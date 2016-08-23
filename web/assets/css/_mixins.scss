@@ -1,0 +1,43 @@
+@mixin align-vertically($position) {
+    @include position($position, 50% null null null);
+    @include transform(translateY(-50%));
+}
+
+@mixin align-horizontally($position) {
+    @include position($position, null null null 50%);
+    @include transform(translateX(-50%));
+}
+
+@mixin align-all($position) {
+    @include position($position, 50% null null 50%);
+    @include transform(translate(-50%, -50%));
+}
+
+@mixin align-reset($position: static) {
+    @include position($position, 0 null null 0);
+    @include transform(none);
+}
+
+@mixin maxlines($n: 2) {
+    @include prefixer(box-orient, vertical, webkit);
+    @include prefixer(line-clamp, $n, webkit);
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@mixin scroll($direction: 'y') {
+    @include prefixer(overflow-scrolling, touch, webkit spec);
+    @if $direction == 'x' {
+        overflow-x: auto;
+        white-space: nowrap;
+    } @else if $direction == 'y' {
+        overflow-y: auto;
+    }
+}
+
+@mixin responsive-wrap($padding-bottom: 56.25%) {
+    height: 0;
+    padding-bottom: $padding-bottom;
+    position: relative;
+}

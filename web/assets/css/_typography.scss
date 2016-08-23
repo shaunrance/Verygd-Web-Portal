@@ -1,0 +1,33 @@
+// Reset headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+    margin: 0;
+}
+
+a {
+    cursor: pointer;
+}
+
+%h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@include media($tablet) {
+
+    %h1 {
+        font-size: 15px;
+    }
+}
+
+@include media($phablet) {
+
+    %h1 {
+        font-size: 12px;
+    }
+}

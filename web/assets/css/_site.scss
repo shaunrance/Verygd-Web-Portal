@@ -1,0 +1,20 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+html {
+    color: $black;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

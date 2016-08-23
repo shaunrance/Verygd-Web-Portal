@@ -1,0 +1,12 @@
+-   repo: git://github.com/pre-commit/mirrors-scss-lint
+    sha: f840ac610d8d9d76b666062416241f2156b3f388
+    hooks:
+    -   id: scss-lint
+-   repo: git://github.com/pre-commit/mirrors-jshint
+    sha: 'c62c18f8ed2a43ef47483a1e0677fc532d228d73'
+    hooks:
+    -   id: jshint
+-   repo: git://github.com/elidupuis/mirrors-jscs
+    sha: '5c6ba4da7eb5a09e0c1f849a5f86f5dcb871f876'
+    hooks:
+    -   id: jscs

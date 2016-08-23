@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html
+    class="no-js"
+    lang="en"
+    data-ng-app="ua5App"
+    ng-strict-di="true"
+    data-ng-cloak
+    data-app>
+    <head>
+        <meta charset="utf-8">
+        <meta name="fragment" content="!">
+        <base href="/">
+        <!-- @if PRODUCTION='false' -->
+        <script src="bower_components/angular/angular.js"></script>
+        <!-- @endif -->        
+        <!-- @if TESTING='true' -->
+        <link
+            href="_build/app.css"
+            rel="stylesheet"
+            type="text/css">
+        <!-- @endif -->
+        <!-- @if TESTING='false' -->
+        <link
+            href="app.css"
+            rel="stylesheet"
+            type="text/css">
+        <!-- @endif -->
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title>
+            {{ ngMeta.title }}
+        </title>
+        <meta content="Base Angular">
+        <meta
+            name="description"
+            content="{{ ngMeta.description }}">
+        <meta
+            property="og:description"
+            content="{{ ngMeta.description }}">
+        <meta
+            property="og:image"
+            content="{{ ngMeta.image }}">
+        <meta
+            property="og:site_name"
+            content="Site Name">
+        <meta
+            property="og:url"
+            content="{{ ngMeta.url }}">
+        <meta
+            property="og:type"
+            content="website">
+        <meta
+            name="twitter:card"
+            content="summary_large_image">
+        <meta
+            name="twitter:title"
+            content="{{ ngMeta.title }}">
+        <meta
+            property="twitter:image:src"
+            content="{{ ngMeta.image }}">
+        <link
+            href="assets/img/favicon.png"
+            rel="icon"
+            type="image/png">
+    </head>
+    <body>
+        <noscript>
+            <div class="noscript">
+                Please enable JavaScript on your browser or upgrade to <a href="http://www.google.com/chrome/" target="_blank">Google Chrome</a> to use Base Angular.
+            </div>
+        </noscript>
+        <div header></div>
+        <div ui-view></div>
+        <!-- @if PRODUCTION='true' -->
+            <!-- @if TESTING='true' -->
+            <script src="_build/vendor.js"></script>
+            <script src="_build/app.js"></script>
+            <!-- @endif -->
+            <!-- @if TESTING='false' -->
+            <script src="vendor.js"></script>
+            <script src="app.js"></script>
+            <!-- @endif -->
+        <!-- @endif -->
+        <!-- @if PRODUCTION='false' -->
+        <!-- start bower_components -->
+        <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
+        <script src="bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.min.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+        <script src="bower_components/gsap/src/minified/TweenMax.min.js"></script>
+        <script src="bower_components/imagesloaded/imagesloaded.pkgd.min.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/slick-carousel/slick/slick.min.js"></script>
+        <script src="bower_components/ngMeta/dist/ngMeta.min.js"></script>
+        <script src="bower_components/jquery-unorphanize/unorphanize.jquery.min.js"></script>
+        <script src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
+        <!-- end bower_components -->
+        <script src="app.js"></script>
+        <!-- state scripts -->
+        <script src="states/home/home.js"></script>
+        <!-- end state scripts -->
+        <!-- component scripts -->
+        <script src="components/header/header.js"></script>
+        <script src="components/unorphanize/unorphanize.js"></script>
+        <!-- end component scripts -->        
+        <!-- @endif -->
+    </body>
+</html>

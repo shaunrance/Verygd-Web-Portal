@@ -1,0 +1,36 @@
+@import 'neat/app/assets/stylesheets/neat-helpers';
+
+// Colors
+$black: #000;
+$blue: #00f;
+$spot-color: $blue;
+$white: #fff;
+
+// Grid
+$column: 100px;
+$grid-columns: 12;
+$gutter: 40px;
+$max-width: 1200px;
+$visual-grid: false;
+$visual-grid-index: front;
+
+// Breakpoints
+$mobile-size: 459px;
+$phablet-size: 767px;
+$tablet-size: 1025px;
+$desktop-size: 1430px;
+
+$mobile: new-breakpoint(max-width $mobile-size);
+$phablet-min: new-breakpoint(min-width $mobile-size + 1);
+$phablet: new-breakpoint(max-width $phablet-size);
+$phablet-landscape: new-breakpoint(max-width $phablet-size orientation 'landscape');
+$tablet-min: new-breakpoint(min-width $phablet-size + 1);
+$tablet: new-breakpoint(max-width $tablet-size);
+$desktop-min: new-breakpoint(min-width $tablet-size + 1);
+$desktop: new-breakpoint(max-width $desktop-size);
+
+
+// More variables
+$power2-ease-out: cubic-bezier(0.2, 0.485, 0.205, 1);
+$site-gutter: 20px;
+$transition-speed: 0.3s;

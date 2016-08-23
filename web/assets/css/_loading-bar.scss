@@ -1,0 +1,73 @@
+// Customized version of https://github.com/chieffancypants/angular-loading-bar
+#loading-bar,
+#loading-bar-spinner {
+    @include transition(all 0.35s);
+    pointer-events: none;
+}
+
+#loading-bar.ng-enter,
+#loading-bar.ng-leave.ng-leave-active,
+#loading-bar-spinner.ng-enter,
+#loading-bar-spinner.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+
+#loading-bar.ng-enter.ng-enter-active,
+#loading-bar.ng-leave,
+#loading-bar-spinner.ng-enter.ng-enter-active,
+#loading-bar-spinner.ng-leave {
+    opacity: 1;
+}
+
+#loading-bar .bar {
+    @include transition(width 0.35s);
+    background: $spot-color;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+    height: 3px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10002;
+}
+
+// Fancy blur effect
+#loading-bar .peg {
+    border-radius: 100%;
+    box-shadow: $spot-color 1px 0 6px 1px;
+    height: 2px;
+    opacity: 0.45;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 70px;
+}
+
+#loading-bar-spinner {
+    display: block;
+    left: 10px;
+    position: fixed;
+    top: 10px;
+    z-index: 10002;
+
+    .spinner-icon {
+        @include animation(loading-bar-spinner 0.4s infinite);
+        border: solid 2px transparent;
+        border-left-color: $spot-color;
+        border-radius: 10px;
+        border-top-color: $spot-color;
+        height: 14px;
+        width: 14px;
+    }
+}
+
+@include keyframes(loading-bar-spinner) {
+    0% {
+        @include transform(rotate(0deg));
+    }
+
+    100% {
+        @include transform(rotate(360deg));
+    }
+}

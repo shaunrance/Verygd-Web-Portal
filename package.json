@@ -1,0 +1,31 @@
+{
+  "name": "very.gd",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UseAllFive/very.gd.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UseAllFive/very.gd/issues"
+  },
+  "homepage": "https://github.com/UseAllFive/very.gd#readme",
+  "devDependencies": {
+    "chalk": "1.1.3",
+    "connect-modrewrite": "0.9.0",
+    "grunt": "1.0.1",
+    "grunt-angular-templates": "1.0.3",
+    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-connect": "1.0.1",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-cssmin": "1.0.1",
+    "grunt-contrib-sass": "1.0.0",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-preprocess": "5.1.0",
+    "grunt-ssh-deploy": "0.4.1",
+    "matchdep": "1.0.1",
+    "ua5-frontend-standards": "0.0.17",
+    "uglify-save-license": "0.4.1"
+  }
+}

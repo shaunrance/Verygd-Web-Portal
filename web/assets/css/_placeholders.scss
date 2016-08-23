@@ -1,0 +1,39 @@
+%responsive {
+    @include position(absolute, 0 null null 0);
+    @include size(100%);
+}
+
+%image-block {
+    display: block;
+    max-width: 100%;
+}
+
+%cover-img {
+    background-color: $black;
+    background-position: center;
+    background-size: cover;
+}
+
+%h-padding {
+    @include padding(null $site-gutter);
+}
+
+%v-padding {
+    @include padding(57px null 65px);
+}
+
+%no-tap-color {
+    @include prefixer(tap-highlight-color, rgba($black, 0), webkit);
+}
+
+%slice {
+    @extend %h-padding;
+    @extend %v-padding;
+}
+
+@include media($phablet) {
+
+    %v-padding {
+        @include padding(30px null);
+    }
+}

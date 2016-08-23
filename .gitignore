@@ -1,0 +1,27 @@
+# Ignore cache
+/.sass-cache
+/.cache
+
+# Ignore .DS_store file
+.DS_Store
+
+# Ignore private file
+secret.yml
+
+# Ignore node modules
+/node_modules
+
+# Ignore linter config files
+/.editorconfig
+/.jscsrc
+/.jshintrc
+/.npmignore
+/.scss-lint.yml
+/.jshintignore
+
+# Ignore bower components
+/web/bower_components
+/web/_build
+/web/index.html
+/tmp
+
