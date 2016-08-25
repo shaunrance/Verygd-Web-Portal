@@ -4,6 +4,7 @@ angular.module('ua5Templates', []);
 // start module declaration
 angular.module('ua5App.home', []);
 angular.module('ua5App.projects', []);
+angular.module('ua5App.project-details', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -18,6 +19,7 @@ angular.module('ua5App', [
     'angularModalService',
     'ngMeta',
     // start add states as app dependency
+    'ua5App.project-details',
     'ua5App.projects',
     'ua5App.home'
     // end add states as app dependency
