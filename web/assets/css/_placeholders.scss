@@ -43,3 +43,8 @@
     max-width: $max-width;
     width: 100%;
 }
+
+//adding this because its prevalent in this project but not universal or wildcard worthy.
+%uppercase {
+    text-transform: uppercase;
+}

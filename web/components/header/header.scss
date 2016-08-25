@@ -20,9 +20,9 @@ header {
 }
 
 .user-login {
+    @extend %uppercase;
     color: $pink;
     text-decoration: none;
-    text-transform: uppercase;
 
     &:hover {
         text-decoration: underline;
@@ -30,8 +30,8 @@ header {
 }
 
 .breadcrumbs__item {
+    @extend %uppercase;
     display: inline-block;
-    text-transform: uppercase;
 }
 
 .breadcrumbs__link {
