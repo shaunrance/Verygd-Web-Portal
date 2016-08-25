@@ -1,4 +1,45 @@
-.header {
-    background: $black;
+
+header {
+    background: $header;
     color: $white;
+}
+
+.header__container {
+    @extend %contain;
+    @include display(flex);
+    @include flex-direction(column);
+    @include justify-content(space-between);
+    height: $header-height-desk;
+    padding: 30px 0 40px;
+}
+
+.header__meta {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(space-between);
+}
+
+.user-login {
+    color: $pink;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.breadcrumbs__item {
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.breadcrumbs__link {
+    color: $btn-blue;
+    text-decoration: none;
+
+    &::after {
+        content: '>';
+        padding-left: 5px;
+    }
 }
