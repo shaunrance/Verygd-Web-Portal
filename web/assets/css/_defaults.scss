@@ -3,14 +3,19 @@
 // Colors
 $black: #000;
 $blue: #00f;
-$spot-color: $blue;
 $white: #fff;
+$spot-color: $blue;
+$navy: #2b2c3f;
+$pink: #f229e8;
+$btn-blue: #53a0fd;
+$grey: #f4f4f4;
+$grey-dark: #dfdfe1;
 
 // Grid
 $column: 100px;
 $grid-columns: 12;
 $gutter: 40px;
-$max-width: 1200px;
+$max-width: 1440px;
 $visual-grid: false;
 $visual-grid-index: front;
 
@@ -34,3 +39,7 @@ $desktop: new-breakpoint(max-width $desktop-size);
 $power2-ease-out: cubic-bezier(0.2, 0.485, 0.205, 1);
 $site-gutter: 20px;
 $transition-speed: 0.3s;
+
+
+//Header
+$header-height-desk:	194px;

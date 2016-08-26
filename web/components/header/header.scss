@@ -1,4 +1,30 @@
+
 .header {
-    background: $black;
+    background: $navy;
     color: $white;
+}
+
+.header__container {
+    @include outer-container;
+    @include display(flex);
+    @include flex-direction(column);
+    @include justify-content(space-between);
+    @include padding(30px null 40px);
+    height: $header-height-desk;
+}
+
+.header__meta {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(space-between);
+}
+
+.user__login {
+    @extend %uppercase;
+    color: $pink;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }

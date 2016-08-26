@@ -1,0 +1,96 @@
+.project-details__container {
+    background-color: $grey;
+}
+
+.project-details {
+    @include outer-container;
+    @include display(flex);
+    @include justify-content(space-between);
+    padding-top: 50px;
+}
+
+.scenes {
+    @extend %uppercase;
+}
+
+.scene__image__container {
+    @include flex(calc(33.33% - 20px) 0 0);
+    margin: 0 10px 20px;
+
+    &:hover {
+        background-color: $white;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+}
+
+.scene__image {
+    height: auto;
+    max-width: 100%;
+}
+
+.scene__images {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    margin: 0 10px;
+    width: 100%;
+}
+
+.image__caption {
+    padding: 10px 10px 20px;
+}
+
+.scene__link {
+    color: $black;
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+
+    &:hover {
+        background-color: $grey-dark;
+        border-radius: 2px;
+    }
+
+    &.active {
+        background-color: $grey-dark;
+        border-radius: 2px;
+    }
+}
+
+.scene__add {
+    color: $btn-blue;
+    display: block;
+    margin-top: 20px;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.scenes,
+.scene__preview {
+    max-width: 240px;
+    width: 100%;
+}
+
+.scene__preview {
+    text-align: center;
+}
+
+.preview__widget {
+    background-color: $grey-dark;
+}
+
+.scene__button {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    background-color: $pink;
+    border-radius: 4px;
+    color: $white;
+    display: block;
+    padding: 10px 20px;
+    text-align: center;
+
+    + .scene__button {
+        margin-top: 10px;
+    }
+}
