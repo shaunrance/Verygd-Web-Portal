@@ -28,18 +28,3 @@ header {
         text-decoration: underline;
     }
 }
-
-.breadcrumbs__item {
-    @extend %uppercase;
-    display: inline-block;
-}
-
-.breadcrumbs__link {
-    color: $btn-blue;
-    text-decoration: none;
-
-    &::after {
-        content: '>';
-        padding-left: 5px;
-    }
-}
