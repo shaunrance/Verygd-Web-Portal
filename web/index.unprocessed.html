@@ -12,7 +12,7 @@
         <base href="/">
         <!-- @if PRODUCTION='false' -->
         <script src="bower_components/angular/angular.js"></script>
-        <!-- @endif -->        
+        <!-- @endif -->
         <!-- @if TESTING='true' -->
         <link
             href="_build/app.css"
@@ -31,6 +31,9 @@
         <title>
             {{ ngMeta.title }}
         </title>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
         <meta content="Base Angular">
         <meta
             name="description"
@@ -63,8 +66,8 @@
             href="assets/img/favicon.png"
             rel="icon"
             type="image/png">
-        <link 
-            href="https://fonts.googleapis.com/css?family=Open+Sans" 
+        <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans"
             rel="stylesheet">
     </head>
     <body>
@@ -102,17 +105,28 @@
         <script src="bower_components/ngMeta/dist/ngMeta.min.js"></script>
         <script src="bower_components/jquery-unorphanize/unorphanize.jquery.min.js"></script>
         <script src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="bower_components/three.js/build/three.min.js"></script>
+        <script src="bower_components/three.js/examples/js/effects/StereoEffect.js"></script>
+        <script src="bower_components/three.js/examples/js/controls/DeviceOrientationControls.js"></script>
+        <script src="bower_components/three.js/examples/js/controls/OrbitControls.js"></script>
+        <script src="bower_components/suite/suite.js"></script>
+        <script src="bower_components/suite/factories/base-three-scene.js"></script>
+        <script src="bower_components/suite/factories/browser.js"></script>
         <!-- end bower_components -->
         <script src="app.js"></script>
         <!-- state scripts -->
         <script src="states/home/home.js"></script>
         <script src="states/projects/projects.js"></script>
+        <script src="states/viewer/viewer.js"></script>
         <!-- end state scripts -->
         <!-- component scripts -->
         <script src="components/header/header.js"></script>
         <script src="components/unorphanize/unorphanize.js"></script>
         <script src="components/breadcrumbs/breadcrumbs.js"></script>
-        <!-- end component scripts -->        
+        <!-- end component scripts -->
+        <script src="components/pano/pano.js"></script>
+        <!-- end component scripts -->
         <!-- @endif -->
     </body>
 </html>
