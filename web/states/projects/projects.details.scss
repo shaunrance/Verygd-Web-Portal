@@ -3,7 +3,7 @@
 }
 
 .project-details {
-    @extend %contain;
+    @include outer-container;
     @include display(flex);
     @include justify-content(space-between);
     padding-top: 50px;

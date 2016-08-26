@@ -4,10 +4,14 @@ angular.module('ua5App.home')
         $urlRouterProvider.when('', '/');
         $urlRouterProvider.otherwise('/');
         $stateProvider.state('home', {
+            name: 'Home',
             url: '/',
             templateUrl: 'states/home/home.html',
             controller: 'HomeCtrl',
-            controllerAs: 'ctrl'
+            controllerAs: 'ctrl',
+            data: {
+                settings: {displayName:'Home'}
+            }
         });
     }])
     .controller('HomeCtrl', [function() {}])

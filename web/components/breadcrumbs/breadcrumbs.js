@@ -3,7 +3,6 @@ angular.module('ua5App')
     .directive('breadcrumbs', ['$log', '$parse', '$interpolate', function($log, $parse) {
         return {
             restrict: 'EA',
-            replace: false,
             scope: {
                 itemDisplayNameResolver: '&'
             },

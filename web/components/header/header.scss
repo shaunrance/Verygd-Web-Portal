@@ -1,16 +1,16 @@
 
-header {
-    background: $header;
+.header {
+    background: $navy;
     color: $white;
 }
 
 .header__container {
-    @extend %contain;
+    @include outer-container;
     @include display(flex);
     @include flex-direction(column);
     @include justify-content(space-between);
+    @include padding(30px null 40px);
     height: $header-height-desk;
-    padding: 30px 0 40px;
 }
 
 .header__meta {
@@ -19,7 +19,7 @@ header {
     @include justify-content(space-between);
 }
 
-.user-login {
+.user__login {
     @extend %uppercase;
     color: $pink;
     text-decoration: none;
