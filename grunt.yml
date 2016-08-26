@@ -26,7 +26,6 @@ config:
                     - web/bower_components/three.js/examples/js/controls/DeviceOrientationControls.js
                     - web/bower_components/three.js/examples/js/controls/OrbitControls.js
                     - web/bower_components/suite/suite.js
-                    - web/bower_components/suite/factories/base-three-scene.js
                     - web/bower_components/suite/factories/browser.js
                 dest: web/_build/vendor.js
             app:

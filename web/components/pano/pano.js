@@ -6,9 +6,9 @@ angular.module('ua5App')
             templateUrl: 'components/pano/pano.html',
             link: function($scope, element, attrs) {
                 var scene = new BaseThreeScene();
-                var sphere;
                 var $$el = $('.my-canvas');
                 var panels = [
+                    //front
                     {
                         rotation: {
                             x: 0,
@@ -21,18 +21,20 @@ angular.module('ua5App')
                             z: 0
                         }
                     },
+                    //back
                     {
                         rotation: {
                             x: 0,
-                            y: -Math.PI / 2,
+                            y: 100,
                             z: 0
                         },
                         position: {
                             x: -50,
                             y: 15,
-                            z: 0
+                            z: 25
                         }
                     },
+                    //right
                     {
                         rotation: {
                             x: 0,
@@ -42,19 +44,32 @@ angular.module('ua5App')
                         position: {
                             x: 0,
                             y: 15,
-                            z: 55
+                            z: 45
                         }
                     },
+                    //left
                     {
                         rotation: {
                             x: 0,
-                            y: 60,
+                            y: 50,
                             z: 0
                         },
                         position: {
                             x: 0,
                             y: 15,
-                            z: -55
+                            z: -45
+                        }
+                    },
+                    {
+                        rotation: {
+                            x: 0,
+                            y: 70,
+                            z: 0
+                        },
+                        position: {
+                            x: -54,
+                            y: 15,
+                            z: -20
                         }
                     }
                 ];
@@ -67,13 +82,12 @@ angular.module('ua5App')
                     $$el.click(clickHandler);
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler);
                     $rootScope.renderer.setClearColor(0x000000);
-                    geometry = new THREE.SphereGeometry(1, 1, 1);
-                    material = new THREE.MeshBasicMaterial({color: 0xff0000});
 
                     i = panels.length;
                     while (i--) {
-                        material = new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide});
-                        geometry = new THREE.PlaneBufferGeometry(60, 30);
+                        var texture = THREE.ImageUtils.loadTexture('/assets/images/' + i + '.jpg');
+                        material = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
+                        geometry = new THREE.PlaneBufferGeometry(50, 30);
                         floor = new THREE.Mesh(geometry, material);
                         floor.rotation.x = panels[i].rotation.x;
                         floor.rotation.y = panels[i].rotation.y;
@@ -87,9 +101,6 @@ angular.module('ua5App')
                 }
 
                 function onRender() {
-                    sphere.rotation.x += 0.01;
-                    sphere.rotation.y += 0.01;
-                    sphere.rotation.z += 0.01;
                 }
 
                 function clickHandler(item) {
