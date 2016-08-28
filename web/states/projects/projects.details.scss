@@ -16,10 +16,30 @@
 .scene__image__container {
     @include flex(calc(33.33% - 20px) 0 0);
     margin: 0 10px 20px;
+    overflow: hidden;
+    position: relative;
 
     &:hover {
         background-color: $white;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    &::before {
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(center);
+        background: $btn-blue;
+        border: 2px solid $white;
+        border-radius: 3px;
+        color: $white;
+        content: counter(sceneImage);
+        counter-increment: sceneImage;
+        font-size: 12px;
+        height: 20px;
+        margin-left: -2px;
+        margin-top: -2px;
+        position: absolute;
+        width: 20px;
     }
 }
 
@@ -32,6 +52,7 @@
     @include display(flex);
     @include flex-direction(row);
     @include flex-wrap(wrap);
+    counter-reset: sceneImage;
     margin: 0 10px;
     width: 100%;
 }

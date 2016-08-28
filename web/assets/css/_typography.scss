@@ -11,12 +11,14 @@ h4,
 h5,
 h6 {
     @extend %uppercase;
+    font-family: 'Open Sans', sans-serif;
     font-weight: normal;
     margin: 0;
 }
 
 a {
     cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
 }
 
 %h1 {
