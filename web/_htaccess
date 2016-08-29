@@ -1,4 +1,9 @@
+AuthType Basic
+AuthName "MemoriesAlive"
+AuthUserFile /var/www/vhosts/ua5.land/very.gd.ua5.land/current/.htpasswd
+Require valid-user
 # Redirect all requests to index.html to allow Angular to route
+
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]

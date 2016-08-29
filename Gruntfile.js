@@ -186,7 +186,8 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, cwd: 'web/assets/', src:['**'], dest: 'web/_build/assets/'},
                     {expand: false, src: 'web/index.html', dest: 'web/_build/index.html'},
-                    {expand: false, src: 'web/_htaccess', dest: 'web/_build/_htaccess'}
+                    {expand: false, src: 'web/_htaccess', dest: 'web/_build/_htaccess'},
+                    {expand: false, src: 'web/_htpasswd', dest: 'web/_build/_htpasswd'}
                 ]
             }
         },
@@ -202,7 +203,7 @@ module.exports = function(grunt) {
                     password: secret.staging.password,
                     debug: true,
                     releases_to_keep: '3',
-                    after_deploy: 'cd ' + secret.staging.path + '/current/ && mv _htaccess .htaccess'
+                    after_deploy: 'cd ' + secret.staging.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
                 }
             }
         }
