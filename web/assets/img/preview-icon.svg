@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="192px" height="192px" viewBox="0 0 192 192" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Alpha" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Project-Detail" transform="translate(-1164.000000, -332.000000)">
+            <g id="Group" transform="translate(1164.000000, 332.000000)">
+                <g id="Group-3" transform="translate(85.000000, 0.000000)">
+                    <rect id="Rectangle-7" fill="#53A0FD" x="0" y="0" width="22" height="22" rx="2"></rect>
+                    <text id="1" font-family=".AppleSystemUIFont" font-size="12" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="8.70214844" y="15">1</tspan>
+                    </text>
+                </g>
+                <g id="Group-3" transform="translate(170.000000, 55.000000)">
+                    <rect id="Rectangle-7" fill="#53A0FD" x="0" y="0" width="22" height="22" rx="2"></rect>
+                    <text id="1" font-family=".AppleSystemUIFont" font-size="12" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="8" y="15">2</tspan>
+                    </text>
+                </g>
+                <g id="Group-3" transform="translate(0.000000, 55.000000)">
+                    <rect id="Rectangle-7" fill="#53A0FD" x="0" y="0" width="22" height="22" rx="2"></rect>
+                    <text id="1" font-family=".AppleSystemUIFont" font-size="12" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="8" y="15">5</tspan>
+                    </text>
+                </g>
+                <g id="Group-3" transform="translate(143.000000, 161.000000)">
+                    <rect id="Rectangle-7" fill="#53A0FD" x="0" y="0" width="22" height="22" rx="2"></rect>
+                    <text id="1" font-family=".AppleSystemUIFont" font-size="12" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="8" y="15">3</tspan>
+                    </text>
+                </g>
+                <g id="Group-3" transform="translate(27.000000, 161.000000)">
+                    <rect id="Rectangle-7" fill="#53A0FD" x="0" y="0" width="22" height="22" rx="2"></rect>
+                    <text id="1" font-family=".AppleSystemUIFont" font-size="12" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="8" y="15">4</tspan>
+                    </text>
+                </g>
+                <polygon id="Polygon" stroke="#53A0FD" stroke-width="2" transform="translate(97.000000, 102.000000) rotate(180.000000) translate(-97.000000, -102.000000) " points="97 27 168.329239 78.8237254 141.083894 162.676275 52.9161061 162.676275 25.6707613 78.8237254"></polygon>
+                <g transform="translate(7.000000, 12.000000)" id="Shape" fill="#DFDFE1">
+                    <polygon transform="translate(90.000000, 90.000000) scale(1, -1) translate(-90.000000, -90.000000) " points="90 126.000001 37.0993273 162.811529 55.7619649 101.124612 4.40491353 62.1884705 68.8397306 60.8753878 90 0 111.160269 60.8753878 175.595086 62.1884705 124.238035 101.124612 142.900673 162.811529"></polygon>
+                </g>
+                <g transform="translate(90.000000, 87.000000)" id="Shape" fill="#95959F">
+                    <rect x="0" y="9" width="14" height="18" rx="2"></rect>
+                    <path d="M1.06554227,0.9375 C0.877189146,0.419733047 1.17117418,0 1.73033553,0 L12.269063,0 C12.8245713,0 13.1248755,0.412404299 12.9338563,0.9375 L11.4332649,5.0625 C11.2449117,5.58026695 10.6521578,6 10.0885743,6 L3.91082429,6 C3.35652531,6 2.75715288,5.5875957 2.5661337,5.0625 L1.06554227,0.9375 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

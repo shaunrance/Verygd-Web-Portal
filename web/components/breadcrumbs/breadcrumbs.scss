@@ -5,10 +5,16 @@
 
 .breadcrumbs__link {
     color: $btn-blue;
+    font-size: 24px;
+    margin-right: 20px;
     text-decoration: none;
 
     &::after {
         content: '>';
         padding-left: 5px;
     }
+}
+
+.breadcrumbs__current {
+    font-size: 24px;
 }

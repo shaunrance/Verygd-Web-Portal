@@ -1,49 +1,19 @@
-.project-details__container {
-    background-color: $grey;
-}
-
 .project-details {
     @include outer-container;
     @include display(flex);
     @include justify-content(space-between);
-    padding-top: 50px;
+    @include padding(50px $site-gutter null);
 }
 
-.scenes {
+
+.scene-nav {
     @extend %uppercase;
 }
 
-.scene__image__container {
-    @include flex(calc(33.33% - 20px) 0 0);
-    margin: 0 10px 20px;
-
-    &:hover {
-        background-color: $white;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-    }
-}
-
-.scene__image {
-    height: auto;
-    max-width: 100%;
-}
-
-.scene__images {
-    @include display(flex);
-    @include flex-direction(row);
-    @include flex-wrap(wrap);
-    margin: 0 10px;
-    width: 100%;
-}
-
-.image__caption {
-    padding: 10px 10px 20px;
-}
-
-.scene__link {
+.scene-list--link {
+    @include padding(10px 5px);
     color: $black;
     display: block;
-    padding: 5px;
     text-decoration: none;
 
     &:hover {
@@ -57,40 +27,146 @@
     }
 }
 
-.scene__add {
+.scene-add {
+    @extend %icon-button;
+    @include display(flex);
+    @include align-items(center);
+    @include padding(5px);
     color: $btn-blue;
-    display: block;
     margin-top: 20px;
-    padding: 5px;
-    text-decoration: none;
 }
 
-.scenes,
-.scene__preview {
+.scene__item--wrapper {
+    @include flex(calc(33.33% - 20px) 0 0);
+    margin: 0 10px 20px;
+    position: relative;
+
+    &::before {
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(center);
+        background: $btn-blue;
+        border: 2px solid $white;
+        border-radius: 3px;
+        color: $white;
+        content: counter(sceneImage);
+        counter-increment: sceneImage;
+        font-size: 12px;
+        height: 20px;
+        margin-left: -2px;
+        margin-top: -2px;
+        position: absolute;
+        width: 20px;
+        z-index: $z-alpha;
+    }
+}
+
+.scene__image {
+    height: auto;
+    max-width: 100%;
+}
+
+.scene__items {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    counter-reset: sceneImage;
+    margin: 0 10px;
+    width: 100%;
+}
+
+.scene__image--caption {
+    @include padding(10px 10px 20px);
+}
+
+.scene__image--wrapper {
+    position: relative;
+}
+
+.scene__item--link:hover .search-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.search-icon {
+    opacity: 0;
+    transform: scale(2);
+    transition: all $transition-speed $power2-ease-out;
+}
+
+.search-icon---container {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.scene-preview__icon {
+    @include display(flex);
+    @include justify-content(center);
+    height: inherit;
+    max-width: 50px;
+    width: 100%;
+}
+
+.scene__item--link {
+    display: inline-block;
+
+    &:hover {
+        background-color: $white;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+}
+
+.scene-nav,
+.scene-preview {
     max-width: 240px;
     width: 100%;
 }
 
-.scene__preview {
+.scene-preview {
     text-align: center;
 }
 
-.preview__widget {
+.scene-preview--widget {
+    @include padding(20px 20px 40px);
     background-color: $grey-dark;
+    margin-bottom: 40px;
 }
 
-.scene__button {
+.scene-preview__button {
+    @extend %reset-button;
     @include display(flex);
     @include align-items(center);
-    @include justify-content(center);
     background-color: $pink;
     border-radius: 4px;
     color: $white;
-    display: block;
-    padding: 10px 20px;
+    height: 60px;
     text-align: center;
 
-    + .scene__button {
-        margin-top: 10px;
+    + .scene-preview__button {
+        margin-top: 20px;
     }
+}
+
+.add-icon {
+    margin-right: 10px;
+    max-width: 25px;
+}
+
+.mobile-icon {
+    max-width: 15px;
+}
+
+.cardboard-icon {
+    max-width: 25px;
+}
+
+.preview-icon {
+    margin-top: 50px;
+    max-width: 100%;
 }
