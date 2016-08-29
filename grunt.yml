@@ -18,8 +18,15 @@ config:
                     - web/bower_components/underscore/underscore-min.js
                     - web/bower_components/slick-carousel/slick/slick.min.js
                     - web/bower_components/ngMeta/dist/ngMeta.min.js
-                    - web/bower_components/angular-modal-service/dst/angular-modal-service.min.js                    
+                    - web/bower_components/angular-modal-service/dst/angular-modal-service.min.js
                     - web/bower_components/jquery-unorphanize/unorphanize.jquery.min.js
+                    - web/bower_components/modernizr/modernizr.js
+                    - web/bower_components/three.js/build/three.min.js
+                    - web/bower_components/three.js/examples/js/effects/StereoEffect.js
+                    - web/bower_components/three.js/examples/js/controls/DeviceOrientationControls.js
+                    - web/bower_components/three.js/examples/js/controls/OrbitControls.js
+                    - web/bower_components/suite/suite.js
+                    - web/bower_components/suite/factories/browser.js
                 dest: web/_build/vendor.js
             app:
                 src:

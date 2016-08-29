@@ -8,7 +8,8 @@ To do it, follow these steps in **this order**:
 1. [Install node modules and linters](#install-node-modules)
 2. [Install pre-commit](#install-pre-commit)
 3. [Install bower components](#install-bower-components)
-4. [Deployments](#deployments)
+4. [Setup local environment config](#setup-local-environment-config)
+5. [Run Grunt](#run-grunt)
 
 ### Install node modules and linters
 

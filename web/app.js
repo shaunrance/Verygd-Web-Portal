@@ -1,9 +1,10 @@
-/* global angular, $ */
+/* global angular, $, THREE */
 // Create templates module for ngTemplates to attach to
 angular.module('ua5Templates', []);
 // start module declaration
 angular.module('ua5App.home', []);
 angular.module('ua5App.projects', []);
+angular.module('ua5App.viewer', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -17,8 +18,10 @@ angular.module('ua5App', [
     'angular-loading-bar',
     'angularModalService',
     'ngMeta',
+    'suite',
     // start add states as app dependency
     'ua5App.projects',
+    'ua5App.viewer',
     'ua5App.home'
     // end add states as app dependency
 ])
@@ -80,6 +83,10 @@ angular.module('ua5App', [
                     if (toStateParent !== fromStateParent) {
                         $$window.scrollTop(0);
                     }
+                });
+
+                $rootScope.renderer = new THREE.WebGLRenderer({
+                    antialias: true
                 });
             }
         };
