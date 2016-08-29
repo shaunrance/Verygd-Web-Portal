@@ -19,7 +19,8 @@ angular.module('ua5App')
                             x: 45,
                             y: 15,
                             z: 0
-                        }
+                        },
+                        file: 0
                     },
                     //back
                     {
@@ -32,7 +33,8 @@ angular.module('ua5App')
                             x: -50,
                             y: 15,
                             z: 25
-                        }
+                        },
+                        file: 2
                     },
                     //right
                     {
@@ -45,7 +47,8 @@ angular.module('ua5App')
                             x: 0,
                             y: 15,
                             z: 45
-                        }
+                        },
+                        file: 1
                     },
                     //left
                     {
@@ -58,7 +61,8 @@ angular.module('ua5App')
                             x: 0,
                             y: 15,
                             z: -45
-                        }
+                        },
+                        file: 3
                     },
                     {
                         rotation: {
@@ -70,7 +74,8 @@ angular.module('ua5App')
                             x: -54,
                             y: 15,
                             z: -20
-                        }
+                        },
+                        file: 4
                     }
                 ];
 
@@ -85,7 +90,7 @@ angular.module('ua5App')
 
                     i = panels.length;
                     while (i--) {
-                        var texture = THREE.ImageUtils.loadTexture('/assets/images/' + i + '.jpg');
+                        var texture = THREE.ImageUtils.loadTexture('/assets/img/demo/demo-' + panels[i].file + '.jpg');
                         material = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
                         geometry = new THREE.PlaneBufferGeometry(50, 30);
                         floor = new THREE.Mesh(geometry, material);
