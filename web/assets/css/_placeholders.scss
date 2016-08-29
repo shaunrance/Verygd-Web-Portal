@@ -38,4 +38,25 @@
     }
 }
 
+%icon-button {
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    width: 100%;
+}
 
+%reset-button {
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

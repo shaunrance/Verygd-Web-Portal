@@ -9,6 +9,10 @@ body {
     overflow-x: hidden;
 }
 
+body {
+    background-color: $grey;
+}
+
 html {
     color: $black;
 }
@@ -21,4 +25,9 @@ ul {
 
 figure {
     margin: 0;
+}
+
+a,
+button {
+    cursor: pointer;
 }
