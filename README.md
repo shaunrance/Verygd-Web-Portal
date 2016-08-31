@@ -85,3 +85,31 @@ To push to staging, run:
 ```
 grunt stage
 ```
+
+##Backend Setup
+
+This assumes you have python installed already.
+
+###Install virtualenv
+
+```
+[sudo] pip install virtualenv
+```
+
+###Create a virtualenv
+
+Name a new virtualenv directory ('verygd' in this example).
+```
+virtualenv ~/verygd
+```
+Activate it.
+```
+source ~/verygd/bin/activate
+```
+Keep this virtualenv active for subsequent steps, and in general before running any project-related commands.
+
+###Install Project Dependencies 
+
+Change to the project directory and run
+
+```pip install -r requirements.txt```
