@@ -1,0 +1,5 @@
+.viewer__toggle {
+    @include position(absolute, 15px null null 15px);
+    color: #fff;
+    z-index: 10;
+}

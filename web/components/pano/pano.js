@@ -4,6 +4,9 @@ angular.module('ua5App')
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
+            scope: {
+                useVr: '='
+            },
             link: function($scope, element, attrs) {
                 var scene = new BaseThreeScene();
                 var $$el = $('.my-canvas');
@@ -78,6 +81,19 @@ angular.module('ua5App')
                         file: 4
                     }
                 ];
+                var useVr = $scope.useVr;
+
+                $scope.$watch(function() {
+                    return $scope.useVr;
+                }, function(newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        scene.destroy();
+                        useVr = newValue;
+                        scene = new BaseThreeScene();
+                        init();
+                        scene.resize();
+                    }
+                });
 
                 function init() {
                     var geometry;
@@ -85,7 +101,8 @@ angular.module('ua5App')
                     var i;
                     var floor;
                     $$el.click(clickHandler);
-                    scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler);
+
+                    scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
                     $rootScope.renderer.setClearColor(0x000000);
 
                     i = panels.length;
@@ -127,6 +144,9 @@ angular.module('ua5App')
                     scene.resize();
                 });
 
+                $scope.$on('$destroy', function() {
+                    scene.destroy();
+                });
             }
         };
     }])

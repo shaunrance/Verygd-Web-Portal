@@ -19,6 +19,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             var renderer;
             var rendering = true;
             var scene;
+            var useVR = false;
 
             function getHoveredElements() {
                 var elToMouseOver = false;
@@ -80,7 +81,11 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 camera.updateMatrixWorld();
                 activeElements = getHoveredElements();
                 renderHook();
-                effect.render(scene, camera);
+                if (useVR) {
+                    effect.render(scene, camera);
+                } else {
+                    renderer.render(scene, camera);
+                }
                 if (rendering) {
                     controls.update();
                     animationFrameRequest = requestAnimationFrame(render);
@@ -166,7 +171,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             function setupBaseScene() {
                 var ASPECT = $$el.width() / $$el.height();
                 var FAR = 700;
-                var FOV = 90;
+                var FOV = 70;
                 var NEAR = 0.001;
 
                 scene = new THREE.Scene();
@@ -180,18 +185,31 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 camera.position.set(0, 10, 0);
 
                 raycaster = new THREE.Raycaster();
-                controls = new THREE.DeviceOrientationControls(camera, true);
-                controls.connect();
-                controls.update();
-                effect = new THREE.StereoEffect(renderer);
+
+                if (useVR) {
+                    controls = new THREE.DeviceOrientationControls(camera, true);
+                    controls.connect();
+                    controls.update();
+                    effect = new THREE.StereoEffect(renderer);
+                } else {
+                    controls = new THREE.OrbitControls(camera, renderer.domElement);
+                    controls.target.set(
+                      camera.position.x + 0.15,
+                      camera.position.y,
+                      camera.position.z
+                    );
+                    controls.minPolarAngle = Math.PI / 2 - 0.2;
+                    controls.maxPolarAngle = Math.PI / 2 + 0.2;
+                    controls.noPan = true;
+                    controls.noZoom = true;
+                }
 
                 render();
             }
 
-            function init($el, _renderer, _renderHook, _onMouseOver, _onMouseOut) {
+            function init($el, _renderer, _renderHook, _onMouseOver, _onMouseOut, _useVR) {
                 $$el = $el;
                 renderer = _renderer;
-                setupBaseScene();
                 if (typeof _renderHook === 'function') {
                     renderHook = _renderHook;
                 }
@@ -201,6 +219,10 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 if (typeof _onMouseOver === 'function') {
                     onMouseOver = _onMouseOver;
                 }
+                if (typeof _useVR === 'boolean') {
+                    useVR = _useVR;
+                }
+                setupBaseScene();
             }
 
             return {

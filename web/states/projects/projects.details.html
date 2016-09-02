@@ -79,16 +79,22 @@
                 <h5>Preview</h5>
                 <img class="preview-icon" src="assets/img/preview-icon.png">
             </div>
-            <button class="scene-preview__button scene-preview--mobile">
-            <span class="scene-preview__icon">
-                <img class="mobile-icon" src="assets/img/mobile.svg" />
-            </span>
-            Launch Mobile</button>
-            <button class="scene-preview__button scene-preview--carboard">
-            <span class="scene-preview__icon">
-                <img class="cardboard-icon" src="assets/img/cardboard.svg" />
-            </span>
-            Launch Cardboard</button>
+            <button
+                ui-sref="viewer({version: 'mobile'})"
+                class="scene-preview__button scene-preview--mobile">
+                <span class="scene-preview__icon">
+                    <img class="mobile-icon" src="assets/img/mobile.svg" />
+                </span>
+                Launch Mobile
+            </button>
+            <button
+                ui-sref="viewer({version: 'cardboard'})"
+                class="scene-preview__button scene-preview--carboard">
+                <span class="scene-preview__icon">
+                    <img class="cardboard-icon" src="assets/img/cardboard.svg" />
+                </span>
+                Launch Cardboard
+            </button>
         </div>
     </div>
 </main>
