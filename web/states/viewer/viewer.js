@@ -5,7 +5,12 @@ angular.module('ua5App.viewer')
             url: '/viewer/:version',
             templateUrl: 'states/viewer/viewer.html',
             controller: 'viewerCtrl',
-            controllerAs: 'ctrl'
+            controllerAs: 'ctrl',
+            resolve: {
+                page: ['$http', function($http) {
+                    return $http.get('http://api.very.gd.ua5.land:8080/photos');
+                }]
+            }
         });
     }])
     .controller('viewerCtrl', ['$scope', '$stateParams', function($scope, $stateParams) {
@@ -16,3 +21,4 @@ angular.module('ua5App.viewer')
         }
     }])
 ;
+// http://api.very.gd.ua5.land:8080/photos

@@ -10,77 +10,6 @@ angular.module('ua5App')
             link: function($scope, element, attrs) {
                 var scene = new BaseThreeScene();
                 var $$el = $('.my-canvas');
-                var panels = [
-                    //front
-                    {
-                        rotation: {
-                            x: 0,
-                            y: -Math.PI / 2,
-                            z: 0
-                        },
-                        position: {
-                            x: 45,
-                            y: 15,
-                            z: 0
-                        },
-                        file: 0
-                    },
-                    //back
-                    {
-                        rotation: {
-                            x: 0,
-                            y: 100,
-                            z: 0
-                        },
-                        position: {
-                            x: -50,
-                            y: 15,
-                            z: 25
-                        },
-                        file: 2
-                    },
-                    //right
-                    {
-                        rotation: {
-                            x: 0,
-                            y: 60,
-                            z: 0
-                        },
-                        position: {
-                            x: 0,
-                            y: 15,
-                            z: 45
-                        },
-                        file: 1
-                    },
-                    //left
-                    {
-                        rotation: {
-                            x: 0,
-                            y: 50,
-                            z: 0
-                        },
-                        position: {
-                            x: 0,
-                            y: 15,
-                            z: -45
-                        },
-                        file: 3
-                    },
-                    {
-                        rotation: {
-                            x: 0,
-                            y: 70,
-                            z: 0
-                        },
-                        position: {
-                            x: -54,
-                            y: 15,
-                            z: -20
-                        },
-                        file: 4
-                    }
-                ];
                 var useVr = $scope.useVr;
 
                 $scope.$watch(function() {
@@ -95,21 +24,52 @@ angular.module('ua5App')
                     }
                 });
 
+                function getPanels(numSides) {
+                    var radius = (75 * numSides) / 6, // arbitrary
+                        yRot = Math.PI / -2;
+
+                    var angle = 2 * Math.PI / numSides; // arbitrary
+
+                    var panels = [];
+
+                    var rotation,
+                        position;
+
+                    for (var i = 0; i < numSides; i++) {
+                        rotation = {
+                            x: 0,
+                            y: -angle * i + yRot,
+                            z: 0
+                        };
+
+                        position = {
+                            x: parseFloat((radius * Math.cos(angle * i)).toFixed(3)),
+                            y: (useVr) ? 15 : 10,
+                            z: parseFloat((radius * Math.sin(angle * i)).toFixed(3))
+                        };
+
+                        panels.push({rotation: rotation, position: position, file: 1});
+                    }
+                    return panels;
+                }
+
                 function init() {
                     var geometry;
                     var material;
                     var i;
                     var floor;
+                    var panels;
                     $$el.click(clickHandler);
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
                     $rootScope.renderer.setClearColor(0x000000);
+                    panels = getPanels(15);
 
                     i = panels.length;
                     while (i--) {
                         var texture = THREE.ImageUtils.loadTexture('/assets/img/demo/demo-' + panels[i].file + '.jpg');
                         material = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
-                        geometry = new THREE.PlaneBufferGeometry(50, 30);
+                        geometry = new THREE.PlaneBufferGeometry(70, 60);
                         floor = new THREE.Mesh(geometry, material);
                         floor.rotation.x = panels[i].rotation.x;
                         floor.rotation.y = panels[i].rotation.y;
