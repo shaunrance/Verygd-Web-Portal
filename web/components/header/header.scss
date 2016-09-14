@@ -1,6 +1,15 @@
 .header {
     background: $navy;
     color: $white;
+
+    &::after {
+        background: linear-gradient(to right, $brand-blue 0%, $pink 100%);
+        content: '';
+        display: block;
+        height: 3px;
+        position: relative;
+        width: 100%;
+    }
 }
 
 .header__container {
@@ -10,12 +19,24 @@
     @include justify-content(space-between);
     @include padding($site-gutter 30px 40px);
     height: $header-height-desk;
+
+    @include media($tablet) {
+        @include justify-content(center);
+        @include align-items(flex-end);
+        height: $header-height-tablet;
+        margin-left: -($logo-width / 2);
+        padding: (0 $site-gutter 0 0);
+    }
 }
 
 .header__meta {
     @include display(flex);
     @include align-items(center);
     @include justify-content(space-between);
+
+    @include media($tablet) {
+        width: 50%;
+    }
 }
 
 .user__login {
@@ -26,4 +47,8 @@
     &:hover {
         text-decoration: underline;
     }
+}
+
+.logo {
+    width: $logo-width;
 }

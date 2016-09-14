@@ -11,6 +11,10 @@ body {
 
 body {
     background-color: $grey;
+
+    @include media($tablet) {
+        background-color: $deep-navy;
+    }
 }
 
 html {
