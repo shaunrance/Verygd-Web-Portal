@@ -8,15 +8,6 @@
     margin-right: $item-wrapper-margin-desk;
     position: relative;
     width: 240px;
-
-    @include media($tablet) {
-        margin-right: 0;
-        width: calc(50% - #{$item-wrapper-margin-tablet});
-    }
-
-    @include media($phablet) {
-        width: 100%;
-    }
 }
 
 .vg__image {
@@ -30,10 +21,6 @@
     @include flex-wrap(wrap);
     counter-reset: sceneImage;
     width: 100%;
-
-    @include media($tablet) {
-        @include justify-content(space-between);
-    }
 }
 
 .vg__item--link {
@@ -58,4 +45,24 @@
     &:nth-child(5) {
         margin-right: 0;
     }
+}
+
+@include media($tablet) {
+
+    .vg__item--wrapper {
+        margin-right: 0;
+        width: calc(50% - #{$item-wrapper-margin-tablet});
+    }
+
+    .vg__items {
+        @include justify-content(space-between);
+    }
+}
+
+@include media($phablet) {
+
+    .vg__item--wrapper {
+        width: 100%;
+    }
+
 }

@@ -25,3 +25,11 @@
 .breadcrumbs__current {
     font-size: 24px;
 }
+
+@include media($tablet) {
+
+    .breadcrumbs {
+        display: none;
+    }
+
+}
