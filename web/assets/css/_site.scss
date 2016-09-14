@@ -35,3 +35,10 @@ a,
 button {
     cursor: pointer;
 }
+
+@include media($tablet) {
+
+    body {
+        background-color: $deep-navy;
+    }
+}
