@@ -1,5 +1,4 @@
 .header {
-    @include padding(null $site-gutter);
     background: $navy;
     color: $white;
 }
@@ -9,7 +8,7 @@
     @include display(flex);
     @include flex-direction(column);
     @include justify-content(space-between);
-    @include padding(30px null 40px);
+    @include padding($site-gutter 30px 40px);
     height: $header-height-desk;
 }
 
