@@ -11,6 +11,10 @@ body {
 
 body {
     background-color: $grey;
+
+    @include media($tablet) {
+        background-color: $deep-navy;
+    }
 }
 
 html {
@@ -30,4 +34,11 @@ figure {
 a,
 button {
     cursor: pointer;
+}
+
+@include media($tablet) {
+
+    body {
+        background-color: $deep-navy;
+    }
 }

@@ -1,3 +1,10 @@
+.breadcrumbs {
+
+    @include media($tablet) {
+        display: none;
+    }
+}
+
 .breadcrumbs__item {
     @extend %uppercase;
     display: inline-block;
@@ -17,4 +24,12 @@
 
 .breadcrumbs__current {
     font-size: 24px;
+}
+
+@include media($tablet) {
+
+    .breadcrumbs {
+        display: none;
+    }
+
 }

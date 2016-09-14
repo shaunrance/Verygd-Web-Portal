@@ -1,3 +1,68 @@
 .projects {
-    background-color: $white;
+    @include outer-container;
+    @include padding(50px $site-gutter null);
+}
+
+.vg__item--wrapper {
+    margin-bottom: $item-wrapper-margin-desk;
+    margin-right: $item-wrapper-margin-desk;
+    position: relative;
+    width: 240px;
+}
+
+.vg__image {
+    height: auto;
+    width: 100%;
+}
+
+.vg__items {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    counter-reset: sceneImage;
+    width: 100%;
+}
+
+.vg__item--link {
+    display: inline-block;
+    width: 100%;
+}
+
+.vg__image--caption {
+    @include padding(10px 10px 20px);
+}
+
+.vg__image--wrapper {
+    position: relative;
+}
+
+.project--link {
+    @extend %item-box-shadow;
+}
+
+.project--wrapper {
+
+    &:nth-child(5) {
+        margin-right: 0;
+    }
+}
+
+@include media($tablet) {
+
+    .vg__item--wrapper {
+        margin-right: 0;
+        width: calc(50% - #{$item-wrapper-margin-tablet});
+    }
+
+    .vg__items {
+        @include justify-content(space-between);
+    }
+}
+
+@include media($phablet) {
+
+    .vg__item--wrapper {
+        width: 100%;
+    }
+
 }
