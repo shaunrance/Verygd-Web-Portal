@@ -49,4 +49,8 @@ $site-gutter: 30px;
 $transition-speed: 0.15s;
 
 //Header
-$header-height-desk:	194px;
+$header-height-desk: 194px;
+
+//Item Wrapper Margins
+$item-wrapper-margin-desk: 20px;
+$item-wrapper-margin-tablet: $item-wrapper-margin-desk / 2;

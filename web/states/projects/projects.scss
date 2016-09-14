@@ -4,14 +4,24 @@
 }
 
 .vg__item--wrapper {
-    margin: 0 10px 20px;
-    max-width: 240px;
+    margin-bottom: $item-wrapper-margin-desk;
+    margin-right: $item-wrapper-margin-desk;
     position: relative;
+    width: 240px;
+
+    @include media($tablet) {
+        margin-right: 0;
+        width: calc(50% - #{$item-wrapper-margin-tablet});
+    }
+
+    @include media($phablet) {
+        width: 100%;
+    }
 }
 
 .vg__image {
     height: auto;
-    max-width: 100%;
+    width: 100%;
 }
 
 .vg__items {
@@ -20,10 +30,15 @@
     @include flex-wrap(wrap);
     counter-reset: sceneImage;
     width: 100%;
+
+    @include media($tablet) {
+        @include justify-content(space-between);
+    }
 }
 
 .vg__item--link {
     display: inline-block;
+    width: 100%;
 }
 
 .vg__image--caption {
@@ -39,10 +54,6 @@
 }
 
 .project--wrapper {
-
-    &:first-child {
-        margin-left: 0;
-    }
 
     &:nth-child(5) {
         margin-right: 0;
