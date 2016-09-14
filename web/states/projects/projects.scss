@@ -1,3 +1,39 @@
+.projects {
+    @include outer-container;
+    @include padding(50px $site-gutter null);
+}
+
+.vg__item--wrapper {
+    margin: 0 10px 20px;
+    max-width: 240px;
+    position: relative;
+}
+
+.vg__image {
+    height: auto;
+    max-width: 100%;
+}
+
+.vg__items {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    counter-reset: sceneImage;
+    width: 100%;
+}
+
+.vg__item--link {
+    display: inline-block;
+}
+
+.vg__image--caption {
+    @include padding(10px 10px 20px);
+}
+
+.vg__image--wrapper {
+    position: relative;
+}
+
 .project--link {
     @extend %item-box-shadow;
 }

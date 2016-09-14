@@ -1,8 +1,3 @@
-.projects {
-    @include outer-container;
-    @include padding(50px $site-gutter null);
-}
-
 .project-details {
     @include justify-content(space-between);
     @include display(flex);
@@ -38,12 +33,6 @@
     margin-top: 20px;
 }
 
-.vg__item--wrapper {
-    margin: 0 10px 20px;
-    max-width: 240px;
-    position: relative;
-}
-
 .scene--wrapper {
     &::before {
         @include display(flex);
@@ -63,27 +52,6 @@
         width: 20px;
         z-index: $z-alpha;
     }
-}
-
-.vg__image {
-    height: auto;
-    max-width: 100%;
-}
-
-.vg__items {
-    @include display(flex);
-    @include flex-direction(row);
-    @include flex-wrap(wrap);
-    counter-reset: sceneImage;
-    width: 100%;
-}
-
-.vg__image--caption {
-    @include padding(10px 10px 20px);
-}
-
-.vg__image--wrapper {
-    position: relative;
 }
 
 .search-icon {
@@ -109,10 +77,6 @@
     height: inherit;
     max-width: 50px;
     width: 100%;
-}
-
-.vg__item--link {
-    display: inline-block;
 }
 
 .scene--link:hover {
