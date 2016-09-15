@@ -1,9 +1,8 @@
 <div header></div>
-    <a ui-sref="projects.details">Test Project 1</a>
 <div ui-view class="projects">
     <div  class="vg__items">
         <figure class="vg__item--wrapper project--wrapper">
-            <a class="vg__item--link project--link">
+            <a class="vg__item--link project--link" ui-sref="projects.details({ projectId: 415 })">
                 <div class="vg__image--wrapper">
                     <img class="vg__image" src="/assets/img/demo/demo-1.jpg" alt="Filename">
                     <div class="search-icon---container">

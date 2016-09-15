@@ -39,37 +39,18 @@
                     <figcaption class="vg__image--caption">filename.png</figcaption>
                 </a>
             </figure>
-            <figure class="vg__item--wrapper scene--wrapper">
+            <figure ng-repeat="screen in screens" class="vg__item--wrapper scene--wrapper">
                 <a class="vg__item--link scene--link">
+                    <button class="scene__item--delete" ng-click="deleteScreen(screen.filename)">
+                        <img class="scene-delete_icon" src="assets/img/close.svg" />
+                    </button>
                     <div class="vg__image--wrapper">
-                        <img class="vg__image" src="/assets/img/demo/demo-3.jpg" alt="Filename">
+                        <img class="vg__image" ng-src="{{screen.url}}" alt="Filename">
                         <div class="search-icon---container">
                             <img class="search-icon" src="assets/img/search.svg" />
                         </div>
                     </div>
-                    <figcaption class="vg__image--caption">filename.png</figcaption>
-                </a>
-            </figure>
-            <figure class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link">
-                    <div class="vg__image--wrapper">
-                        <img class="vg__image" src="/assets/img/demo/demo-4.jpg" alt="Filename">
-                        <div class="search-icon---container">
-                            <img class="search-icon" src="assets/img/search.svg" />
-                        </div>
-                    </div>
-                    <figcaption class="vg__image--caption">filename.png</figcaption>
-                </a>
-            </figure>
-            <figure class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link">
-                    <div class="vg__image--wrapper">
-                        <img class="vg__image" src="/assets/img/demo/demo-5.jpg" alt="Filename">
-                        <div class="search-icon---container">
-                            <img class="search-icon" src="assets/img/search.svg" />
-                        </div>
-                    </div>
-                    <figcaption class="vg__image--caption">filename.png</figcaption>
+                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}</figcaption>
                 </a>
             </figure>
         </div>
@@ -96,4 +77,10 @@
             </button>
         </div>
     </div>
+        <div class="drop-box--container">
+            <div ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+                <h1>Drag images here to create your scene</h1>
+                <button class="drop-box__button">Upload Files</button>
+            </div>
+        </div>
 </main>

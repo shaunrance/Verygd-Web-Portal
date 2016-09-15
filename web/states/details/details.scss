@@ -166,3 +166,26 @@
     }
 }
 
+.drop-box--container {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    @include margin(50px 50px null);
+    border: 2px dashed $pink;
+    color: $pink;
+    cursor: pointer;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+}
+
+.drop-box__button {
+    @extend %reset-button;
+    background-color: $btn-blue;
+    border-radius: 2px;
+    color: $white;
+    height: 40px;
+    margin-top: 40px;
+    width: 160px;
+}
+

@@ -3,7 +3,7 @@
     color: $white;
 
     &::after {
-        background: linear-gradient(to right, $brand-blue 0%, $pink 100%);
+        @extend %gradient;
         content: '';
         display: block;
         height: 3px;

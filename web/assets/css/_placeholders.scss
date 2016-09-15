@@ -65,3 +65,7 @@
     @include item-box-shadow;
 }
 
+%gradient {
+    background: linear-gradient(to right, $brand-blue 0%, $pink 100%);
+}
+
