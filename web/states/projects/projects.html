@@ -1,51 +1,7 @@
 <div header></div>
 <div ui-view class="projects">
     <div  class="vg__items">
-        <figure class="vg__item--wrapper project--wrapper">
-            <a class="vg__item--link project--link" ui-sref="projects.details({ projectId: 415 })">
-                <div class="vg__image--wrapper">
-                    <img class="vg__image" src="/assets/img/demo/demo-1.jpg" alt="Filename">
-                    <div class="search-icon---container">
-                        <img class="search-icon" src="assets/img/search.svg" />
-                    </div>
-                </div>
-                <figcaption class="vg__image--caption">Project Name</figcaption>
-            </a>
-        </figure>
-        <figure class="vg__item--wrapper project--wrapper">
-            <a class="vg__item--link project--link">
-                <div class="vg__image--wrapper">
-                    <img class="vg__image" src="/assets/img/demo/demo-2.jpg" alt="Filename">
-                    <div class="search-icon---container">
-                        <img class="search-icon" src="assets/img/search.svg" />
-                    </div>
-                </div>
-                <figcaption class="vg__image--caption">Project Name</figcaption>
-            </a>
-        </figure>
-        <figure class="vg__item--wrapper project--wrapper">
-            <a class="vg__item--link project--link">
-                <div class="vg__image--wrapper">
-                    <img class="vg__image" src="/assets/img/demo/demo-3.jpg" alt="Filename">
-                    <div class="search-icon---container">
-                        <img class="search-icon" src="assets/img/search.svg" />
-                    </div>
-                </div>
-                <figcaption class="vg__image--caption">Project Name</figcaption>
-            </a>
-        </figure>
-        <figure class="vg__item--wrapper project--wrapper">
-            <a class="vg__item--link project--link">
-                <div class="vg__image--wrapper">
-                    <img class="vg__image" src="/assets/img/demo/demo-4.jpg" alt="Filename">
-                    <div class="search-icon---container">
-                        <img class="search-icon" src="assets/img/search.svg" />
-                    </div>
-                </div>
-                <figcaption class="vg__image--caption">Project Name</figcaption>
-            </a>
-        </figure>
-        <figure class="vg__item--wrapper project--wrapper">
+        <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper" ui-sref="projects.details({ projectId: project.id })">
             <a class="vg__item--link project--link">
                 <div class="vg__image--wrapper">
                     <img class="vg__image" src="/assets/img/demo/demo-5.jpg" alt="Filename">
@@ -53,8 +9,15 @@
                         <img class="search-icon" src="assets/img/search.svg" />
                     </div>
                 </div>
-                <figcaption class="vg__image--caption">Project Name</figcaption>
+                <figcaption class="vg__image--caption">{{project.title}}</figcaption>
             </a>
         </figure>
+        <form ng-submit="createProject()">
+            <h3>Project name:</h3>
+            <input type="text" ng-model="newProject.name"/>
+            <h3>Description:</h3>
+            <input type="text" ng-model="newProject.description"/>
+            <button type="submit">Create</button>
+        </form>
     </div>
 </div>

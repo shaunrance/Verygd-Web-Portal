@@ -33,6 +33,8 @@
 }
 
 .vg__image--wrapper {
+    height: 185px;
+    overflow: hidden;
     position: relative;
 }
 
@@ -52,6 +54,10 @@
     .vg__item--wrapper {
         margin-right: 0;
         width: calc(50% - #{$item-wrapper-margin-tablet});
+    }
+
+    .vg__image--wrapper {
+        height: auto;
     }
 
     .vg__items {

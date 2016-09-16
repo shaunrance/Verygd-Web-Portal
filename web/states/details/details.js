@@ -13,6 +13,16 @@ angular.module('ua5App.details', ['ngFileUpload'])
     }])
     .controller('detailsCtrl', ['$scope', 'screenFactory', function($scope, screenFactory) {
         $scope.screens = [];
+        
+        $scope.deleteScreen = function(screenId) {
+            screenFactory.deleteScreen(screenId)
+            
+            .then(function(response) {
+                    getScreens();
+                }, function(error) {
+                    $scope.status = 'Unable to delete screen: ' + error.message;
+                });
+        };
 
         function uploadScreens(files) {
             if (files && files.length) {
@@ -25,7 +35,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                                 $scope.status = 'Success';
                                 getScreens();
                             }, function(error) {
-                                $scope.status = 'Unable to load screen data: ' + error.message;
+                                $scope.status = 'Unable to insert screen: ' + error.message;
                             });
                 }
             }

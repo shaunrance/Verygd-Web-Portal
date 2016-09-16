@@ -17,31 +17,9 @@
             Add Scene</button>
         </nav>
         <div  class="vg__items">
-            <figure class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link">
-                    <div class="vg__image--wrapper">
-                        <img class="vg__image" src="/assets/img/demo/demo-1.jpg" alt="Filename">
-                        <div class="search-icon---container">
-                            <img class="search-icon" src="assets/img/search.svg" />
-                        </div>
-                    </div>
-                    <figcaption class="vg__image--caption">filename.png</figcaption>
-                </a>
-            </figure>
-            <figure class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link">
-                    <div class="vg__image--wrapper">
-                        <img class="vg__image" src="/assets/img/demo/demo-2.jpg" alt="Filename">
-                        <div class="search-icon---container">
-                            <img class="search-icon" src="assets/img/search.svg" />
-                        </div>
-                    </div>
-                    <figcaption class="vg__image--caption">filename.png</figcaption>
-                </a>
-            </figure>
             <figure ng-repeat="screen in screens" class="vg__item--wrapper scene--wrapper">
                 <a class="vg__item--link scene--link">
-                    <button class="scene__item--delete" ng-click="deleteScreen(screen.filename)">
+                    <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
                         <img class="scene-delete_icon" src="assets/img/close.svg" />
                     </button>
                     <div class="vg__image--wrapper">

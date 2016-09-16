@@ -12,4 +12,29 @@ angular.module('ua5App.projects')
             }
         });
     }])
-    .controller('projectsCtrl', ['$scope', function($scope) {}]);
+    .controller('projectsCtrl', ['$scope', 'projectFactory', function($scope, projectFactory) {
+        $scope.newProjects = {};
+
+        $scope.createProject = function() {
+            projectFactory.addProject($scope.newProjects)
+                .then(function(response) {
+                   
+                }, function(error) {
+                  
+                });
+        };
+
+        function getProjects() {
+            projectFactory.getProjects()
+
+                .then(function(response) {
+                    var grabProject = response.data[1];
+                    $scope.projects = grabProject;
+                    
+                }, function(error) {
+                    
+                });
+        }
+
+        getProjects();
+    }]);
