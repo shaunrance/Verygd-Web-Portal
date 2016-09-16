@@ -26,6 +26,7 @@
     "jquery-unorphanize": "1.0.1",
     "suite": "*",
     "three.js": "threejs#*",
-    "modernizr": "components/modernizr#^2.8.3"
+    "modernizr": "components/modernizr#^2.8.3",
+    "ng-file-upload": "^12.2.9"
   }
 }

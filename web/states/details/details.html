@@ -1,0 +1,64 @@
+<main class="project-details__container">
+    <div class="project-details">
+        <nav class="scene-nav">
+            <ul class="scene-list">
+                <li class="scene-list--item">
+                    <a href="#" class="scene-list--link">Scene 1</a>
+                </li>
+                <li class="scene-list--item">
+                    <a href="#" class="scene-list--link">Scene 2</a>
+                </li>
+                <li class="scene-list--item">
+                    <a href="#" class="scene-list--link">Scene 3</a>
+                </li>
+            </ul>
+            <button class="scene-add">
+            <img class="add-icon" src="assets/img/add.svg" />
+            Add Scene</button>
+        </nav>
+        <div  class="vg__items project__items">
+            <figure ng-repeat="screen in screens" class="vg__item--wrapper scene--wrapper">
+                <a class="vg__item--link scene--link">
+                    <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
+                        <img class="scene-delete_icon" src="assets/img/close.svg" />
+                    </button>
+                    <div class="vg__image--wrapper">
+                        <img class="vg__image" ng-src="{{screen.url}}" alt="Filename">
+                        <div class="search-icon---container">
+                            <img class="search-icon" src="assets/img/search.svg" />
+                        </div>
+                    </div>
+                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}</figcaption>
+                </a>
+            </figure>
+        </div>
+        <div class="scene-preview">
+            <div class="scene-preview--widget">
+                <h5>Preview</h5>
+                <img class="preview-icon" src="assets/img/preview-icon.png">
+            </div>
+            <button
+                ui-sref="viewer({version: 'mobile'})"
+                class="scene-preview__button scene-preview--mobile">
+                <span class="scene-preview__icon">
+                    <img class="mobile-icon" src="assets/img/mobile.svg" />
+                </span>
+                Launch Mobile
+            </button>
+            <button
+                ui-sref="viewer({version: 'cardboard'})"
+                class="scene-preview__button scene-preview--carboard">
+                <span class="scene-preview__icon">
+                    <img class="cardboard-icon" src="assets/img/cardboard.svg" />
+                </span>
+                Launch Cardboard
+            </button>
+        </div>
+        <div class="drop-box--container">
+                <div class="drop-box" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+                    <h1 class="drop-box__header">Drag images here to create your scene</h1>
+                    <button class="drop-box__button">Upload Files</button>
+                </div>
+        </div>
+    </div>
+</main>

@@ -1,6 +1,7 @@
 .project-details {
     @include justify-content(space-between);
     @include display(flex);
+    @include flex-wrap(wrap);
 }
 
 .scene-nav {
@@ -139,10 +140,56 @@
     max-width: 100%;
 }
 
+.scene__item--delete {
+    @extend %icon-button;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 20px;
+    z-index: $z-beta;
+}
+
+.scene-delete_icon {
+    width: 20px;
+}
+
+.drop-box--container {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    @include flex(100%);
+    @include margin(50px null null 240px);
+    border: 2px dashed $pink;
+    color: $pink;
+    cursor: pointer;
+    height: 300px;
+    padding: 25px;
+    text-align: center;
+}
+
+.drop-box {
+    width: 100%;
+}
+
+.drop-box__button {
+    @extend %reset-button;
+    background-color: $btn-blue;
+    border-radius: 2px;
+    color: $white;
+    height: 40px;
+    margin-top: 40px;
+    width: 160px;
+}
+
+
 @include media($tablet) {
 
     .project-details {
         @include flex-direction(column);
+    }
+
+    .project__items {
+        @include order(1);
     }
 
     .scene-nav {
@@ -154,6 +201,7 @@
     }
 
     .scene-preview {
+        @include order(3);
         max-width: 100%;
     }
 
@@ -164,5 +212,26 @@
     .scene-preview__button {
         @include justify-content(center);
     }
-}
 
+    .drop-box--container {
+        @include order(2);
+        border: none;
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .drop-box {
+        @include margin(null null 20px);
+    }
+
+    .drop-box__header {
+        display: none;
+    }
+
+    .drop-box__button {
+        height: 60px;
+        margin: 0;
+        width: 100%;
+    }
+}

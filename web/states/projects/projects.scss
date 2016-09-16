@@ -1,6 +1,6 @@
 .projects {
     @include outer-container;
-    @include padding(50px $site-gutter null);
+    @include padding(50px $site-gutter 50px);
 }
 
 .vg__item--wrapper {
@@ -19,6 +19,7 @@
     @include display(flex);
     @include flex-direction(row);
     @include flex-wrap(wrap);
+    @include flex(1);
     counter-reset: sceneImage;
     width: 100%;
 }
@@ -33,6 +34,8 @@
 }
 
 .vg__image--wrapper {
+    height: 185px;
+    overflow: hidden;
     position: relative;
 }
 
@@ -52,6 +55,10 @@
     .vg__item--wrapper {
         margin-right: 0;
         width: calc(50% - #{$item-wrapper-margin-tablet});
+    }
+
+    .vg__image--wrapper {
+        height: 240px;
     }
 
     .vg__items {

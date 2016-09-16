@@ -10,14 +10,31 @@ angular.module('ua5App.projects')
             data: {
                 settings:{displayName:'My Projects'}
             }
-        })
-        .state('projects.details', {
-            name:'Details',
-            url: '/project-details',
-            templateUrl: 'states/projects/projects.details.html',
-            data: {
-                settings:{displayName:'Project Name'}
-            }    
         });
     }])
-    .controller('projectsCtrl', ['$scope', function($scope) {}]);
+    .controller('projectsCtrl', ['$scope', 'projectFactory', function($scope, projectFactory) {
+        $scope.newProject = {};
+
+        $scope.addProject = function() {
+            projectFactory.addProject($scope.newProject)
+
+            .then(function(response) {
+                getProjects();
+            }, function(error) {
+                  
+            });
+        };
+
+        function getProjects() {
+            projectFactory.getProjects()
+
+                .then(function(response) {
+                    $scope.projects = response.data;
+                    
+                }, function(error) {
+                    
+                });
+        }
+
+        getProjects();
+    }]);
