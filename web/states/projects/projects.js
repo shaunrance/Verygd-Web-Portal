@@ -13,23 +13,23 @@ angular.module('ua5App.projects')
         });
     }])
     .controller('projectsCtrl', ['$scope', 'projectFactory', function($scope, projectFactory) {
-        $scope.newProjects = {};
+        $scope.newProject = {};
 
-        $scope.createProject = function() {
-            projectFactory.addProject($scope.newProjects)
-                .then(function(response) {
-                   
-                }, function(error) {
+        $scope.addProject = function() {
+            projectFactory.addProject($scope.newProject)
+
+            .then(function(response) {
+                getProjects();
+            }, function(error) {
                   
-                });
+            });
         };
 
         function getProjects() {
             projectFactory.getProjects()
 
                 .then(function(response) {
-                    var grabProject = response.data[1];
-                    $scope.projects = grabProject;
+                    $scope.projects = response.data;
                     
                 }, function(error) {
                     

@@ -4,7 +4,7 @@
         <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper" ui-sref="projects.details({ projectId: project.id })">
             <a class="vg__item--link project--link">
                 <div class="vg__image--wrapper">
-                    <img class="vg__image" src="/assets/img/demo/demo-5.jpg" alt="Filename">
+                    <img class="vg__image" ng-src="{{project.cover_image}}" alt="Filename">
                     <div class="search-icon---container">
                         <img class="search-icon" src="assets/img/search.svg" />
                     </div>
@@ -12,7 +12,7 @@
                 <figcaption class="vg__image--caption">{{project.title}}</figcaption>
             </a>
         </figure>
-        <form ng-submit="createProject()">
+        <form ng-submit="addProject()">
             <h3>Project name:</h3>
             <input type="text" ng-model="newProject.name"/>
             <h3>Description:</h3>

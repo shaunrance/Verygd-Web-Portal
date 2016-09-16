@@ -11,7 +11,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', 'screenFactory', function($scope, screenFactory) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', function($scope, stateParams, screenFactory) {
         $scope.screens = [];
         
         $scope.deleteScreen = function(screenId) {
@@ -29,7 +29,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                   
-                    screenFactory.insertScreen(file)
+                    screenFactory.insertScreen(file, stateParams.projectId)
 
                         .then(function(response) {
                                 $scope.status = 'Success';
@@ -42,7 +42,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         }
 
         function getScreens() {
-            screenFactory.getScreens()
+            screenFactory.getScreens(stateParams.projectId)
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
