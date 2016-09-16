@@ -1,6 +1,6 @@
 .projects {
     @include outer-container;
-    @include padding(50px $site-gutter null);
+    @include padding(50px $site-gutter 50px);
 }
 
 .vg__item--wrapper {
@@ -19,6 +19,7 @@
     @include display(flex);
     @include flex-direction(row);
     @include flex-wrap(wrap);
+    @include flex(1);
     counter-reset: sceneImage;
     width: 100%;
 }
@@ -57,7 +58,7 @@
     }
 
     .vg__image--wrapper {
-        height: auto;
+        height: 240px;
     }
 
     .vg__items {

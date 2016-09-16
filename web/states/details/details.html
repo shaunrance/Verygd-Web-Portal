@@ -16,7 +16,7 @@
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
         </nav>
-        <div  class="vg__items">
+        <div  class="vg__items project__items">
             <figure ng-repeat="screen in screens" class="vg__item--wrapper scene--wrapper">
                 <a class="vg__item--link scene--link">
                     <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
@@ -54,11 +54,11 @@
                 Launch Cardboard
             </button>
         </div>
-    </div>
         <div class="drop-box--container">
-            <div ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
-                <h1>Drag images here to create your scene</h1>
-                <button class="drop-box__button">Upload Files</button>
-            </div>
+                <div class="drop-box" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+                    <h1 class="drop-box__header">Drag images here to create your scene</h1>
+                    <button class="drop-box__button">Upload Files</button>
+                </div>
         </div>
+    </div>
 </main>
