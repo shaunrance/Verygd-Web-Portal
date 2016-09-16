@@ -63,5 +63,6 @@ angular.module('ua5App.details', ['ngFileUpload'])
             }
         });
         $scope.log = '';
+        $scope.projectId = stateParams.projectId;
     }])
 ;

@@ -5,7 +5,8 @@ angular.module('ua5App')
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
             scope: {
-                useVr: '='
+                useVr: '=',
+                panoContent: '='
             },
             link: function($scope, element, attrs) {
                 var scene = new BaseThreeScene();
@@ -63,11 +64,11 @@ angular.module('ua5App')
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
                     $rootScope.renderer.setClearColor(0x000000);
-                    panels = getPanels(15);
-
-                    i = panels.length;
+                    
+                    i = $scope.panoContent.length;
+                    panels = getPanels(i);
                     while (i--) {
-                        var texture = THREE.ImageUtils.loadTexture('/assets/img/demo/demo-' + panels[i].file + '.jpg');
+                        var texture = THREE.ImageUtils.loadTexture($scope.panoContent[i].url);
                         material = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
                         geometry = new THREE.PlaneBufferGeometry(70, 60);
                         floor = new THREE.Mesh(geometry, material);
