@@ -55,10 +55,7 @@ angular.module('ua5App')
                 }
 
                 function init() {
-                    var geometry;
-                    var material;
                     var i;
-                    var floor;
                     var panels;
                     $$el.click(clickHandler);
 
@@ -68,19 +65,56 @@ angular.module('ua5App')
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
                     while (i--) {
-                        var texture = THREE.ImageUtils.loadTexture($scope.panoContent[i].url);
-                        material = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
-                        geometry = new THREE.PlaneBufferGeometry(70, 60);
-                        floor = new THREE.Mesh(geometry, material);
-                        floor.rotation.x = panels[i].rotation.x;
-                        floor.rotation.y = panels[i].rotation.y;
-                        floor.rotation.z = panels[i].rotation.z;
-
-                        floor.position.x = panels[i].position.x;
-                        floor.position.y = panels[i].position.y;
-                        floor.position.z = panels[i].position.z;
-                        scene.addItem(floor);
+                        makePanel($scope.panoContent[i], panels[i]);
                     }
+                }
+
+                function makePanel(data, panel) {
+                    var floor;
+                    var geometry;
+                    var material;
+                    var textureLoader = new THREE.TextureLoader();
+
+                    textureLoader.load(
+                        data.url,
+                        function(texture) {
+                            var size = getPlaneSize(texture.image);
+                            texture.repeat.x = 1; // adjust as needed to stretch horizontally
+                            texture.repeat.y = 1; // adjust as needed to stretch vertically
+
+                            material = new THREE.MeshBasicMaterial({
+                                side: THREE.MeshBasicMaterial,
+                                map: texture
+                            });
+                            geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
+                            floor = new THREE.Mesh(geometry, material);
+                            floor.rotation.x = panel.rotation.x;
+                            floor.rotation.y = panel.rotation.y;
+                            floor.rotation.z = panel.rotation.z;
+
+                            floor.position.x = panel.position.x;
+                            floor.position.y = panel.position.y;
+                            floor.position.z = panel.position.z;
+                            scene.addItem(floor);
+                        }
+                    );
+                }
+
+                function getPlaneSize(image) {
+                    var MAX_H = 60;
+                    var MAX_W = 70;
+                    var dimensions = {};
+
+                    if (image.height > image.width) {
+                        dimensions.height = MAX_H;
+                        dimensions.width = (MAX_H * image.width) / image.height;
+                    } else if (image.height < image.width) {
+                        dimensions.width = MAX_W;
+                        dimensions.height = (MAX_W * image.height) / image.width;
+                    } else {
+                        dimensions = {width: MAX_H, height: MAX_H};
+                    }
+                    return dimensions;
                 }
 
                 function onRender() {
