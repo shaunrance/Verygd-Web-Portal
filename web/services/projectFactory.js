@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('ua5App.projects')
+angular.module('ua5App')
     .factory('projectFactory', ['$http', 'Upload', function($http, Upload) {
         var urlBase = 'http://216.70.115.196:7777/album';
         var dataFactory = {};
