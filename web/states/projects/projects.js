@@ -25,6 +25,16 @@ angular.module('ua5App.projects')
             });
         };
 
+        $scope.deleteProject = function(projectId) {
+            projectFactory.deleteScreen(projectId)
+            
+            .then(function(response) {
+                    getProjects();
+                }, function(error) {
+                    $scope.status = 'Unable to delete project: ' + error.message;
+                });
+        };
+
         function getProjects() {
             projectFactory.getProjects()
 

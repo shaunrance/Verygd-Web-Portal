@@ -34,9 +34,23 @@
 }
 
 .vg__image--wrapper {
+    @extend %gradient;
     height: 185px;
     overflow: hidden;
     position: relative;
+}
+
+.project__item--delete {
+    @extend %icon-button;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 20px;
+    z-index: $z-beta;
+}
+
+.project-delete_icon {
+    width: 20px;
 }
 
 .project--link {

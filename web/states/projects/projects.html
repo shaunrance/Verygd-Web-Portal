@@ -1,8 +1,11 @@
 <div header></div>
 <div ui-view class="projects">
     <div  class="vg__items">
-        <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper" ui-sref="projects.details({ projectId: project.id })">
-            <a class="vg__item--link project--link">
+        <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper">
+            <button class="project__item--delete" ng-click="deleteProject(project.id)">
+                <img class="project-delete_icon" src="assets/img/close.svg" />
+            </button>
+            <a class="vg__item--link project--link" ui-sref="projects.details({ projectId: project.id })">
                 <div class="vg__image--wrapper">
                     <img class="vg__image" ng-src="{{project.cover_image}}" alt="Filename">
                     <div class="search-icon---container">
