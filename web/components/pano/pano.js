@@ -76,7 +76,7 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.load(
-                        data.url,
+                        data.url + '?fm=jpg&h=800&w=800&fit=max&q=60',
                         function(texture) {
                             var size = getPlaneSize(texture.image);
                             texture.repeat.x = 1; // adjust as needed to stretch horizontally
