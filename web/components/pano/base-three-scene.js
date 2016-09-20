@@ -196,6 +196,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     controls = new THREE.DeviceOrientationControls(camera, true);
                     controls.connect();
                     controls.update();
+                    //TODO Replace this with WebVR + Shim
                     effect = new THREE.StereoEffect(renderer);
                 } else {
                     controls = new THREE.OrbitControls(camera, renderer.domElement);
