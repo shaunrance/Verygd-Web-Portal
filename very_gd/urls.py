@@ -4,22 +4,23 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from rest_framework import routers
 
-from media_portal.aws_encoding.views import aws_encoder_job_updates
-from media_portal.album.content.views import AlbumImagesViewSet, AlbumVideoViewSet
-from media_portal.album.views import AlbumViewSet
-from media_portal.payment.views import available_stripe_plans
-from media_portal.policy.urls import urlpatterns as policy_urls
 from media_portal.users.auth.views import MediaPortalAuthToken as VeryGDAuthToken
 from media_portal.users.views import MembersViewSet, MemberCreateView
+
+from media_portal.album.content.views import AlbumImagesViewSet
+from media_portal.album.views import AlbumViewSet
+
+from media_portal.payment.views import available_stripe_plans
+from media_portal.policy.urls import urlpatterns as policy_urls
 from media_portal.admin import admin_site
+
 
 router = routers.DefaultRouter(trailing_slash=False)
 
 router.register(r'users', MembersViewSet, base_name='users')
 
-router.register(r'project', AlbumViewSet, base_name='album')
+router.register(r'project', AlbumViewSet, base_name='project')
 router.register(r'images', AlbumImagesViewSet, base_name='images')
-router.register(r'videos', AlbumVideoViewSet, base_name='videos')
 
 
 urlpatterns = router.urls
@@ -34,6 +35,5 @@ urlpatterns = [
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
-    url(r'^aws_sns/?', aws_encoder_job_updates),
 
 ] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
