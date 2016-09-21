@@ -35,7 +35,15 @@
         <div class="scene-preview">
             <div class="scene-preview--widget">
                 <h5>Preview</h5>
-                <img class="preview-icon" src="assets/img/preview-icon.png">
+                <div ng-if="screens.length > 2 && screens.length < 7">
+                    <img class="preview-icon" src="assets/img/{{screens.length}}.png">
+                </div>
+                <div ng-if="screens.length > 6">
+                    <p>We recommend you keep your scene under 7 panels</p>
+                </div>
+                <div ng-if="screens.length < 3">
+                    <p>We recommend you add at&nbsp;least 3 panels</p>
+                </div>
             </div>
             <button
                 ui-sref="viewer({version: 'mobile', projectId: projectId})"
