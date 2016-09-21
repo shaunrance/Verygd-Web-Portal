@@ -25,3 +25,4 @@ secret.yml
 /web/index.html
 /tmp
 
+/db.sqlite3
