@@ -22,10 +22,12 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
 
-# TODO(andrew.silvernail): setup stripe test api key
-STRIPE_API_KEY = ''
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 ALLOWED_HOSTS = []
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = (
 # Third-party applications
 INSTALLED_APPS += (
     'actstream',
+    'rest_framework',
     'media_portal.policy',
     'media_portal.payment',
     'media_portal.invite',
@@ -71,6 +74,22 @@ ROOT_URLCONF = 'very_gd.urls'
 
 WSGI_APPLICATION = 'very_gd.wsgi.application'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+            'debug': DEBUG
+        },
+    },
+]
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
