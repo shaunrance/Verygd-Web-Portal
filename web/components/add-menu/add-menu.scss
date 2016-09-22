@@ -69,8 +69,7 @@
     @include flex-direction(column);
     @include align-items(flex-end);
     @include outer-container;
-    @include padding(50px $site-gutter 50px);
-    padding-right: $site-gutter;
+    padding-right: $site-gutter * 2;
     width: 100%;
 }
 

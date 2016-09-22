@@ -12,8 +12,11 @@
 }
 
 .vg__image {
+    background-color: $navy;
+    background-repeat: no-repeat;
+    background-size: cover;
     height: 100%;
-    width: auto;
+    width: 100%;
 }
 
 .vg__items {
@@ -35,7 +38,6 @@
 }
 
 .vg__image--wrapper {
-    background-color: $navy;
     height: 185px;
     overflow: hidden;
     position: relative;
