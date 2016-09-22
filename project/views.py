@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from media_portal.album.views import AlbumViewSet as ProjectViewSet
+from project.models import Project
 
-# Create your views here.
+ProjectViewSet.model = Project
