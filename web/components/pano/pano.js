@@ -1,4 +1,4 @@
-/* global angular, THREE, $ */
+/* global angular, THREE, $, TweenMax, Linear */
 angular.module('ua5App')
     .directive('pano', ['$rootScope', 'BaseThreeScene', function($rootScope, BaseThreeScene) {
         return {
@@ -9,8 +9,11 @@ angular.module('ua5App')
                 panoContent: '='
             },
             link: function($scope, element, attrs) {
-                var scene = new BaseThreeScene();
                 var $$el = $('.my-canvas');
+                var crosshair;
+                var gazeStarted = false;
+                var gazeTimeout;
+                var scene = new BaseThreeScene();
                 var useVr = $scope.useVr;
 
                 $scope.$watch(function() {
@@ -25,8 +28,20 @@ angular.module('ua5App')
                     }
                 });
 
+                // Watch for new data getting set (aka a new scene);
+                $scope.$watch(function() {
+                    return $scope.panoContent;
+                }, function(newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        $scope.panoContent = newValue;
+                        reload();
+                    }
+                });
+
+                // returns an array of panels positioned equally around a room
                 function getPanels(numSides) {
-                    var radius = (75 * numSides) / 6, // arbitrary
+                    //75 is a good radius for 6 sides, this adjusts accordingly:
+                    var radius = (75 * numSides) / 6,
                         yRot = Math.PI / -2;
 
                     var angle = 2 * Math.PI / numSides; // arbitrary
@@ -67,40 +82,113 @@ angular.module('ua5App')
                     while (i--) {
                         makePanel($scope.panoContent[i], panels[i]);
                     }
+
+                    if (useVr) {
+                        crosshair = makeCrosshair();    
+                    }
+                    scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                 }
 
                 function makePanel(data, panel) {
-                    var floor;
                     var geometry;
+                    var hitAreaGeo;
+                    var hitAreaMat;
+                    var hitAreaMesh;
                     var material;
+                    var plane;
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.load(
                         data.url + '?fm=jpg&h=800&w=800&fit=max&q=60',
                         function(texture) {
-                            var size = getPlaneSize(texture.image);
-                            texture.repeat.x = 1; // adjust as needed to stretch horizontally
-                            texture.repeat.y = 1; // adjust as needed to stretch vertically
+                            var size = sizePlaneFromImage(texture.image);
 
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
+                                transparent: true,
                                 map: texture
                             });
-                            geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
-                            floor = new THREE.Mesh(geometry, material);
-                            floor.rotation.x = panel.rotation.x;
-                            floor.rotation.y = panel.rotation.y;
-                            floor.rotation.z = panel.rotation.z;
 
-                            floor.position.x = panel.position.x;
-                            floor.position.y = panel.position.y;
-                            floor.position.z = panel.position.z;
-                            scene.addItem(floor);
+                            geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
+                            plane = new THREE.Mesh(geometry, material);
+                            plane.rotation.x = panel.rotation.x;
+                            plane.rotation.y = panel.rotation.y;
+                            plane.rotation.z = panel.rotation.z;
+
+                            plane.position.x = panel.position.x;
+                            plane.position.y = panel.position.y;
+                            plane.position.z = panel.position.z;
+
+                            hitAreaGeo = new THREE.PlaneBufferGeometry(15, 5);
+                            hitAreaMat = new THREE.MeshBasicMaterial({color: 0xf229e8, opacity: 0.5, transparent: true});
+                            hitAreaMat.depthWrite = false;
+                            hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                            hitAreaMesh.position.y = -size.height / 2 - 1;
+                            hitAreaMesh.position.z = 15;
+                            plane.add(hitAreaMesh);
+                            scene.pushItem(hitAreaMesh);
+
+                            scene.scene().add(plane);
                         }
                     );
                 }
 
-                function getPlaneSize(image) {
+                function reload() {
+                    var i = $scope.panoContent.length;
+                    var panels;
+                    // empty the scene, except for our camera:
+                    scene.destroyAllSceneObjects(['PerspectiveCamera']);
+                    // make new panels
+                    panels = getPanels(i);
+                    while (i--) {
+                        makePanel($scope.panoContent[i], panels[i]);
+                    }
+                }
+
+                function makeCrosshair() {
+                    var backGeo;
+                    var backMat;
+                    var backMesh;
+
+                    var midGeo;
+                    var midMat;
+                    var midMesh;
+
+                    var frontGeo;
+                    var frontMat;
+                    var frontMesh;
+                    var cam = scene.camera();
+
+                    backGeo = new THREE.SphereGeometry(0.2, 25, 25);
+                    backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
+                    backMesh = new THREE.Mesh(backGeo, backMat);
+                    backMat.depthWrite = false;
+                    backMesh.position.set(0, 0, -5);
+
+                    midGeo = new THREE.SphereGeometry(0.2, 25, 25);
+                    midMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
+                    midMesh = new THREE.Mesh(midGeo, midMat);
+                    midMat.depthWrite = false;
+                    midMesh.position.set(0, 0, -5); 
+
+                    frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
+                    frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.9, transparent: true});
+                    frontMat.depthWrite = false;
+                    frontMesh = new THREE.Mesh(frontGeo, frontMat);
+                    frontMesh.position.set(0, 0, -5);
+                    
+                    //add in in front of our camera:
+                    cam.add(backMesh);
+                    cam.add(midMesh);
+                    cam.add(frontMesh);
+
+                    // return the mid crosshair, so we can animate it
+                    return midMesh;
+                }
+
+                // returns a width & height object
+                // it keeps the aspect of the uploaded image
+                function sizePlaneFromImage(image) {
                     var MAX_H = 60;
                     var MAX_W = 70;
                     var dimensions = {};
@@ -122,17 +210,38 @@ angular.module('ua5App')
 
                 function clickHandler(item) {
                     console.log('Clicked: ', scene.activeObject());
+                    if (typeof scene.activeObject() !== 'undefined') {
+                        // TODO: hook this up with real data
+                        // currently hardcoded to fire a 'scene:change' event
+                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                            $rootScope.$broadcast('scene:change');
+                        }});
+                    }
                 }
 
                 function mouseOverHandler(item) {
-                    // console.log('Mouse Hovering: ', item);
+                    console.log('Mouse Hovering: ', item);
+                    if (!gazeStarted && useVr) {
+                        // Animate crosshair for long gaze
+                        gazeStarted = true;
+                        TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
+                        TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
+                        clearTimeout(gazeTimeout);
+                        gazeTimeout = setTimeout(clickHandler, 1700);
+                    }
                 }
 
                 function mouseOutHandler(item) {
-                    // console.log('Mouse Out: ', item);
+                    if (useVr) {
+                        // Reset crosshair for long gaze
+                        gazeStarted = false;
+                        clearTimeout(gazeTimeout);
+                        TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
+                        TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});                        
+                    }
                 }
-                init();
-
+                                
                 $rootScope.$on('app:resized', function() {
                     $$el.width($(window).width());
                     $$el.height($(window).height());
@@ -142,6 +251,25 @@ angular.module('ua5App')
                 $scope.$on('$destroy', function() {
                     scene.destroy();
                 });
+
+                $$el.mousemove(function(event) {
+                    if (!useVr) {
+                        scene.setCursorPosition(
+                            event.clientX - $$el.offset().left + $(window).scrollLeft(),
+                            event.clientY - $$el.offset().top + $(window).scrollTop()
+                        );
+                    }
+                });
+                
+                init();
+
+                // TODO: Add touch
+                // $element.on('touchmove touchstart', function(event) {
+                //     var mouseX = event.originalEvent.touches[0].pageX - $element.offset().left + $window.scrollLeft();
+                //     var mouseY = event.originalEvent.touches[0].pageY - $element.offset().top + $window.scrollTop();
+                //     map.setTouching(true);
+                //     map.setCursorPosition(mouseX, mouseY);
+                // });               
             }
         };
     }])

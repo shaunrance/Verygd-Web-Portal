@@ -96,33 +96,40 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             }
 
             function destroy() {
-                var i;
-
                 rendering = false;
                 cancelAnimationFrame(animationFrameRequest);
+                destroyAllSceneObjects();
+                $(renderer.domElement).remove();
+            }
+
+            function destroyAllSceneObjects(skipTypes) {
+                var i;
+                skipTypes = (typeof skipTypes !== 'object') ? [] : skipTypes;
                 i = scene.children.length;
                 while (i--) {
                     var obj = scene.children[i];
-                    scene.remove(obj);
-                    if (obj.geometry) {
-                        obj.geometry.dispose();
-                    }
-                    if (obj.material) {
-                        if (obj.material instanceof THREE.MeshFaceMaterial) {
-                            _.each(obj.material.materials, function(obj, idx) {
-                                obj.dispose();
-                            });
-                        } else {
-                            obj.material.dispose();
+                    // if our object is in the group of skip types, dont remove it
+                    if (_.indexOf(skipTypes, obj.type) === -1) {
+                        scene.remove(obj);
+                        if (obj.geometry) {
+                            obj.geometry.dispose();
                         }
+                        if (obj.material) {
+                            if (obj.material instanceof THREE.MeshFaceMaterial) {
+                                _.each(obj.material.materials, function(obj, idx) {
+                                    obj.dispose();
+                                });
+                            } else {
+                                obj.material.dispose();
+                            }
+                        }
+                        if (obj.dispose) {
+                            obj.dispose();
+                        }
+                        obj = undefined;                        
                     }
-                    if (obj.dispose) {
-                        obj.dispose();
-                    }
-                    obj = undefined;
                 }
-                $(renderer.domElement).remove();
-                i = scene.children.length;
+                itemsMouseCanHit = [];
             }
 
             function stopRendering() {
@@ -171,6 +178,11 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 scene.add(item);
             }
 
+            function pushItem(item) {
+                itemsMouseCanHit.push(item);
+                item.isVisible = true;
+            }
+
             function setupBaseScene() {
                 var ASPECT = $$el.width() / $$el.height();
                 var FAR = 700;
@@ -181,6 +193,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 stats.showPanel(0);
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(FOV, ASPECT, NEAR, FAR);
+                scene.add(camera);
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.shadowMap.enabled = false;
                 renderer.setSize($$el.width(), $$el.height());
@@ -237,8 +250,10 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 addItem: addItem,
                 camera: getCamera,
                 destroy: destroy,
+                destroyAllSceneObjects: destroyAllSceneObjects,
                 init: init,
                 mouse: getMouse,
+                pushItem: pushItem,
                 scene: getScene,
                 setCursorPosition: setCursorPosition,
                 startRendering: startRendering,

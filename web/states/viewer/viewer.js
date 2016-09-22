@@ -15,7 +15,9 @@ angular.module('ua5App.viewer')
             }
         });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', function($scope, $stateParams, content) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'screenFactory', function($scope, $stateParams, content, screenFactory) {
+        var OTHER_SCENE = 117;
+        var current = $stateParams.projectId;
         if ($stateParams.version === 'cardboard') {
             $scope.useVr = true;
         } else {
@@ -23,6 +25,13 @@ angular.module('ua5App.viewer')
         }
 
         $scope.content = content.data.content;
+        
+        // right now we're going to simulate a scene change between two projects
+        $scope.$on('scene:change', function() {
+            current = (current === $stateParams.projectId) ? OTHER_SCENE : $stateParams.projectId;
+            screenFactory.getScreens(current).then(function(response) {
+                $scope.content = response.data.content;
+            });
+        });
     }])
 ;
-// http://api.very.gd.ua5.land:8080/photos
