@@ -15,3 +15,7 @@ class TestProject(TestImageAPI):
 
     def test_images(self):
         super(TestProject, self).test_images()
+
+    def test_list_images(self):
+        super(TestProject, self).test_list_images()
+
