@@ -13,10 +13,8 @@ angular.module('ua5App.projects')
         });
     }])
     .controller('projectsCtrl', ['$scope', 'projectFactory', function($scope, projectFactory) {
-        $scope.newProject = {};
-
-        $scope.addProject = function() {
-            projectFactory.addProject($scope.newProject)
+        var addProject = function(project) {
+            projectFactory.addProject(project)
 
             .then(function(response) {
                 getProjects();
@@ -24,6 +22,12 @@ angular.module('ua5App.projects')
                   
             });
         };
+
+        $scope.newProject = {};
+
+        $scope.$on('addProject', function(event, args) {
+            addProject(args);
+        });
 
         $scope.deleteProject = function(projectId) {
             projectFactory.deleteScreen(projectId)

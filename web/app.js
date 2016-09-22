@@ -24,7 +24,8 @@ angular.module('ua5App', [
     'ua5App.details',
     'ua5App.projects',
     'ua5App.viewer',
-    'ua5App.home'
+    'ua5App.home',
+    'ngAnimate'
     // end add states as app dependency
 ])
     .constant('BREAKPOINTS', {

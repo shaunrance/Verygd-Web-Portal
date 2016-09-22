@@ -1,0 +1,12 @@
+<div class="add-menu--container">
+	<div class="add-menu-button--wrapper">
+		<button class="add-menu--button" ng-class="menuToggle ? 'open' : ''" ng-click="menuToggle = !menuToggle"><img class="plus-icon" src="assets/img/plus.svg" /></button>
+	</div>
+</div>
+<div class="modal-launch--container ng-hide" ng-show="menuToggle">
+	<div class="modal-launch--buttons">
+		<button class="add-item--button" ng-repeat="item in menuItems" class="scene-add" ng-click="showModal(item)">
+		    {{item}}<img class="add-item--icon" src="assets/img/modal-add.svg">
+		</button>
+	</div>
+</div>
