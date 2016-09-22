@@ -19,6 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', None)
 
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -49,6 +51,7 @@ INSTALLED_APPS = (
 INSTALLED_APPS += (
     'actstream',
     'rest_framework',
+    'taggit',
     'media_portal.policy',
     'media_portal.payment',
     'media_portal.invite',
