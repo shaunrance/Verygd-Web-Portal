@@ -2,6 +2,10 @@
     @include justify-content(space-between);
     @include display(flex);
     @include flex-wrap(wrap);
+
+    &.empty {
+        @include flex-wrap(nowrap);
+    }
 }
 
 .scene-nav {

@@ -1,5 +1,5 @@
 <main class="project-details__container">
-    <div class="project-details">
+    <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
         <nav class="scene-nav">
             <ul class="scene-list">
                 <li class="scene-list--item">
@@ -16,7 +16,7 @@
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
         </nav>
-        <div  class="vg__items project__items">
+        <div  class="vg__items project__items" ng-show="!emptyScene">
             <figure ng-repeat="screen in screens" class="vg__item--wrapper scene--wrapper">
                 <a class="vg__item--link scene--link">
                     <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
@@ -32,7 +32,7 @@
                 </a>
             </figure>
         </div>
-        <div class="scene-preview">
+        <div class="scene-preview" ng-show="!emptyScene">
             <div class="scene-preview--widget">
                 <h5>Preview</h5>
                 <div ng-if="screens.length > 2 && screens.length < 7">
