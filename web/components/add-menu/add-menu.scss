@@ -1,3 +1,154 @@
-.add-menu {
-    background-color: $white;
+.add-menu--button {
+    @extend %icon-button;
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    background: $btn-blue;
+    border-radius: 50%;
+    box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.5);
+    height: 60px;
+    position: absolute;
+    right: $site-gutter;
+    top: -30px;
+    transition: transform $transition-speed $power2-ease-out;
+    width: 60px;
+    z-index: $z-epsilon;
+
+    &.open {
+        transform: rotate(-45deg);
+        transition: transform $transition-speed $power2-ease-out;
+    }
 }
+
+.plus-icon {
+    max-width: 25px;
+}
+
+.add-menu--container {
+    left: 0;
+    margin-top: $header-height-desk;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: $z-epsilon;
+}
+
+.add-menu-button--wrapper {
+    @include display(flex);
+    @include flex-direction(column);
+    @include align-items(flex-end);
+    @include outer-container;
+    padding-right: $site-gutter;
+    position: relative;
+    width: 100%;
+}
+
+.modal-launch--container {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100vh;
+    left: 0;
+    padding-top: $header-height-desk + 60px;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: $z-delta;
+
+    &.ng-hide-add,
+    &.ng-hide-remove {
+        transition: opacity $transition-speed $power2-ease-out;
+    }
+
+    &.ng-hide {
+        opacity: 0;
+    }
+}
+
+
+.modal-launch--buttons {
+    @include display(flex);
+    @include flex-direction(column);
+    @include align-items(flex-end);
+    @include outer-container;
+    @include padding(50px $site-gutter 50px);
+    padding-right: $site-gutter;
+    width: 100%;
+}
+
+.add-item--button {
+    @include display(inline-flex);
+    @include align-items(center);
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    border-radius: 0;
+    color: $white;
+    margin-bottom: 20px;
+    outline: 0;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.add-item--icon {
+    margin-left: 10px;
+    max-width: 25px;
+}
+
+
+.modal-overlay {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: $z-epsilon;
+}
+
+.modal-body {
+    background-color: $white;
+    min-width: 400px;
+    padding: 30px;
+    position: relative;
+}
+
+.modal-close {
+    @extend %icon-button;
+    max-width: 20px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.modal-submit {
+    @extend %reset-button;
+    background: $btn-blue;
+    border-radius: 3px;
+    color: $white;
+    height: 40px;
+    margin-top: 50px;
+}
+
+.modal-label {
+    display: none;
+}
+
+.modal-input {
+    border: none;
+    border-bottom: 1px solid $input-grey;
+    margin-top: 20px;
+    outline: 0;
+    padding: 10px 0;
+    width: 100%;
+}
+
+@include media($tablet) {
+
+    .add-menu--container {
+        margin-top: $header-height-tablet;
+    }
+}
+
+
