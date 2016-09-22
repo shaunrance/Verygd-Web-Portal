@@ -1,4 +1,5 @@
 <div header></div>
+<div add-menu></div>
 <div ui-view class="projects">
     <div  class="vg__items">
         <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper">
@@ -15,12 +16,5 @@
                 <figcaption class="vg__image--caption">{{project.title}}</figcaption>
             </a>
         </figure>
-        <form ng-submit="addProject()">
-            <h3>Project name:</h3>
-            <input type="text" ng-model="newProject.name"/>
-            <h3>Description:</h3>
-            <input type="text" ng-model="newProject.description"/>
-            <button type="submit">Create</button>
-        </form>
     </div>
 </div>

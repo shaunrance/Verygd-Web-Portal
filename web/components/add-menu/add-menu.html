@@ -1,0 +1,9 @@
+
+<button class="plus-btn" ng-click="menuToggle = !menuToggle"><img class="plus-icon" src="assets/img/plus.svg" /></button>
+<div class="overlay-container" ng-show="menuToggle">
+	<div class="view-buttons">
+		<button ng-repeat="item in menuItems" class="scene-add" ng-click="showModal(item)">
+		    {{item}}<img class="add-icon" src="assets/img/add.svg">
+		</button>
+	</div>
+</div>

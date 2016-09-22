@@ -2,6 +2,7 @@
 angular.module('ua5App.details', ['ngFileUpload'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects.details', {
+            name: 'Details',
             url: '/{projectId}',
             templateUrl: 'states/details/details.html',
             controller: 'detailsCtrl',
@@ -13,7 +14,16 @@ angular.module('ua5App.details', ['ngFileUpload'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', function($scope, $stateParams, screenFactory) {
         $scope.screens = [];
-        
+        $scope.$watch('files', function() {
+            uploadScreens($scope.files);
+        });
+        $scope.$watch('file', function() {
+            if ($scope.file !== null) {
+                $scope.files = [$scope.file];
+            }
+        });
+        $scope.log = '';
+        $scope.projectId = $stateParams.projectId;
         $scope.deleteScreen = function(screenId) {
             screenFactory.deleteScreen(screenId)
             
@@ -53,16 +63,5 @@ angular.module('ua5App.details', ['ngFileUpload'])
         }
 
         getScreens();
-
-        $scope.$watch('files', function() {
-            uploadScreens($scope.files);
-        });
-        $scope.$watch('file', function() {
-            if ($scope.file !== null) {
-                $scope.files = [$scope.file];
-            }
-        });
-        $scope.log = '';
-        $scope.projectId = $stateParams.projectId;
     }])
 ;
