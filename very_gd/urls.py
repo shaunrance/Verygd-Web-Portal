@@ -8,6 +8,7 @@ from media_portal.users.auth.views import MediaPortalAuthToken as VeryGDAuthToke
 from media_portal.users.views import MembersViewSet, MemberCreateView
 
 from media_portal.album.content.views import AlbumImagesViewSet
+from media_portal.album.views import AlbumViewSet
 
 from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls
@@ -17,6 +18,8 @@ from project.views import ProjectViewSet
 
 
 router = routers.DefaultRouter(trailing_slash=False)
+
+router.register(r'album', AlbumViewSet, base_name='album')
 
 router.register(r'users', MembersViewSet, base_name='users')
 

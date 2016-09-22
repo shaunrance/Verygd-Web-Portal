@@ -24,6 +24,29 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+MEDIA_PORTAL_SETTINGS = {
+    'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup'
+}
+
+AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
+AWS_REGION = 'us-west-1'
+
+AWS_STORAGE_BUCKET_NAME = 'core-api-bucket'
+AWS_S3_FILE_OVERWRITE = False
+AWS_VIDEO_PIPELINE_ID = '1473882498921-q1vh9h'
+
+ADMINS = [('Andrew', 'andrew@useallfive.com')]
+SERVER_EMAIL = 'andrew@useallfive.com'
+
+ALLOWED_HOSTS = ['216.70.115.196', 'very.gd.ua5.land']
+
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
+EMAIL_PORT = 465
+
+EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
+EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
 
 AUTHENTICATION_BACKENDS = (
@@ -31,8 +54,7 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
-ALLOWED_HOSTS = []
-
+IMGIX_URL = 'https://verygd.imgix.net'
 
 # Application definition
 
@@ -51,7 +73,9 @@ INSTALLED_APPS = (
 INSTALLED_APPS += (
     'actstream',
     'rest_framework',
+    'rest_framework.authtoken',
     'taggit',
+    'guardian',
     'media_portal.policy',
     'media_portal.payment',
     'media_portal.invite',
