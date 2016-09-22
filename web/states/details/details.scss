@@ -170,6 +170,10 @@
     height: 300px;
     padding: 25px;
     text-align: center;
+
+    &.empty {
+        margin: 0;
+    }
 }
 
 .drop-box {

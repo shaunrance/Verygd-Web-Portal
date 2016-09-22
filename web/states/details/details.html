@@ -62,7 +62,7 @@
                 Launch Cardboard
             </button>
         </div>
-        <div class="drop-box--container">
+        <div class="drop-box--container" ng-class="emptyScene ? 'empty' : ''">
                 <div class="drop-box" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
                     <h1 class="drop-box__header">Drag images here to create your scene</h1>
                     <button class="drop-box__button">Upload Files</button>
