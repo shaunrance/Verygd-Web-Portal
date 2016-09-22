@@ -1,0 +1,1 @@
+from media_portal.tests.strategies import MediaPortalTestStrategies as VeryGDTestStrategies

@@ -12,3 +12,6 @@ class TestProject(TestImageAPI):
 
         self.strategies = VeryGDTestStrategies()
         self.users = TestVeryGDUsers()
+
+    def test_images(self):
+        super(TestProject, self).test_images()
