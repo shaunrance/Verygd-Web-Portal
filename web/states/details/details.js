@@ -14,6 +14,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', function($scope, $stateParams, screenFactory) {
         $scope.screens = [];
+        $scope.emptyScene = true;
         $scope.$watch('files', function() {
             uploadScreens($scope.files);
         });
@@ -56,7 +57,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
-                    
+                    $scope.emptyScene = $scope.screens.length > 0 ? false : true;
                 }, function(error) {
                     $scope.status = 'Unable to load screen data: ' + error.message;
                 });
