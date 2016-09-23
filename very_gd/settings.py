@@ -25,7 +25,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEBUG = True
 
 MEDIA_PORTAL_SETTINGS = {
-    'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup'
+    'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',
+    'CONTENT_SERIALIZER': 'panel.serializers.PanelSerializer'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
@@ -44,6 +45,8 @@ ALLOWED_HOSTS = ['216.70.115.196', 'very.gd.ua5.land']
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 465
+
+TAGGIT_CASE_INSENSITIVE = True
 
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
@@ -85,7 +88,10 @@ INSTALLED_APPS += (
 )
 
 # Project applications
-INSTALLED_APPS += ()
+INSTALLED_APPS += (
+    'project',
+    'panel',
+)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
