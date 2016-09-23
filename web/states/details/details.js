@@ -12,8 +12,9 @@ angular.module('ua5App.details', ['ngFileUpload'])
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', function($scope, $stateParams, screenFactory) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', 'ModalService', function($scope, $stateParams, screenFactory, ModalService) {
         $scope.screens = [];
+        $scope.emptyScene = true;
         $scope.$watch('files', function() {
             uploadScreens($scope.files);
         });
@@ -25,13 +26,29 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
         $scope.deleteScreen = function(screenId) {
-            screenFactory.deleteScreen(screenId)
-            
-            .then(function(response) {
-                    getScreens();
-                }, function(error) {
-                    $scope.status = 'Unable to delete screen: ' + error.message;
+            ModalService.showModal({
+                templateUrl: 'modals/deleteModal.html',
+                controller: 'deleteModalController',
+                inputs: {
+                    fields:{
+                        title: 'Delete Screen',
+                        confirmText: 'Are you sure you would like to delete this screen?',
+                        submitButtonText: 'Delete'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result) {
+                        screenFactory.deleteScreen(screenId)
+                                
+                        .then(function(response) {
+                                getScreens();
+                            }, function(error) {
+                                $scope.status = 'Unable to delete screen: ' + error.message;
+                            });
+                    }
                 });
+            });
         };
 
         function uploadScreens(files) {
@@ -56,7 +73,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
-                    
+                    $scope.emptyScene = $scope.screens.length > 0 ? false : true;
                 }, function(error) {
                     $scope.status = 'Unable to load screen data: ' + error.message;
                 });

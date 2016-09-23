@@ -12,7 +12,7 @@ angular.module('ua5App.projects')
             }
         });
     }])
-    .controller('projectsCtrl', ['$scope', 'projectFactory', function($scope, projectFactory) {
+    .controller('projectsCtrl', ['$scope', 'projectFactory', 'ModalService', function($scope, projectFactory, ModalService) {
         var addProject = function(project) {
             projectFactory.addProject(project)
 
@@ -30,13 +30,31 @@ angular.module('ua5App.projects')
         });
 
         $scope.deleteProject = function(projectId) {
-            projectFactory.deleteScreen(projectId)
+            ModalService.showModal({
+                templateUrl: 'modals/deleteModal.html',
+                controller: 'deleteModalController',
+                inputs: {
+                    fields:{
+                        title: 'Delete Project',
+                        confirmText: 'Are you sure you would like to delete this project? Deleting will remove all content and scenes.',
+                        submitButtonText: 'Delete'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result) {
+                        projectFactory.deleteScreen(projectId)
             
-            .then(function(response) {
-                    getProjects();
-                }, function(error) {
-                    $scope.status = 'Unable to delete project: ' + error.message;
+                            .then(function(response) {
+                                    getProjects();
+                                }, function(error) {
+                                    $scope.status = 'Unable to delete project: ' + error.message;
+                                });
+                    }
+                    
                 });
+            });
+            
         };
 
         function getProjects() {

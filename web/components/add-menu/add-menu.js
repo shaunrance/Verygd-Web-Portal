@@ -8,17 +8,17 @@ angular.module('ua5App')
             controller:['$scope', '$state', '$stateParams', 'ModalService', function($scope, $state, $stateParams, ModalService) {
                 var menu = {
                     project:'Add Project',
-                    team: 'Add Team Member'
+                    team: 'Add Team Member',
+                    scene:'Add Scene',
+                    screen: 'Add Screen',
+                    share: 'Share Project'
                 };
 
                 var getOptions = function() {
-                    if ($state.current.name === 'projects.details') {
+                    if ($state.current.name !== 'projects.details') {
                         $scope.menuItems = {
                             project:'Add Project',
-                            team: 'Add Team Member',
-                            scene:'Add Scene',
-                            screen: 'Add Screen',
-                            share: 'Share Project'
+                            team: 'Add Team Member'
                         }; 
                     } else {
                         $scope.menuItems = menu;
@@ -41,7 +41,8 @@ angular.module('ua5App')
                                     fields:{
                                         title: menu.project,
                                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
-                                        showFileUpload: false
+                                        showFileUpload: false,
+                                        submitButtonText: 'Add Project'
                                     }
                                 }
                             }).then(function(modal) {
@@ -59,8 +60,9 @@ angular.module('ua5App')
                                 inputs: {
                                     fields:{
                                         title: menu.team,
-                                        formLabels:['Member Name'],
-                                        showFileUpload: false
+                                        formLabels:[{name: 'memberName', title: 'Email Address'}],
+                                        showFileUpload: false,
+                                        submitButtonText: 'Add Team Member'
                                     }
                                 }
                             }).then(function(modal) {
@@ -76,8 +78,9 @@ angular.module('ua5App')
                                 inputs: {
                                     fields:{
                                         title: menu.scene,
-                                        formLabels:['Name'],
-                                        showFileUpload: true
+                                        formLabels:[{name: 'name', title: 'Name'}],
+                                        showFileUpload: true,
+                                        submitButtonText: 'Add Scene'
                                     }
                                 }
                             }).then(function(modal) {
@@ -92,8 +95,9 @@ angular.module('ua5App')
                                 inputs: {
                                     fields:{
                                         title: menu.screen,
-                                        formLabels:['Name', 'Description'],
-                                        showFileUpload: true
+                                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                                        showFileUpload: true,
+                                        submitButtonText: 'Add Screen'
                                     }
                                 }
                             }).then(function(modal) {
@@ -109,8 +113,9 @@ angular.module('ua5App')
                                 inputs: {
                                     fields:{
                                         title: menu.share,
-                                        formLabels:['Name', 'Description'],
-                                        showFileUpload: false
+                                        formLabels:[{name: 'email', title: 'Email Address'}],
+                                        showFileUpload: false,
+                                        submitButtonText: 'Share'
                                     }
                                 }
                             }).then(function(modal) {
