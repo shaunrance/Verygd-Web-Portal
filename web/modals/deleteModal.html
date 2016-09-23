@@ -1,13 +1,19 @@
 <div class="modal-overlay">
-    <div class="modal-body">
+    <div class="modal">
         <form>
-            <h3>{{title}}</h3>
-            <label>{{confirmText}}</label>
-            <button type="button" ng-click="close(true)">{{buttonText}}</button>
-            <button type="button" ng-click="close(false)">Cancel</button>
-            <button class="modal-close" type="button" ng-click="close(false)">
-                <img class="modal-close--icon" src="assets/img/modal-close.svg" />
-            </button>
+            <div class="modal-header">
+                <h3>{{title}}</h3>
+                <button class="modal-close" type="button" ng-click="close(false)">
+                    <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>{{confirmText}}</label>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button modal-delete" type="button" ng-click="close(true)">{{buttonText}}</button>
+                <button class="modal-button modal-cancel" type="button" ng-click="close(false)">Cancel</button>
+            
         </form>
     </div>
 </div>

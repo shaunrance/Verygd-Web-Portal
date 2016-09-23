@@ -69,3 +69,8 @@
     background: linear-gradient(to right, $brand-blue 0%, $pink 100%);
 }
 
+%modal-button {
+    border-radius: 3px;
+    color: $white;
+    height: 50px;
+}

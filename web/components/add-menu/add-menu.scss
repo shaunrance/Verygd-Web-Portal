@@ -106,11 +106,26 @@
     z-index: $z-epsilon;
 }
 
-.modal-body {
+.modal {
     background-color: $white;
     min-width: 400px;
     padding: 30px;
     position: relative;
+}
+
+.modal-header {
+    padding-top: 20px;
+}
+
+.modal-body {
+    color: $grey-dark;
+    padding: 20px 0;
+}
+
+.modal-footer {
+    @include display(flex);
+    @include justify-content(space-around);
+    @include align-items(center);
 }
 
 .modal-close {
@@ -121,13 +136,29 @@
     top: 10px;
 }
 
-.modal-submit {
+.modal-button {
     @extend %reset-button;
+    @extend %modal-button;
+
+    + .modal-button {
+        margin-left: 10px;
+    }
+}
+
+.modal-submit {
     background: $btn-blue;
-    border-radius: 3px;
-    color: $white;
-    height: 40px;
-    margin-top: 50px;
+}
+
+.modal-cancel {
+    background: $grey-dark;
+}
+
+.modal-delete {
+    background: $red;
+}
+
+.modal-accept {
+    background: $btn-blue;
 }
 
 .modal-label {
