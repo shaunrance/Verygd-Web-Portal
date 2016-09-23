@@ -6,23 +6,23 @@ angular.module('ua5App')
 
         dataFactory.getScreens = function(projectId) {
             return $http.get(urlBase + '/' + projectId, {
-                headers: {Authorization: 'Token 99fa9507df915b6164537069e3d2b61af92882a3'}
+                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 
-        dataFactory.insertScreen = function(file, projectId) {
+        dataFactory.insertScreen = function(file, projectId, scene) {
             return Upload.upload({
                 headers: {
-                    Authorization: 'Token 99fa9507df915b6164537069e3d2b61af92882a3'
+                    Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
                 },
                 url:'http://216.70.115.196:7777/images',
-                data: {title: 'name', description: 'description', album: projectId, content: file}
+                data: {title: 'name', description: 'description', tag: scene, album: projectId, content: file}
             });
         };
 
         dataFactory.deleteScreen = function(id) {
             return $http.delete('http://216.70.115.196:7777/images/' + id, { // jshint ignore:line
-                headers: {Authorization: 'Token 99fa9507df915b6164537069e3d2b61af92882a3'}
+                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 

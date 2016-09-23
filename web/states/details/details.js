@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, _ */
 angular.module('ua5App.details', ['ngFileUpload'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects.details', {
@@ -14,6 +14,8 @@ angular.module('ua5App.details', ['ngFileUpload'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', 'ModalService', function($scope, $stateParams, screenFactory, ModalService) {
         $scope.screens = [];
+        $scope.currentSceneScreens = [];
+        $scope.currentScene = 'Scene 1';
         $scope.emptyScene = true;
         $scope.$watch('files', function() {
             uploadScreens($scope.files);
@@ -56,7 +58,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
                   
-                    screenFactory.insertScreen(file, $stateParams.projectId)
+                    screenFactory.insertScreen(file, $stateParams.projectId, $scope.currentScene)
 
                         .then(function(response) {
                                 $scope.status = 'Success';
@@ -73,11 +75,17 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
+                    $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene});
                     $scope.emptyScene = $scope.screens.length > 0 ? false : true;
                 }, function(error) {
                     $scope.status = 'Unable to load screen data: ' + error.message;
                 });
         }
+
+        $scope.changeScene = function(scenekey) {
+            $scope.currentScene = scenekey;
+            $scope.currentSceneScreens = _.where($scope.screens, {tag: scenekey});
+        };
 
         getScreens();
     }])
