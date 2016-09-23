@@ -2,6 +2,10 @@
     @include justify-content(space-between);
     @include display(flex);
     @include flex-wrap(wrap);
+
+    &.empty {
+        @include flex-wrap(nowrap);
+    }
 }
 
 .scene-nav {
@@ -102,7 +106,7 @@
 .scene-preview__icon {
     @include display(flex);
     @include justify-content(center);
-    height: inherit;
+    height: 60px;
     max-width: 50px;
     width: 100%;
 }
@@ -115,6 +119,7 @@
     border-radius: 4px;
     color: $white;
     height: 60px;
+    line-height: 60px;
     text-align: center;
 
     + .scene-preview__button {
@@ -165,6 +170,10 @@
     height: 300px;
     padding: 25px;
     text-align: center;
+
+    &.empty {
+        margin: 0;
+    }
 }
 
 .drop-box {
@@ -210,12 +219,26 @@
     }
 
     .scene-preview__button {
-        @include justify-content(center);
+        display: block;
+    }
+
+    .scene-preview__icon {
+        display: inline-block;
+        margin-right: 10px;
+        max-width: auto;
+        vertical-align: middle;
+        width: auto;
+    }
+
+    .mobile-icon,
+    .cardboard-icon {
+        height: 60px;
     }
 
     .drop-box--container {
         @include order(2);
         border: none;
+        display: block;
         height: auto;
         margin: 0;
         padding: 0;
