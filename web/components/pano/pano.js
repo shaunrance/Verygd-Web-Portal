@@ -29,7 +29,7 @@ angular.module('ua5App')
                 });
 
                 // Watch for new data getting set (aka a new scene);
-                $scope.$watch(function() {
+                $scope.$watchCollection(function() {
                     return $scope.panoContent;
                 }, function(newValue, oldValue) {
                     if (newValue !== oldValue) {

@@ -48,7 +48,7 @@
                 </div>
             </div>
             <button
-                ui-sref="viewer({version: 'mobile', projectId: projectId})"
+                ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
                 class="scene-preview__button scene-preview--mobile">
                 <span class="scene-preview__icon">
                     <img class="mobile-icon" src="assets/img/mobile.svg" />
@@ -56,7 +56,7 @@
                 Launch Mobile
             </button>
             <button
-                ui-sref="viewer({version: 'cardboard', projectId: projectId})"
+                ui-sref="viewer({version: 'cardboard', currentScene, projectId: projectId})"
                 class="scene-preview__button scene-preview--carboard">
                 <span class="scene-preview__icon">
                     <img class="cardboard-icon" src="assets/img/cardboard.svg" />

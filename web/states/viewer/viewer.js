@@ -1,8 +1,8 @@
-/* global angular */
+/* global angular, _ */
 angular.module('ua5App.viewer')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('viewer', {
-            url: '/viewer/:projectId/:version',
+            url: '/viewer/:projectId/:scene/:version',
             templateUrl: 'states/viewer/viewer.html',
             controller: 'viewerCtrl',
             controllerAs: 'ctrl',
@@ -16,8 +16,8 @@ angular.module('ua5App.viewer')
         });
     }])
     .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'screenFactory', function($scope, $stateParams, content, screenFactory) {
-        var OTHER_SCENE = 117;
-        var current = $stateParams.projectId;
+        var scene = parseInt($stateParams.scene, 10);
+        var lastScene = 1;
         if ($stateParams.version === 'cardboard') {
             $scope.useVr = true;
         } else {
@@ -25,13 +25,25 @@ angular.module('ua5App.viewer')
         }
 
         $scope.content = content.data.content;
+        $scope.currentSceneScreens = _.where($scope.content, {tag: scene.toString()});
+
+        _.each($scope.content, function(screen) {
+            if (parseInt(screen.tag, 10) > lastScene) {
+                lastScene = parseInt(screen.tag, 10);
+            }
+        });
         
         // right now we're going to simulate a scene change between two projects
         $scope.$on('scene:change', function() {
-            current = (current === $stateParams.projectId) ? OTHER_SCENE : $stateParams.projectId;
-            screenFactory.getScreens(current).then(function(response) {
-                $scope.content = response.data.content;
-            });
+            scene++;
+            console.log(scene, lastScene);
+            if (scene <= lastScene) {
+                $scope.currentSceneScreens = _.where($scope.content, {tag: scene.toString()});
+                $scope.$apply();
+            } else {
+                scene = 0;
+                $scope.$broadcast('scene:change');
+            }
         });
     }])
 ;

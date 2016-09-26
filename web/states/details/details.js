@@ -78,7 +78,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                     $scope.screens = response.data.content;
                     $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
                     _.each($scope.screens, function(screen) {
-                        if (parseInt(screen.tag, 10) > $scope.currentScene) {
+                        if (parseInt(screen.tag, 10) > $scope.scenes) {
                             $scope.scenes = parseInt(screen.tag, 10);
                         }
                     });
