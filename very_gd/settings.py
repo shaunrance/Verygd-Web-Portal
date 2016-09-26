@@ -28,7 +28,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 MEDIA_PORTAL_SETTINGS = {
     'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',
-    'CONTENT_SERIALIZER': 'panel.serializers.PanelSerializer'
+    'CONTENT_SERIALIZER': 'panel.serializers.PanelSerializer',
+    'IMGIX_URL': 'https://verygd.imgix.net'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
@@ -58,8 +59,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
 )
-
-IMGIX_URL = 'https://verygd.imgix.net'
 
 # Application definition
 
