@@ -8,9 +8,9 @@ angular.module('ua5App')
             controller:['$scope', '$state', '$stateParams', 'ModalService', function($scope, $state, $stateParams, ModalService) {
                 var menu = {
                     project:'Add Project',
-                    team: 'Add Team Member',
+                    //team: 'Add Team Member',
                     scene:'Add Scene',
-                    screen: 'Add Screen',
+                    //screen: 'Add Screen',
                     share: 'Share Project'
                 };
 
@@ -72,21 +72,23 @@ angular.module('ua5App')
                             });
                             break;
                         case menu.scene:
-                            ModalService.showModal({
-                                templateUrl: 'modals/addModal.html',
-                                controller: 'addModalController',
-                                inputs: {
-                                    fields:{
-                                        title: menu.scene,
-                                        formLabels:[{name: 'name', title: 'Name'}],
-                                        showFileUpload: true,
-                                        submitButtonText: 'Add Scene'
-                                    }
-                                }
-                            }).then(function(modal) {
-                                modal.close.then(function(result) {
-                                });
-                            });
+                            // ModalService.showModal({
+                            //     templateUrl: 'modals/addModal.html',
+                            //     controller: 'addModalController',
+                            //     inputs: {
+                            //         fields:{
+                            //             title: menu.scene,
+                            //             formLabels:[{name: 'name', title: 'Name'}],
+                            //             showFileUpload: true,
+                            //             submitButtonText: 'Add Scene'
+                            //         }
+                            //     }
+                            // }).then(function(modal) {
+                            //     modal.close.then(function(result) {
+                            //     });
+                            // });
+                            $scope.$broadcast('nav:add-scene');
+                            $scope.menuToggle = false;
                             break;
                         case menu.screen:
                             ModalService.showModal({
