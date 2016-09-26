@@ -21,6 +21,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             var scene;
             var stats;
             var useVR = false;
+            var debug = false;
 
             function getHoveredElements() {
                 var elToMouseOver = false;
@@ -79,7 +80,9 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             }
 
             function render() {
-                stats.begin();
+                if (debug) {
+                    stats.begin();
+                }
                 camera.updateMatrixWorld();
                 activeElements = getHoveredElements();
                 renderHook();
@@ -92,7 +95,9 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     controls.update();
                     animationFrameRequest = requestAnimationFrame(render);
                 }
-                stats.end();
+                if (debug) {
+                    stats.end();
+                }
             }
 
             function destroy() {
@@ -189,8 +194,10 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 var FOV = 70;
                 var NEAR = 0.001;
 
-                stats = new Stats();
-                stats.showPanel(0);
+                if (debug) {
+                    stats = new Stats();
+                    stats.showPanel(0);
+                }
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(FOV, ASPECT, NEAR, FAR);
                 scene.add(camera);
@@ -198,7 +205,9 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 renderer.shadowMap.enabled = false;
                 renderer.setSize($$el.width(), $$el.height());
                 $$el.append(renderer.domElement);
-                $$el.append(stats.dom);
+                if (debug) {
+                    $$el.append(stats.dom);
+                }
 
                 //camera.position.set(-90, 15, 0);
                 camera.position.set(0, 10, 0);

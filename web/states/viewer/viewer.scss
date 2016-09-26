@@ -1,5 +1,13 @@
 .viewer__toggle {
-    @include position(absolute, 15px null null 15px);
+    @include position(fixed, null 15px 15px null);
     color: #fff;
     z-index: 10;
+}
+
+.cardboard-icon {
+    width: 30px;
+}
+
+.cardboard-icon--selected {
+    opacity: 0.3;
 }

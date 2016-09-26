@@ -102,6 +102,7 @@ angular.module('ua5App')
                         data.url + '?fm=jpg&h=800&w=800&fit=max&q=60',
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
+                            var linkMaterial;
 
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
@@ -119,8 +120,14 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
 
-                            hitAreaGeo = new THREE.PlaneBufferGeometry(15, 5);
-                            hitAreaMat = new THREE.MeshBasicMaterial({color: 0xf229e8, opacity: 0.5, transparent: true});
+                            linkMaterial = new THREE.MeshBasicMaterial({
+                                side: THREE.MeshBasicMaterial,
+                                map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
+                                transparent: true
+                            });
+
+                            hitAreaGeo = new THREE.CircleGeometry(2, 32);
+                            hitAreaMat = linkMaterial;
                             hitAreaMat.depthWrite = false;
                             hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
                             hitAreaMesh.position.y = -size.height / 2 - 1;
