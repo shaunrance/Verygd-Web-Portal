@@ -1,3 +1,4 @@
 -e git+ssh://git@github.com/UseAllFive/media-portal.git#egg=media_portal
 django-taggit
 fabric
+django-cors-headers
