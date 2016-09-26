@@ -13,6 +13,7 @@
 }
 
 .scene-list--link {
+    @include margin(0 20px 0 0);
     @include padding(10px 5px);
     color: $black;
     display: block;

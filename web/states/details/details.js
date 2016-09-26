@@ -15,7 +15,8 @@ angular.module('ua5App.details', ['ngFileUpload'])
     .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', 'ModalService', function($scope, $stateParams, screenFactory, ModalService) {
         $scope.screens = [];
         $scope.currentSceneScreens = [];
-        $scope.currentScene = 'Scene 1';
+        $scope.currentScene = 1;
+        $scope.scenes = 1;
         $scope.emptyScene = true;
         $scope.$watch('files', function() {
             uploadScreens($scope.files);
@@ -75,7 +76,12 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
-                    $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene});
+                    $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
+                    _.each($scope.screens, function(screen) {
+                        if (parseInt(screen.tag, 10) > $scope.currentScene) {
+                            $scope.scenes = parseInt(screen.tag, 10);
+                        }
+                    });
                     $scope.emptyScene = $scope.screens.length > 0 ? false : true;
                 }, function(error) {
                     $scope.status = 'Unable to load screen data: ' + error.message;
@@ -84,8 +90,20 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
         $scope.changeScene = function(scenekey) {
             $scope.currentScene = scenekey;
-            $scope.currentSceneScreens = _.where($scope.screens, {tag: scenekey});
+            $scope.currentSceneScreens = _.where($scope.screens, {tag: scenekey.toString()});
         };
+
+        $scope.addScene = function() {
+            $scope.scenes++;
+        };
+
+        $scope.getScene = function(num) {
+            return new Array(num);   
+        };
+
+        $scope.$on('nav:add-scene', function() {
+            $scope.addScene();
+        });
 
         getScreens();
     }])

@@ -1,19 +1,20 @@
 <main class="project-details__container">
     <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
         <nav class="scene-nav">
-            <h1>{{currentScene}}</h1>
             <ul class="scene-list">
-                <li class="scene-list--item">
-                    <a ng-click="changeScene('Scene 1')" class="scene-list--link">Scene 1</a>
-                </li>
-                <li class="scene-list--item">
-                    <a ng-click="changeScene('Scene 2')" class="scene-list--link">Scene 2</a>
-                </li>
-                <li class="scene-list--item">
-                    <a ng-click="changeScene('Scene 3')" class="scene-list--link">Scene 3</a>
+                <li
+                    class="scene-list--item"
+
+                    ng-repeat="i in getScene(scenes) track by $index">
+                    <a
+                        ng-click="changeScene($index + 1)"
+                        ng-class="{'active' : (currentScene === ($index + 1))}"
+                        class="scene-list--link">Scene {{$index + 1}}</a>
                 </li>
             </ul>
-            <button class="scene-add">
+            <button
+                ng-click="addScene()"
+                class="scene-add">
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
         </nav>
@@ -37,7 +38,7 @@
             <div class="scene-preview--widget">
                 <h5>Preview</h5>
                 <div ng-if="currentSceneScreens.length > 2 && currentSceneScreens.length < 7">
-                    <img class="preview-icon" src="assets/img/{{currentSceneScreens.length}}.png">
+                    <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
                 </div>
                 <div ng-if="currentSceneScreens.length > 6">
                     <p>We recommend you keep your scene under 7 panels</p>
