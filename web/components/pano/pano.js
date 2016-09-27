@@ -130,8 +130,8 @@ angular.module('ua5App')
                             hitAreaMat = linkMaterial;
                             hitAreaMat.depthWrite = false;
                             hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                            hitAreaMesh.position.y = -size.height / 2 - 1;
-                            hitAreaMesh.position.z = 15;
+                            hitAreaMesh.position.y = -size.height / 2 - 4;
+                            hitAreaMesh.position.z = 3;
                             plane.add(hitAreaMesh);
                             scene.pushItem(hitAreaMesh);
 
