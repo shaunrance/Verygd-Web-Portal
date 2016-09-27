@@ -227,8 +227,8 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                       camera.position.y,
                       camera.position.z
                     );
-                    controls.minPolarAngle = Math.PI / 2 - 0.2;
-                    controls.maxPolarAngle = Math.PI / 2 + 0.2;
+                    controls.minPolarAngle = Math.PI / 2 - 0.6;
+                    controls.maxPolarAngle = Math.PI / 2 + 0.6;
                     controls.noPan = true;
                     controls.noZoom = true;
                 }

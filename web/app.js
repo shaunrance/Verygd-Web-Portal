@@ -6,6 +6,7 @@ angular.module('ua5App.home', []);
 angular.module('ua5App.projects', []);
 angular.module('ua5App.viewer', []);
 angular.module('ua5App.details', []);
+angular.module('ua5App.scene', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -21,6 +22,7 @@ angular.module('ua5App', [
     'ngMeta',
     'suite',
     // start add states as app dependency
+    'ua5App.scene',
     'ua5App.details',
     'ua5App.projects',
     'ua5App.viewer',

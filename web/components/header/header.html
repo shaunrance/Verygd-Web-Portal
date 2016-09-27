@@ -4,9 +4,14 @@
             <a class="logo-link" href="#">
                 <img class="logo" src="assets/img/vg-logo.svg">
             </a>
-            <a href="#" class="user__login">Logout</a>
+            <a
+            	ng-if="!basic"
+            	href="#"
+            	class="user__login">Logout</a>
         </div>
+        <span ng-if="!basic">
         <breadcrumbs></breadcrumbs>
+        </span>
     </div>
 </header>
 

@@ -4,7 +4,11 @@ angular.module('ua5App')
         return {
             restrict: 'A',
             templateUrl: 'components/header/header.html',
-            link: function($scope, element, attrs) {}
+            scope: {
+                basic: '@'
+            },
+            link: function($scope, element, attrs) {
+            }
         };
     }])
 ;

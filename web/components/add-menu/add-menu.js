@@ -110,12 +110,12 @@ angular.module('ua5App')
                             break;
                         case menu.share:
                             ModalService.showModal({
-                                templateUrl: 'modals/addModal.html',
-                                controller: 'addModalController',
+                                templateUrl: 'modals/shareModal.html',
+                                controller: 'shareModalController',
                                 inputs: {
                                     fields:{
                                         title: menu.share,
-                                        formLabels:[{name: 'email', title: 'Email Address'}],
+                                        formLabels:[{title: 'URL'}],
                                         showFileUpload: false,
                                         submitButtonText: 'Share'
                                     }
