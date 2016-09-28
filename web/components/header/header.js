@@ -8,7 +8,22 @@ angular.module('ua5App')
                 basic: '@'
             },
             link: function($scope, element, attrs) {
-            }
+            },
+            controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+                $scope.backButtonToggle = false;
+                $scope.goBack = function() {
+                    if ($rootScope.previousState !== undefined) {
+
+                        $state.go($rootScope.previousState.name);
+                    }
+                    
+                };
+                $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+                    $rootScope.previousState = from;
+                    $scope.backButtonToggle = (to.name === 'projects.details') ? true : false;
+                    
+                });
+            }]
         };
     }])
 ;

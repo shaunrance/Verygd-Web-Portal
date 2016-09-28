@@ -71,6 +71,16 @@ angular.module('ua5App.details', ['ngFileUpload'])
             }
         }
 
+        window.addEventListener('dragover', function(e) {
+            e = e || event;
+            e.preventDefault();
+        }, false);
+
+        window.addEventListener('drop', function(e) {
+            e = e || event;
+            e.preventDefault();
+        }, false);
+
         function getScreens() {
             screenFactory.getScreens($stateParams.projectId)
 

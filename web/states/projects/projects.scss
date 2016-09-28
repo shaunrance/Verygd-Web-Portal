@@ -35,6 +35,7 @@
 
 .vg__image--caption {
     @include padding(10px 10px 20px);
+    position: relative;
 }
 
 .vg__image--wrapper {
