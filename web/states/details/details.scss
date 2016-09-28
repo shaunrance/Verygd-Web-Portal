@@ -249,15 +249,11 @@
 
     .drop-box--container {
         @include order(2);
+        @include margin(0 0 20px);
         border: none;
         display: block;
         height: auto;
-        margin: 0;
         padding: 0;
-    }
-
-    .drop-box {
-        @include margin(null null 20px);
     }
 
     .drop-box__header {
