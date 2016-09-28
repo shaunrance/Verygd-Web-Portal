@@ -21,16 +21,17 @@
         <div  class="vg__items project__items" ng-show="!emptyScene">
             <figure ng-repeat="screen in currentSceneScreens" class="vg__item--wrapper scene--wrapper">
                 <a class="vg__item--link scene--link">
-                    <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
-                        <img class="scene-delete_icon" src="assets/img/close.svg" />
-                    </button>
                     <div class="vg__image--wrapper">
                         <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
-                        <div class="search-icon---container">
-                            <img class="search-icon" src="assets/img/search.svg" />
+                        <div class="link-icon---container">
+                            <img class="link-icon" src="assets/img/link.svg" />
                         </div>
                     </div>
-                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}</figcaption>
+                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}
+                        <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
+                            <img class="scene-delete_icon" src="assets/img/delete.svg" />
+                        </button>
+                    </figcaption>
                 </a>
             </figure>
         </div>
