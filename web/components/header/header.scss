@@ -41,6 +41,16 @@
     width: $logo-width;
 }
 
+.back-button {
+    @extend %icon-button;
+    display: none;
+    width: auto;
+}
+
+.back-icon {
+    height: 30px;
+}
+
 @include media($tablet) {
 
     .header__container {
@@ -53,5 +63,11 @@
 
     .header__meta {
         width: 50%;
+    }
+
+    .back-button {
+        display: inline-block;
+        left: $site-gutter;
+        position: absolute;
     }
 }
