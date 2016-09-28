@@ -12,11 +12,13 @@ angular.module('ua5App.projects')
             }
         });
     }])
-    .controller('projectsCtrl', ['$scope', 'projectFactory', 'ModalService', function($scope, projectFactory, ModalService) {
+    .controller('projectsCtrl', ['$scope', '$state', 'projectFactory', 'ModalService', function($scope, $state, projectFactory, ModalService) {
         var addProject = function(project) {
             projectFactory.addProject(project)
 
             .then(function(response) {
+                var id = response.data.id;
+                $state.go('projects.details', {projectId:id});
                 getProjects();
             }, function(error) {
                   

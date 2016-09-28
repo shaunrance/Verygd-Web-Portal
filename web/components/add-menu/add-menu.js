@@ -49,6 +49,7 @@ angular.module('ua5App')
                                 modal.close.then(function(result) {
                                     if (result.input) {
                                         $scope.$emit('addProject', result.input);
+                                        $scope.menuToggle = false;
                                     }
                                 });
                             });
