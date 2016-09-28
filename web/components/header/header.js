@@ -19,7 +19,6 @@ angular.module('ua5App')
                     
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
-                    //save the previous state in a rootScope variable so that it's accessible from everywhere
                     $rootScope.previousState = from;
                     $scope.backButtonToggle = (to.name === 'projects.details') ? true : false;
                     
