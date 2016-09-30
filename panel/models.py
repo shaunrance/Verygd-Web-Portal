@@ -1,16 +1,24 @@
-from media_portal.album.content.models import Content as Panel
-from taggit.managers import TaggableManager
+from media_portal.album.content.models.base import AlbumImage, AlbumVideo
+
 from django.db import models
 
 
-@property
-def tag(self):
-    return self.tags.all()[0]
+class Tag(models.Model):
+    type = models.CharField(max_length=16, blank=True, null=True)
 
 
-Panel.tags = TaggableManager()
-Panel.tag = tag
+class Panel(models.Model):
+    class Meta:
+        abstract = True
+
+    tag = models.CharField(max_length=16, blank=True, null=True)
+    related_tag = models.CharField(max_length=16, blank=True, null=True)
+    order = models.IntegerField(blank=True, null=True)
 
 
-order = models.IntegerField(max_length=128, blank=True, null=True)
-order.contribute_to_class(Panel, 'order')
+class PanelImage(AlbumImage, Panel):
+    album = models.ForeignKey('project.Project', related_name='images')
+
+
+class PanelVideo(AlbumVideo, Panel):
+    album = models.ForeignKey('project.Project', related_name='videos')

@@ -1,14 +1,12 @@
 from rest_framework import serializers
-from media_portal.album.content.serializers import ContentSerializer
+from media_portal.album.content.serializers.base import ContentSerializer
 
 
 class PanelSerializer(ContentSerializer):
     tag = serializers.CharField()
+    related_tag = serializers.CharField(required=False)
+    order = serializers.IntegerField()
 
     def create(self, validated_data):
-        tag = validated_data.pop('tag')
-
         instance = super(PanelSerializer, self).create(validated_data)
-        instance.tags.add(tag)
-
         return instance

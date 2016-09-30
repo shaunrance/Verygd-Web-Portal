@@ -1,1 +1,5 @@
-from media_portal.album.models import Album as Project
+from media_portal.album.models.base import Album
+
+
+class Project(Album):
+    pass
