@@ -1,6 +1,6 @@
 /* global angular, THREE, $, TweenMax, Linear */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', function($rootScope, BaseThreeScene) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', function($rootScope, BaseThreeScene, BrowserFactory) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -94,7 +94,7 @@ angular.module('ua5App')
                     if (useVr) {
                         crosshair = makeCrosshair();    
                     }
-                    cam = scene.camera;
+                    cam = scene.camera();
                     scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                     createExitBtn();
                 }
@@ -169,7 +169,22 @@ angular.module('ua5App')
                             });
                             plane = new THREE.Mesh(geometry, material);
                             plane.name = 'exit';
-                            scene.addItem(plane);
+                            if (!useVr) {
+                                cam.add(plane);
+                                // make it interactive:
+                                scene.pushItem(plane);
+                                plane.position.z = -50;
+                                if (BrowserFactory.hasTouch()) {
+                                    plane.position.y = -24;
+                                } else {
+                                    //we want our btn lower on desktop
+                                    plane.position.y = -30;    
+                                }
+                                plane.scale.x = 0.2;
+                                plane.scale.y = 0.2;
+                            } else {
+                                scene.addItem(plane);
+                            }
                             exitBtn = plane;
                         }
                     );
@@ -248,7 +263,7 @@ angular.module('ua5App')
                 }
                 
                 function onRender() {
-                    if (typeof exitBtn === 'object') {
+                    if (typeof exitBtn === 'object' && useVr) {
                         cam.getWorldDirection(worldDirectionVector);
                         exitBtn.position.z = worldDirectionVector.z * 200;
                         exitBtn.position.x = worldDirectionVector.x * 200;
