@@ -20,12 +20,15 @@ class TestProject(TestImageAPI):
         super(TestProject, self).test_list_images()
 
     def test_tag_with_image(self):
-        response, msg = self.add_image(self.member, self.album_id, tag='tag')
+        response, msg = self.add_image(self.member, self.album_id, tag='tag', related_tag='related_tag', order=5)
 
-        self.assertTrue(response.status_code == 201, 'got {0} expected 201'.format(response.status_code))
+        self.assertEquals(response.status_code, 201, 'got {0} expected 201'.format(response.status_code))
 
-        response, msg = self.get_as(self.member, '/images/{0}'.format(msg['id']))
+        response, image_meta = self.get_as(self.member, '/images/{0}'.format(msg['id']))
 
-        self.assertTrue(response.status_code == 200, 'got {0} expected 201'.format(response.status_code))
+        self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
 
-        self.assertTrue('tag' in msg and msg['tag'] == 'tag')
+        self.assertTrue('tag' in image_meta and image_meta['tag'] == 'tag')
+        self.assertTrue('related_tag' in image_meta and image_meta['related_tag'] == 'related_tag')
+
+        self.assertTrue('order' in image_meta and image_meta['order'] == 5)
