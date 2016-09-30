@@ -15,6 +15,11 @@ angular.module('ua5App')
                 var gazeTimeout;
                 var scene = new BaseThreeScene();
                 var useVr = $scope.useVr;
+                var panelCount = 0;
+                var exitBtn;
+                var roomRadius;
+                var worldDirectionVector = new THREE.Vector3();
+                var cam;
 
                 $scope.$watch(function() {
                     return $scope.useVr;
@@ -51,6 +56,8 @@ angular.module('ua5App')
                     var rotation,
                         position;
 
+                    roomRadius = radius;
+
                     for (var i = 0; i < numSides; i++) {
                         rotation = {
                             x: 0,
@@ -64,7 +71,7 @@ angular.module('ua5App')
                             z: parseFloat((radius * Math.sin(angle * i)).toFixed(3))
                         };
 
-                        panels.push({rotation: rotation, position: position, file: 1});
+                        panels.push({rotation: rotation, position: position, file: 1, index: i});
                     }
                     return panels;
                 }
@@ -79,6 +86,7 @@ angular.module('ua5App')
                     
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
+                    panelCount = panels.length;
                     while (i--) {
                         makePanel($scope.panoContent[i], panels[i]);
                     }
@@ -86,7 +94,9 @@ angular.module('ua5App')
                     if (useVr) {
                         crosshair = makeCrosshair();    
                     }
+                    cam = scene.camera;
                     scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                    createExitBtn();
                 }
 
                 function makePanel(data, panel) {
@@ -107,7 +117,8 @@ angular.module('ua5App')
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
                                 transparent: true,
-                                map: texture
+                                map: texture,
+                                opacity: 1
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
@@ -119,6 +130,7 @@ angular.module('ua5App')
                             plane.position.x = panel.position.x;
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
+                            plane.index = panel.index;
 
                             linkMaterial = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
@@ -130,12 +142,35 @@ angular.module('ua5App')
                             hitAreaMat = linkMaterial;
                             hitAreaMat.depthWrite = false;
                             hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                            hitAreaMesh.name = 'sceneLink';
                             hitAreaMesh.position.y = -size.height / 2 - 4;
                             hitAreaMesh.position.z = 3;
                             plane.add(hitAreaMesh);
                             scene.pushItem(hitAreaMesh);
+                            plane.name = 'panel';
+                            scene.addItem(plane);
+                        }
+                    );
+                }
 
-                            scene.scene().add(plane);
+                function createExitBtn() {
+                    var geometry = new THREE.PlaneGeometry(40, 20, 1);
+                    var material;
+                    var textureLoader = new THREE.TextureLoader();
+                    textureLoader.load(
+                        '/assets/img/exit.png',
+                        function(texture) {
+                            var plane;
+                            material = new THREE.MeshBasicMaterial({
+                                side: THREE.MeshBasicMaterial,
+                                transparent: true,
+                                map: texture,
+                                opacity: 0.8
+                            });
+                            plane = new THREE.Mesh(geometry, material);
+                            plane.name = 'exit';
+                            scene.addItem(plane);
+                            exitBtn = plane;
                         }
                     );
                 }
@@ -211,24 +246,39 @@ angular.module('ua5App')
                     }
                     return dimensions;
                 }
-
+                
                 function onRender() {
+                    if (typeof exitBtn === 'object') {
+                        cam.getWorldDirection(worldDirectionVector);
+                        exitBtn.position.z = worldDirectionVector.z * 200;
+                        exitBtn.position.x = worldDirectionVector.x * 200;
+                        exitBtn.position.y = -145;
+                        exitBtn.lookAt(cam.position);
+                    }
                 }
 
                 function clickHandler(item) {
                     console.log('Clicked: ', scene.activeObject());
                     if (typeof scene.activeObject() !== 'undefined') {
-                        // TODO: hook this up with real data
-                        // currently hardcoded to fire a 'scene:change' event
-                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
-                            $rootScope.$broadcast('scene:change');
-                        }});
+                        if (scene.activeObject().name === 'sceneLink') {
+                            // TODO: hook this up with real data
+                            // currently hardcoded to fire a 'scene:change' event
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                                $rootScope.$broadcast('scene:change');
+                            }});                            
+                        } else if (scene.activeObject().name === 'exit') {
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                                window.history.back();
+                            }});                            
+                            
+                        }
                     }
                 }
 
                 function mouseOverHandler(item) {
-                    console.log('Mouse Hovering: ', item);
+                    //console.log('Mouse Hovering: ', item);
                     if (!gazeStarted && useVr) {
                         // Animate crosshair for long gaze
                         gazeStarted = true;
