@@ -16,7 +16,7 @@ angular.module('ua5App')
                     Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
                 },
                 url:'http://216.70.115.196:7777/images',
-                data: {title: 'name', description: 'description', tag: scene, album: projectId, content: file}
+                data: {title: 'name', order: 1, description: 'description', tag: scene, album: projectId, content: file}
             });
         };
 

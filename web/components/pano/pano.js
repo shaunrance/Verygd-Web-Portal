@@ -1,6 +1,6 @@
 /* global angular, THREE, $, TweenMax, Linear */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', function($rootScope, BaseThreeScene) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', function($rootScope, BaseThreeScene, BrowserFactory) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -15,6 +15,11 @@ angular.module('ua5App')
                 var gazeTimeout;
                 var scene = new BaseThreeScene();
                 var useVr = $scope.useVr;
+                var panelCount = 0;
+                var exitBtn;
+                var roomRadius;
+                var worldDirectionVector = new THREE.Vector3();
+                var cam;
 
                 $scope.$watch(function() {
                     return $scope.useVr;
@@ -51,6 +56,8 @@ angular.module('ua5App')
                     var rotation,
                         position;
 
+                    roomRadius = radius;
+
                     for (var i = 0; i < numSides; i++) {
                         rotation = {
                             x: 0,
@@ -64,7 +71,7 @@ angular.module('ua5App')
                             z: parseFloat((radius * Math.sin(angle * i)).toFixed(3))
                         };
 
-                        panels.push({rotation: rotation, position: position, file: 1});
+                        panels.push({rotation: rotation, position: position, file: 1, index: i});
                     }
                     return panels;
                 }
@@ -72,13 +79,26 @@ angular.module('ua5App')
                 function init() {
                     var i;
                     var panels;
-                    $$el.click(clickHandler);
+                    var pos = {x: 0, y: 0};
+                    
+                    $$el.mousedown(function() {
+                        pos = {x: cam.rotation.x, y: cam.rotation.y};
+                    });
+                    $$el.mouseup(function() {
+                        if (
+                            Math.abs(pos.x - cam.rotation.x) === 0 &&
+                            Math.abs(pos.y - cam.rotation.y) === 0
+                        ) {
+                            clickHandler();
+                        }
+                    });
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
                     $rootScope.renderer.setClearColor(0x000000);
                     
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
+                    panelCount = panels.length;
                     while (i--) {
                         makePanel($scope.panoContent[i], panels[i]);
                     }
@@ -86,7 +106,9 @@ angular.module('ua5App')
                     if (useVr) {
                         crosshair = makeCrosshair();    
                     }
+                    cam = scene.camera();
                     scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                    createExitBtn();
                 }
 
                 function makePanel(data, panel) {
@@ -107,7 +129,8 @@ angular.module('ua5App')
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
                                 transparent: true,
-                                map: texture
+                                map: texture,
+                                opacity: 1
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
@@ -119,23 +142,54 @@ angular.module('ua5App')
                             plane.position.x = panel.position.x;
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
+                            plane.index = panel.index;
 
-                            linkMaterial = new THREE.MeshBasicMaterial({
+                            if (useVr) {
+                                linkMaterial = new THREE.MeshBasicMaterial({
+                                    side: THREE.MeshBasicMaterial,
+                                    map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
+                                    transparent: true
+                                });
+
+                                hitAreaGeo = new THREE.CircleGeometry(2, 32);
+                                hitAreaMat = linkMaterial;
+                                hitAreaMat.depthWrite = false;
+                                hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                                hitAreaMesh.name = 'sceneLink';
+                                hitAreaMesh.position.y = -size.height / 2 - 4;
+                                hitAreaMesh.position.z = 3;
+                                plane.add(hitAreaMesh);
+                                scene.pushItem(hitAreaMesh); 
+                                scene.scene().add(plane);
+                            } else {
+                                plane.name = 'sceneLink';
+                                scene.addItem(plane);
+                            }
+                            
+                        }
+                    );
+                }
+
+                function createExitBtn() {
+                    var geometry = new THREE.PlaneGeometry(40, 20, 1);
+                    var material;
+                    var textureLoader = new THREE.TextureLoader();
+                    textureLoader.load(
+                        '/assets/img/exit.png',
+                        function(texture) {
+                            var plane;
+                            material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
-                                map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
-                                transparent: true
+                                transparent: true,
+                                map: texture,
+                                opacity: 0.8
                             });
-
-                            hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                            hitAreaMat = linkMaterial;
-                            hitAreaMat.depthWrite = false;
-                            hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                            hitAreaMesh.position.y = -size.height / 2 - 4;
-                            hitAreaMesh.position.z = 3;
-                            plane.add(hitAreaMesh);
-                            scene.pushItem(hitAreaMesh);
-
-                            scene.scene().add(plane);
+                            plane = new THREE.Mesh(geometry, material);
+                            plane.name = 'exit';
+                            if (useVr) {
+                                scene.addItem(plane);
+                            }
+                            exitBtn = plane;
                         }
                     );
                 }
@@ -211,24 +265,38 @@ angular.module('ua5App')
                     }
                     return dimensions;
                 }
-
+                
                 function onRender() {
+                    if (typeof exitBtn === 'object' && useVr) {
+                        cam.getWorldDirection(worldDirectionVector);
+                        exitBtn.position.z = worldDirectionVector.z * 200;
+                        exitBtn.position.x = worldDirectionVector.x * 200;
+                        exitBtn.position.y = -145;
+                        exitBtn.lookAt(cam.position);
+                    }
                 }
 
                 function clickHandler(item) {
                     console.log('Clicked: ', scene.activeObject());
                     if (typeof scene.activeObject() !== 'undefined') {
-                        // TODO: hook this up with real data
-                        // currently hardcoded to fire a 'scene:change' event
-                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                        TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
-                            $rootScope.$broadcast('scene:change');
-                        }});
+                        if (scene.activeObject().name === 'sceneLink') {
+                            // TODO: hook this up with real data
+                            // currently hardcoded to fire a 'scene:change' event
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                                $rootScope.$broadcast('scene:change');
+                            }});                            
+                        } else if (scene.activeObject().name === 'exit') {
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                                window.history.back();
+                            }});                            
+                        }
                     }
                 }
 
                 function mouseOverHandler(item) {
-                    console.log('Mouse Hovering: ', item);
+                    //console.log('Mouse Hovering: ', item);
                     if (!gazeStarted && useVr) {
                         // Animate crosshair for long gaze
                         gazeStarted = true;

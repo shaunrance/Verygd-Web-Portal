@@ -214,7 +214,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
 
                 raycaster = new THREE.Raycaster();
 
-                if (useVR) {
+                if (BrowserFactory.hasTouch()) {
                     controls = new THREE.DeviceOrientationControls(camera, true);
                     controls.connect();
                     controls.update();
@@ -227,8 +227,8 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                       camera.position.y,
                       camera.position.z
                     );
-                    controls.minPolarAngle = Math.PI / 2 - 0.6;
-                    controls.maxPolarAngle = Math.PI / 2 + 0.6;
+                    // controls.minPolarAngle = Math.PI / 2 - 0.6;
+                    // controls.maxPolarAngle = Math.PI / 2 + 0.6;
                     controls.noPan = true;
                     controls.noZoom = true;
                 }
