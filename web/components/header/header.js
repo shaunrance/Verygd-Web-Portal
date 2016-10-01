@@ -13,15 +13,14 @@ angular.module('ua5App')
                 $scope.backButtonToggle = false;
                 $scope.goBack = function() {
                     if ($rootScope.previousState !== undefined) {
-
                         $state.go($rootScope.previousState.name);
+                    } else {
+                        $state.go('projects');
                     }
                     
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
-                    $scope.backButtonToggle = (to.name === 'projects.details') ? true : false;
-                    
                 });
             }]
         };
