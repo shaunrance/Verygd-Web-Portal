@@ -1,7 +1,22 @@
-.viewer__toggle {
+.viewer__nav {
     @include position(fixed, null 15px 15px null);
-    color: #fff;
     z-index: 10;
+
+    > * {
+        float: left;
+    }
+}
+
+.viewer__toggle {
+    color: #fff;
+}
+
+.viewer__exit {
+    border: 1px solid $white;
+    color: #fff;
+    margin-right: 20px;
+    margin-top: 16px;
+    padding: 2px 12px;
 }
 
 .cardboard-icon {
@@ -10,4 +25,12 @@
 
 .cardboard-icon--selected {
     opacity: 0.3;
+}
+
+@include media($phablet) {
+    .viewer__exit {
+        font-size: 11px;
+        margin-top: 18px;
+        padding: 2px 8px;
+    }
 }

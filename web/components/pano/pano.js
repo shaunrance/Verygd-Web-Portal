@@ -79,7 +79,19 @@ angular.module('ua5App')
                 function init() {
                     var i;
                     var panels;
-                    $$el.click(clickHandler);
+                    var pos = {x: 0, y: 0};
+                    
+                    $$el.mousedown(function() {
+                        pos = {x: cam.rotation.x, y: cam.rotation.y};
+                    });
+                    $$el.mouseup(function() {
+                        if (
+                            Math.abs(pos.x - cam.rotation.x) === 0 &&
+                            Math.abs(pos.y - cam.rotation.y) === 0
+                        ) {
+                            clickHandler();
+                        }
+                    });
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
                     $rootScope.renderer.setClearColor(0x000000);
@@ -132,23 +144,28 @@ angular.module('ua5App')
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
 
-                            linkMaterial = new THREE.MeshBasicMaterial({
-                                side: THREE.MeshBasicMaterial,
-                                map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
-                                transparent: true
-                            });
+                            if (useVr) {
+                                linkMaterial = new THREE.MeshBasicMaterial({
+                                    side: THREE.MeshBasicMaterial,
+                                    map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
+                                    transparent: true
+                                });
 
-                            hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                            hitAreaMat = linkMaterial;
-                            hitAreaMat.depthWrite = false;
-                            hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                            hitAreaMesh.name = 'sceneLink';
-                            hitAreaMesh.position.y = -size.height / 2 - 4;
-                            hitAreaMesh.position.z = 3;
-                            plane.add(hitAreaMesh);
-                            scene.pushItem(hitAreaMesh);
-                            plane.name = 'panel';
-                            scene.addItem(plane);
+                                hitAreaGeo = new THREE.CircleGeometry(2, 32);
+                                hitAreaMat = linkMaterial;
+                                hitAreaMat.depthWrite = false;
+                                hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                                hitAreaMesh.name = 'sceneLink';
+                                hitAreaMesh.position.y = -size.height / 2 - 4;
+                                hitAreaMesh.position.z = 3;
+                                plane.add(hitAreaMesh);
+                                scene.pushItem(hitAreaMesh); 
+                                scene.scene().add(plane);
+                            } else {
+                                plane.name = 'sceneLink';
+                                scene.addItem(plane);
+                            }
+                            
                         }
                     );
                 }
@@ -169,20 +186,7 @@ angular.module('ua5App')
                             });
                             plane = new THREE.Mesh(geometry, material);
                             plane.name = 'exit';
-                            if (!useVr) {
-                                cam.add(plane);
-                                // make it interactive:
-                                scene.pushItem(plane);
-                                plane.position.z = -50;
-                                if (BrowserFactory.hasTouch()) {
-                                    plane.position.y = -24;
-                                } else {
-                                    //we want our btn lower on desktop
-                                    plane.position.y = -30;    
-                                }
-                                plane.scale.x = 0.2;
-                                plane.scale.y = 0.2;
-                            } else {
+                            if (useVr) {
                                 scene.addItem(plane);
                             }
                             exitBtn = plane;
@@ -287,7 +291,6 @@ angular.module('ua5App')
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
                                 window.history.back();
                             }});                            
-                            
                         }
                     }
                 }

@@ -33,6 +33,10 @@ angular.module('ua5App.viewer')
         $scope.toggleCardboard = function() {
             $scope.useVr = !$scope.useVr;
         };
+
+        $scope.exit = function() {
+            window.history.back();
+        };
         
         // right now we're going to simulate a scene change between two projects
         $scope.$on('scene:change', function() {

@@ -4,11 +4,17 @@
         use-vr="useVr"
         pano-content="currentSceneScreens">
     </div>
-    <a
-        ng-click="toggleCardboard()"
-        ng-if="touch"
-        class="viewer__toggle"
-        ng-class="{'cardboard-icon--selected': useVr}">
-        <img class="cardboard-icon" src="assets/img/cardboard.svg" />
-    </a>
+    <div class="viewer__nav">
+        <a
+            class="viewer__exit"
+            ng-if="!useVr"
+            ng-click="exit()">Exit</a>
+        <a
+            ng-click="toggleCardboard()"
+            ng-if="touch"
+            class="viewer__toggle"
+            ng-class="{'cardboard-icon--selected': useVr}">
+            <img class="cardboard-icon" src="assets/img/cardboard.svg" />
+        </a>
+    </div>
 </div>

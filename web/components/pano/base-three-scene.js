@@ -214,7 +214,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
 
                 raycaster = new THREE.Raycaster();
 
-                if (useVR) {
+                if (BrowserFactory.hasTouch()) {
                     controls = new THREE.DeviceOrientationControls(camera, true);
                     controls.connect();
                     controls.update();
