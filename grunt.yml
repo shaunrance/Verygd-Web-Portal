@@ -30,6 +30,7 @@ config:
                     - web/bower_components/suite/suite.js
                     - web/bower_components/suite/factories/browser.js
                     - web/bower_components/ng-file-upload/ng-file-upload.min.js
+                    - web/bower_components/ng-sortable/dist/ng-sortable.js
                 dest: web/_build/vendor.js
             app:
                 src:

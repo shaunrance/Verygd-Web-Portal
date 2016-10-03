@@ -18,9 +18,16 @@
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
         </nav>
-        <div  class="vg__items project__items" ng-show="!emptyScene">
-            <figure ng-repeat="screen in currentSceneScreens" class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link">
+        <div
+            class="vg__items project__items"
+            as-sortable="dragControlListeners"
+            ng-model="currentSceneScreens"
+            ng-show="!emptyScene">
+            <figure
+                ng-repeat="screen in currentSceneScreens"
+                as-sortable-item
+                class="vg__item--wrapper scene--wrapper">
+                <a class="vg__item--link scene--link" as-sortable-item-handle>
                     <div class="vg__image--wrapper">
                         <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
 <!--                         <div class="link-icon---container">

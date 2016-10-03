@@ -27,7 +27,8 @@
     "suite": "*",
     "three.js": "threejs#*",
     "modernizr": "components/modernizr#^2.8.3",
-    "ng-file-upload": "^12.2.9"
+    "ng-file-upload": "^12.2.9",
+    "ng-sortable": "^1.3.6"
   },
   "resolutions": {
     "angular": "1.5.6"

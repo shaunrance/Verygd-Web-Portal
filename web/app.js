@@ -15,6 +15,7 @@ angular.module('ua5App', [
     'ngTouch',
     'ua5Templates',
     'ui.router',
+    'as.sortable',
     'angulartics',
     'angulartics.google.analytics',
     'angular-loading-bar',

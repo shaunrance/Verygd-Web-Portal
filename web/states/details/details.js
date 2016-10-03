@@ -115,6 +115,15 @@ angular.module('ua5App.details', ['ngFileUpload'])
             $scope.addScene();
         });
 
+        $scope.dragControlListeners = {
+            orderChanged: function(event) {
+                console.log($scope.currentSceneScreens);
+                _.each($scope.currentSceneScreens, function(screen, key) {
+                    screenFactory.editScreen(screen.id, {id: screen.id, order: key + 1});
+                });
+            }
+        };
+
         getScreens();
     }])
 ;

@@ -26,6 +26,13 @@ angular.module('ua5App')
             });
         };
 
+        dataFactory.editScreen = function(id, data) {
+            return $http.put('http://216.70.115.196:7777/images/' + id, { // jshint ignore:line
+                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'},
+                data: data
+            });
+        };
+
         return dataFactory;
 
     }])
