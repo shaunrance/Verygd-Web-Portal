@@ -28,7 +28,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 MEDIA_PORTAL_SETTINGS = {
     'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',
+
     'CONTENT_SERIALIZER': 'panel.serializers.PanelSerializer',
+    'ALBUM_SERIALIZER': 'project.serializers.ProjectSerializer',
+
     'IMGIX_URL': 'https://verygd.imgix.net',
 
     'ALBUM': 'project.models.Project',

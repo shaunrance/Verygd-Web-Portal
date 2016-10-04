@@ -7,6 +7,12 @@ class PanelSerializer(ContentSerializer):
     related_tag = serializers.CharField(required=False)
     order = serializers.IntegerField(required=False)
 
+    def to_representation(self, instance):
+        data = super(PanelSerializer, self).to_representation(instance)
+
+        data['is-panorama'] = data.pop('is_panorama')
+        return data
+
     def create(self, validated_data):
         instance = super(PanelSerializer, self).create(validated_data)
         return instance
