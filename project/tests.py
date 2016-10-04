@@ -34,7 +34,7 @@ class TestProject(TestImageAPI):
 
         self.assertTrue('order' in image_meta and image_meta['order'] == 5)
 
-        self.assertTrue('is-panorama' in image_meta and image_meta['is-panorama'])
+        self.assertTrue('is_panorama' in image_meta and image_meta['is_panorama'])
 
         response, msg = self.put_as(self.member, '/images/{0}'.format(image_meta['id']), data={'related_tag': 'cool'})
 
@@ -58,4 +58,4 @@ class TestProject(TestImageAPI):
         self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
 
         self.assertTrue('title' in album_meta and album_meta['title'] == 'new title')
-        self.assertTrue('background-color' in album_meta and album_meta['background-color'] == 'salmon')
+        self.assertTrue('background_color' in album_meta and album_meta['background_color'] == 'salmon')
