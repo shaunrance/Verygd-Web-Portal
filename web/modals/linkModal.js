@@ -12,9 +12,7 @@ angular.module('ua5App')
             }
         };
 
-        //$scope.selectedScene = fields.content.related_tag;
         $scope.selectedScene = parseInt(fields.content.related_tag, 10);
-
         $scope.showFileUpload = fields.showFileUpload;
         $scope.scenes = fields.scenes;
 

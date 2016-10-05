@@ -37,7 +37,11 @@
                             <img class="link-icon" src="assets/img/link.svg" />
                         </div> -->
                     </div>
-                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}
+                    <figcaption class="vg__image--caption">
+                        <span ng-if="screen.related_tag && screen.related_tag > 0">
+                            Linked to Scene {{screen.related_tag}}
+                        </span>
+                        
                         <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />
                         </button>
