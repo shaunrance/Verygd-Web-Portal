@@ -121,7 +121,7 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&h=800&w=800&fit=max&q=60',
+                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000',
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
                             var linkMaterial;
