@@ -22,9 +22,7 @@ angular.module('ua5App')
         };
 
         dataFactory.editScreen = function(id, data) {
-            return $http.put('http://216.70.115.196:7777/images/' + id, { // jshint ignore:line
-                order: data.order
-            });
+            return $http.put('http://216.70.115.196:7777/images/' + id, data); // jshint ignore:line
         };
 
         return dataFactory;

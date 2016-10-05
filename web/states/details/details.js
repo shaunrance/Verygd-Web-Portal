@@ -19,7 +19,13 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.scenes = 1;
         $scope.emptyScene = true;
         $scope.$watch('files', function() {
-            uploadScreens($scope.files);
+            if (
+                typeof $scope.files === 'object' &&
+                $scope.files.length > 0 &&
+                typeof $scope.files[0] === 'object'
+            ) {
+                uploadScreens($scope.files);    
+            }
         });
         $scope.$watch('file', function() {
             if ($scope.file !== null) {
@@ -54,7 +60,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
             });
         };
 
-        $scope.linkContent = function() {
+        $scope.linkContent = function(content) {
             ModalService.showModal({
                 templateUrl: 'modals/linkModal.html',
                 controller: 'linkModalController',
@@ -65,18 +71,12 @@ angular.module('ua5App.details', ['ngFileUpload'])
                         showFileUpload: false,
                         submitButtonTextLink: 'Link',
                         submitButtonTextCancel: 'Cancel',
-                        scenes: $scope.scenes
+                        scenes: $scope.scenes,
+                        content: content
                     }
                 }
             }).then(function(modal) {
-                modal.close.then(function(result) {
-                    if (result.input) {
-                        $scope.$emit('addProject', result.input);
-                        $scope.menuToggle = false;
-                    }
-                });
             });
-
         };
 
         function uploadScreens(files) {
@@ -155,7 +155,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.dragControlListeners = {
             orderChanged: function(event) {
                 _.each($scope.currentSceneScreens, function(screen, key) {
-                    screenFactory.editScreen(screen.id, {id: screen.id, order: key + 1});
+                    screenFactory.editScreen(screen.id, {order: key + 1});
                     //update the order in the view also:
                     screen.order = key + 1;
                 });
