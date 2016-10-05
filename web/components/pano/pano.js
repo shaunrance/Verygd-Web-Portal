@@ -99,8 +99,12 @@ angular.module('ua5App')
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    while (i--) {
-                        makePanel($scope.panoContent[i], panels[i]);
+                    if (panelCount > 1) {
+                        while (i--) {
+                            makePanel($scope.panoContent[i], panels[i]);
+                        }
+                    } else {
+                        makePanorama($scope.panoContent[0]);
                     }
 
                     if (useVr) {
@@ -176,6 +180,86 @@ angular.module('ua5App')
                     );
                 }
 
+                function makePanorama(data) {
+                    var cylinder;
+                    var geometry;
+                    var hitAreaGeo;
+                    var hitAreaMat;
+                    var hitAreaMesh;
+                    var material;
+                    var textureLoader = new THREE.TextureLoader();
+                    var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide});
+                    var materialsArray = [];
+
+                    textureLoader.load(
+                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60',
+                        function(texture) {
+                            var size = sizePlaneFromImage(texture.image);
+                            var linkMaterial;
+                            var height;
+                            var materialGroup;
+                            var cylFaces;
+
+                            material = new THREE.MeshBasicMaterial({
+                                side: THREE.FrontSide,
+                                transparent: true,
+                                map: texture,
+                                opacity: 1
+                            });
+
+                            materialsArray = [
+                                materialEmpty,
+                                material,
+                                materialEmpty
+                            ];
+
+                            height = ((texture.image.width / texture.image.height) * 300) / 2;
+                            geometry = new THREE.CylinderGeometry(150, 150, height, 20);
+
+                            materialGroup = new THREE.MeshFaceMaterial(materialsArray);
+                            cylFaces = geometry.faces.length;
+                            for (var i = 0; i < cylFaces; i++) {
+                                if (i <= 39) {
+                                    //give the faces around the cyl the img texture
+                                    geometry.faces[i].materialIndex = 1;
+                                } else {
+                                    //give the top/bottom faces a black texture
+                                    geometry.faces[i].materialIndex = 0;
+                                }
+                            }
+                            
+                            cylinder = new THREE.Mesh(geometry, materialGroup);
+                            cylinder.index = 0;
+
+                            //invert the object, to fix the texture
+                            cylinder.scale.set(- 1, 1, 1);
+
+                            if (useVr) {
+                                linkMaterial = new THREE.MeshBasicMaterial({
+                                    side: THREE.MeshBasicMaterial,
+                                    map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
+                                    transparent: true
+                                });
+
+                                hitAreaGeo = new THREE.CircleGeometry(2, 32);
+                                hitAreaMat = linkMaterial;
+                                hitAreaMat.depthWrite = false;
+                                hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                                hitAreaMesh.name = 'sceneLink';
+                                hitAreaMesh.position.y = -size.height / 2 - 4;
+                                hitAreaMesh.position.z = 3;
+                                cylinder.add(hitAreaMesh);
+                                scene.pushItem(hitAreaMesh); 
+                                scene.scene().add(cylinder);
+                            } else {
+                                cylinder.name = 'sceneLink';
+                                scene.addItem(cylinder);
+                            }
+                            
+                        }
+                    );
+                }
+
                 function createExitBtn() {
                     var geometry = new THREE.PlaneGeometry(40, 20, 1);
                     var material;
@@ -207,8 +291,13 @@ angular.module('ua5App')
                     scene.destroyAllSceneObjects(['PerspectiveCamera']);
                     // make new panels
                     panels = getPanels(i);
-                    while (i--) {
-                        makePanel($scope.panoContent[i], panels[i]);
+                    panelCount = panels.length;
+                    if (panelCount > 1) {
+                        while (i--) {
+                            makePanel($scope.panoContent[i], panels[i]);
+                        }
+                    } else {
+                        makePanorama($scope.panoContent[0]);
                     }
                 }
 
