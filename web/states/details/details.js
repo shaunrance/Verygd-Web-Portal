@@ -64,7 +64,8 @@ angular.module('ua5App.details', ['ngFileUpload'])
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
                         showFileUpload: false,
                         submitButtonTextLink: 'Link',
-                        submitButtonTextCancel: 'Cancel'
+                        submitButtonTextCancel: 'Cancel',
+                        scenes: $scope.scenes
                     }
                 }
             }).then(function(modal) {
@@ -79,11 +80,20 @@ angular.module('ua5App.details', ['ngFileUpload'])
         };
 
         function uploadScreens(files) {
+            var lastItemOrder = 0;
+            if ($scope.currentSceneScreens.length > 0) {
+                lastItemOrder = _.last($scope.currentSceneScreens).order + 1;
+            }
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
 
-                    screenFactory.insertScreen(file, $stateParams.projectId, $scope.currentScene)
+                    screenFactory.insertScreen(
+                        file,
+                        $stateParams.projectId,
+                        $scope.currentScene,
+                        lastItemOrder + i
+                    )
 
                         .then(function(response) {
                                 $scope.status = 'Success';
@@ -110,6 +120,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
                 .then(function(response) {
                     $scope.screens = response.data.content;
+                    $scope.screens = _.sortBy($scope.screens, 'order');
                     $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
                     _.each($scope.screens, function(screen) {
                         if (parseInt(screen.tag, 10) > $scope.scenes) {
@@ -123,8 +134,10 @@ angular.module('ua5App.details', ['ngFileUpload'])
         }
 
         $scope.changeScene = function(scenekey) {
+            var scenes;
             $scope.currentScene = scenekey;
-            $scope.currentSceneScreens = _.where($scope.screens, {tag: scenekey.toString()});
+            scenes = _.where($scope.screens, {tag: scenekey.toString()});
+            $scope.currentSceneScreens = _.sortBy(scenes, 'order');
         };
 
         $scope.addScene = function() {
@@ -141,9 +154,10 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
         $scope.dragControlListeners = {
             orderChanged: function(event) {
-                console.log($scope.currentSceneScreens);
                 _.each($scope.currentSceneScreens, function(screen, key) {
                     screenFactory.editScreen(screen.id, {id: screen.id, order: key + 1});
+                    //update the order in the view also:
+                    screen.order = key + 1;
                 });
             }
         };
