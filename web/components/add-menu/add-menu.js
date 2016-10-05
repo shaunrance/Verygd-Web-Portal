@@ -19,12 +19,12 @@ angular.module('ua5App')
                         $scope.menuItems = {
                             project:'Add Project',
                             team: 'Add Team Member'
-                        }; 
+                        };
                     } else {
                         $scope.menuItems = menu;
                     }
                 };
-                
+
                 $scope.menuToggle = false;
 
                 $scope.$watch('menuToggle', function() {
@@ -68,7 +68,7 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                
+
                                 });
                             });
                             break;
@@ -105,7 +105,7 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                
+
                                 });
                             });
                             break;
@@ -123,13 +123,13 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                
+
                                 });
                             });
                             break;
                     }
                 };
-                
+
             }]
         };
     }])

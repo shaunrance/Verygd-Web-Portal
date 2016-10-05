@@ -121,7 +121,7 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&h=800&w=800&fit=max&q=60',
+                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000',
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
                             var linkMaterial;
@@ -143,26 +143,32 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
-
+                            
+                            //TODO: validate that the linked scene exists
                             if (useVr) {
                                 linkMaterial = new THREE.MeshBasicMaterial({
                                     side: THREE.MeshBasicMaterial,
                                     map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
                                     transparent: true
                                 });
-
-                                hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                                hitAreaMat = linkMaterial;
-                                hitAreaMat.depthWrite = false;
-                                hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                                hitAreaMesh.name = 'sceneLink';
-                                hitAreaMesh.position.y = -size.height / 2 - 4;
-                                hitAreaMesh.position.z = 3;
-                                plane.add(hitAreaMesh);
-                                scene.pushItem(hitAreaMesh); 
+                                if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
+                                    hitAreaGeo = new THREE.CircleGeometry(2, 32);
+                                    hitAreaMat = linkMaterial;
+                                    hitAreaMat.depthWrite = false;
+                                    hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
+                                    hitAreaMesh.name = 'sceneLink';
+                                    hitAreaMesh.sceneLink = data.related_tag;
+                                    hitAreaMesh.position.y = -size.height / 2 - 4;
+                                    hitAreaMesh.position.z = 3;
+                                    plane.add(hitAreaMesh);
+                                    scene.pushItem(hitAreaMesh);
+                                }
                                 scene.scene().add(plane);
                             } else {
-                                plane.name = 'sceneLink';
+                                if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
+                                    plane.name = 'sceneLink';
+                                    plane.sceneLink = data.related_tag;
+                                }
                                 scene.addItem(plane);
                             }
                             
@@ -277,18 +283,20 @@ angular.module('ua5App')
                 }
 
                 function clickHandler(item) {
-                    console.log('Clicked: ', scene.activeObject());
+                    var activeObject = scene.activeObject();
                     if (typeof scene.activeObject() !== 'undefined') {
                         if (scene.activeObject().name === 'sceneLink') {
                             // TODO: hook this up with real data
                             // currently hardcoded to fire a 'scene:change' event
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
-                                $rootScope.$broadcast('scene:change');
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
+                                if (activeObject.hasOwnProperty('sceneLink')) {
+                                    $rootScope.$broadcast('scene:change', {link: activeObject.sceneLink});    
+                                }
                             }});                            
                         } else if (scene.activeObject().name === 'exit') {
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.5, delay: 0.2, onComplete: function() {
+                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                                 window.history.back();
                             }});                            
                         }

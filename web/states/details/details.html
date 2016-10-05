@@ -27,14 +27,21 @@
                 ng-repeat="screen in currentSceneScreens"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link" as-sortable-item-handle>
+                <a
+                    class="vg__item--link scene--link"
+                    as-sortable-item-handle
+                    ng-click="linkContent(screen)">
                     <div class="vg__image--wrapper">
                         <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
 <!--                         <div class="link-icon---container">
                             <img class="link-icon" src="assets/img/link.svg" />
                         </div> -->
                     </div>
-                    <figcaption class="vg__image--caption">{{screen.title}} - {{screen.description}}
+                    <figcaption class="vg__image--caption">
+                        <span ng-if="screen.related_tag && screen.related_tag > 0">
+                            Linked to Scene {{screen.related_tag}}
+                        </span>
+                        
                         <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />
                         </button>
