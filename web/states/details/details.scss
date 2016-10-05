@@ -73,6 +73,7 @@
     @include align-items(center);
     @include justify-content(center);
     background-color: none;
+    cursor: pointer;
     height: 100%;
     left: 0;
     position: absolute;
@@ -212,29 +213,40 @@
     @include display(flex);
     @include flex-direction(row);
     @include flex-wrap(wrap);
-    @include flex(1);
+    @include justify-content(space-around);
     counter-reset: sceneImage;
     width: 100%;
 }
 
 .modal-body__item--wrapper {
-    @include margin(null $item-wrapper-margin-desk $item-wrapper-margin-desk null);
-    @include size(90px 100px);
+    @include size(100px);
     background-color: rgba(#edbbf4, 0.5);
-    flex: 1;
+    margin-bottom: 30px;
     position: relative;
 }
 
 .modal-body__image {
     background-color: $navy;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    border: 1px solid $white;
     height: 100%;
+    padding-top: 14px;
+    text-align: center;
     width: 100%;
 
     &.selected {
         border: 1px solid $pink;
     }
+}
+
+.modal-body__item--label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    position: relative;
+    text-align: center;
+    top: 3px;
 }
 
 

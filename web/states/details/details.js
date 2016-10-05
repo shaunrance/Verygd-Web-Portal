@@ -1,4 +1,4 @@
-/* global angular, _ */
+/* global angular, _, Modernizr */
 angular.module('ua5App.details', ['ngFileUpload'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects.details', {
@@ -18,6 +18,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.currentScene = 1;
         $scope.scenes = 1;
         $scope.emptyScene = true;
+        $scope.hasTouch = Modernizr.touch;
         $scope.$watch('files', function() {
             if (
                 typeof $scope.files === 'object' &&
