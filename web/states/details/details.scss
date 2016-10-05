@@ -219,11 +219,10 @@
 
 .modal-body__item--wrapper {
     @include margin(null $item-wrapper-margin-desk $item-wrapper-margin-desk null);
-    @include size(90px 25%);
+    @include size(90px 100px);
     background-color: rgba(#edbbf4, 0.5);
     flex: 1;
     position: relative;
-    // width: 240px;
 }
 
 .modal-body__image {
