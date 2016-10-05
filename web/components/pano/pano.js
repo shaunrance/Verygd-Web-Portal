@@ -143,7 +143,8 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
-
+                            
+                            //TODO: validate that the linked scene exists
                             if (useVr) {
                                 linkMaterial = new THREE.MeshBasicMaterial({
                                     side: THREE.MeshBasicMaterial,

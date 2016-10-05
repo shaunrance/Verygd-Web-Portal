@@ -72,7 +72,8 @@ angular.module('ua5App.details', ['ngFileUpload'])
                         submitButtonTextLink: 'Link',
                         submitButtonTextCancel: 'Cancel',
                         scenes: $scope.scenes,
-                        content: content
+                        content: content,
+                        allScreens: $scope.screens
                     }
                 }
             }).then(function(modal) {
