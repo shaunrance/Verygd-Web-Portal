@@ -43,7 +43,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 modal.close.then(function(result) {
                     if (result) {
                         screenFactory.deleteScreen(screenId)
-                                
+
                         .then(function(response) {
                                 getScreens();
                             }, function(error) {
@@ -54,11 +54,35 @@ angular.module('ua5App.details', ['ngFileUpload'])
             });
         };
 
+        $scope.linkContent = function() {
+            ModalService.showModal({
+                templateUrl: 'modals/linkModal.html',
+                controller: 'linkModalController',
+                inputs: {
+                    fields:{
+                        title: 'Link Panel',
+                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        showFileUpload: false,
+                        submitButtonTextLink: 'Link',
+                        submitButtonTextCancel: 'Cancel'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result.input) {
+                        $scope.$emit('addProject', result.input);
+                        $scope.menuToggle = false;
+                    }
+                });
+            });
+
+        };
+
         function uploadScreens(files) {
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-                  
+
                     screenFactory.insertScreen(file, $stateParams.projectId, $scope.currentScene)
 
                         .then(function(response) {
@@ -108,7 +132,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         };
 
         $scope.getScene = function(num) {
-            return new Array(num);   
+            return new Array(num);
         };
 
         $scope.$on('nav:add-scene', function() {

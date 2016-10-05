@@ -27,7 +27,10 @@
                 ng-repeat="screen in currentSceneScreens"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper">
-                <a class="vg__item--link scene--link" as-sortable-item-handle>
+                <a
+                    class="vg__item--link scene--link"
+                    as-sortable-item-handle
+                    ng-click="linkContent()">
                     <div class="vg__image--wrapper">
                         <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
 <!--                         <div class="link-icon---container">

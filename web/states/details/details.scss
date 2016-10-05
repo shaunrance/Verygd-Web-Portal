@@ -202,6 +202,38 @@
     width: 160px;
 }
 
+.modal-body {
+    @include outer-container;
+    @include padding(50px $site-gutter 50px);
+    position: relative;
+}
+
+.modal-body__items {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    @include flex(1);
+    counter-reset: sceneImage;
+    width: 100%;
+}
+
+.modal-body__item--wrapper {
+    @include margin(null $item-wrapper-margin-desk $item-wrapper-margin-desk null);
+    @include size(90px 25%);
+    background-color: rgba(#edbbf4, 0.5);
+    flex: 1;
+    position: relative;
+    // width: 240px;
+}
+
+.modal-body__image {
+    background-color: $navy;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+
 
 @include media($tablet) {
 
