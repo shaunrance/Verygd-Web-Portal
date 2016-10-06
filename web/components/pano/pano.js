@@ -213,7 +213,11 @@ angular.module('ua5App')
                                 materialEmpty
                             ];
 
-                            height = ((texture.image.width / texture.image.height) * 300) / 2;
+                            function map(value, start1, stop1, start2, stop2) {
+                                return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+                            }
+
+                            height = map(texture.image.width / texture.image.height, 7.5, 2.01, 100, 300);
                             geometry = new THREE.CylinderGeometry(150, 150, height, 20);
 
                             materialGroup = new THREE.MeshFaceMaterial(materialsArray);
