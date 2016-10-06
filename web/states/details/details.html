@@ -40,9 +40,10 @@
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
-                        <span class="vg__image--caption-tag" ng-if="screen.related_tag && screen.related_tag > 0">
+                        <div class="vg__image--caption-name">{{screen.screenName}}</div>
+                        <div class="vg__image--caption-tag" ng-if="screen.related_tag && screen.related_tag > 0">
                             Scene {{screen.related_tag}}
-                        </span>
+                        </div>
 
                         <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />

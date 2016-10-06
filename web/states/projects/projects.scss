@@ -34,14 +34,24 @@
 }
 
 .vg__image--caption {
-    @include padding(10px 10px 20px 25px);
+    @include padding(10px 10px 20px 10px);
     color: $grey-darkest;
     font-size: 12px;
     line-height: 1;
     position: relative;
 }
 
+.vg__image--caption-name {
+    color: $black;
+    font-size: 14px;
+    margin-bottom: 10px;
+    padding-right: 30px;
+    word-break: break-word;
+}
+
 .vg__image--caption-tag {
+    margin-left: 12px;
+
     &::before {
         background: url('../assets/img/link-grey.svg') no-repeat;
         background-size: 100% auto;
