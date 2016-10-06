@@ -34,8 +34,23 @@
 }
 
 .vg__image--caption {
-    @include padding(10px 10px 20px);
+    @include padding(10px 10px 20px 25px);
+    color: $grey-darkest;
+    font-size: 12px;
+    line-height: 1;
     position: relative;
+}
+
+.vg__image--caption-tag {
+    &::before {
+        background: url('../assets/img/link-grey.svg') no-repeat;
+        background-size: 100% auto;
+        content: '';
+        height: 10px;
+        left: 10px;
+        position: absolute;
+        width: 10px;
+    }
 }
 
 .vg__image--wrapper {

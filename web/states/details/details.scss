@@ -213,7 +213,7 @@
     @include display(flex);
     @include flex-direction(row);
     @include flex-wrap(wrap);
-    @include justify-content(space-around);
+    @include justify-content(left);
     counter-reset: sceneImage;
     width: 100%;
 }
@@ -221,8 +221,12 @@
 .modal-body__item--wrapper {
     @include size(100px);
     background-color: rgba(#edbbf4, 0.5);
-    margin-bottom: 30px;
+    margin: 0 20px 30px 0;
     position: relative;
+
+    &:nth-child(3n) {
+        margin-right: 0;
+    }
 }
 
 .modal-body__image {
@@ -233,6 +237,7 @@
     border: 1px solid $white;
     height: 100%;
     padding-top: 14px;
+    position: absolute;
     text-align: center;
     width: 100%;
 
@@ -243,7 +248,8 @@
 
 .modal-body__item--label {
     font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
+    font-size: 12px;
+    margin-top: 100%;
     position: relative;
     text-align: center;
     top: 3px;
@@ -311,5 +317,19 @@
         height: 60px;
         margin: 0;
         width: 100%;
+    }
+}
+
+@include media($mobile) {
+    .modal-body__item--wrapper {
+        height: 0;
+        margin: 0 0 30px;
+        padding-bottom: 50%;
+        width: 50%;
+    }
+
+    .modal-body__item--label {
+        margin-top: 100%;
+        top: 0;
     }
 }
