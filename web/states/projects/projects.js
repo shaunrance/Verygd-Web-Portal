@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, _ */
 angular.module('ua5App.projects')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects', {
@@ -64,7 +64,15 @@ angular.module('ua5App.projects')
 
                 .then(function(response) {
                     $scope.projects = response.data;
-                    
+                    _.each($scope.projects, function(project) {
+                        var screens = project.content;
+                        screens = _.sortBy(screens, 'order');
+                        screens = _.where(screens, {tag: '1'});
+                        
+                        if (screens.length > 0) {
+                            project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';    
+                        }
+                    });
                 }, function(error) {
                     
                 });
