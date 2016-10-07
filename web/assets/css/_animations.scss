@@ -1,0 +1,10 @@
+@include keyframes(gradientBackground) {
+
+    from {
+        background-position: left;
+    }
+
+    to {
+        background-position: right;
+    }
+}

@@ -1,5 +1,5 @@
 .home {
-    @include linear-gradient(to right, #5de0e9 0%, #5b9df9 50%, #ec39e5 100%);
+    @include animated-gradient-background((#5de0e9, #ec39e5, #5b9df9, #ec39e5, #5de0e9));
     min-height: 100vh;
 
     .form-group {

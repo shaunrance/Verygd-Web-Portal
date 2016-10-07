@@ -46,3 +46,10 @@
     background-color: $white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 }
+
+@mixin animated-gradient-background($colors) {
+    @include animation(gradientBackground 20s alternate ease-in-out);
+    @include animation-iteration-count(infinite);
+    @include background(linear-gradient(to right, $colors));
+    background-size: 1000%;
+}
