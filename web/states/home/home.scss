@@ -55,3 +55,23 @@
     @include position(relative, 30px null null);
     display: inline-block;
 }
+
+@include media($phablet) {
+
+    .home-modal-overlay {
+        @include padding(null 20px);
+    }
+
+    .home-logo-link {
+        @include position(relative, 75px null null);
+
+        .logo {
+            width: 125px;
+
+            .vg-logo {
+                @include size(100%);
+            }
+        }
+    }
+
+}
