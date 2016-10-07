@@ -28,28 +28,31 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>
-            {{ ngMeta.title }}
-        </title>
+        <title ng-bind="ngMeta.title">Very.gd</title>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
-        <meta content="Base Angular">
+        <meta content="Very.gd">
         <meta
             name="description"
-            content="{{ ngMeta.description }}">
+            content=""
+            ng-content="{{ ngMeta.description }}">
         <meta
             property="og:description"
-            content="{{ ngMeta.description }}">
+            content=""
+            ng-content="{{ ngMeta.description }}">
         <meta
             property="og:image"
-            content="{{ ngMeta.image }}">
+            content=""
+            ng-content="{{ ngMeta.image }}">
         <meta
             property="og:site_name"
-            content="Site Name">
+            content=""
+            ng-content="Site Name">
         <meta
             property="og:url"
-            content="{{ ngMeta.url }}">
+            content=""
+            ng-content="{{ ngMeta.url }}">
         <meta
             property="og:type"
             content="website">
