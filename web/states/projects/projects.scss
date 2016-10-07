@@ -36,13 +36,11 @@
 
 .vg__image--caption {
     @include padding(10px 10px 15px 10px);
-    color: $black;
     font-size: 14px;
     position: relative;
 }
 
 .vg__image--caption-name {
-    color: $black;
     font-size: 14px;
     line-height: 1.3;
     margin-bottom: 15px;
@@ -52,6 +50,7 @@
 
 .vg__image--caption-tag {
     color: $grey-darkest;
+    font-size: 12px;
     line-height: 1;
     margin-left: 20px;
 
