@@ -13,6 +13,7 @@ module.exports = function(grunt) {
     var devTasks;
     var pkg;
     var prodTasks;
+    var stageTasks;
     var rewrite;
     var secret;
 
@@ -205,6 +206,17 @@ module.exports = function(grunt) {
                     releases_to_keep: '3',
                     after_deploy: 'cd ' + secret.staging.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
                 }
+            },
+            prod: {
+                options: {
+                    deploy_path: secret.prod.path,
+                    host: secret.prod.host,
+                    username: secret.prod.username,
+                    privateKey: require('fs').readFileSync('../verygd.pem'),
+                    debug: true,
+                    releases_to_keep: '3',
+                    after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
+                }
             }
         }
     });
@@ -275,7 +287,7 @@ module.exports = function(grunt) {
     ];
     grunt.registerTask('build', buildTasks);
 
-    prodTasks = [
+    stageTasks = [
         'ngtemplates:app',
         'concat:scss',
         'sass',
@@ -288,5 +300,20 @@ module.exports = function(grunt) {
         'copy',
         'ssh_deploy:staging'
     ];
-    grunt.registerTask('stage', prodTasks);
+    grunt.registerTask('stage', stageTasks);
+
+    prodTasks = [
+        'ngtemplates:app',
+        'concat:scss',
+        'sass',
+        'cssmin:target',
+        'concat:js-app',
+        'concat:js-vendor',
+        'uglify',
+        'keepBanners',
+        'preprocess:build',
+        'copy',
+        'ssh_deploy:prod'
+    ];
+    grunt.registerTask('deploy', prodTasks);
 };
