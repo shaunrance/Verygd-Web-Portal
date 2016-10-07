@@ -109,7 +109,7 @@
 
 .modal {
     background-color: $white;
-    max-width: 400px;
+    max-width: 600px;
     padding: 30px;
     position: relative;
     width: 100%;
@@ -125,7 +125,7 @@
         content: '';
         left: -30px;
         position: absolute;
-        width: 400px;
+        width: 600px;
     }
 }
 
@@ -198,6 +198,16 @@
     .modal-launch--container {
 
         padding-top: $header-height-tablet + 60px;
+    }
+}
+
+@include media($phablet) {
+    .modal {
+        max-width: 400px;
+    }
+
+    .modal-header::after {
+        width: 400px;
     }
 }
 

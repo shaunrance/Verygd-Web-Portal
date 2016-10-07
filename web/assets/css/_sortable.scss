@@ -20,7 +20,7 @@
 }
 
 .as-sortable-drag {
-    position: absolute;
+    position: fixed;
     pointer-events: none;
     z-index: 9999;
 }
