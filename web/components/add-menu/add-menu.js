@@ -31,6 +31,10 @@ angular.module('ua5App')
                     getOptions();
                 });
 
+                $scope.close = function() {
+                    $scope.menuToggle = false;
+                };
+
                 $scope.showModal = function(type) {
                     switch (type){
                         case menu.project:
