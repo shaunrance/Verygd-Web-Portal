@@ -15,13 +15,13 @@
         <!-- @endif -->
         <!-- @if TESTING='true' -->
         <link
-            href="_build/app.css"
+            href="_build/app.css?v=<!-- @echo VERSION -->"
             rel="stylesheet"
             type="text/css">
         <!-- @endif -->
         <!-- @if TESTING='false' -->
         <link
-            href="app.css"
+            href="app.css?v=<!-- @echo VERSION -->"
             rel="stylesheet"
             type="text/css">
         <!-- @endif -->
@@ -82,12 +82,12 @@
         <div ui-view></div>
         <!-- @if PRODUCTION='true' -->
             <!-- @if TESTING='true' -->
-            <script src="_build/vendor.js"></script>
-            <script src="_build/app.js"></script>
+            <script src="_build/vendor.js?v=<!-- @echo VERSION -->"></script>
+            <script src="_build/app.js?v=<!-- @echo VERSION -->"></script>
             <!-- @endif -->
             <!-- @if TESTING='false' -->
-            <script src="vendor.js"></script>
-            <script src="app.js"></script>
+            <script src="vendor.js?v=<!-- @echo VERSION -->"></script>
+            <script src="app.js?v=<!-- @echo VERSION -->"></script>
             <!-- @endif -->
         <!-- @endif -->
         <!-- @if PRODUCTION='false' -->

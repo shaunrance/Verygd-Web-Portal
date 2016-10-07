@@ -157,7 +157,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'false',
-                        TESTING: 'true'
+                        TESTING: 'true',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             },
@@ -167,7 +169,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'true',
-                        TESTING: 'true'
+                        TESTING: 'true',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             },
@@ -177,7 +181,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'true',
-                        TESTING: 'false'
+                        TESTING: 'false',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             }
@@ -188,6 +194,7 @@ module.exports = function(grunt) {
                     {expand: true, cwd: 'web/assets/', src:['**'], dest: 'web/_build/assets/'},
                     {expand: false, src: 'web/index.html', dest: 'web/_build/index.html'},
                     {expand: false, src: 'web/_htaccess', dest: 'web/_build/_htaccess'},
+                    {expand: false, src: 'web/_htaccessProd', dest: 'web/_build/_htaccessProd'},
                     {expand: false, src: 'web/_htpasswd', dest: 'web/_build/_htpasswd'}
                 ]
             }
@@ -215,7 +222,7 @@ module.exports = function(grunt) {
                     privateKey: require('fs').readFileSync('../verygd.pem'),
                     debug: true,
                     releases_to_keep: '3',
-                    after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
+                    after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccessProd .htaccess'
                 }
             }
         }
