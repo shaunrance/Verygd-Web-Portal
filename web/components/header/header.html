@@ -13,7 +13,8 @@
             	class="user__login">Logout</a>
         </div>
         <span ng-if="!basic">
-        <breadcrumbs></breadcrumbs>
+            <span class="breadcrumb"><a class="breadcrumb__link" href="projects">My Projects</a></span>
+            <span class="breadcrumb" ng-if="projectTitle != ''">{{projectTitle}}</span>
         </span>
     </div>
 </header>

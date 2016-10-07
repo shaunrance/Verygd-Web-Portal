@@ -9,7 +9,8 @@ angular.module('ua5App')
             },
             link: function($scope, element, attrs) {
             },
-            controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
+            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
+                $scope.projectTitle = '';
                 $scope.backButtonToggle = false;
                 $scope.goBack = function() {
                     if ($rootScope.previousState !== undefined) {
@@ -21,7 +22,25 @@ angular.module('ua5App')
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
+                    getProjectName();
                 });
+
+                function getProjectName() {
+                    if ($stateParams.projectId === undefined) {
+                        $scope.projectTitle = '';
+                    }else {
+                        projectFactory.getProjectById($stateParams.projectId)
+
+                        .then(function(response) {
+                            $scope.projectTitle = response.data.title;
+                            
+                        }, function(error) {
+                            
+                        });
+                    }
+                }
+
+                getProjectName();
             }]
         };
     }])
