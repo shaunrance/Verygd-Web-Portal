@@ -1,7 +1,8 @@
 <main class="project-details__container">
     <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
         <nav class="scene-nav">
-            <ul class="scene-list">
+            <div class="scene-nav--selector" ng-click="toggleSceneList()">Scene {{currentScene}}</div>
+            <ul class="scene-list" ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
 

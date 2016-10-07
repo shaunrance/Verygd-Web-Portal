@@ -30,6 +30,10 @@
     }
 }
 
+.scene-nav--selector {
+    display: none;
+}
+
 .scene-add {
     @extend %icon-button;
     @include display(flex);
@@ -261,7 +265,45 @@
     }
 
     .scene-nav {
+        max-width: none;
+        width: 100%;
+    }
+
+    .scene-list {
         display: none;
+
+        &.active {
+            display: block;
+        }
+    }
+
+    .scene-nav--selector {
+        @include margin(0 20px 0 0);
+        @include padding(10px 15px);
+        background-color: $grey-dark;
+        border-radius: 2px;
+        color: $black;
+        display: block;
+        margin-bottom: 4px;
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .scene-list--link {
+        @include padding(10px 15px);
+        background-color: $grey-dark;
+        border-radius: 2px;
+        margin-bottom: 4px;
+
+
+        &.active {
+            background-color: $btn-blue;
+            color: $white;
+        }
+    }
+
+    .scene-add {
+        margin-bottom: 20px;
     }
 
     .scene--link {

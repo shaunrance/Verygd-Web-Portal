@@ -19,6 +19,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.scenes = 1;
         $scope.emptyScene = true;
         $scope.hasTouch = Modernizr.touch;
+        $scope.showSceneList = false;
         $scope.$watch('files', function() {
             if (
                 typeof $scope.files === 'object' &&
@@ -140,10 +141,16 @@ angular.module('ua5App.details', ['ngFileUpload'])
             $scope.currentScene = scenekey;
             scenes = _.where($scope.screens, {tag: scenekey.toString()});
             $scope.currentSceneScreens = _.sortBy(scenes, 'order');
+            $scope.showSceneList = false;
         };
 
         $scope.addScene = function() {
             $scope.scenes++;
+            $scope.changeScene($scope.scenes);
+        };
+
+        $scope.toggleSceneList = function() {
+            $scope.showSceneList = !$scope.showSceneList;
         };
 
         $scope.getScene = function(num) {
