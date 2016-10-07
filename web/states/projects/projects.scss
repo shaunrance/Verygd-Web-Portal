@@ -6,9 +6,7 @@
 
 .vg__item--wrapper {
     margin-bottom: $item-wrapper-margin-desk;
-    margin-right: $item-wrapper-margin-desk;
     position: relative;
-    width: 240px;
 }
 
 .vg__image {
@@ -16,6 +14,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
+    position: absolute;
     width: 100%;
 }
 
@@ -65,8 +64,9 @@
 }
 
 .vg__image--wrapper {
-    height: 185px;
+    height: 0;
     overflow: hidden;
+    padding-bottom: 90%;
     position: relative;
 }
 
@@ -88,6 +88,8 @@
 }
 
 .project--wrapper {
+    margin-right: 2.5%;
+    width: 18%;
 
     &:nth-child(5) {
         margin-right: 0;

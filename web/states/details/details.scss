@@ -44,6 +44,8 @@
 }
 
 .scene--wrapper {
+    margin-right: $item-wrapper-margin-desk;
+    width: 240px;
 
     &::before {
         @include display(flex);
