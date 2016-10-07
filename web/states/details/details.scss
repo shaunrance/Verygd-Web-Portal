@@ -234,15 +234,20 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    border: 1px solid $white;
+    border: 2px solid $white;
+    box-sizing: border-box;
     height: 100%;
     padding-top: 14px;
     position: absolute;
     text-align: center;
     width: 100%;
 
+    &:hover {
+        border: 2px solid $btn-blue;
+    }
+
     &.selected {
-        border: 1px solid $pink;
+        border: 2px solid $btn-blue;
     }
 }
 
