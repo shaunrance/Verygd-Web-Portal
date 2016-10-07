@@ -1,3 +1,29 @@
 <div class="home">
-    home
+    <div class="home-inner">
+        <div class="home-logo-link" href="#">
+            <img class="logo" src="assets/img/vg-logo-new.svg">
+        </div>
+        <div class="home-modal-overlay">
+            <div class="modal">
+                <form>
+                    <div class="modal-header">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <img class="input-icon" src="assets/img/icon-email.png">
+                            <input class="modal-input" placeholder="Email Address" value="Email Address" type="text" />
+                        </div>
+                        <div class="form-group">
+                            <img class="input-icon" src="assets/img/icon-password.png">
+                            <input class="modal-input" placeholder="Password" value="Password" type="text" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button ui-sref="projects" class="modal-submit modal-button" type="button" ng-click="close()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

@@ -4,15 +4,29 @@ angular.module('ua5App.home')
         $urlRouterProvider.when('', '/');
         $urlRouterProvider.otherwise('/');
         $stateProvider.state('home', {
-            name: 'Home',
             url: '/',
             templateUrl: 'states/home/home.html',
             controller: 'HomeCtrl',
-            controllerAs: 'ctrl',
-            data: {
-                settings: {displayName:'Home'}
-            }
+            controllerAs: 'ctrl'
         });
     }])
-    .controller('HomeCtrl', [function() {}])
+    .controller('HomeCtrl', ['$scope', 'ModalService', function($scope, ModalService) {
+        $scope.showModal = function() {
+            ModalService.showModal({
+                templateUrl: 'modals/signInModal.html',
+                controller: 'signInModalController',
+                inputs: {
+                    fields:{
+                        title: 'sduhk'
+                    }
+                }}).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result.input) {
+                        $scope.$emit('addProject', result.input);
+                        $scope.menuToggle = false;
+                    }
+                });
+            });
+        };
+    }])
 ;
