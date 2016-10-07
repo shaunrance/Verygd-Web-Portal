@@ -56,17 +56,11 @@
     @extend %uppercase;
     display: inline-block;
 
-    @include media($tablet) {
-        display: none;
-    }
-
     + .breadcrumb {
-        display: inline-block;
         margin-left: 5px;
 
         &::before {
             content: '›';
-            display: inline-block;
             margin-right: 5px;
         }
     }
