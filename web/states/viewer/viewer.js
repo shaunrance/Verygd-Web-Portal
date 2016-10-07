@@ -23,6 +23,7 @@ angular.module('ua5App.viewer')
         $scope.touch = BrowserFactory.hasTouch();
         $scope.content = content.data.content;
         $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
+        $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
 
         _.each($scope.content, function(screen) {
             if (parseInt(screen.tag, 10) > lastScene) {
@@ -44,6 +45,7 @@ angular.module('ua5App.viewer')
             if (targetScene > 0) {
                 $scope.scene = targetScene;
                 $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
+                $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
                 $scope.$apply();                
             }
         });
