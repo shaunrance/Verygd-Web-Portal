@@ -26,7 +26,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 $scope.files.length > 0 &&
                 typeof $scope.files[0] === 'object'
             ) {
-                uploadScreens($scope.files);    
+                uploadScreens($scope.files);
             }
         });
         $scope.$watch('file', function() {
@@ -126,6 +126,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                     $scope.screens = _.sortBy($scope.screens, 'order');
                     $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
                     _.each($scope.screens, function(screen) {
+                        screen.screenName = screen.url.split('https://verygd.imgix.net/images/').join('');
                         if (parseInt(screen.tag, 10) > $scope.scenes) {
                             $scope.scenes = parseInt(screen.tag, 10);
                         }

@@ -34,8 +34,34 @@
 }
 
 .vg__image--caption {
-    @include padding(10px 10px 20px);
+    @include padding(10px 10px 15px 10px);
+    color: $grey-darkest;
+    font-size: 12px;
     position: relative;
+}
+
+.vg__image--caption-name {
+    color: $black;
+    font-size: 14px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    padding-right: 30px;
+    word-break: break-word;
+}
+
+.vg__image--caption-tag {
+    line-height: 1;
+    margin-left: 20px;
+
+    &::before {
+        background: url('../assets/img/link-grey.svg') no-repeat;
+        background-size: 100% auto;
+        content: '';
+        height: 10px;
+        left: 10px;
+        position: absolute;
+        width: 10px;
+    }
 }
 
 .vg__image--wrapper {
