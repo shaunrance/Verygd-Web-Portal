@@ -30,7 +30,9 @@
 .user__login {
     @extend %uppercase;
     color: $pink;
+    position: relative;
     text-decoration: none;
+    top: -15px;
 
     &:hover {
         text-decoration: underline;
