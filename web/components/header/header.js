@@ -11,7 +11,7 @@ angular.module('ua5App')
             },
             controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
                 $scope.projectTitle = '';
-                $scope.backButtonToggle = false;
+                $scope.backButtonHide = true;
                 $scope.goBack = function() {
                     if ($rootScope.previousState !== undefined) {
                         $state.go($rootScope.previousState.name);
@@ -23,6 +23,7 @@ angular.module('ua5App')
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
                     getProjectName();
+                    $scope.backButtonHide = ($state.$current.name === 'projects') ? true : false;
                 });
 
                 function getProjectName() {
