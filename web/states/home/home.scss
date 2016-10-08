@@ -6,6 +6,11 @@
         border-bottom: 1px solid #000;
     }
 
+    .modal-body {
+        overflow: hidden;
+        width: 100%;
+    }
+
     .modal-input {
         @include margin(0 null null 25px);
         border: none;
@@ -17,8 +22,11 @@
     }
 }
 
+.home-inner {
+    @include padding(100px null);
+}
+
 .home-logo-link {
-    @include position(relative, 150px null null);
     text-align: center;
 
     .logo {
@@ -58,12 +66,44 @@
 
 @include media($phablet) {
 
+    .home {
+
+        .modal {
+            @include padding(0 20px 20px);
+            top: 30px;
+        }
+
+        .modal-body {
+            @include padding(0 0 10px 0);
+        }
+
+        .modal-header {
+            padding: 0;
+            top: 30px;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .form-group {
+
+            &:first-of-type {
+                position: relative;
+                top: 15px;
+            }
+        }
+    }
+
     .home-modal-overlay {
         @include padding(null 20px);
     }
 
+    .home-inner {
+        @include padding(40px null);
+    }
+
     .home-logo-link {
-        @include position(relative, 75px null null);
 
         .logo {
             width: 125px;

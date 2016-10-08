@@ -6,7 +6,7 @@ angular.module('ua5App')
 
         dataFactory.getProjects = function() {
             return $http.get(urlBase, {
-                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
+                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 
@@ -18,9 +18,9 @@ angular.module('ua5App')
 
         dataFactory.addProject = function(newProject) {
             return Upload.upload({
-                headers: {
-                    Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
-                },
+                // headers: {
+                //     Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
+                // },
                 url: urlBase,
                 data: {title: newProject.name, description: newProject.description, patient: 1}
             });
@@ -28,7 +28,7 @@ angular.module('ua5App')
 
         dataFactory.deleteScreen = function(id) {
             return $http.delete(urlBase + '/' + id, { // jshint ignore:line
-                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
+                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 

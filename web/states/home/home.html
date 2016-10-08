@@ -1,26 +1,48 @@
 <div class="home">
     <div class="home-inner">
-        <div class="home-logo-link" href="#">
-            <img class="logo" src="assets/img/vg-logo-new.svg">
+        <div
+            class="home-logo-link"
+            href="#">
+            <img
+                class="logo"
+                src="assets/img/vg-logo-new.svg">
         </div>
         <div class="home-modal-overlay">
             <div class="modal">
-                <form>
+                <form ng-submit="login(model)">
                     <div class="modal-header">
-                        <h3>Login</h3>
+                        <h3>{{ page.header }}</h3>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <img class="input-icon" src="assets/img/icon-email.png">
-                            <input class="modal-input" placeholder="Email Address" value="Email Address" type="text" />
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-email.png">
+                            <input
+                                class="modal-input"
+                                placeholder="{{ page.email }}"
+                                value=""
+                                type="text"
+                                ng-model="model.email" />
                         </div>
                         <div class="form-group">
-                            <img class="input-icon" src="assets/img/icon-password.png">
-                            <input class="modal-input" placeholder="Password" value="Password" type="text" />
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-password.png">
+                            <input
+                                class="modal-input"
+                                placeholder="{{ page.password }}"
+                                value=""
+                                type="password"
+                                ng-model="model.password" />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button ui-sref="projects" class="modal-submit modal-button" type="button" ng-click="close()">Submit</button>
+                        <button
+                            class="modal-submit modal-button"
+                            type="submit">
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>

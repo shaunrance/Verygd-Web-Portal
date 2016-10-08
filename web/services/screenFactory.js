@@ -4,7 +4,7 @@ angular.module('ua5App')
         var urlBase = 'http://216.70.115.196:7777/album';
         var dataFactory = {};
 
-        $http.defaults.headers.common['Authorization'] = 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'; // jshint ignore:line
+        // $http.defaults.headers.common['Authorization'] = 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'; // jshint ignore:line
 
         dataFactory.getScreens = function(projectId) {
             return $http.get(urlBase + '/' + projectId);
