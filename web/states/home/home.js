@@ -9,9 +9,6 @@ angular.module('ua5App.home')
             controller: 'HomeCtrl',
             controllerAs: 'ctrl',
             resolve: {
-                page: ['$http', function($http) {
-                    return $http.get('data/login.json');
-                }],
                 user: ['APICONSTANTS', '$cookies', function(APICONSTANTS, $cookies) {
                     var userId = $cookies.get(APICONSTANTS.authCookie.user_id),
                     token = $cookies.get(APICONSTANTS.authCookie.user_id);
@@ -25,8 +22,7 @@ angular.module('ua5App.home')
             }
         });
     }])
-    .controller('HomeCtrl', ['$scope', 'user', 'page', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, page, AuthResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
-        $scope.page = page.data;
+    .controller('HomeCtrl', ['$scope', 'user', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
         if (user) {
             $state.go('projects');
         }
