@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('ua5App')
-    .directive('header', [function() {
+    .directive('header', ['$state', '$http', 'APICONSTANTS', '$cookies', '$rootScope', function($state, $http, APICONSTANTS, $cookies, $rootScope) {
         return {
             restrict: 'A',
             templateUrl: 'components/header/header.html',
@@ -18,7 +18,7 @@ angular.module('ua5App')
                     } else {
                         $state.go('projects');
                     }
-                    
+
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
@@ -34,14 +34,24 @@ angular.module('ua5App')
 
                         .then(function(response) {
                             $scope.projectTitle = response.data.title;
-                            
+
                         }, function(error) {
-                            
+
                         });
                     }
                 }
 
                 getProjectName();
+                $scope.logout = function() {
+                    //remove cookies
+                    $cookies.remove(APICONSTANTS.authCookie.token);
+                    $cookies.remove(APICONSTANTS.authCookie.user_id);
+                    $cookies.remove(APICONSTANTS.authCookie.patient_id);
+
+                    //TODO hit endpoint to expire auth token
+                    //redirect to login
+                    $state.go('home');
+                };
             }]
         };
     }])
