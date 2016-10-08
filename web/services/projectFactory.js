@@ -10,6 +10,12 @@ angular.module('ua5App')
             });
         };
 
+        dataFactory.getProjectById = function(projectId) {
+            return $http.get(urlBase + '/' + projectId, {
+                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
+            });
+        };
+
         dataFactory.addProject = function(newProject) {
             return Upload.upload({
                 headers: {
