@@ -1,4 +1,4 @@
-/* global angular, _, Modernizr */
+/* global angular, _, Modernizr, $ */
 angular.module('ua5App.details', ['ngFileUpload'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects.details', {
@@ -171,6 +171,11 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 });
             }
         };
+
+        $scope.$on('nav:add-screen', function() {
+            //Todo make this more angular friendly
+            $('.drop-box__button').click();
+        });
 
         getScreens();
     }])

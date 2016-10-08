@@ -10,7 +10,7 @@ angular.module('ua5App')
                     project:'Add Project',
                     //team: 'Add Team Member',
                     scene:'Add Scene',
-                    //screen: 'Add Screen',
+                    screen: 'Add Screen',
                     share: 'Share Project'
                 };
 
@@ -96,22 +96,7 @@ angular.module('ua5App')
                             $scope.menuToggle = false;
                             break;
                         case menu.screen:
-                            ModalService.showModal({
-                                templateUrl: 'modals/addModal.html',
-                                controller: 'addModalController',
-                                inputs: {
-                                    fields:{
-                                        title: menu.screen,
-                                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
-                                        showFileUpload: true,
-                                        submitButtonText: 'Add Screen'
-                                    }
-                                }
-                            }).then(function(modal) {
-                                modal.close.then(function(result) {
-
-                                });
-                            });
+                            $scope.$broadcast('nav:add-screen');
                             break;
                         case menu.share:
                             ModalService.showModal({
