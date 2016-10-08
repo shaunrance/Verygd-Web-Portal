@@ -13,12 +13,7 @@ angular.module('ua5App')
                 $scope.projectTitle = '';
                 $scope.backButtonHide = true;
                 $scope.goBack = function() {
-                    if ($rootScope.previousState !== undefined) {
-                        $state.go($rootScope.previousState.name);
-                    } else {
-                        $state.go('projects');
-                    }
-
+                    $state.go('projects', {}, {reload: true});
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;

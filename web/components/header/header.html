@@ -1,10 +1,10 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <a class="back-button" ui-sref="projects" ng-hide="backButtonHide">
+            <a class="back-button" ui-sref="projects"  data-ui-sref-opts="{reload: true}" ng-hide="backButtonHide">
                 <img class="back-icon" src="assets/img/back.svg" />
             </a>
-            <a class="logo-link" ui-sref="projects">
+            <a class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
                 <img class="logo" src="assets/img/vg-logo.svg">
             </a>
             <a
@@ -13,7 +13,7 @@
             	class="user__login">Logout</a>
         </div>
         <span ng-if="!basic">
-            <span class="breadcrumb"><a class="breadcrumb__link" ui-sref="projects">My Projects</a></span>
+            <span class="breadcrumb"><a class="breadcrumb__link" ui-sref="projects" data-ui-sref-opts="{reload: true}">My Projects</a></span>
             <span class="breadcrumb" ng-if="projectTitle != ''">{{projectTitle}}</span>
         </span>
     </div>
