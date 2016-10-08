@@ -22,8 +22,9 @@
                                 class="modal-input"
                                 placeholder="{{ page.email }}"
                                 value=""
-                                type="text"
-                                ng-model="model.email" />
+                                type="email"
+                                ng-model="model.email"
+                                required />
                         </div>
                         <div class="form-group">
                             <img
@@ -34,15 +35,23 @@
                                 placeholder="{{ page.password }}"
                                 value=""
                                 type="password"
-                                ng-model="model.password" />
+                                ng-model="model.password"
+                                required />
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button
                             class="modal-submit modal-button"
-                            type="submit">
+                            type="submit"
+                            ng-disabled="loginForm.$invalid">
                             Submit
                         </button>
+                    </div>
+                    <div
+                        ng-if="loginError"
+                        class="home-modal-error"
+                        login-error-message>
+                        The email and password you entered don't match. Please try again.
                     </div>
                 </form>
             </div>

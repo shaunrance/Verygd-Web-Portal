@@ -20,6 +20,17 @@
             color: #a3a3ac;
         }
     }
+
+    .home-modal-error {
+        @include padding(10px 5px);
+        border-radius: 2px;
+        color: #ec39e5;
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        margin-top: 5px;
+        text-decoration: none;
+    }
 }
 
 .home-inner {
