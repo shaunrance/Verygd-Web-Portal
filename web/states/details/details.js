@@ -175,7 +175,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
 
         $scope.$on('nav:add-screen', function() {
             //Todo make this more angular friendly
-            $('.drop-box__button').click();
+            $('#uploadInput').click();
         });
 
         getScreens();
