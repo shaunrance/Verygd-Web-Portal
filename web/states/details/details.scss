@@ -209,6 +209,38 @@
     width: 160px;
 }
 
+.dragover > .project-details {
+
+    &::before {
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(center);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: $white;
+        content: 'Add Scene';
+        font-size: 50px;
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: $z-epsilon;
+    }
+
+    &::after {
+        border: 5px dashed $input-grey;
+        border-radius: 20px;
+        content: '';
+        height: calc(100vh - 100px);
+        left: 0;
+        margin: 50px;
+        position: fixed;
+        top: 0;
+        width: calc(100vw - 100px);
+        z-index: $z-epsilon;
+    }
+}
+
 .modal-body {
     @include outer-container;
     @include padding(50px $site-gutter 50px);
@@ -363,6 +395,16 @@
         height: 60px;
         margin: 0;
         width: 100%;
+    }
+
+    .dragover > .project-details {
+        &::before {
+            content: none;
+        }
+
+        &::after {
+            content: none;
+        }
     }
 }
 
