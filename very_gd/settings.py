@@ -36,7 +36,11 @@ MEDIA_PORTAL_SETTINGS = {
 
     'ALBUM': 'project.models.Project',
     'ALBUM_IMAGE': 'panel.models.PanelImage',
-    'ALBUM_VIDEO': 'panel.models.PanelVideo'
+    'ALBUM_VIDEO': 'panel.models.PanelVideo',
+
+    'MEDIA_MEMBER': 'users.models.VeryGDMember',
+
+    'TEST_STRATEGIES': 'very_gd.tests.strategies.VeryGDTestStrategies'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
