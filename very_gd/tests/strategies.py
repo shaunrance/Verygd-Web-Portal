@@ -1,1 +1,5 @@
-from media_portal.tests.strategies import MediaPortalTestStrategies as VeryGDTestStrategies
+from media_portal.tests.strategies import MediaPortalTestStrategiesBase
+
+
+class VeryGDTestStrategies(MediaPortalTestStrategiesBase):
+    pass
