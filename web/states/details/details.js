@@ -17,7 +17,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         $scope.currentSceneScreens = [];
         $scope.currentScene = 1;
         $scope.scenes = 1;
-        $scope.emptyScene = true;
+        $scope.emptyScene = false;
         $scope.hasTouch = Modernizr.touch;
         $scope.showSceneList = false;
         $scope.$watch('files', function() {
@@ -131,7 +131,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                             $scope.scenes = parseInt(screen.tag, 10);
                         }
                     });
-                    $scope.emptyScene = $scope.screens.length > 0 ? false : true;
+                    $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
                 }, function(error) {
                     $scope.status = 'Unable to load screen data: ' + error.message;
                 });
@@ -143,6 +143,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
             scenes = _.where($scope.screens, {tag: scenekey.toString()});
             $scope.currentSceneScreens = _.sortBy(scenes, 'order');
             $scope.showSceneList = false;
+            $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
         };
 
         $scope.addScene = function() {

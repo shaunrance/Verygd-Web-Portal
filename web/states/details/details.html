@@ -1,4 +1,4 @@
-<main class="project-details__container">
+<main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
     <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
         <nav class="scene-nav">
             <div class="scene-nav--selector" ng-click="toggleSceneList()">Scene {{currentScene}}</div>
@@ -76,10 +76,10 @@
             </button>
         </div>
         <div class="drop-box--container" ng-class="emptyScene ? 'empty' : ''">
-                <div class="drop-box" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
-                    <h1 class="drop-box__header">Drag images here to <span ng-if="currentSceneScreens.length < 1">create</span><span ng-if="currentSceneScreens.length > 0">add to</span> your scene</h1>
-                    <button class="drop-box__button">Upload Files</button>
-                </div>
+            <div class="drop-box">
+                <h1 class="drop-box__header">Drag images here to create your scene</h1>
+                <button ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="drop-box__button">Upload Files</button>
+            </div>
         </div>
     </div>
 </main>

@@ -186,11 +186,13 @@
     border: 2px dashed $pink;
     color: $pink;
     cursor: pointer;
+    display: none;
     height: 300px;
     padding: 25px;
     text-align: center;
 
     &.empty {
+        display: block;
         margin: 0;
     }
 }
@@ -207,6 +209,42 @@
     height: 40px;
     margin-top: 40px;
     width: 160px;
+}
+
+.drop-box__button--hidden {
+    visibility: hidden;
+}
+
+.dragover > .project-details {
+
+    &::before {
+        @extend %headline;
+        @include align-items(center);
+        @include display(flex);
+        @include justify-content(center);
+        background-color: $deep-navy;
+        color: $pink;
+        content: 'Drop Images Here';
+        font-size: 50px;
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: $z-epsilon;
+    }
+
+    &::after {
+        border: 2px dashed $pink;
+        content: '';
+        height: calc(100vh - 100px);
+        left: 0;
+        margin: 50px;
+        position: fixed;
+        top: 0;
+        width: calc(100vw - 100px);
+        z-index: $z-epsilon;
+    }
 }
 
 .modal-body {
@@ -363,6 +401,16 @@
         height: 60px;
         margin: 0;
         width: 100%;
+    }
+
+    .dragover > .project-details {
+        &::before {
+            content: none;
+        }
+
+        &::after {
+            content: none;
+        }
     }
 }
 
