@@ -13,6 +13,8 @@ class TestProject(TestImageAPI):
         self.strategies = VeryGDTestStrategies()
         self.users = TestVeryGDUsers()
 
+        self.endpoint = 'project'
+
     def test_images(self):
         response, msg = self.add_image(
             self.member,
@@ -72,13 +74,13 @@ class TestProject(TestImageAPI):
         self.assertTrue('related_tag' in image_meta and image_meta['related_tag'] is None)
 
     def test_update_project(self):
-        response, msg = self.put_as(self.member, '/album/{0}'.format(self.album_id), data={
+        response, msg = self.put_as(self.member, '/{0}/{1}'.format(self.endpoint, self.album_id), data={
             'title': 'new title', 'background_color': 'salmon'
         })
 
         self.assertEquals(response.status_code, 200)
 
-        response, album_meta = self.get_as(self.member, '/album/{0}'.format(self.album_id))
+        response, album_meta = self.get_as(self.member, '/{0}/{1}'.format(self.endpoint, self.album_id))
 
         self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
 

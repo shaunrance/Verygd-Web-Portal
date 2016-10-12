@@ -19,8 +19,6 @@ from project.views import ProjectViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 
-router.register(r'album', AlbumViewSet, base_name='album')
-
 router.register(r'users', MembersViewSet, base_name='users')
 
 router.register(r'project', ProjectViewSet, base_name='project')
