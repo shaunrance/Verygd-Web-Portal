@@ -27,30 +27,19 @@
     @include justify-content(space-between);
 }
 
-.user__login {
-    @extend %uppercase;
-    color: $pink;
-    position: relative;
-    text-decoration: none;
-    top: -15px;
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
 .logo {
     width: $logo-width;
 }
 
-.back-button {
+.menu-button {
     @extend %icon-button;
     display: none;
-    width: auto;
+    width: 20px;
 }
 
-.back-icon {
-    height: 30px;
+.menu-icon {
+    height: 20px;
+    width: 20px;
 }
 
 .breadcrumb {
@@ -79,6 +68,63 @@
     }
 }
 
+.menu-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100vh;
+    left: 0;
+    padding-top: $header-height-desk;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: $z-epsilon;
+
+    &.ng-hide-add,
+    &.ng-hide-remove {
+        transition: opacity $transition-speed $power2-ease-out;
+    }
+
+    &.ng-hide {
+        opacity: 0;
+    }
+}
+
+.menu-list {
+    @include display(flex);
+    @include flex-direction(column);
+    @include align-items(flex-start);
+    @include outer-container;
+    padding-left: $site-gutter;
+    width: 100%;
+}
+
+.menu-list--item {
+    margin: 5px 0;
+}
+
+.menu-link {
+    @extend %uppercase;
+    color: $white;
+    display: inline-block;
+    padding: 10px 0;
+    text-decoration: none;
+}
+
+.user-login {
+    color: $pink;
+}
+
+.close-menu-button {
+    @extend %icon-button;
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    width: 20px;
+}
+
+.account-name {
+    text-transform: none;
+}
+
 @include media($tablet) {
 
     .header__container {
@@ -93,7 +139,7 @@
         width: 50%;
     }
 
-    .back-button {
+    .menu-button {
         display: inline-block;
         left: $site-gutter;
         position: absolute;
@@ -101,5 +147,17 @@
 
     .breadcrumb {
         display: none;
+    }
+
+    .menu-container {
+        padding-top: $header-height-tablet;
+    }
+
+    .user-login {
+        display: none;
+
+        &.mobile {
+            display: inline-block;
+        }
     }
 }
