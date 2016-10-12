@@ -80,7 +80,7 @@ angular.module('ua5App')
 
                     //TODO hit endpoint to expire auth token
                     //redirect to login
-                    $state.go('home');
+                    $state.go('sign-in');
                 };
 
                 $scope.toggleMenu = function() {

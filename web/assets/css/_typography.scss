@@ -44,12 +44,20 @@ button {
     %h1 {
         font-size: 15px;
     }
+
+    %h2 {
+        font-size: 18px;
+    }
 }
 
 @include media($phablet) {
 
     %h1 {
         font-size: 12px;
+    }
+
+    %h2 {
+        font-size: 15px;
     }
 }
 

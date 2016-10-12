@@ -1,19 +1,32 @@
-<div class="home">
-    <div class="home-inner">
+<div class="sign-up">
+	<div class="sign-up-inner">
         <div
-            class="home-logo-link"
+            class="sign-up-logo-link"
             href="#">
             <img
                 class="logo"
                 src="assets/img/vg-logo-new.svg">
         </div>
-        <div class="home-modal-overlay">
+        <div class="sign-up-modal-overlay">
             <div class="modal">
                 <form ng-submit="login(model)">
                     <div class="modal-header">
-                        <h3>Login</h3>
+                        <h3 class="modal-header-title">Get started for free</h3>
+                        <h4 class="modal-header-tag">No credit card required</h4>
                     </div>
                     <div class="modal-body">
+                        <div class="form-group">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-email.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Full Name"
+                                value=""
+                                type="name"
+                                ng-model="model.name"
+                                required />
+                        </div>
                         <div class="form-group">
                             <img
                                 class="input-icon"
@@ -32,7 +45,7 @@
                                 src="assets/img/icon-password.png">
                             <input
                                 class="modal-input"
-                                placeholder="Password"
+                                placeholder="Create password"
                                 value=""
                                 type="password"
                                 ng-model="model.password"
@@ -44,16 +57,26 @@
                             class="modal-submit modal-button"
                             type="submit"
                             ng-disabled="loginForm.$invalid">
-                            Submit
+                            Create Account
                         </button>
                     </div>
-                    <div
-                        ng-if="loginError"
-                        class="home-modal-error"
-                        login-error-message>
-                        The email and password you entered don't match. Please try again.
+                    <div class="sign-up-modal-terms">
+                        By creating an account you agree to very.gd
+                        <a
+                            class="sign-up-modal-terms-link"
+                            href="/terms">
+                            Terms of Service.
+                        </a>
                     </div>
                 </form>
+            </div>
+            <div class="sign-up-cta">
+                Already have an account?
+                <a
+                    class="sign-in-link"
+                    href="#">
+                    Login
+                </a>
             </div>
         </div>
     </div>
