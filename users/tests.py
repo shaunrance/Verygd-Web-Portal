@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from very_gd.tests.strategies import VeryGDTestStrategies
+from very_gd.tests.strategies import TestStrategies
 from media_portal.users.tests import TestUserAPI as TestVeryGDUsers
 
-TestVeryGDUsers.strategy = VeryGDTestStrategies
+TestVeryGDUsers.strategy = TestStrategies
 
 
 class TestUserAPI(TestVeryGDUsers):

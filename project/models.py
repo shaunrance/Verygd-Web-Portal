@@ -1,6 +1,19 @@
-from media_portal.album.models.base import Album
 from django.db import models
+from users.models import Member
 
 
-class Project(Album):
+class Project(models.Model):
+    name = models.CharField(max_length=32, blank=False, null=False)
+    owner = models.ForeignKey(Member, null=False)
+
+    created_dt = models.DateTimeField(auto_now_add=True, null=False)
+    updated_dt = models.DateTimeField(auto_now=True, null=False)
+
+    public = models.BooleanField(default=False, blank=True, null=False)
     background_color = models.CharField(max_length=32, null=True, blank=True, verbose_name='background-color')
+
+    @property
+    def content(self):
+        for content_type in ['scenes']:
+            for content in getattr(self, str(content_type)).all():
+                yield content

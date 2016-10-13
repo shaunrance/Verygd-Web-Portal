@@ -34,13 +34,14 @@ MEDIA_PORTAL_SETTINGS = {
 
     'IMGIX_URL': 'https://verygd.imgix.net',
 
-    'ALBUM': 'project.models.Project',
+    'ALBUM': 'scene.models.Scene',
+
     'ALBUM_IMAGE': 'panel.models.PanelImage',
     'ALBUM_VIDEO': 'panel.models.PanelVideo',
 
-    'MEDIA_MEMBER': 'users.models.VeryGDMember',
+    'MEDIA_MEMBER': 'users.models.Member',
 
-    'TEST_STRATEGIES': 'very_gd.tests.strategies.VeryGDTestStrategies'
+    'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
@@ -103,6 +104,7 @@ INSTALLED_APPS += (
 INSTALLED_APPS += (
     'project',
     'panel',
+    'scene'
 )
 
 MIDDLEWARE_CLASSES = (
