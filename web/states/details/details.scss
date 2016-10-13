@@ -116,13 +116,13 @@
     position: relative;
 }
 
-.scene-preview--header {
+.scene-preview__header {
     @include position(relative);
     @include size(100% 60px);
     @include padding(23px 0);
 }
 
-.scene-preview--display {
+.scene-preview__display {
     @include padding(20px 20px 40px);
     background-color: $grey-dark;
 }
@@ -133,6 +133,12 @@
     height: 60px;
     max-width: 50px;
     width: 100%;
+}
+
+.scene-preview__privacy {
+    @include position(relative);
+    @include size(100% 60px);
+    @include padding(23px 0);
 }
 
 .scene-preview__button {

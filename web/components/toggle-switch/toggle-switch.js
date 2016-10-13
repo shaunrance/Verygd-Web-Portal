@@ -37,6 +37,7 @@ angular.module('ua5App')
                 scope.toggle = function toggle() {
                     if (!scope.disabled) {
                         scope.model = !scope.model;
+                        console.log(scope.model);
                         ngModelCtrl.$setViewValue(scope.model);
                     }
                 };

@@ -8,6 +8,30 @@
     vertical-align: top;
 }
 
+.toggle-switch__text {
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+
+.toggle-switch__text--left {
+    @include margin(-2px 7px 0 0);
+
+    &.color {
+        color: $green;
+    }
+}
+
+.toggle-switch__text--right {
+    @include margin(-2px 0 0 7px);
+
+    &.color {
+        color: $red;
+    }
+}
+
 .toggle-switch__icon {
     background-repeat: no-repeat;
     background-size: 100% auto;
@@ -38,8 +62,18 @@
 .toggle-switch__bar {
     @include position(absolute, 0 0);
     @include size(100% 100%);
+    @include transition(background-color, $transition-speed);
     background-color: #95959F;
     border-radius: 10px;
+    transition-delay: 0.05s;
+
+    .color & {
+        background-color: $green;
+    }
+
+    .color .switch-on & {
+        background-color: $red;
+    }
 }
 
 .toggle-switch__button {
@@ -49,6 +83,7 @@
     background-color: $white-2;
     border-radius: 20px;
     box-shadow: 0 2px 2px rgba($black, 0.2);
+    cursor: pointer;
 
     .switch-on & {
         left: 15px;

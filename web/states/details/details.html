@@ -44,17 +44,16 @@
         </div>
         <div class="scene-preview" ng-show="!emptyScene">
             <div class="scene-preview--widget">
-                <div class="scene-preview--header">
+                <div class="scene-preview__header">
                     <div class="toggle">
                         <div class="toggle-switch__icon poly"></div>
                         <toggle-switch
-                            ng-model="switchStatus",
-                            color="red">
+                            ng-model="sceneTypeToggle">
                         </toggle-switch>
                         <div class="toggle-switch__icon pano"></div>
                     </div>
                 </div>
-                <div class="scene-preview--display">
+                <div class="scene-preview__display">
                     <div ng-if="currentSceneScreens.length > 2 && currentSceneScreens.length < 7">
                         <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
                     </div>
@@ -65,6 +64,16 @@
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
                     <h5>Preview</h5>
+                </div>
+                <div class="scene-preview__privacy">
+                    <div class="toggle">
+                        <div class="toggle-switch__text toggle-switch__text--left color">Public</div>
+                        <toggle-switch
+                            ng-model="scenePrivacyToggle"
+                            color="true">
+                        </toggle-switch>
+                        <div class="toggle-switch__text toggle-switch__text--right color">Private</div>
+                    </div>
                 </div>
             </div>
             <button
