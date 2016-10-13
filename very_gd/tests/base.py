@@ -1,6 +1,6 @@
 from media_portal.tests.base.tests import TestAPIBase as Base
 from very_gd.tests.strategies import TestStrategies
-from users.tests import TestVeryGDUsers
+from users.tests import TestUserAPI
 
 
 class TestAPIBase(Base):
@@ -8,4 +8,4 @@ class TestAPIBase(Base):
         super(TestAPIBase, self).__init__(*args, **kwargs)
 
         self.strategies = TestStrategies()
-        self.users = TestVeryGDUsers()
+        self.users = TestUserAPI()

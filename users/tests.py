@@ -2,12 +2,12 @@
 from __future__ import unicode_literals
 
 from very_gd.tests.strategies import TestStrategies
-from media_portal.users.tests import TestUserAPI as TestVeryGDUsers
+from media_portal.users.tests import TestUserAPI as TestUserAPIBase
 
-TestVeryGDUsers.strategy = TestStrategies
+TestUserAPIBase.strategy = TestStrategies
 
 
-class TestUserAPI(TestVeryGDUsers):
+class TestUserAPI(TestUserAPIBase):
     def __init__(self, *args, **kwargs):
         self.member = None
         self.second_member = None
