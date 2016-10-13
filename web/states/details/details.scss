@@ -110,9 +110,21 @@
 }
 
 .scene-preview--widget {
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba($black, 0.2);
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.scene-preview--header {
+    @include position(relative);
+    @include size(100% 60px);
+    @include padding(23px 0);
+}
+
+.scene-preview--display {
     @include padding(20px 20px 40px);
     background-color: $grey-dark;
-    margin-bottom: 40px;
 }
 
 .scene-preview__icon {
@@ -153,7 +165,7 @@
 }
 
 .preview-icon {
-    margin-top: 50px;
+    @include margin(25px 0);
     max-width: 100%;
 }
 

@@ -1,0 +1,56 @@
+.toggle {
+    @include position(relative);
+    width: 100%;
+}
+
+.toggle-switch {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.toggle-switch__icon {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.poly {
+    @include margin(-1px 7px 0 0);
+    @include size(18px 18px);
+    background-image: url('assets/img/icon-polygon.svg');
+
+}
+
+.pano {
+    @include margin(-1px 0 0 7px);
+    @include size(24px 20px);
+    background-image: url('assets/img/icon-pano.svg');
+
+}
+
+.toggle-switch__animate {
+    @include size(34px 14px);
+    @include position(relative);
+    margin: 0px auto;
+}
+
+.toggle-switch__bar {
+    @include position(absolute, 0 0);
+    @include size(100% 100%);
+    background-color: #95959F;
+    border-radius: 10px;
+}
+
+.toggle-switch__button {
+    @include transition(left, $transition-speed);
+    @include size(20px 20px);
+    @include position(absolute, -4px 0);
+    background-color: $white-2;
+    border-radius: 20px;
+    box-shadow: 0 2px 2px rgba($black, 0.2);
+
+    .switch-on & {
+        left: 15px;
+    }
+}

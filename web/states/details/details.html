@@ -44,15 +44,27 @@
         </div>
         <div class="scene-preview" ng-show="!emptyScene">
             <div class="scene-preview--widget">
-                <h5>Preview</h5>
-                <div ng-if="currentSceneScreens.length > 2 && currentSceneScreens.length < 7">
-                    <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
+                <div class="scene-preview--header">
+                    <div class="toggle">
+                        <div class="toggle-switch__icon poly"></div>
+                        <toggle-switch
+                            ng-model="switchStatus",
+                            color="red">
+                        </toggle-switch>
+                        <div class="toggle-switch__icon pano"></div>
+                    </div>
                 </div>
-                <div ng-if="currentSceneScreens.length > 6">
-                    <p>We recommend you keep your scene under 7 panels</p>
-                </div>
-                <div ng-if="currentSceneScreens.length < 3">
-                    <p>We recommend you add at&nbsp;least 3 panels</p>
+                <div class="scene-preview--display">
+                    <div ng-if="currentSceneScreens.length > 2 && currentSceneScreens.length < 7">
+                        <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
+                    </div>
+                    <div ng-if="currentSceneScreens.length > 6">
+                        <p>We recommend you keep your scene under 7 panels</p>
+                    </div>
+                    <div ng-if="currentSceneScreens.length < 3">
+                        <p>We recommend you add at&nbsp;least 3 panels</p>
+                    </div>
+                    <h5>Preview</h5>
                 </div>
             </div>
             <button
