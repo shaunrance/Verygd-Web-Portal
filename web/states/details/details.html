@@ -65,14 +65,17 @@
                     </div>
                     <h5>Preview</h5>
                 </div>
+                <div class="scene-preview--color-picker">
+
+                </div>
                 <div class="scene-preview__privacy">
                     <div class="toggle">
-                        <div class="toggle-switch__text toggle-switch__text--left color">Public</div>
                         <toggle-switch
                             ng-model="scenePrivacyToggle"
-                            color="true">
+                            color="true"
+                            on-label="Public"
+                            off-label="Private">
                         </toggle-switch>
-                        <div class="toggle-switch__text toggle-switch__text--right color">Private</div>
                     </div>
                 </div>
             </div>

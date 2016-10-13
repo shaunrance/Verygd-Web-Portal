@@ -7,6 +7,8 @@ angular.module('ua5App')
             require: 'ngModel',
             scope: {
                 disabled: '@',
+                onLabel: '@',
+                offLabel: '@',
                 color: '@'
             },
             templateUrl:'components/toggle-switch/toggle-switch.html',
@@ -37,7 +39,6 @@ angular.module('ua5App')
                 scope.toggle = function toggle() {
                     if (!scope.disabled) {
                         scope.model = !scope.model;
-                        console.log(scope.model);
                         ngModelCtrl.$setViewValue(scope.model);
                     }
                 };
