@@ -26,3 +26,5 @@ secret.yml
 /tmp
 
 /db.sqlite3
+
+verygd.pem
