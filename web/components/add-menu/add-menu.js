@@ -13,6 +13,7 @@ angular.module('ua5App')
                     screen: 'Add Screen',
                     share: 'Share Project'
                 };
+                var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 var getOptions = function() {
                     if ($state.current.name !== 'projects.details') {
@@ -25,6 +26,41 @@ angular.module('ua5App')
                     }
                 };
 
+                function preventDefault(e) {
+                    e = e || window.event;
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
+                    e.returnValue = false;
+                }
+
+                function preventDefaultForScrollKeys(e) {
+                    if (keys[e.keyCode]) {
+                        preventDefault(e);
+                        return false;
+                    }
+                }
+
+                function disableScroll() {
+                    if (window.addEventListener) {
+                        window.addEventListener('DOMMouseScroll', preventDefault, false);
+                    }
+                    window.onwheel = preventDefault; // modern standard
+                    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+                    window.ontouchmove  = preventDefault; // mobile
+                    document.onkeydown  = preventDefaultForScrollKeys;
+                }
+
+                function enableScroll() {
+                    if (window.removeEventListener) {
+                        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+                    }
+                    window.onmousewheel = document.onmousewheel = null;
+                    window.onwheel = null;
+                    window.ontouchmove = null;
+                    document.onkeydown = null;
+                }
+
                 $scope.menuToggle = false;
 
                 $scope.$watch('menuToggle', function() {
@@ -33,6 +69,16 @@ angular.module('ua5App')
 
                 $scope.close = function() {
                     $scope.menuToggle = false;
+                };
+
+                $scope.toggleAddMenu = function() {
+                    if (!$scope.menuToggle) {
+                        $scope.menuToggle = true;
+                        disableScroll();
+                    } else {
+                        $scope.menuToggle = false;
+                        enableScroll();
+                    }
                 };
 
                 $scope.showModal = function(type) {
