@@ -54,7 +54,8 @@ def setup_supervisord(*args, **kwargs):
 def run_supervisord():
     if has_file('/tmp/supervisord.pid'):
         sudo('kill -HUP `cat /tmp/supervisord.pid`')
-    sudo('supervisord -c /etc/supervisord.conf')
+    else:
+        sudo('supervisord -c /etc/supervisord.conf')
 
 
 def setup_nginx(*args, **kwargs):
