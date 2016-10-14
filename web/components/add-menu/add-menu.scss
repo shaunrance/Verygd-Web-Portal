@@ -21,7 +21,10 @@
 }
 
 .plus-icon {
-    max-height: 25px;
+    @include size(25px 25px);
+    background: url('/assets/img/plus.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
 }
 
 .add-menu--container {
@@ -192,11 +195,23 @@
 @include media($tablet) {
 
     .add-menu--container {
-        margin-top: $header-height-tablet;
+        margin-top: 0;
+    }
+
+    .add-menu--button {
+        @include size(36px 36px);
+        background-color: rgba($btn-blue, 0);
+        border: 2px solid $btn-blue;
+        top: 21px;
+    }
+
+    .plus-icon {
+        @include size(20px 20px);
+        background: url('/assets/img/plus-blue.svg');
+        right: 25px;
     }
 
     .modal-launch--container {
-
         padding-top: $header-height-tablet + 60px;
     }
 }
