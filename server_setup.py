@@ -142,6 +142,9 @@ def has_virtualenv(venv_dir):
 def initial_install(*args, **kwargs):
     print('checking for existing setup..\n')
 
+    with cd(kwargs['working_dir']):
+        sudo('git pull -r')
+
     sudo('apt-get update')
     sudo('apt-get install python3-dev')
 
