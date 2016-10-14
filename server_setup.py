@@ -10,23 +10,21 @@ sys_files_dir = 'system'
 
 def checkout_repo(in_dir):
     print('cloning repo..\n')
-    sudo('git clone git@github.com:verygd/Verygd-Web-Portal.git {0}'.format(in_dir))
+
+    run('git clone git@github.com:verygd/Verygd-Web-Portal.git {0}'.format(in_dir))
 
 
-def setup_working_dir(working_dir_name):
-    print('creating working directory ({0})\n'.format(working_dir_name))
+def setup_working_dir(*args, **kwargs):
+    print('creating working directory ({0})\n'.format(kwargs['working_dir']))
 
-    sudo('mkdir -p {0}'.format(working_dir_name))
-
-    with cd(working_dir_name):
-        checkout_repo(env_dir)
+    checkout_repo(kwargs['working_dir'])
 
 
 def copy(repo_conf, system_file):
     if not has_file(system_file):
         print('{repo_conf} -> {system_file}'.format(repo_conf=repo_conf, system_file=system_file))
 
-        sudo('cp {repo_conf} {system_file}'.format(repo_conf=repo_conf, system_file=system_file))
+        run('cp {repo_conf} {system_file}'.format(repo_conf=repo_conf, system_file=system_file))
 
 
 def repo_config_path(working_dir, path):
@@ -35,8 +33,12 @@ def repo_config_path(working_dir, path):
 
 def create_tmp_socket(named):
     socket = '/tmp/{name}'.format(name=named)
-    sudo('touch ' + socket)
-    sudo('chmod 600 ' + socket)
+
+    if not has_file(socket):
+        run('touch ' + socket)
+
+    # needed for uwsgi
+    sudo('chmod 666 ' + socket)
 
 
 def setup_supervisord(*args, **kwargs):
@@ -67,7 +69,7 @@ def setup_nginx(*args, **kwargs):
 
     conf_dir = '/etc/nginx/sites-available/very.gd/{0}'.format(env_dir)
 
-    sudo('mkdir -p {0}'.format(conf_dir))
+    run('mkdir -p {0}'.format(conf_dir))
 
     copy(repo_config_path(kwargs['working_dir'], 'nginx.conf'), '/'.join([conf_dir, 'nginx.conf']))
 
@@ -90,10 +92,10 @@ def setup_uwsgi(*args, **kwargs):
     create_tmp_socket('very_gd_{0}_uwsgi.sock'.format(env_dir))
 
     if not has_file(conf_dir):
-        sudo('mkdir -p {0}'.format(conf_dir))
+        run('mkdir -p {0}'.format(conf_dir))
 
     if not has_file(log_dir):
-        sudo('mkdir -p {0}'.format(log_dir))
+        run('mkdir -p {0}'.format(log_dir))
 
     # this is needed for python3
     copy(repo_config_path(kwargs['working_dir'], 'spawn_python3.ini'), '/'.join([conf_dir, '../spawn_python3.ini']))
@@ -106,9 +108,9 @@ def setup_uwsgi(*args, **kwargs):
 def setup_virtualenv(*args, **kwargs):
     print('setting up virtualenv..\n')
 
-    sudo('mkdir -p {0}'.format(kwargs['venv_dir']))
-    sudo('pip install --upgrade virtualenv')
-    sudo('virtualenv -p python3 {0}'.format(kwargs['venv_dir']))
+    run('mkdir -p {0}'.format(kwargs['venv_dir']))
+    run('pip install --upgrade virtualenv')
+    run('virtualenv -p python3 {0}'.format(kwargs['venv_dir']))
 
 
 def has_file(named):
@@ -142,14 +144,14 @@ def has_virtualenv(venv_dir):
 def initial_install(*args, **kwargs):
     print('checking for existing setup..\n')
 
-    with cd(kwargs['working_dir']):
-        sudo('git pull -r')
-
     sudo('apt-get update')
     sudo('apt-get install python3-dev')
 
     if not has_file(kwargs['working_dir']):
         setup_working_dir(**kwargs)
+
+    with cd(kwargs['working_dir']):
+        run('git pull -r')
 
     if not has_virtualenv(kwargs['venv_dir']):
         setup_virtualenv(**kwargs)
