@@ -6,7 +6,7 @@ from server_setup import initial_install as init
 
 env_dir = env.roles[0]
 working_dir = '/var/local/very.gd/{0}'.format(env_dir)
-remote_venv = '/'.join([working_dir, '../../verygd_venv', env_dir])
+remote_venv = '/var/local/very.gd/venvs/{0}'.format(env_dir)
 
 env.roledefs = {
     'staging': ['ec2-52-53-186-20.us-west-1.compute.amazonaws.com']
