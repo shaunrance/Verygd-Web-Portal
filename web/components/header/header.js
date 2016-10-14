@@ -10,8 +10,11 @@ angular.module('ua5App')
             link: function($scope, element, attrs) {
             },
             controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
+                var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
                 $scope.projectTitle = '';
                 $scope.userMenuToggle = false;
+                $scope.isActive = false;
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
                     getProjectName();
@@ -32,6 +35,41 @@ angular.module('ua5App')
                     }
                 }
 
+                function preventDefault(e) {
+                    e = e || window.event;
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
+                    e.returnValue = false;
+                }
+
+                function preventDefaultForScrollKeys(e) {
+                    if (keys[e.keyCode]) {
+                        preventDefault(e);
+                        return false;
+                    }
+                }
+
+                function disableScroll() {
+                    if (window.addEventListener) {
+                        window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
+                    }
+                    window.onwheel = preventDefault; // modern standard
+                    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+                    window.ontouchmove  = preventDefault; // mobile
+                    document.onkeydown  = preventDefaultForScrollKeys;
+                }
+
+                function enableScroll() {
+                    if (window.removeEventListener) {
+                        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+                    }
+                    window.onmousewheel = document.onmousewheel = null;
+                    window.onwheel = null;
+                    window.ontouchmove = null;
+                    document.onkeydown = null;
+                }
+
                 getProjectName();
 
                 $scope.logout = function() {
@@ -43,6 +81,20 @@ angular.module('ua5App')
                     //TODO hit endpoint to expire auth token
                     //redirect to login
                     $state.go('home');
+                };
+
+                $scope.toggleMenu = function() {
+                    if (!$scope.userMenuToggle) {
+                        $scope.userMenuToggle = true;
+                        disableScroll();
+                    } else {
+                        $scope.userMenuToggle = false;
+                        enableScroll();
+                    }
+                };
+
+                $scope.closeMenu = function() {
+                    $scope.userMenuToggle = false;
                 };
             }]
         };
