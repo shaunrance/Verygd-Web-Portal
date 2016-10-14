@@ -18,14 +18,14 @@
 .poly {
     @include margin(-1px 7px 0 0);
     @include size(18px 18px);
-    background-image: url('assets/img/icon-polygon.svg');
+    background-image: url('/assets/img/icon-polygon.svg');
 
 }
 
 .pano {
     @include margin(-1px 0 0 7px);
     @include size(24px 20px);
-    background-image: url('assets/img/icon-pano.svg');
+    background-image: url('/assets/img/icon-pano.svg');
 
 }
 
