@@ -2,11 +2,14 @@ from fabric.api import env
 from fabric.context_managers import cd
 from fabric.operations import run
 
+from server_setup import initial_install as init
+
+
 working_dir = '/var/local/very.gd'
 remove_venv = '/'.join([working_dir, '../verygd_venv'])
 
 env.roledefs = {
-    'staging': ['216.70.115.196']
+    'staging': ['ec2-52-53-186-20.us-west-1.compute.amazonaws.com']
 }
 
 
@@ -31,6 +34,10 @@ def setup():
     install_upgrade_reqs()
     run_migrations()
     restart_uwsgi()
+
+
+def initial_install():
+    return init(venv_dir=remove_venv, working_dir=working_dir)
 
 
 def deploy():
