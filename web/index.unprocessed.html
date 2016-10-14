@@ -15,41 +15,44 @@
         <!-- @endif -->
         <!-- @if TESTING='true' -->
         <link
-            href="_build/app.css"
+            href="_build/app.css?v=<!-- @echo VERSION -->"
             rel="stylesheet"
             type="text/css">
         <!-- @endif -->
         <!-- @if TESTING='false' -->
         <link
-            href="app.css"
+            href="app.css?v=<!-- @echo VERSION -->"
             rel="stylesheet"
             type="text/css">
         <!-- @endif -->
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>
-            {{ ngMeta.title }}
-        </title>
+        <title ng-bind="ngMeta.title">Very.gd</title>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
-        <meta content="Base Angular">
+        <meta content="Very.gd">
         <meta
             name="description"
-            content="{{ ngMeta.description }}">
+            content=""
+            ng-content="{{ ngMeta.description }}">
         <meta
             property="og:description"
-            content="{{ ngMeta.description }}">
+            content=""
+            ng-content="{{ ngMeta.description }}">
         <meta
             property="og:image"
-            content="{{ ngMeta.image }}">
+            content=""
+            ng-content="{{ ngMeta.image }}">
         <meta
             property="og:site_name"
-            content="Site Name">
+            content=""
+            ng-content="Site Name">
         <meta
             property="og:url"
-            content="{{ ngMeta.url }}">
+            content=""
+            ng-content="{{ ngMeta.url }}">
         <meta
             property="og:type"
             content="website">
@@ -79,12 +82,12 @@
         <div ui-view></div>
         <!-- @if PRODUCTION='true' -->
             <!-- @if TESTING='true' -->
-            <script src="_build/vendor.js"></script>
-            <script src="_build/app.js"></script>
+            <script src="_build/vendor.js?v=<!-- @echo VERSION -->"></script>
+            <script src="_build/app.js?v=<!-- @echo VERSION -->"></script>
             <!-- @endif -->
             <!-- @if TESTING='false' -->
-            <script src="vendor.js"></script>
-            <script src="app.js"></script>
+            <script src="vendor.js?v=<!-- @echo VERSION -->"></script>
+            <script src="app.js?v=<!-- @echo VERSION -->"></script>
             <!-- @endif -->
         <!-- @endif -->
         <!-- @if PRODUCTION='false' -->
@@ -117,6 +120,7 @@
         <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
         <script src="bower_components/tinycolor/dist/tinycolor-min.js"></script>
         <script src="bower_components/angular-color-picker/dist/angularjs-color-picker.min.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
         <!-- end bower_components -->
         <script src="app.js"></script>
         <!-- state scripts -->
@@ -129,17 +133,28 @@
         <!-- component scripts -->
         <script src="components/header/header.js"></script>
         <script src="components/unorphanize/unorphanize.js"></script>
-        <script src="components/breadcrumbs/breadcrumbs.js"></script>
         <script src="components/pano/base-three-scene.js"></script>
         <script src="components/pano/pano.js"></script>
         <script src="components/toggle-switch/toggle-switch.js"></script>
         <script src="components/add-menu/add-menu.js"></script>
         <!-- end component scripts -->
+        <!-- start factories scripts -->
+        <script src="factories/authInterceptor.js"></script>
+        <!-- end factories scripts-->
+        <!-- start resources scripts -->
+        <script src="resources/auth.js"></script>
+        <!-- end resources scripts-->
+        <!-- start services scripts -->
         <script src="services/screenFactory.js"></script>
         <script src="services/projectFactory.js"></script>
+        <!-- end services scripts -->
+        <!-- start modals scripts -->
         <script src="modals/addModal.js"></script>
         <script src="modals/deleteModal.js"></script>
         <script src="modals/shareModal.js"></script>
+        <script src="modals/linkModal.js"></script>
+        <script src="modals/signInModal.js"></script>
+        <!-- end modals scripts -->
         <!-- @endif -->
     </body>
 </html>

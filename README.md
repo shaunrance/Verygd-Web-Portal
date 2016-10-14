@@ -55,6 +55,10 @@ secret:
         host: ua5.land
         username:
         password:
+    prod:
+        path: '/'
+        host: 
+        username: 
     port: 8082
 ```
 

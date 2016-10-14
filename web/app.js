@@ -10,6 +10,7 @@ angular.module('ua5App.scene', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
+    'ngCookies',
     'ngResource',
     'ngSanitize',
     'ngTouch',
@@ -39,10 +40,20 @@ angular.module('ua5App', [
         LAPTOP: 1199,
         DESKTOP: 1430
     })
-    .config(['$analyticsProvider', '$locationProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, ngMetaProvider) {
+    .constant('APICONSTANTS', {
+        //TODO add option for production server
+        apiHost: 'http://216.70.115.196:7777',
+        authCookie: {
+            token: 'vg-user',
+            user_id: 'vg-member'
+        }
+    })
+    .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {
         $locationProvider.html5Mode(true);
         // Prevents bounce rate of 0.01
         $analyticsProvider.firstPageview(false);
+        //intercept $resolves to add token authorization to header
+        $httpProvider.interceptors.push('authInterceptor');
         ngMetaProvider.useTitleSuffix(true);
         ngMetaProvider.setDefaultTitleSuffix(' | Site Name');
         ngMetaProvider.setDefaultTitle('Page');
@@ -50,8 +61,12 @@ angular.module('ua5App', [
         ngMetaProvider.setDefaultTag('description', 'Site description');
         ngMetaProvider.setDefaultTag('image', 'URL');
     }])
-    .run(['ngMeta', function(ngMeta) {
+    .run(['ngMeta', '$q', '$rootScope', function(ngMeta, $q, $rootScope) {
         ngMeta.init();
+        //This rootscope promise is being set so that the portal header can
+        //call the /user api once and all components will have access to that info
+        $rootScope.deferredUser = $q.defer();
+        $rootScope.deferredTerms = $q.defer();
     }])
     .directive('app', ['$rootScope', function($rootScope) {
         return {

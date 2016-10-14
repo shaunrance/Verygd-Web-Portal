@@ -30,6 +30,10 @@
     }
 }
 
+.scene-nav--selector {
+    display: none;
+}
+
 .scene-add {
     @extend %icon-button;
     @include display(flex);
@@ -40,6 +44,8 @@
 }
 
 .scene--wrapper {
+    margin-right: $item-wrapper-margin-desk;
+    width: 240px;
 
     &::before {
         @include display(flex);
@@ -73,6 +79,7 @@
     @include align-items(center);
     @include justify-content(center);
     background-color: none;
+    cursor: pointer;
     height: 100%;
     left: 0;
     position: absolute;
@@ -240,11 +247,13 @@
     border: 2px dashed $pink;
     color: $pink;
     cursor: pointer;
+    display: none;
     height: 300px;
     padding: 25px;
     text-align: center;
 
     &.empty {
+        display: block;
         margin: 0;
     }
 }
@@ -263,11 +272,106 @@
     width: 160px;
 }
 
+.drop-box__button--hidden {
+    visibility: hidden;
+}
+
+.dragover > .project-details {
+
+    &::before {
+        @extend %headline;
+        @include align-items(center);
+        @include display(flex);
+        @include justify-content(center);
+        background-color: $deep-navy;
+        color: $pink;
+        content: 'Drop Images Here';
+        font-size: 50px;
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: $z-epsilon;
+    }
+
+    &::after {
+        border: 2px dashed $pink;
+        content: '';
+        height: calc(100vh - 100px);
+        left: 0;
+        margin: 50px;
+        position: fixed;
+        top: 0;
+        width: calc(100vw - 100px);
+        z-index: $z-epsilon;
+    }
+}
+
+.modal-body {
+    @include outer-container;
+    @include padding(50px $site-gutter 50px);
+    position: relative;
+}
+
+.modal-body__items {
+    @include display(flex);
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
+    @include justify-content(left);
+    counter-reset: sceneImage;
+    width: 100%;
+}
+
+.modal-body__item--wrapper {
+    @include size(125px 100px);
+    background-color: rgba(#edbbf4, 0.5);
+    margin: 0 13px 30px 0;
+    position: relative;
+
+    &:nth-child(4n) {
+        margin-right: 0;
+    }
+}
+
+.modal-body__image {
+    background-color: $navy;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 2px solid $white;
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 100%;
+    padding-top: 14px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+
+    &.selected {
+        border: 2px solid $btn-blue;
+    }
+}
+
+.modal-body__item--label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    margin-top: 80%;
+    position: relative;
+    text-align: center;
+    top: 3px;
+}
+
+.scene-preview--mobile,
+.drop-box__button--mobile {
+    display: none;
+}
+
 
 @include media($tablet) {
 
     .project-details {
-        @include flex-direction(column);
+        @include display(block);
     }
 
     .project__items {
@@ -275,7 +379,45 @@
     }
 
     .scene-nav {
+        max-width: none;
+        width: 100%;
+    }
+
+    .scene-list {
         display: none;
+
+        &.active {
+            display: block;
+        }
+    }
+
+    .scene-nav--selector {
+        @include margin(0 20px 0 0);
+        @include padding(10px 15px);
+        background-color: $grey-dark;
+        border-radius: 2px;
+        color: $black;
+        display: block;
+        margin-bottom: 4px;
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .scene-list--link {
+        @include padding(10px 15px);
+        background-color: $grey-dark;
+        border-radius: 2px;
+        margin-bottom: 4px;
+
+
+        &.active {
+            background-color: $btn-blue;
+            color: $white;
+        }
+    }
+
+    .scene-add {
+        margin-bottom: 20px;
     }
 
     .scene--link {
@@ -292,7 +434,16 @@
     }
 
     .scene-preview__button {
+        display: none;
+    }
+
+    .scene-preview--mobile {
         display: block;
+        margin-bottom: 20px;
+    }
+
+    .mobile-btn-container {
+        width: 100%;
     }
 
     .scene-preview__icon {
@@ -308,13 +459,9 @@
         height: 60px;
     }
 
-    .drop-box--container {
-        @include order(2);
-        @include margin(0 0 20px);
-        border: none;
-        display: block;
-        height: auto;
-        padding: 0;
+    .drop-box--container,
+    .drop-box--container.empty {
+        display: none;
     }
 
     .drop-box__header {
@@ -322,8 +469,56 @@
     }
 
     .drop-box__button {
+        display: none;
+    }
+
+    .drop-box__button--mobile {
+        display: block;
         height: 60px;
-        margin: 0;
+        margin: 0 0 20px;
         width: 100%;
+    }
+
+    .dragover > .project-details {
+        &::before {
+            content: none;
+        }
+
+        &::after {
+            content: none;
+        }
+    }
+}
+
+@include media($phablet) {
+    .modal-body__item--wrapper {
+        @include size(100px);
+        margin: 0 20px 30px 0;
+
+        &:nth-child(3n) {
+            margin-right: 0;
+        }
+
+        &:nth-child(4n) {
+            margin-right: 20px;
+        }
+    }
+}
+
+@include media($mobile) {
+    .modal-body__item--wrapper {
+        height: 0;
+        margin: 0 0 30px;
+        padding-bottom: 50%;
+        width: 50%;
+
+        &:nth-child(4n) {
+            margin-right: 0;
+        }
+    }
+
+    .modal-body__item--label {
+        margin-top: 100%;
+        top: 0;
     }
 }

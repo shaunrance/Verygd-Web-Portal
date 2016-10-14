@@ -13,6 +13,7 @@ module.exports = function(grunt) {
     var devTasks;
     var pkg;
     var prodTasks;
+    var stageTasks;
     var rewrite;
     var secret;
 
@@ -156,7 +157,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'false',
-                        TESTING: 'true'
+                        TESTING: 'true',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             },
@@ -166,7 +169,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'true',
-                        TESTING: 'true'
+                        TESTING: 'true',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             },
@@ -176,7 +181,9 @@ module.exports = function(grunt) {
                 options: {
                     context: {
                         PRODUCTION: 'true',
-                        TESTING: 'false'
+                        TESTING: 'false',
+                        VERSION: Math.round(new Date().getTime() / 1000)
+
                     }
                 }
             }
@@ -187,6 +194,7 @@ module.exports = function(grunt) {
                     {expand: true, cwd: 'web/assets/', src:['**'], dest: 'web/_build/assets/'},
                     {expand: false, src: 'web/index.html', dest: 'web/_build/index.html'},
                     {expand: false, src: 'web/_htaccess', dest: 'web/_build/_htaccess'},
+                    {expand: false, src: 'web/_htaccessProd', dest: 'web/_build/_htaccessProd'},
                     {expand: false, src: 'web/_htpasswd', dest: 'web/_build/_htpasswd'}
                 ]
             }
@@ -204,6 +212,17 @@ module.exports = function(grunt) {
                     debug: true,
                     releases_to_keep: '3',
                     after_deploy: 'cd ' + secret.staging.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
+                }
+            },
+            prod: {
+                options: {
+                    deploy_path: secret.prod.path,
+                    host: secret.prod.host,
+                    username: secret.prod.username,
+                    privateKey: require('fs').readFileSync('verygd.pem'),
+                    debug: true,
+                    releases_to_keep: '3',
+                    after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccessProd .htaccess'
                 }
             }
         }
@@ -275,7 +294,7 @@ module.exports = function(grunt) {
     ];
     grunt.registerTask('build', buildTasks);
 
-    prodTasks = [
+    stageTasks = [
         'ngtemplates:app',
         'concat:scss',
         'sass',
@@ -288,5 +307,20 @@ module.exports = function(grunt) {
         'copy',
         'ssh_deploy:staging'
     ];
-    grunt.registerTask('stage', prodTasks);
+    grunt.registerTask('stage', stageTasks);
+
+    prodTasks = [
+        'ngtemplates:app',
+        'concat:scss',
+        'sass',
+        'cssmin:target',
+        'concat:js-app',
+        'concat:js-vendor',
+        'uglify',
+        'keepBanners',
+        'preprocess:build',
+        'copy',
+        'ssh_deploy:prod'
+    ];
+    grunt.registerTask('deploy', prodTasks);
 };

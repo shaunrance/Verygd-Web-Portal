@@ -1,3 +1,128 @@
 .home {
-    background-color: $white;
+    @include linear-gradient(to right, #5de0e9 0%, #5b9df9 50%, #ec39e5 100%);
+    min-height: 100vh;
+
+    .form-group {
+        border-bottom: 1px solid #000;
+    }
+
+    .modal-body {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .modal-input {
+        @include margin(0 null null 25px);
+        border: none;
+        display: inline-block;
+
+        @include placeholder {
+            color: #a3a3ac;
+        }
+    }
+
+    .home-modal-error {
+        @include padding(10px 5px);
+        border-radius: 2px;
+        color: #ec39e5;
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        margin-top: 5px;
+        text-decoration: none;
+    }
+}
+
+.home-inner {
+    @include padding(100px null);
+}
+
+.home-logo-link {
+    text-align: center;
+
+    .logo {
+        width: 250px;
+
+        .vg-logo {
+            @include size(100%);
+        }
+    }
+}
+
+.home-modal-overlay {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: $z-epsilon;
+}
+
+.home__modal {
+    @include size(200px);
+    background-color: #fff;
+
+    .modal-overlay {
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+.input-icon {
+    @include position(relative, 30px null null);
+    display: inline-block;
+}
+
+@include media($phablet) {
+
+    .home {
+
+        .modal {
+            @include padding(0 20px 20px);
+            top: 30px;
+        }
+
+        .modal-body {
+            @include padding(0 0 10px 0);
+        }
+
+        .modal-header {
+            padding: 0;
+            top: 30px;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .form-group {
+
+            &:first-of-type {
+                position: relative;
+                top: 15px;
+            }
+        }
+    }
+
+    .home-modal-overlay {
+        @include padding(null 20px);
+    }
+
+    .home-inner {
+        @include padding(40px null);
+    }
+
+    .home-logo-link {
+
+        .logo {
+            width: 125px;
+
+            .vg-logo {
+                @include size(100%);
+            }
+        }
+    }
+
 }

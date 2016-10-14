@@ -101,6 +101,7 @@
     height: 100%;
     left: 0;
     position: fixed;
+    right: 0;
     top: 0;
     width: 100%;
     z-index: $z-epsilon;
@@ -108,19 +109,32 @@
 
 .modal {
     background-color: $white;
-    max-width: 400px;
+    max-width: 600px;
     padding: 30px;
     position: relative;
     width: 100%;
 }
 
 .modal-header {
-    padding-top: 20px;
+    padding: 10px 0;
+    position: relative;
+
+    &::after {
+        border-bottom: 1px solid $grey-dark;
+        bottom: 0;
+        content: '';
+        left: -30px;
+        position: absolute;
+        width: 600px;
+    }
 }
 
 .modal-body {
     color: #999;
+    max-height: 430px;
+    overflow-y: auto;
     padding: 20px 0;
+    width: 105%;
 }
 
 .modal-footer {
@@ -131,10 +145,10 @@
 
 .modal-close {
     @extend %icon-button;
-    max-width: 20px;
+    max-width: 15px;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: -20px;
+    top: -20px;
 }
 
 .modal-button {
@@ -187,4 +201,23 @@
     }
 }
 
+@include media($phablet) {
+    .modal {
+        max-width: 400px;
+    }
 
+    .modal-header::after {
+        width: 400px;
+    }
+}
+
+@include media($mobile) {
+    .modal-body {
+        height: 100%;
+        max-width: 100%;
+    }
+
+    .modal-footer {
+        margin-top: 15px;
+    }
+}

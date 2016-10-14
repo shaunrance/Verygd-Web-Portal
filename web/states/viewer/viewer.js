@@ -23,6 +23,7 @@ angular.module('ua5App.viewer')
         $scope.touch = BrowserFactory.hasTouch();
         $scope.content = content.data.content;
         $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
+        $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
 
         _.each($scope.content, function(screen) {
             if (parseInt(screen.tag, 10) > lastScene) {
@@ -39,14 +40,13 @@ angular.module('ua5App.viewer')
         };
         
         // right now we're going to simulate a scene change between two projects
-        $scope.$on('scene:change', function() {
-            $scope.scene++;
-            if ($scope.scene <= lastScene) {
+        $scope.$on('scene:change', function(event, data) {
+            var targetScene = parseInt(data.link, 10);
+            if (targetScene > 0) {
+                $scope.scene = targetScene;
                 $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
-                $scope.$apply();
-            } else {
-                $scope.scene = 0;
-                $scope.$broadcast('scene:change');
+                $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
+                $scope.$apply();                
             }
         });
     }])

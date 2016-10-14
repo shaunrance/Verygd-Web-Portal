@@ -30,7 +30,9 @@
 .user__login {
     @extend %uppercase;
     color: $pink;
+    position: relative;
     text-decoration: none;
+    top: -15px;
 
     &:hover {
         text-decoration: underline;
@@ -51,6 +53,32 @@
     height: 30px;
 }
 
+.breadcrumb {
+    @extend %h2;
+    @extend %uppercase;
+    display: inline-block;
+
+    + .breadcrumb {
+        margin-left: 5px;
+
+        &::before {
+            content: '›';
+            margin-right: 5px;
+        }
+    }
+}
+
+.breadcrumb__link {
+    @include transition(color 0.25s ease-out);
+    color: $btn-blue;
+    font-size: 24px;
+    text-decoration: none;
+
+    &:hover {
+        color: $white;
+    }
+}
+
 @include media($tablet) {
 
     .header__container {
@@ -69,5 +97,9 @@
         display: inline-block;
         left: $site-gutter;
         position: absolute;
+    }
+
+    .breadcrumb {
+        display: none;
     }
 }

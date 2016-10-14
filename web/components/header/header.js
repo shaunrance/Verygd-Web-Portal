@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('ua5App')
-    .directive('header', [function() {
+    .directive('header', ['$state', '$http', 'APICONSTANTS', '$cookies', '$rootScope', function($state, $http, APICONSTANTS, $cookies, $rootScope) {
         return {
             restrict: 'A',
             templateUrl: 'components/header/header.html',
@@ -9,19 +9,44 @@ angular.module('ua5App')
             },
             link: function($scope, element, attrs) {
             },
-            controller: ['$scope', '$state', '$rootScope', function($scope, $state, $rootScope) {
-                $scope.backButtonToggle = false;
+            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
+                $scope.projectTitle = '';
+                $scope.backButtonHide = true;
                 $scope.goBack = function() {
-                    if ($rootScope.previousState !== undefined) {
-                        $state.go($rootScope.previousState.name);
-                    } else {
-                        $state.go('projects');
-                    }
-                    
+                    $state.go('projects', {}, {reload: true});
                 };
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
+                    getProjectName();
+                    $scope.backButtonHide = ($state.$current.name === 'projects') ? true : false;
                 });
+
+                function getProjectName() {
+                    if ($stateParams.projectId === undefined) {
+                        $scope.projectTitle = '';
+                    }else {
+                        projectFactory.getProjectById($stateParams.projectId)
+
+                        .then(function(response) {
+                            $scope.projectTitle = response.data.title;
+
+                        }, function(error) {
+
+                        });
+                    }
+                }
+
+                getProjectName();
+                $scope.logout = function() {
+                    //remove cookies
+                    $cookies.remove(APICONSTANTS.authCookie.token);
+                    $cookies.remove(APICONSTANTS.authCookie.user_id);
+                    $cookies.remove(APICONSTANTS.authCookie.patient_id);
+
+                    //TODO hit endpoint to expire auth token
+                    //redirect to login
+                    $state.go('home');
+                };
             }]
         };
     }])

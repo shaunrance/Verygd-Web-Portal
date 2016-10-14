@@ -6,16 +6,16 @@
 
 .vg__item--wrapper {
     margin-bottom: $item-wrapper-margin-desk;
-    margin-right: $item-wrapper-margin-desk;
     position: relative;
-    width: 240px;
 }
 
 .vg__image {
     background-color: $navy;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
+    position: absolute;
     width: 100%;
 }
 
@@ -29,18 +29,47 @@
 }
 
 .vg__item--link {
+    color: $black;
     display: inline-block;
+    text-decoration: none;
     width: 100%;
 }
 
 .vg__image--caption {
-    @include padding(10px 10px 20px);
+    @include padding(10px 10px 15px 10px);
+    font-size: 14px;
     position: relative;
 }
 
+.vg__image--caption-name {
+    font-size: 14px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    padding-right: 30px;
+    word-break: break-word;
+}
+
+.vg__image--caption-tag {
+    color: $grey-darkest;
+    font-size: 12px;
+    line-height: 1;
+    margin-left: 20px;
+
+    &::before {
+        background: url('../assets/img/link-grey.svg') no-repeat;
+        background-size: 100% auto;
+        content: '';
+        height: 10px;
+        left: 10px;
+        position: absolute;
+        width: 10px;
+    }
+}
+
 .vg__image--wrapper {
-    height: 185px;
+    height: 0;
     overflow: hidden;
+    padding-bottom: 90%;
     position: relative;
 }
 
@@ -62,8 +91,10 @@
 }
 
 .project--wrapper {
+    margin-right: 2.5%;
+    width: 18%;
 
-    &:nth-child(5) {
+    &:nth-child(5n) {
         margin-right: 0;
     }
 }
