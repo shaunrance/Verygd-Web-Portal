@@ -82,7 +82,7 @@ def setup_uwsgi(*args, **kwargs):
 
     setup_uwsgi_params(**kwargs)
 
-    conf_dir = '/etc/uwsgi/sites/python3/very.gd/{0}'.format(env_dir)
+    conf_dir = '/etc/uwsgi/sites/python3/'
     log_dir = '/var/local/uwsgi/log/'
 
     sudo('TMPDIR=/tmp pip install uwsgi'.format(venv_dir=kwargs['venv_dir']))
@@ -96,11 +96,11 @@ def setup_uwsgi(*args, **kwargs):
         sudo('mkdir -p {0}'.format(log_dir))
 
     # this is needed for python3
-    copy(repo_config_path(kwargs['working_dir'], 'spawn_python3.ini'), '/'.join([conf_dir, 'uwsgi.ini']))
+    copy(repo_config_path(kwargs['working_dir'], 'spawn_python3.ini'), '/'.join([conf_dir, '../spawn_python3.ini']))
 
     # copy main uwsgi file
     copy(repo_config_path(kwargs['working_dir'], '{0}/uwsgi.ini'.format(env_dir)),
-         '/'.join(['/etc/uwsgi/sites', 'uwsgi.ini']))
+         '/etc/uwsgi/sites/python3/very.gd.{0}.ini'.format(env_dir))
 
 
 def setup_virtualenv(*args, **kwargs):
