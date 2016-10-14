@@ -76,7 +76,7 @@
     position: fixed;
     top: 0;
     width: 100vw;
-    z-index: $z-epsilon;
+    z-index: $z-epsilon + 10;
 
     &.ng-hide-add,
     &.ng-hide-remove {
