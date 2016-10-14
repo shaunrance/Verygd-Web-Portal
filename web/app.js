@@ -22,6 +22,7 @@ angular.module('ua5App', [
     'angularModalService',
     'ngMeta',
     'suite',
+    'color.picker',
     // start add states as app dependency
     'ua5App.scene',
     'ua5App.details',

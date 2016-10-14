@@ -1,5 +1,5 @@
 /* global angular, _ */
-angular.module('ua5App.details', ['ngFileUpload'])
+angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects.details', {
             name: 'Details',
@@ -28,6 +28,12 @@ angular.module('ua5App.details', ['ngFileUpload'])
         });
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
+        $scope.colorOptions = {
+            format: 'hex',
+            alpha: false,
+            swatchPos: 'right'
+        };
+        
         $scope.deleteScreen = function(screenId) {
             ModalService.showModal({
                 templateUrl: 'modals/deleteModal.html',
@@ -43,7 +49,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
                 modal.close.then(function(result) {
                     if (result) {
                         screenFactory.deleteScreen(screenId)
-                                
+
                         .then(function(response) {
                                 getScreens();
                             }, function(error) {
@@ -58,7 +64,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-                  
+
                     screenFactory.insertScreen(file, $stateParams.projectId, $scope.currentScene)
 
                         .then(function(response) {
@@ -108,7 +114,7 @@ angular.module('ua5App.details', ['ngFileUpload'])
         };
 
         $scope.getScene = function(num) {
-            return new Array(num);   
+            return new Array(num);
         };
 
         $scope.$on('nav:add-scene', function() {

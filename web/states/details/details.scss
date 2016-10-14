@@ -116,6 +116,10 @@
     position: relative;
 }
 
+.scene-preview__section-title {
+    text-align: left;
+}
+
 .scene-preview__header {
     @include position(relative);
     @include size(100% 60px);
@@ -124,7 +128,8 @@
 
 .scene-preview__display {
     @include padding(20px 20px 40px);
-    background-color: $grey-dark;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(244, 244, 244, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f4f4f4', GradientType=1);
 }
 
 .scene-preview__icon {
@@ -133,6 +138,44 @@
     height: 60px;
     max-width: 50px;
     width: 100%;
+}
+
+.scene-preview__color-picker {
+    @include padding(10px 30px 30px);
+    border-bottom: 1px solid $grey;
+}
+
+.scene-preview__color-style-wrap {
+    margin-top: 15px;
+    position: relative;
+    width: 93px;
+}
+
+.scene-preview__color-style-button {
+    @include size(18px 18px);
+    background-color: $btn-blue;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+#scene-preview__color-style-gradient {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(149, 149, 159, 1) 100%);
+    border: 2px solid $grey-2;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#95959f', GradientType=0);
+}
+
+#scene-preview__color-style-image {
+    background-color: rgba($btn-blue, 0);
+    background-image: url('assets/img/icon-image.svg');
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    border: 2px solid $grey-2;
+}
+
+.scene-preview__color-picker-wrap {
+    margin-top: 15px;
 }
 
 .scene-preview__privacy {
