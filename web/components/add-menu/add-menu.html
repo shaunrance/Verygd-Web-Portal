@@ -3,7 +3,7 @@
 		<button class="add-menu--button" ng-class="menuToggle ? 'open' : ''" ng-click="toggleAddMenu()"><div class="plus-icon"></div></button>
 	</div>
 </div>
-<div class="modal-launch--container ng-hide" ng-click="toggleAddMenu" ng-show="menuToggle">
+<div class="modal-launch--container ng-hide" ng-click="toggleAddMenu()" ng-show="menuToggle">
 	<div class="modal-launch--buttons">
 		<button class="add-item--button" ng-repeat="item in menuItems" class="scene-add" ng-click="showModal(item)">
 		    {{item}}<img class="add-item--icon" src="assets/img/modal-add.svg">
