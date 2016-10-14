@@ -31,6 +31,7 @@ config:
                     - web/bower_components/suite/factories/browser.js
                     - web/bower_components/ng-file-upload/ng-file-upload.min.js
                     - web/bower_components/ng-sortable/dist/ng-sortable.js
+                    - web/bower_components/angular-color-pickier/dist/angularjs-color-picker-min.js
                     - web/bower_components/angular-cookies/angular-cookies.min.js
                 dest: web/_build/vendor.js
             app:
