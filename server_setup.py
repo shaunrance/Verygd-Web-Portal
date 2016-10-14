@@ -85,7 +85,7 @@ def setup_uwsgi(*args, **kwargs):
     conf_dir = '/etc/uwsgi/sites/python3/'
     log_dir = '/var/local/uwsgi/log/'
 
-    sudo('TMPDIR=/tmp pip install uwsgi')
+    run('source {venv_dir}/bin/activate && TMPDIR=/tmp pip install uwsgi'.format(venv_dir=kwargs['venv_dir']))
 
     create_tmp_socket('very_gd_{0}_uwsgi.sock'.format(env_dir))
 
