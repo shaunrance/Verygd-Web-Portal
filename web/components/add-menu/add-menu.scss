@@ -21,10 +21,12 @@
 }
 
 .plus-icon {
+    @include position(absolute, 50% 50%);
     @include size(25px 25px);
     background: url('/assets/img/plus.svg');
     background-repeat: no-repeat;
     background-size: 100% auto;
+    transform: translate(-50%, -50%);
 }
 
 .add-menu--container {

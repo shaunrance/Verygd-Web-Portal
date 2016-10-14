@@ -33,6 +33,12 @@ angular.module('ua5App')
                 }
 
                 getProjectName();
+
+                $scope.close = function() {
+                    console.log('close');
+                    $scope.userMenuToggle = false;
+                };
+
                 $scope.logout = function() {
                     //remove cookies
                     $cookies.remove(APICONSTANTS.authCookie.token);
