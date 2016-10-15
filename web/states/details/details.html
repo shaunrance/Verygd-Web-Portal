@@ -1,23 +1,43 @@
-<main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
-    <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
+<main
+    class="project-details__container"
+    ngf-drop
+    ng-model="files"
+    ngf-drag-over-class="'dragover'"
+    ngf-multiple="true"
+    ngf-allow-dir="true"
+    accept="image/*"
+    ngf-pattern="'image/*'">
+    <div
+        class="project-details"
+        ng-class="emptyScene ? 'empty' : ''">
         <nav class="scene-nav">
-            <div class="scene-nav--selector" ng-click="toggleSceneList()">Scene {{currentScene}}</div>
-            <ul class="scene-list" ng-class="{'active':showSceneList}">
+            <div
+                class="scene-nav--selector"
+                ng-click="toggleSceneList()">
+                Scene {{currentScene}}
+            </div>
+            <ul
+                class="scene-list"
+                ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
-
                     ng-repeat="i in getScene(scenes) track by $index">
                     <a
                         ng-click="changeScene($index + 1)"
                         ng-class="{'active' : (currentScene === ($index + 1))}"
-                        class="scene-list--link">Scene {{$index + 1}}</a>
+                        class="nav-item">
+                        Scene {{$index + 1}}
+                    </a>
                 </li>
             </ul>
             <button
                 ng-click="addScene()"
                 class="scene-add">
-            <img class="add-icon" src="assets/img/add.svg" />
-            Add Scene</button>
+                <img
+                    class="add-icon"
+                    src="assets/img/add.svg" />
+                Add Scene
+            </button>
         </nav>
         <div
             class="vg__items project__items"
@@ -33,27 +53,41 @@
                     class="vg__item--link scene--link"
                     as-sortable-item-handle>
                     <div class="vg__image--wrapper">
-                        <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
+                        <div
+                            class="vg__image"
+                            ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}">
+                        </div>
                         <div
                             class="link-icon---container"
                             ng-click="linkContent(screen)">
-                            <img class="link-icon" src="assets/img/link.svg" />
+                            <img
+                                class="link-icon"
+                                src="assets/img/link.svg" />
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
-                        <div class="vg__image--caption-name">{{screen.screenName}}</div>
-                        <div class="vg__image--caption-tag" ng-if="screen.related_tag && screen.related_tag > 0">
+                        <div class="vg__image--caption-name">
+                                {{screen.screenName}}
+                        </div>
+                        <div
+                            class="vg__image--caption-tag"
+                            ng-if="screen.related_tag && screen.related_tag > 0">
                             Scene {{screen.related_tag}}
                         </div>
-
-                        <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
-                            <img class="scene-delete_icon" src="assets/img/delete.svg" />
+                        <button
+                            class="scene__item--delete"
+                            ng-click="deleteScreen(screen.id)">
+                            <img
+                                class="scene-delete_icon"
+                                src="assets/img/delete.svg" />
                         </button>
                     </figcaption>
                 </a>
             </figure>
         </div>
-        <div class="scene-preview" ng-show="!emptyScene">
+        <div
+            class="scene-preview"
+            ng-show="!emptyScene">
             <div class="scene-preview--widget">
                 <div class="scene-preview__header">
                     <div class="toggle">
@@ -105,24 +139,49 @@
                 ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
                 class="scene-preview__button">
                 <span class="scene-preview__icon">
-                    <img class="mobile-icon" src="assets/img/mobile.svg" />
+                    <img
+                        class="mobile-icon"
+                        src="assets/img/mobile.svg" />
                 </span>
                 Launch Scene
             </button>
         </div>
-        <div class="drop-box--container" ng-class="emptyScene ? 'empty' : ''">
+        <div
+            class="drop-box--container"
+            ng-class="emptyScene ? 'empty' : ''">
             <div class="drop-box">
-                <h1 class="drop-box__header">Drag images here to create your scene</h1>
-                <button id="uploadInput" ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="drop-box__button">Upload Files</button>
+                <h1 class="drop-box__header">
+                    Drag images here to create your scene
+                </h1>
+                <button
+                    id="uploadInput"
+                    ngf-select
+                    ng-model="files"
+                    ngf-multiple="true"
+                    accept="image/*"
+                    ngf-pattern="'image/*'"
+                    class="drop-box__button">
+                    Upload Files
+                </button>
             </div>
         </div>
         <div class="mobile-btn-container">
-            <button ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="drop-box__button drop-box__button--mobile">Upload Files</button>
+            <button
+                ngf-select
+                ng-model="files"
+                ngf-multiple="true"
+                accept="image/*"
+                ngf-pattern="'image/*'"
+                class="drop-box__button drop-box__button--mobile">
+                Upload Files
+            </button>
             <button
                 ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
                 class="scene-preview__button scene-preview--mobile">
                 <span class="scene-preview__icon">
-                    <img class="mobile-icon" src="assets/img/mobile.svg" />
+                    <img
+                        class="mobile-icon"
+                        src="assets/img/mobile.svg" />
                 </span>
                 Launch Scene
             </button>

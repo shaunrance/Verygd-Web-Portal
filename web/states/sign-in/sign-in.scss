@@ -48,6 +48,24 @@
         margin-top: 5px;
         text-decoration: none;
     }
+
+
+    .sign-in-cta {
+        @include padding(10px 5px);
+        border-radius: 2px;
+        color: $white;
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .sign-up-link {
+        color: $neon-blue;
+        text-decoration: none;
+    }
 }
 
 .sign-in-inner {

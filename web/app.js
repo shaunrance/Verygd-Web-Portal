@@ -8,6 +8,9 @@ angular.module('ua5App.viewer', []);
 angular.module('ua5App.details', []);
 angular.module('ua5App.scene', []);
 angular.module('ua5App.sign-up', []);
+angular.module('ua5App.account', []);
+angular.module('ua5App.billing', []);
+angular.module('ua5App.notifications', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -26,6 +29,9 @@ angular.module('ua5App', [
     'suite',
     'color.picker',
     // start add states as app dependency
+    'ua5App.notifications',
+    'ua5App.billing',
+    'ua5App.account',
     'ua5App.sign-up',
     'ua5App.scene',
     'ua5App.details',

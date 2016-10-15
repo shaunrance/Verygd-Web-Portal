@@ -8,8 +8,8 @@ angular.module('ua5App.sign-in')
             controllerAs: 'ctrl',
             resolve: {
                 user: ['APICONSTANTS', '$cookies', function(APICONSTANTS, $cookies) {
-                    var userId = $cookies.get(APICONSTANTS.authCookie.user_id),
-                    token = $cookies.get(APICONSTANTS.authCookie.user_id);
+                    var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+                    var token = $cookies.get(APICONSTANTS.authCookie.user_id);
 
                     if (userId && token) {
                         return true;
@@ -20,7 +20,7 @@ angular.module('ua5App.sign-in')
             }
         });
     }])
-    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
+    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
         if (user) {
             $state.go('projects');
         }

@@ -9,7 +9,7 @@
         </div>
         <div class="sign-up-modal-overlay">
             <div class="modal">
-                <form ng-submit="login(model)">
+                <form ng-submit="createUser(model)">
                     <div class="modal-header">
                         <h3 class="modal-header-title">Get started for free</h3>
                         <h4 class="modal-header-tag">No credit card required</h4>
@@ -38,6 +38,11 @@
                                 type="email"
                                 ng-model="model.email"
                                 required />
+                                <span
+                                    class=""
+                                    ng-if="emailDuplicate">
+                                    This email address is already in use.
+                                </span>
                         </div>
                         <div class="form-group">
                             <img
@@ -53,12 +58,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button
+                        <input
                             class="modal-submit modal-button"
                             type="submit"
-                            ng-disabled="loginForm.$invalid">
-                            Create Account
-                        </button>
+                            ng-class="{'button-disable': disableButton === true}"
+                            ng-disabled="model.$invalid"
+                            value="Sign Up">
                     </div>
                     <div class="sign-up-modal-terms">
                         By creating an account you agree to very.gd
@@ -74,7 +79,7 @@
                 Already have an account?
                 <a
                     class="sign-in-link"
-                    href="#">
+                    ui-sref="sign-in">
                     Login
                 </a>
             </div>

@@ -56,44 +56,6 @@
     top: -20px;
 }
 
-.modal-button {
-    @extend %reset-button;
-    @extend %modal-button;
-
-    + .modal-button {
-        margin-left: 10px;
-    }
-}
-
-.modal-submit {
-    background: $btn-blue;
-}
-
-.modal-cancel {
-    background: $grey-dark;
-}
-
-.modal-delete {
-    background: $red;
-}
-
-.modal-accept {
-    background: $btn-blue;
-}
-
-.modal-label {
-    display: none;
-}
-
-.modal-input {
-    border: none;
-    border-bottom: 1px solid $input-grey;
-    margin-top: 20px;
-    outline: 0;
-    padding: 10px 0;
-    width: 100%;
-}
-
 @include media($tablet) {
 
     .modal-launch--container {

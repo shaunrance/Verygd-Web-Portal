@@ -53,8 +53,20 @@
             </a>
         </div>
         <span ng-if="!basic">
-            <span class="breadcrumb"><a class="breadcrumb__link" ui-sref="projects" data-ui-sref-opts="{reload: true}">My Projects</a></span>
-            <span class="breadcrumb" ng-if="projectTitle != ''">{{projectTitle}}</span>
+            <span
+                class="breadcrumb">
+                <a
+                    class="breadcrumb__link"
+                    ui-sref="{{headerTitleData}}"
+                    data-ui-sref-opts="{reload: true}"
+                    ng-bind="headerTitleData">
+                </a>
+            </span>
+            <span
+                class="breadcrumb"
+                ng-if="projectTitle != ''">
+                {{projectTitle}}
+            </span>
         </span>
         <div add-menu class="add-menu--controls"></div>
     </div>
