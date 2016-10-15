@@ -191,22 +191,6 @@
     @include padding(23px 0);
 }
 
-.scene-preview__button {
-    @extend %reset-button;
-    @include display(flex);
-    @include align-items(center);
-    background-color: $pink;
-    border-radius: 4px;
-    color: $white;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-
-    + .scene-preview__button {
-        margin-top: 20px;
-    }
-}
-
 .add-icon {
     margin-right: 10px;
     max-width: 25px;
@@ -367,6 +351,46 @@
     display: none;
 }
 
+.project-details__footer {
+    @include position(fixed);
+    @include size(100% 40px);
+    background-color: $navy;
+    bottom: 0;
+    left: 0;
+    z-index: $z-epsilon;
+
+    &::before {
+        @extend %gradient;
+        content: '';
+        display: block;
+        height: 3px;
+        position: relative;
+        width: 100%;
+    }
+}
+
+.scene-preview__button {
+    @extend %reset-button;
+    @include size(60px 60px);
+    @include align-horizontally(absolute);
+    background-color: $deep-navy;
+    border: 2px solid $white;
+    border-radius: 60px;
+    margin-top: -30px;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.scene-preview__button__icon {
+    @include position(absolute, 50% 50%);
+    @include size(22px 28px);
+    background: url('/assets/img/icon-play.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    transform: translate(-35%, -50%);
+}
 
 @include media($tablet) {
 
@@ -433,10 +457,6 @@
         display: none;
     }
 
-    .scene-preview__button {
-        display: none;
-    }
-
     .scene-preview--mobile {
         display: block;
         margin-bottom: 20px;
@@ -487,6 +507,20 @@
         &::after {
             content: none;
         }
+    }
+
+    .project-details__footer {
+        background-color: $grey;
+
+        &::before {
+            display: none;
+        }
+    }
+
+    .scene-preview__button {
+        background-color: $pink;
+        border: 1px solid rgba($white, 0);
+        box-shadow: 1px 2px 4px rgba($black, 0.2);
     }
 }
 
