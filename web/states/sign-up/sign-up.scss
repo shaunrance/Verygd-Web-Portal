@@ -20,7 +20,7 @@
         @include margin(0 null null 25px);
         border: none;
         display: inline-block;
-        text-transform: uppercase;
+        font-family: 'Open Sans', sans-serif;
 
         @include placeholder {
             color: #a3a3ac;
