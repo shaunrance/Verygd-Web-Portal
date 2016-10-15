@@ -50,7 +50,7 @@ angular.module('ua5App', [
     })
     .constant('APICONSTANTS', {
         //TODO add option for production server
-        apiHost: 'http://216.70.115.196:7777',
+        apiHost: 'http://ec2-52-53-186-20.us-west-1.compute.amazonaws.com/',
         authCookie: {
             token: 'vg-user',
             user_id: 'vg-member'
