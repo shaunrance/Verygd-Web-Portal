@@ -5,16 +5,24 @@ angular.module('ua5App')
             restrict: 'A',
             templateUrl: 'components/header/header.html',
             scope: {
-                basic: '@'
+                basic: '@',
+                headerTitleData: '='
             },
             link: function($scope, element, attrs) {
             },
             controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
+
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 $scope.projectTitle = '';
                 $scope.userMenuToggle = false;
                 $scope.isActive = false;
+
+                $scope.backButtonHide = true;
+                $scope.goBack = function() {
+                    $state.go('projects', {}, {reload: true});
+                };
+
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
                     getProjectName();
@@ -80,7 +88,7 @@ angular.module('ua5App')
 
                     //TODO hit endpoint to expire auth token
                     //redirect to login
-                    $state.go('home');
+                    $state.go('sign-in');
                 };
 
                 $scope.toggleMenu = function() {

@@ -1,27 +1,44 @@
-.home {
+.sign-in {
     @include linear-gradient(to right, #5de0e9 0%, #5b9df9 50%, #ec39e5 100%);
     min-height: 100vh;
 
     .form-group {
-        border-bottom: 1px solid #000;
+        border-bottom: 1px solid $grey-dark;
+    }
+
+    .modal {
+        box-shadow: 2px 1px 10px rgba($black, 0.3);
     }
 
     .modal-body {
+        @include padding(20px 0);
         overflow: hidden;
         width: 100%;
+    }
+
+    .modal-header {
+
+        h3 {
+            text-transform: capitalize;
+        }
+
+        &::after {
+            width: 400px;
+        }
     }
 
     .modal-input {
         @include margin(0 null null 25px);
         border: none;
         display: inline-block;
+        text-transform: uppercase;
 
         @include placeholder {
             color: #a3a3ac;
         }
     }
 
-    .home-modal-error {
+    .sign-in-modal-error {
         @include padding(10px 5px);
         border-radius: 2px;
         color: #ec39e5;
@@ -31,13 +48,32 @@
         margin-top: 5px;
         text-decoration: none;
     }
+
+
+    .sign-in-cta {
+        @include padding(10px 5px);
+        border-radius: 2px;
+        color: $white;
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .sign-up-link {
+        color: $neon-blue;
+        text-decoration: none;
+    }
 }
 
-.home-inner {
+.sign-in-inner {
     @include padding(100px null);
+    position: relative;
 }
 
-.home-logo-link {
+.sign-in-logo-link {
     text-align: center;
 
     .logo {
@@ -49,19 +85,14 @@
     }
 }
 
-.home-modal-overlay {
-    @include display(flex);
-    @include align-items(center);
-    @include justify-content(center);
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
+.sign-in-modal-overlay {
+    @include align-horizontally(absolute);
+    margin-top: 50px;
+    width: 400px;
     z-index: $z-epsilon;
 }
 
-.home__modal {
+.sign-in__modal {
     @include size(200px);
     background-color: #fff;
 
@@ -77,11 +108,12 @@
 
 @include media($phablet) {
 
-    .home {
+    .sign-in {
+        @include padding(null 16px);
 
         .modal {
-            @include padding(0 20px 20px);
-            top: 30px;
+            @include padding(20px);
+            max-width: none;
         }
 
         .modal-body {
@@ -90,31 +122,28 @@
 
         .modal-header {
             padding: 0;
-            top: 30px;
 
             &::after {
                 display: none;
             }
         }
 
-        .form-group {
-
-            &:first-of-type {
-                position: relative;
-                top: 15px;
-            }
+        .modal-input {
+            font-size: 12px;
         }
     }
 
-    .home-modal-overlay {
-        @include padding(null 20px);
+    .sign-in-modal-overlay {
+        margin-top: 50px;
+        position: relative;
+        width: 100%;
     }
 
-    .home-inner {
+    .sign-in-inner {
         @include padding(40px null);
     }
 
-    .home-logo-link {
+    .sign-in-logo-link {
 
         .logo {
             width: 125px;

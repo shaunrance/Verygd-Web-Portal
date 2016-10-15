@@ -8,13 +8,13 @@ angular.module('ua5App')
                 var cookies = $cookies.get(APICONSTANTS.authCookie.token),
                     currentState = $injector.get('$state').current.name;
 
-                if ((currentState === 'home') && (config.url.indexOf('/users') < 0)) {
+                if ((currentState === 'sign-in' && (config.url.indexOf('/users')) < 0) || (currentState === 'sign-up')) {
                     return config;
                 }
 
                 //redirect user to login if they dont have credentials
                 if (!cookies) {
-                    $injector.get('$state').transitionTo('home');
+                    $injector.get('$state').transitionTo('sign-up');
                 } else {
                     config.headers.Authorization = 'Token ' + cookies;
                 }
