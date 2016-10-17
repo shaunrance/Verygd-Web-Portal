@@ -18,11 +18,11 @@
                     </span>
                 </div>
                 <div class="account-billing-button-container">
-                    <a
-                        href=""
-                        class="account-billing-update-button">
+                    <button
+                        class="account-billing-update-button"
+                        ng-click="showModal(billing)">
                         Change Plan
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="account-billing-inner">
@@ -30,8 +30,9 @@
                         Annual Billing
                 </div>
                 <div class="account-billing-toggle">
-                    <div class="account-billing-toggle-dial"></div>
-                    <div class="account-billing-toggle-bg"></div>
+                    <toggle-switch
+                        ng-model="sceneTypeToggle">
+                    </toggle-switch>
                 </div>
                 <div class="account-billing-statement">
                     <span class="account-billing-statement-text">
