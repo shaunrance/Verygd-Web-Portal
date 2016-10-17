@@ -5,7 +5,7 @@ angular.module('ua5App')
             restrict: 'A',
             templateUrl: 'components/add-menu/add-menu.html',
             link: function($scope, element, attrs) {},
-            controller:['$scope', '$state', '$stateParams', 'ModalService', function($scope, $state, $stateParams, ModalService) {
+            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', function($scope, $state, $stateParams, ModalService, $rootScope) {
                 var menu = {
                     project:'Add Project',
                     //team: 'Add Team Member',
@@ -138,11 +138,10 @@ angular.module('ua5App')
                             //     modal.close.then(function(result) {
                             //     });
                             // });
-                            $scope.$broadcast('nav:add-scene');
-                            $scope.menuToggle = false;
+                            $rootScope.$broadcast('nav:add-scene');
                             break;
                         case menu.screen:
-                            $scope.$broadcast('nav:add-screen');
+                            $rootScope.$broadcast('nav:add-screen');
                             break;
                         case menu.share:
                             ModalService.showModal({
