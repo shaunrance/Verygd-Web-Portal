@@ -12,5 +12,20 @@ angular.module('ua5App.billing')
             }
         });
     }])
-    .controller('billingCtrl', [function() {}])
+    .controller('billingCtrl', ['$scope', 'ModalService', function($scope, ModalService) {
+        $scope.showModal = function() {
+            ModalService.showModal({
+                templateUrl: 'modals/billingModal.html',
+                controller: 'billingModalController',
+                inputs: {
+                    fields:{
+                        title: 'ksdjbdsj',
+                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        showFileUpload: false,
+                        submitButtonText: 'Add Project'
+                    }
+                }
+            });
+        };
+    }])
 ;

@@ -1,9 +1,11 @@
 /* global angular */
 angular.module('ua5App')
-	.controller('addModalController', ['$scope', '$element', 'fields', 'close', function($scope, $element, fields, close) {
-        $scope.title = fields.title;
-        $scope.formLabels = fields.formLabels;
-        $scope.buttonText = fields.submitButtonText;
+	.controller('billingModalController', ['$scope', '$element', 'fields', 'close', function($scope, $element, fields, close) {
+        $scope.title = 'Professional Plan';
+        $scope.currentPlan = '$25.00/mo';
+        $scope.formLabels = 'dfdsf';
+        $scope.price = '$' + 25;
+        $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {
             fields: {
                 name: '',
@@ -17,6 +19,7 @@ angular.module('ua5App')
             });
         };
         $scope.cancel = function() {
+            console.log('dsjhg');
             close({
                 input: $scope.input.fields
             });

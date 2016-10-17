@@ -13,7 +13,13 @@ angular.module('ua5App.account', ['ngFileUpload'])
             }
         });
     }])
-    .controller('accountCtrl', ['$scope', '$state', function($scope, $state) {
+    .controller('accountCtrl', ['$scope', '$state', 'APICONSTANTS', '$cookies', function($scope, $state, APICONSTANTS, $cookies) {
+
+        $scope.userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+        if (!$scope.userId) {
+            $scope.go('login');
+        }
+
         $scope.title = 'John Smith';
     }])
 ;

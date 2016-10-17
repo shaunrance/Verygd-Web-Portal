@@ -87,6 +87,7 @@
 
 .account-billing-update-button {
     @include position(relative, 8px null null 20px);
+    background-color: rgba($white, 0);
 }
 
 .account-info-section {
