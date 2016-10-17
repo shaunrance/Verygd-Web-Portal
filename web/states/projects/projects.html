@@ -1,15 +1,28 @@
 <div header></div>
 <div ui-view class="projects">
     <div  class="vg__items">
-        <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper">
-            <button class="project__item--delete" ng-click="deleteProject(project.id)">
-                <img class="project-delete_icon" src="assets/img/close.svg" />
+        <figure
+            ng-repeat="project in projects"
+            class="vg__item--wrapper project--wrapper">
+            <button
+                class="project__item--delete"
+                ng-click="deleteProject(project.id)">
+                <img
+                    class="project-delete_icon"
+                    src="assets/img/close.svg" />
             </button>
-            <a class="vg__item--link project--link" ui-sref="projects.details({ projectId: project.id })">
+            <a
+                class="vg__item--link project--link"
+                ui-sref="projects.details({ projectId: project.id })">
                 <div class="vg__image--wrapper">
-                    <div class="vg__image" ng-style="{'background-image':'url({{project.cover_image}})'}"></div>
+                    <div
+                        class="vg__image"
+                        ng-style="{'background-image':'url({{project.cover_image}})'}">
+                    </div>
                 </div>
-                <figcaption class="vg__image--caption">{{project.title}}</figcaption>
+                <figcaption class="vg__image--caption">
+                    {{project.title}}
+                </figcaption>
             </a>
         </figure>
     </div>
