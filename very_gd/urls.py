@@ -7,21 +7,20 @@ from rest_framework import routers
 from media_portal.users.auth.views import MediaPortalAuthToken as VeryGDAuthToken
 from media_portal.users.views import MembersViewSet, MemberCreateView
 
-from media_portal.album.content.views import AlbumImagesViewSet
-
 from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls
 from media_portal.admin import admin_site
 
 from project.views import ProjectViewSet
 from scene.views import SceneViewSet
+from panel.views import PanelViewSet
 
 router = routers.DefaultRouter(trailing_slash=False)
 
 router.register(r'users', MembersViewSet, base_name='users')
 
 router.register(r'project', ProjectViewSet, base_name='project')
-router.register(r'images', AlbumImagesViewSet, base_name='images')
+router.register(r'panel', PanelViewSet, base_name='panel')
 
 router.register(r'scene', SceneViewSet, base_name='scene')
 
@@ -39,4 +38,7 @@ urlpatterns = [
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),
 
-] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + urlpatterns
+
+if hasattr(settings, 'MEDIA_URL') and hasattr(settings, 'MEDIA_ROOT') and settings.MEDIA_URL and settings.MEDIA_ROOT:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
