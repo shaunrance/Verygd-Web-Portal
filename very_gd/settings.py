@@ -34,13 +34,14 @@ MEDIA_PORTAL_SETTINGS = {
 
     'IMGIX_URL': 'https://verygd.imgix.net',
 
-    'ALBUM': 'project.models.Project',
+    'ALBUM': 'scene.models.Scene',
+
     'ALBUM_IMAGE': 'panel.models.PanelImage',
     'ALBUM_VIDEO': 'panel.models.PanelVideo',
 
-    'MEDIA_MEMBER': 'users.models.VeryGDMember',
+    'MEDIA_MEMBER': 'users.models.Member',
 
-    'TEST_STRATEGIES': 'very_gd.tests.strategies.VeryGDTestStrategies'
+    'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
@@ -59,8 +60,6 @@ ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.c
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 465
-
-TAGGIT_CASE_INSENSITIVE = True
 
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
@@ -102,6 +101,7 @@ INSTALLED_APPS += (
 INSTALLED_APPS += (
     'project',
     'panel',
+    'scene'
 )
 
 MIDDLEWARE_CLASSES = (
