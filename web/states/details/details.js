@@ -12,7 +12,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', 'screenFactory', 'ModalService', function($scope, $stateParams, screenFactory, ModalService) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', 'sceneFactory', 'screenFactory', 'ModalService', function($scope, $stateParams, sceneFactory, screenFactory, ModalService) {
         $scope.screens = [];
         $scope.currentSceneScreens = [];
         $scope.currentScene = 1;
@@ -131,7 +131,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     $scope.screens = _.sortBy($scope.screens, 'order');
                     $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
                     _.each($scope.screens, function(screen) {
-                        screen.screenName = screen.url.split('https://verygd.imgix.net/images/').join('');
+                        // screens should now have saved names
+                        screen.screenName = screen.title !== 'name' ? screen.title : screen.url.split('https://verygd.imgix.net/images/').join('');
                         if (parseInt(screen.tag, 10) > $scope.scenes) {
                             $scope.scenes = parseInt(screen.tag, 10);
                         }
@@ -149,25 +150,39 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             $scope.currentSceneScreens = _.sortBy(scenes, 'order');
             $scope.showSceneList = false;
             $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
-
         };
+
+        function createScene(scene) {
+            sceneFactory.addScene(scene, $scope.projectId);
+
+            // .then(function(response) {
+            //     var id = response.data.id;
+            //     $scope.scenes++;
+            //     $scope.changeScene($scope.scenes);
+            //     //getProjects();
+            // }, function(error) {
+            //
+            // });
+        }
 
         $scope.addScene = function() {
             ModalService.showModal({
-                templateUrl: 'modals/addSceneModal.html',
-                controller: 'addSceneModalController',
+                templateUrl: 'modals/addModal.html',
+                controller: 'addModalController',
                 inputs: {
                     fields:{
                         title: 'Add New Scene',
                         formLabels:[{name: 'name', title: 'Name'}],
                         showFileUpload: false,
-                        submitButtonTextLink: 'Save',
-                        submitButtonTextCancel: 'Cancel',
-                        scenes: $scope.scenes
+                        submitButtonText: 'Add Scene'
                     }
                 }
             }).then(function(modal) {
-
+                modal.close.then(function(result) {
+                    if (result.input) {
+                        createScene(result.input);
+                    }
+                });
             });
         };
 
@@ -179,11 +194,11 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             return new Array(num);
         };
 
-        $scope.$on('modal:add-scene', function(event, args) {
-            $scope.sceneName = args.name;
-            $scope.scenes++;
-            $scope.changeScene($scope.scenes, $scope.sceneName);
-        });
+        // $scope.$on('modal:add-scene', function(event, args) {
+        //
+        //     $scope.scenes++;
+        //     $scope.changeScene($scope.scenes);
+        // });
 
         $scope.$on('nav:add-scene', function() {
             $scope.addScene();
