@@ -11,16 +11,92 @@
             <div class="modal-body modal-body--grey">
                 <div class="form-group">
                     <label class="modal-label">Payment Details</label>
-                    <input class="modal-input" placeholder="{{label.title}}" value="test" ng-model="input.fields[label.name]" type="text" />
                 </div>
-                <div class="form-group" ng-show="showFileUpload">
-                    <label class="modal-label" for="exampleInputFile">File input</label>
-                    <input class="modal-input" placeholder="{{label.title}}" type="file" id="exampleInputFile">
-                </div>
+                <form ng-submit="UpdateUser(model)">
+                    <div class="account-info-section">
+                        <input
+                                class="account-info-data"
+                                type="checkbox"
+                                name="paymentType"
+                                id="paymentType"
+                                value="year"
+                                ng-model="model.paymentType"
+                                ng-change="paymentType(model.paymentType)"/>
+                                <label for="paymentType">Professional Package @ $25/mo</label>
+                    </div>
+                    <div class="account-info-section">
+                        <div class="account-info-title">
+                            Name on Card
+                        </div>
+                        <input
+                            class="account-info-data"
+                            type="name"
+                            ng-model="model.cardName"
+                            placeholder="JamieMcDoodoo"
+                            required />
+                    </div>
+                    <div class="account-info-section">
+                        <div class="account-info-title">
+                            Credit Card Number
+                        </div>
+                        <input
+                            class="account-info-data"
+                            type="text"
+                            ng-model="model.cardNumber"
+                            placeholder="4644569855553427"
+                            required />
+                    </div>
+                    <div class="account-info-section account-info-section-exp-sec">
+                        <div class="account-info-title">
+                            Expiration date
+                        </div>
+                        <input
+                            class="account-info-data"
+                            type="number"
+                            ng-model="model.month"
+                            placeholder="0"
+                            required />
+                        <input
+                            class="account-info-data"
+                            type="number"
+                            ng-model="model.year"
+                            placeholder="2018"
+                            required />
+                        <div class="account-info-title ">
+                            Security Code
+                        </div>
+                        <input
+                            class="account-info-data"
+                            type="number"
+                            ng-model="model.cvc"
+                            placeholder="343"
+                            required />
+                    </div>
+                    <div class="account-info-section">
+                        <div class="account-info-title">
+                            Zip Code
+                        </div>
+                        <input
+                            class="account-info-data"
+                            type="number"
+                            ng-model="model.zip"
+                            placeholder="90005"
+                            required />
+                    </div>
+                    <div class="account-info-section">
+                        <input
+                            class="modal-submit modal-button"
+                            type="submit"
+                            ng-disabled="model.$invalid"
+                            ng-class="{'button-disable': disableButton === true}"
+                            value="Choose Plan"
+                            ng-click="close()">
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
+<!--             <div class="modal-footer">
                 <button class="modal-submit modal-button" type="button" ng-click="close()">{{buttonText}}</button>
-            </div>
+            </div> -->
         </form>
     </div>
 </div>
