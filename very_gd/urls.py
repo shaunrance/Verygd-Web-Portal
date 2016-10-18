@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
+    url(r'^docs/?', include('rest_framework_docs.urls')),
 
 ] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

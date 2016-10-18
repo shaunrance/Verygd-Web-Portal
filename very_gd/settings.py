@@ -24,6 +24,19 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+if os.getenv('DEV_ENV', None):
+    DEBUG = True
+
+REST_FRAMEWORK_DOCS = {
+    'HIDE_DOCS': not DEBUG
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 MEDIA_PORTAL_SETTINGS = {
@@ -101,7 +114,8 @@ INSTALLED_APPS += (
 INSTALLED_APPS += (
     'project',
     'panel',
-    'scene'
+    'scene',
+    'rest_framework_docs',
 )
 
 MIDDLEWARE_CLASSES = (
