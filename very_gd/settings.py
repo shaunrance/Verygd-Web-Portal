@@ -61,8 +61,6 @@ EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
 EMAIL_PORT = 465
 
-TAGGIT_CASE_INSENSITIVE = True
-
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
@@ -90,7 +88,6 @@ INSTALLED_APPS += (
     'actstream',
     'rest_framework',
     'rest_framework.authtoken',
-    'taggit',
     'guardian',
     'media_portal.policy',
     'media_portal.payment',
