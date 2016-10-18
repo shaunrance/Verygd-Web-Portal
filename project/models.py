@@ -10,7 +10,6 @@ class Project(models.Model):
     updated_dt = models.DateTimeField(auto_now=True, null=False)
 
     public = models.BooleanField(default=False, blank=True, null=False)
-    background_color = models.CharField(max_length=32, null=True, blank=True, verbose_name='background-color')
 
     @property
     def content(self):
