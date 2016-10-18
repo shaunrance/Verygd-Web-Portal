@@ -1,0 +1,98 @@
+.toggle {
+    @include position(relative);
+    width: 100%;
+}
+
+.toggle-switch {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.toggle-switch__icon {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.poly {
+    @include margin(-1px 7px 0 0);
+    @include size(18px 18px);
+    background-image: url('/assets/img/icon-polygon.svg');
+
+}
+
+.pano {
+    @include margin(-1px 0 0 7px);
+    @include size(24px 20px);
+    background-image: url('/assets/img/icon-pano.svg');
+
+}
+
+.toggle-switch__animate {
+    @include size(100% 14px);
+    @include position(relative);
+    margin: 0px auto;
+}
+
+.toggle-switch__label {
+    @include transition(color, $transition-speed);
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+
+.toggle-switch__label--left {
+    @include margin(-2px 7px 0 0);
+
+    .color .switch-off & {
+        color: $green;
+    }
+}
+
+.toggle-switch__label--right {
+    @include margin(-2px 0 0 7px);
+
+    .color .switch-on & {
+        color: $red;
+    }
+}
+
+.toggle-switch__bar-wrap {
+    @include size(34px 14px);
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+.toggle-switch__bar {
+    @include position(absolute, 0 0);
+    @include size(100% 100%);
+    @include transition(background-color, $transition-speed);
+    background-color: #95959F;
+    border-radius: 10px;
+    transition-delay: 0.05s;
+
+    .color & {
+        background-color: $green;
+    }
+
+    .color .switch-on & {
+        background-color: $red;
+    }
+}
+
+.toggle-switch__button {
+    @include transition(left, $transition-speed);
+    @include size(20px 20px);
+    @include position(absolute, -4px 0 0 -2px);
+    background-color: $white-2;
+    border-radius: 20px;
+    box-shadow: 0 2px 2px rgba($black, 0.2);
+
+    .switch-on & {
+        left: 15px;
+    }
+}

@@ -1,0 +1,74 @@
+<div
+    header-title-data="title"
+    header>
+</div>
+<div ui-view class="account">
+    <div
+        account-nav
+        class="account-account-nav">
+    </div>
+    <div class="account-body">
+        <div class="account-avatar-container">
+            <div class="account-avatar-inner">
+                <div class="account-avatar-title">
+                    Avatar
+                </div>
+                <div class="account-avatar-image-container">
+                    <img
+                        src="assets/img/lee.jpg"
+                        class="account-avatar-image" />
+                </div>
+                <div class="account-avatar-button-container">
+                    <a
+                        href=""
+                        class="account-avatar-image-upload">
+                        Upload
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="account-info">
+            <form ng-submit="login(model)">
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Name
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="name"
+                        ng-model="user.name"
+                        placeholder="John Smith"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Email
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="name"
+                        ng-model="user.name"
+                        placeholder="john.smith@gmail.com"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Password
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="password"
+                        ng-model="user.password"
+                        placeholder="**********"
+                        required />
+                </div>
+                <button
+                    class="account-info-button modal-update modal-button"
+                    type="submit"
+                    ng-disabled="loginForm.$invalid">
+                    Update
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

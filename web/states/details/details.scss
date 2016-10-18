@@ -117,9 +117,26 @@
 }
 
 .scene-preview--widget {
-    @include padding(20px 20px 40px);
-    background-color: $grey-dark;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba($black, 0.2);
     margin-bottom: 40px;
+    position: relative;
+}
+
+.scene-preview__section-title {
+    text-align: left;
+}
+
+.scene-preview__header {
+    @include position(relative);
+    @include size(100% 60px);
+    @include padding(23px 0);
+}
+
+.scene-preview__display {
+    @include padding(20px 20px 40px);
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(244, 244, 244, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f4f4f4', GradientType=1);
 }
 
 .scene-preview__icon {
@@ -130,20 +147,48 @@
     width: 100%;
 }
 
-.scene-preview__button {
-    @extend %reset-button;
-    @include display(flex);
-    @include align-items(center);
-    background-color: $pink;
-    border-radius: 4px;
-    color: $white;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
+.scene-preview__color-picker {
+    @include padding(10px 30px 30px);
+    border-bottom: 1px solid $grey;
+}
 
-    + .scene-preview__button {
-        margin-top: 20px;
-    }
+.scene-preview__color-style-wrap {
+    margin-top: 15px;
+    position: relative;
+    width: 93px;
+}
+
+.scene-preview__color-style-button {
+    @include size(18px 18px);
+    background-color: $btn-blue;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+#scene-preview__color-style-gradient {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(149, 149, 159, 1) 100%);
+    border: 2px solid $grey-2;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#95959f', GradientType=0);
+}
+
+#scene-preview__color-style-image {
+    background-color: rgba($btn-blue, 0);
+    background-image: url('/assets/img/icon-image.svg');
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+    border: 2px solid $grey-2;
+}
+
+.scene-preview__color-picker-wrap {
+    margin-top: 15px;
+}
+
+.scene-preview__privacy {
+    @include position(relative);
+    @include size(100% 60px);
+    @include padding(23px 0);
 }
 
 .add-icon {
@@ -160,7 +205,7 @@
 }
 
 .preview-icon {
-    margin-top: 50px;
+    @include margin(25px 0);
     max-width: 100%;
 }
 
@@ -306,6 +351,46 @@
     display: none;
 }
 
+.project-details__footer {
+    @include position(fixed);
+    @include size(100% 40px);
+    background-color: $navy;
+    bottom: 0;
+    left: 0;
+    z-index: $z-epsilon;
+
+    &::before {
+        @extend %gradient;
+        content: '';
+        display: block;
+        height: 3px;
+        position: relative;
+        width: 100%;
+    }
+}
+
+.scene-preview__button {
+    @extend %reset-button;
+    @include size(60px 60px);
+    @include align-horizontally(absolute);
+    background-color: $deep-navy;
+    border: 2px solid $white;
+    border-radius: 60px;
+    margin-top: -30px;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.scene-preview__button__icon {
+    @include position(absolute, 50% 50%);
+    @include size(22px 28px);
+    background: url('/assets/img/icon-play.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    transform: translate(-35%, -50%);
+}
 
 @include media($tablet) {
 
@@ -372,10 +457,6 @@
         display: none;
     }
 
-    .scene-preview__button {
-        display: none;
-    }
-
     .scene-preview--mobile {
         display: block;
         margin-bottom: 20px;
@@ -414,7 +495,7 @@
     .drop-box__button--mobile {
         display: block;
         height: 60px;
-        margin: 0 0 20px;
+        margin: 0 0 50px;
         width: 100%;
     }
 
@@ -426,6 +507,20 @@
         &::after {
             content: none;
         }
+    }
+
+    .project-details__footer {
+        background-color: $grey;
+
+        &::before {
+            display: none;
+        }
+    }
+
+    .scene-preview__button {
+        background-color: $pink;
+        border: 1px solid rgba($white, 0);
+        box-shadow: 1px 2px 4px rgba($black, 0.2);
     }
 }
 

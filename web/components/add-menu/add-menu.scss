@@ -21,7 +21,12 @@
 }
 
 .plus-icon {
-    max-height: 25px;
+    @include position(absolute, 50% 50%);
+    @include size(25px 25px);
+    background: url('/assets/img/plus.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    transform: translate(-50%, -50%);
 }
 
 .add-menu--container {
@@ -92,111 +97,26 @@
     max-width: 25px;
 }
 
-
-.modal-overlay {
-    @include display(flex);
-    @include align-items(center);
-    @include justify-content(center);
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 100%;
-    z-index: $z-epsilon;
-}
-
-.modal {
-    background-color: $white;
-    max-width: 600px;
-    padding: 30px;
-    position: relative;
-    width: 100%;
-}
-
-.modal-header {
-    padding: 10px 0;
-    position: relative;
-
-    &::after {
-        border-bottom: 1px solid $grey-dark;
-        bottom: 0;
-        content: '';
-        left: -30px;
-        position: absolute;
-        width: 600px;
-    }
-}
-
-.modal-body {
-    color: #999;
-    max-height: 430px;
-    overflow-y: auto;
-    padding: 20px 0;
-    width: 105%;
-}
-
-.modal-footer {
-    @include display(flex);
-    @include justify-content(space-around);
-    @include align-items(center);
-}
-
-.modal-close {
-    @extend %icon-button;
-    max-width: 15px;
-    position: absolute;
-    right: -20px;
-    top: -20px;
-}
-
-.modal-button {
-    @extend %reset-button;
-    @extend %modal-button;
-
-    + .modal-button {
-        margin-left: 10px;
-    }
-}
-
-.modal-submit {
-    background: $btn-blue;
-}
-
-.modal-cancel {
-    background: $grey-dark;
-}
-
-.modal-delete {
-    background: $red;
-}
-
-.modal-accept {
-    background: $btn-blue;
-}
-
-.modal-label {
-    display: none;
-}
-
-.modal-input {
-    border: none;
-    border-bottom: 1px solid $input-grey;
-    margin-top: 20px;
-    outline: 0;
-    padding: 10px 0;
-    width: 100%;
-}
-
 @include media($tablet) {
 
     .add-menu--container {
-        margin-top: $header-height-tablet;
+        margin-top: 0;
+    }
+
+    .add-menu--button {
+        @include size(36px 36px);
+        background-color: rgba($btn-blue, 0);
+        border: 2px solid $btn-blue;
+        top: 21px;
+    }
+
+    .plus-icon {
+        @include size(20px 20px);
+        background: url('/assets/img/plus-blue.svg');
+        right: 25px;
     }
 
     .modal-launch--container {
-
         padding-top: $header-height-tablet + 60px;
     }
 }

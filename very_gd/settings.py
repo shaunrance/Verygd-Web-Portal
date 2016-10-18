@@ -55,7 +55,7 @@ AWS_VIDEO_PIPELINE_ID = '1473882498921-q1vh9h'
 ADMINS = [('Andrew', 'andrew@useallfive.com')]
 SERVER_EMAIL = 'andrew@useallfive.com'
 
-ALLOWED_HOSTS = ['216.70.115.196', 'very.gd.ua5.land']
+ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
 
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
@@ -90,7 +90,6 @@ INSTALLED_APPS += (
     'actstream',
     'rest_framework',
     'rest_framework.authtoken',
-    'taggit',
     'guardian',
     'media_portal.policy',
     'media_portal.payment',

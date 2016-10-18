@@ -1,13 +1,13 @@
-<div class="home">
-    <div class="home-inner">
+<div class="sign-in">
+    <div class="sign-in-inner">
         <div
-            class="home-logo-link"
+            class="sign-in-logo-link"
             href="#">
             <img
                 class="logo"
                 src="assets/img/vg-logo-new.svg">
         </div>
-        <div class="home-modal-overlay">
+        <div class="sign-in-modal-overlay">
             <div class="modal">
                 <form ng-submit="login(model)">
                     <div class="modal-header">
@@ -49,11 +49,19 @@
                     </div>
                     <div
                         ng-if="loginError"
-                        class="home-modal-error"
+                        class="sign-in-modal-error"
                         login-error-message>
                         The email and password you entered don't match. Please try again.
                     </div>
                 </form>
+            </div>
+            <div class="sign-in-cta">
+                Don't have an account?
+                <a
+                    class="sign-up-link"
+                    ui-sref="sign-up">
+                    Sign Up
+                </a>
             </div>
         </div>
     </div>

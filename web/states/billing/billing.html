@@ -1,0 +1,107 @@
+<div ui-view class="billing">
+    <div
+        account-nav
+        class="account-account-nav">
+    </div>
+    <div class="account-body">
+        <div class="account-billing">
+            <div class="account-billing-inner">
+                <div class="account-billing-title">
+                    Current Plan
+                </div>
+                <div class="account-billing-image-container">
+                    <span class="account-info-billing">
+                        Team
+                    </span>
+                    <span class="account-info-billing-price">
+                        $29/mo
+                    </span>
+                </div>
+                <div class="account-billing-button-container">
+                    <a
+                        href=""
+                        class="account-billing-update-button">
+                        Change Plan
+                    </a>
+                </div>
+            </div>
+            <div class="account-billing-inner">
+                <div class="account-billing-title">
+                        Annual Billing
+                </div>
+                <div class="account-billing-toggle">
+                    <div class="account-billing-toggle-dial"></div>
+                    <div class="account-billing-toggle-bg"></div>
+                </div>
+                <div class="account-billing-statement">
+                    <span class="account-billing-statement-text">
+                        Next Payment of $348 will be processed on 12/01/2018
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="account-info">
+            <form ng-submit="login(model)">
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Name on Card
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="name"
+                        ng-model="user.cardName"
+                        placeholder="John Smith"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Credit Card Number
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="user.cardNumber"
+                        placeholder="**** **** **** 5555"
+                        required />
+                </div>
+                <div class="account-info-section account-info-section-exp-sec">
+                    <div class="account-info-title">
+                        Expiration date
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="user.cardDate"
+                        placeholder="10/19"
+                        required />
+                    <div class="account-info-title ">
+                        Security Code
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="user.cardCode"
+                        placeholder="5555"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Zip Code
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="user.cardZip"
+                        placeholder="90055"
+                        required />
+                </div>
+                <button
+                    class="button account-info-button modal-update modal-button"
+                    type="submit"
+                    ng-disabled="loginForm.$invalid">
+                    Update
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

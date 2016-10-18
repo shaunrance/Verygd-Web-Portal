@@ -1,21 +1,73 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <a class="back-button" ui-sref="projects"  data-ui-sref-opts="{reload: true}" ng-hide="backButtonHide">
-                <img class="back-icon" src="assets/img/back.svg" />
-            </a>
+            <button class="menu-button" ng-click="toggleMenu()">
+                <img class="menu-icon" src="assets/img/hamburger.svg" />
+            </button>
+            <div class="menu-container ng-hide" ng-click="toggleMenu()" ng-show="userMenuToggle">
+                <button class="close-menu-button">
+                    <img class="menu-icon" src="assets/img/close.svg" />
+                </button>
+                <ul class="menu-list">
+                    <li class="menu-list--item">
+                        <a
+                            class="menu-link account-name"
+                            href="#">
+                            John Smith
+                        </a>
+                    </li>
+                    <li class="menu-list--item">
+                        <a
+                            class="menu-link"
+                            href="#"
+                            ui-sref="projects"
+                            data-ui-sref-opts="{reload: true}">
+                            My Projects
+                        </a>
+                    </li>
+                    <li class="menu-list--item">
+                        <a
+                            class="menu-link"
+                            href="#">
+                            Settings
+                        </a>
+                    </li>
+                    <li class="menu-list--item">
+                        <a
+                            class="menu-link user-login mobile"
+                            href="#"
+                            ng-click="logout()">
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <a class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
                 <img class="logo" src="assets/img/vg-logo.svg">
             </a>
             <a
             	ng-if="!basic"
             	ng-click="logout()"
-            	class="user__login">Logout</a>
+            	class="user-login">
+                Logout
+            </a>
         </div>
         <span ng-if="!basic">
-            <span class="breadcrumb"><a class="breadcrumb__link" ui-sref="projects" data-ui-sref-opts="{reload: true}">My Projects</a></span>
-            <span class="breadcrumb" ng-if="projectTitle != ''">{{projectTitle}}</span>
+            <span
+                class="breadcrumb">
+                <a
+                    class="breadcrumb__link"
+                    ui-sref="{{headerTitleData}}"
+                    data-ui-sref-opts="{reload: true}"
+                    ng-bind="headerTitleData">
+                </a>
+            </span>
+            <span
+                class="breadcrumb"
+                ng-if="projectTitle != ''">
+                {{projectTitle}}
+            </span>
         </span>
+        <div add-menu class="add-menu--controls"></div>
     </div>
 </header>
-

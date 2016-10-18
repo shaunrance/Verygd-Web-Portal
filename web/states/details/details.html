@@ -55,25 +55,52 @@
         </div>
         <div class="scene-preview" ng-show="!emptyScene">
             <div class="scene-preview--widget">
-                <h5>Preview</h5>
-                <div ng-if="currentSceneScreens.length === 1 || (currentSceneScreens.length > 2 && currentSceneScreens.length < 7)">
-                    <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
+                <div class="scene-preview__header">
+                    <div class="toggle">
+                        <div class="toggle-switch__icon poly"></div>
+                        <toggle-switch
+                            ng-model="sceneTypeToggle">
+                        </toggle-switch>
+                        <div class="toggle-switch__icon pano"></div>
+                    </div>
                 </div>
-                <div ng-if="currentSceneScreens.length > 6">
-                    <p>We recommend you keep your scene under 7 panels</p>
+                <div class="scene-preview__display">
+                    <div ng-if="currentSceneScreens.length === 1 || (currentSceneScreens.length > 2 && currentSceneScreens.length < 7)">
+                        <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
+                    </div>
+                    <div ng-if="currentSceneScreens.length > 6">
+                        <p>We recommend you keep your scene under 7 panels</p>
+                    </div>
+                    <div ng-if="currentSceneScreens.length < 3 && currentSceneScreens.length > 1">
+                        <p>We recommend you add at&nbsp;least 3 panels</p>
+                    </div>
+                    <h5>Preview</h5>
                 </div>
-                <div ng-if="currentSceneScreens.length < 3 && currentSceneScreens.length > 1">
-                    <p>We recommend you add at&nbsp;least 3 panels</p>
+                <div class="scene-preview__color-picker">
+                    <h5 class="scene-preview__section-title">Scene Background</h5>
+                    <div class="scene-preview__color-style-wrap">
+                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-color"></span>
+                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-gradient"></span>
+                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-image"></span>
+                    </div>
+                    <div class="scene-preview__color-picker-wrap">
+                        <color-picker
+                            ng-model="myColor"
+                            options="colorOptions">
+                        </color-picker>
+                    </div>
+                </div>
+                <div class="scene-preview__privacy">
+                    <div class="toggle">
+                        <toggle-switch
+                            ng-model="scenePrivacyToggle"
+                            color="true"
+                            on-label="Public"
+                            off-label="Private">
+                        </toggle-switch>
+                    </div>
                 </div>
             </div>
-            <button
-                ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
-                class="scene-preview__button">
-                <span class="scene-preview__icon">
-                    <img class="mobile-icon" src="assets/img/mobile.svg" />
-                </span>
-                Launch Scene
-            </button>
         </div>
         <div class="drop-box--container" ng-class="emptyScene ? 'empty' : ''">
             <div class="drop-box">
@@ -81,16 +108,13 @@
                 <button id="uploadInput" ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="drop-box__button">Upload Files</button>
             </div>
         </div>
-        <div class="mobile-btn-container">
-            <button ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="drop-box__button drop-box__button--mobile">Upload Files</button>
-            <button
-                ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
-                class="scene-preview__button scene-preview--mobile">
-                <span class="scene-preview__icon">
-                    <img class="mobile-icon" src="assets/img/mobile.svg" />
-                </span>
-                Launch Scene
-            </button>
-        </div>
     </div>
+
+    <footer class="project-details__footer">
+        <button
+            ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+    </footer>
 </main>

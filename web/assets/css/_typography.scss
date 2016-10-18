@@ -39,10 +39,23 @@ button {
     font-weight: 300;
 }
 
+%h7 {
+    @include prefixer(font-smoothing, antialiased, webkit);
+    @include prefixer(osx-font-smoothing, grayscale, moz);
+
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+}
+
 @include media($tablet) {
 
     %h1 {
         font-size: 15px;
+    }
+
+    %h2 {
+        font-size: 18px;
     }
 }
 
@@ -50,6 +63,14 @@ button {
 
     %h1 {
         font-size: 12px;
+    }
+
+    %h2 {
+        font-size: 15px;
+    }
+
+    %h7 {
+        font-size: 9px;
     }
 }
 

@@ -1,17 +1,15 @@
 /* global angular */
-angular.module('ua5App.home')
+angular.module('ua5App.sign-in')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.when('', '/');
-        $urlRouterProvider.otherwise('/');
-        $stateProvider.state('home', {
-            url: '/',
-            templateUrl: 'states/home/home.html',
-            controller: 'HomeCtrl',
+        $stateProvider.state('sign-in', {
+            url: '/sign-in',
+            templateUrl: 'states/sign-in/sign-in.html',
+            controller: 'SignInCtrl',
             controllerAs: 'ctrl',
             resolve: {
                 user: ['APICONSTANTS', '$cookies', function(APICONSTANTS, $cookies) {
-                    var userId = $cookies.get(APICONSTANTS.authCookie.user_id),
-                    token = $cookies.get(APICONSTANTS.authCookie.user_id);
+                    var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+                    var token = $cookies.get(APICONSTANTS.authCookie.user_id);
 
                     if (userId && token) {
                         return true;
@@ -22,7 +20,7 @@ angular.module('ua5App.home')
             }
         });
     }])
-    .controller('HomeCtrl', ['$scope', 'user', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
+    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
         if (user) {
             $state.go('projects');
         }
@@ -67,13 +65,7 @@ angular.module('ua5App.home')
                     fields:{
                         title: 'sduhk'
                     }
-                }}).then(function(modal) {
-                modal.close.then(function(result) {
-                    if (result.input) {
-                        $scope.$emit('addProject', result.input);
-                        $scope.menuToggle = false;
-                    }
-                });
+                }
             });
         };
     }])

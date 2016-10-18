@@ -2,11 +2,15 @@
 // Create templates module for ngTemplates to attach to
 angular.module('ua5Templates', []);
 // start module declaration
-angular.module('ua5App.home', []);
+angular.module('ua5App.sign-in', []);
 angular.module('ua5App.projects', []);
 angular.module('ua5App.viewer', []);
 angular.module('ua5App.details', []);
 angular.module('ua5App.scene', []);
+angular.module('ua5App.sign-up', []);
+angular.module('ua5App.account', []);
+angular.module('ua5App.billing', []);
+angular.module('ua5App.notifications', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -23,12 +27,17 @@ angular.module('ua5App', [
     'angularModalService',
     'ngMeta',
     'suite',
+    'color.picker',
     // start add states as app dependency
+    'ua5App.notifications',
+    'ua5App.billing',
+    'ua5App.account',
+    'ua5App.sign-up',
     'ua5App.scene',
     'ua5App.details',
     'ua5App.projects',
     'ua5App.viewer',
-    'ua5App.home',
+    'ua5App.sign-in',
     'ngAnimate'
     // end add states as app dependency
 ])
@@ -41,7 +50,7 @@ angular.module('ua5App', [
     })
     .constant('APICONSTANTS', {
         //TODO add option for production server
-        apiHost: 'http://216.70.115.196:7777',
+        apiHost: 'http://ec2-52-53-186-20.us-west-1.compute.amazonaws.com/',
         authCookie: {
             token: 'vg-user',
             user_id: 'vg-member'

@@ -21,9 +21,10 @@ angular.module('ua5App.projects')
                 $state.go('projects.details', {projectId:id});
                 getProjects();
             }, function(error) {
-                  
+
             });
         };
+        $scope.title = 'projects';
 
         $scope.newProject = {};
 
@@ -46,17 +47,17 @@ angular.module('ua5App.projects')
                 modal.close.then(function(result) {
                     if (result) {
                         projectFactory.deleteScreen(projectId)
-            
+
                             .then(function(response) {
                                     getProjects();
                                 }, function(error) {
                                     $scope.status = 'Unable to delete project: ' + error.message;
                                 });
                     }
-                    
+
                 });
             });
-            
+
         };
 
         function getProjects() {
@@ -68,13 +69,13 @@ angular.module('ua5App.projects')
                         var screens = project.content;
                         screens = _.sortBy(screens, 'order');
                         screens = _.where(screens, {tag: '1'});
-                        
+
                         if (screens.length > 0) {
-                            project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';    
+                            project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
                         }
                     });
                 }, function(error) {
-                    
+
                 });
         }
 

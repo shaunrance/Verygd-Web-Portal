@@ -219,7 +219,7 @@ module.exports = function(grunt) {
                     deploy_path: secret.prod.path,
                     host: secret.prod.host,
                     username: secret.prod.username,
-                    privateKey: require('fs').readFileSync('../verygd.pem'),
+                    privateKey: require('fs').readFileSync('verygd.pem'),
                     debug: true,
                     releases_to_keep: '3',
                     after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccessProd .htaccess'
