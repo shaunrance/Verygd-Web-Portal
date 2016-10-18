@@ -13,13 +13,51 @@ angular.module('ua5App.account', ['ngFileUpload'])
             }
         });
     }])
-    .controller('accountCtrl', ['$scope', '$state', 'APICONSTANTS', '$cookies', function($scope, $state, APICONSTANTS, $cookies) {
+    .controller('accountCtrl', ['$rootScope', 'UsersResource', '$scope', '$state', 'APICONSTANTS', '$cookies', function($rootScope, UsersResource, $scope, $state, APICONSTANTS, $cookies) {
 
         $scope.userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         if (!$scope.userId) {
             $scope.go('login');
         }
 
-        $scope.title = 'John Smith';
+        function getUserInfo() {
+            //We have set a deferred rootscope promise in app.js
+            //the header will set this response for the user object
+            //and then other components that need to make use of this response
+            //(ie feed.js) can use $rootScope.deferredUser.promise.then(function(response)
+            if ($rootScope.userResponse) {
+                $scope.userName = $rootScope.userResponse.name;
+                $scope.userAdmin = true; //TODO set this correctly after other members can be added
+            } else {
+                var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+
+                if (!userId) {
+                    $state.go('login');
+                } else {
+                    UsersResource.user().retrieve({id: userId}).$promise.then(
+                        function(response) {
+                            $rootScope.userResponse = response;
+                            $rootScope.deferredUser.resolve(response);
+
+                            $scope.email = response.email;
+                            $scope.userName = response.name;
+                            $scope.title = $scope.userName;
+
+                            $scope.userAdmin = true; //TODO set this correctly after other members can be added
+                        },
+                        function(error) {
+                            if (error.status === 401) {
+                                $state.go('login');
+                            }
+                        }
+                    );
+                }
+            }
+        }
+
+        function init() {
+            getUserInfo();
+        }
+        init();
     }])
 ;

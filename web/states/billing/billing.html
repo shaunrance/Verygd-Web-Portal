@@ -42,16 +42,26 @@
             </div>
         </div>
         <div class="account-info">
-            <form ng-submit="login(model)">
-                <div class="account-info-section">
-                    <div class="account-info-title">
+            <form ng-submit="UpdateUser(model)">
+                    <div class="account-info-section">
+                        <input
+                                class="account-info-data"
+                                type="checkbox"
+                                name="paymentType"
+                                id="paymentType"
+                                value="year"
+                                ng-model="model.paymentType"
+                                ng-change="paymentType(model.paymentType)"/>
+                                <label for="paymentType">Professional Package @ $25/mo</label>
+                    </div>
+                     <div class="account-info-title">
                         Name on Card
                     </div>
                     <input
                         class="account-info-data"
                         type="name"
-                        ng-model="user.cardName"
-                        placeholder="John Smith"
+                        ng-model="model.cardName"
+                        placeholder="JamieMcDoodoo"
                         required />
                 </div>
                 <div class="account-info-section">
@@ -60,9 +70,9 @@
                     </div>
                     <input
                         class="account-info-data"
-                        type="number"
-                        ng-model="user.cardNumber"
-                        placeholder="**** **** **** 5555"
+                        type="text"
+                        ng-model="model.cardNumber"
+                        placeholder="4644569855553427"
                         required />
                 </div>
                 <div class="account-info-section account-info-section-exp-sec">
@@ -72,8 +82,14 @@
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardDate"
-                        placeholder="10/19"
+                        ng-model="model.month"
+                        placeholder="0"
+                        required />
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="model.year"
+                        placeholder="2018"
                         required />
                     <div class="account-info-title ">
                         Security Code
@@ -81,8 +97,8 @@
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardCode"
-                        placeholder="5555"
+                        ng-model="model.cvc"
+                        placeholder="343"
                         required />
                 </div>
                 <div class="account-info-section">
@@ -92,16 +108,18 @@
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardZip"
-                        placeholder="90055"
+                        ng-model="model.zip"
+                        placeholder="90005"
                         required />
                 </div>
-                <button
-                    class="button account-info-button modal-update modal-button"
-                    type="submit"
-                    ng-disabled="loginForm.$invalid">
-                    Update
-                </button>
+                <div class="account-info-section">
+                    <input
+                        class="modal-submit modal-button"
+                        type="submit"
+                        ng-disabled="model.$invalid"
+                        ng-class="{'button-disable': disableButton === true}"
+                        value="Update">
+                </div>
             </form>
         </div>
     </div>
