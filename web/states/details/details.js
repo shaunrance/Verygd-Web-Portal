@@ -152,8 +152,24 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         };
 
         $scope.addScene = function() {
-            $scope.scenes++;
-            $scope.changeScene($scope.scenes);
+            ModalService.showModal({
+                templateUrl: 'modals/addScene.html',
+                controller: 'addModalController',
+                inputs: {
+                    fields:{
+                        title: 'Add New Scene',
+                        formLabels:[{name: 'name', title: 'Name'}],
+                        showFileUpload: false,
+                        button: 'Add'
+                    }
+                }
+            }).then(function(modal) {
+                $scope.scenes++;
+                $scope.changeScene($scope.scenes);
+                modal.close.then(function(result) {
+
+                });
+            });
         };
 
         $scope.toggleSceneList = function() {
