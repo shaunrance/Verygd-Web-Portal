@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from media_portal.album.content.views import AlbumImagesViewSet as PanelViewSet
+from panel.models import Panel
 
-# Create your views here.
+
+PanelViewSet.model = Panel
