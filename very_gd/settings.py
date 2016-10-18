@@ -116,6 +116,7 @@ INSTALLED_APPS += (
     'panel',
     'scene',
     'rest_framework_docs',
+    'storages'
 )
 
 MIDDLEWARE_CLASSES = (
