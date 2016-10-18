@@ -1,7 +1,7 @@
 /* global angular */
 angular.module('ua5App')
     .factory('screenFactory', ['$http', 'Upload', function($http, Upload) {
-        var urlBase = 'http://52.53.186.20/album';
+        var urlBase = 'http://52.53.186.20/project';
         var dataFactory = {};
 
         // $http.defaults.headers.common['Authorization'] = 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'; // jshint ignore:line

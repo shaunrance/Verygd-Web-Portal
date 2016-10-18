@@ -153,16 +153,15 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         };
 
         function createScene(scene) {
-            sceneFactory.addScene(scene, $scope.projectId);
+            sceneFactory.addScene(scene)
 
-            // .then(function(response) {
-            //     var id = response.data.id;
-            //     $scope.scenes++;
-            //     $scope.changeScene($scope.scenes);
-            //     //getProjects();
-            // }, function(error) {
-            //
-            // });
+            .then(function(response) {
+                $scope.scenes++;
+                $scope.changeScene($scope.scenes);
+                //getProjects();
+            }, function(error) {
+
+            });
         }
 
         $scope.addScene = function() {
@@ -179,7 +178,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 }
             }).then(function(modal) {
                 modal.close.then(function(result) {
-                    if (result.input) {
+                    if (result.input.name !== '') {
                         createScene(result.input);
                     }
                 });
