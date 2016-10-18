@@ -3,3 +3,5 @@ fabric
 django-cors-headers
 django_smtp_ssl
 drfdocs
+django-storages
+boto
