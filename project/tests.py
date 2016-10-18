@@ -11,11 +11,13 @@ class TestProject(TestAPIBase):
         self.endpoint = 'project'
         self.project_id = None
         self.member = None
+        self.anonymous_member = None
 
     def setUp(self):
         super(TestProject, self).setUp()
 
         self.member = self.users.new_user()
+        self.anonymous_member = self.users.new_anonymous_user()
         self.project_id = self.add_new_project(self.member)
 
     def add_new_project(self, member, *args, **kwargs):
@@ -31,3 +33,13 @@ class TestProject(TestAPIBase):
     def test_add_project(self):
         pass
 
+    def test_public_project(self):
+        detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
+
+        response, msg = self.patch_as(self.member, detail_url, data={'public': True})
+
+        self.assertEquals(response.status_code, 200)
+
+        response, msg = self.get_as(self.anonymous_member, detail_url)
+
+        self.assertEquals(response.status_code, 200)
