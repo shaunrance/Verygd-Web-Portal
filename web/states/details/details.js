@@ -142,33 +142,32 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 });
         }
 
-        $scope.changeScene = function(scenekey) {
+        $scope.changeScene = function(scenekey, sceneName) {
             var scenes;
             $scope.currentScene = scenekey;
             scenes = _.where($scope.screens, {tag: scenekey.toString()});
             $scope.currentSceneScreens = _.sortBy(scenes, 'order');
             $scope.showSceneList = false;
             $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
+
         };
 
         $scope.addScene = function() {
             ModalService.showModal({
-                templateUrl: 'modals/addScene.html',
-                controller: 'addModalController',
+                templateUrl: 'modals/addSceneModal.html',
+                controller: 'addSceneModalController',
                 inputs: {
                     fields:{
                         title: 'Add New Scene',
                         formLabels:[{name: 'name', title: 'Name'}],
                         showFileUpload: false,
-                        button: 'Add'
+                        submitButtonTextLink: 'Save',
+                        submitButtonTextCancel: 'Cancel',
+                        scenes: $scope.scenes
                     }
                 }
             }).then(function(modal) {
-                $scope.scenes++;
-                $scope.changeScene($scope.scenes);
-                modal.close.then(function(result) {
 
-                });
             });
         };
 
@@ -179,6 +178,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.getScene = function(num) {
             return new Array(num);
         };
+
+        $scope.$on('modal:add-scene', function(event, args) {
+            $scope.sceneName = args.name;
+            $scope.scenes++;
+            $scope.changeScene($scope.scenes, $scope.sceneName);
+        });
 
         $scope.$on('nav:add-scene', function() {
             $scope.addScene();
