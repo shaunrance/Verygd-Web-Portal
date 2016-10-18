@@ -1,4 +1,4 @@
-from media_portal.album.content.models.base import AlbumImage, AlbumVideo
+from media_portal.album.content.base.models import AlbumImage, AlbumVideo
 
 from django.db import models
 
