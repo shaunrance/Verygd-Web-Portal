@@ -12,9 +12,9 @@
                 <div class="form-group">
                     <label class="modal-label">Payment Details</label>
                 </div>
-                <form ng-submit="UpdateUser(model)">
-                    <div class="account-info-section">
-                        <input
+                <form ng-submit="updateUser(model)">
+                        <div class="account-info-section">
+                            <input
                                 class="account-info-data"
                                 type="checkbox"
                                 name="paymentType"
@@ -22,10 +22,9 @@
                                 value="year"
                                 ng-model="model.paymentType"
                                 ng-change="paymentType(model.paymentType)"/>
-                                <label for="paymentType">Professional Package @ $25/mo</label>
-                    </div>
-                    <div class="account-info-section">
-                        <div class="account-info-title">
+                            <label for="paymentType">Professional Package @ $25/mo</label>
+                        </div>
+                         <div class="account-info-title">
                             Name on Card
                         </div>
                         <input
@@ -34,7 +33,6 @@
                             ng-model="model.cardName"
                             placeholder="JamieMcDoodoo"
                             required />
-                    </div>
                     <div class="account-info-section">
                         <div class="account-info-title">
                             Credit Card Number
@@ -89,14 +87,11 @@
                             type="submit"
                             ng-disabled="model.$invalid"
                             ng-class="{'button-disable': disableButton === true}"
-                            value="Choose Plan"
+                            value="Update"
                             ng-click="close()">
                     </div>
                 </form>
             </div>
-<!--             <div class="modal-footer">
-                <button class="modal-submit modal-button" type="button" ng-click="close()">{{buttonText}}</button>
-            </div> -->
         </form>
     </div>
 </div>
