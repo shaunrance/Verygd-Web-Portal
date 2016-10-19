@@ -27,6 +27,11 @@ class Scene(models.Model):
         return '{0}'.format(self.title)
 
     @property
+    def serializer(self):
+        from scene.serializers import SceneSerializer
+        return SceneSerializer
+
+    @property
     def media_group(self):
         return self.project.media_group
 
