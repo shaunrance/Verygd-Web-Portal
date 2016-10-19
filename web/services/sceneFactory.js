@@ -5,13 +5,13 @@ angular.module('ua5App')
         var dataFactory = {};
 
         dataFactory.getScenes = function(projectId) {
-            return $http.get(urlBase + '/' + projectId, {
+            return $http.get(urlBase, {
                 headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 
-        dataFactory.getSceneById = function(projectId, sceneId) {
-            return $http.get(urlBase + '/scene/' + sceneId, {
+        dataFactory.getSceneById = function(sceneId) {
+            return $http.get(urlBase + '/' + sceneId, {
                 headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
@@ -26,13 +26,6 @@ angular.module('ua5App')
             };
 
             return $http.post('http://52.53.186.20/scene', data);
-            // return Upload.upload({
-            //     // headers: {
-            //     //     Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
-            //     // },
-            //     url: 'http://52.53.186.20/album/scene',
-            //     data: {}
-            // });
         };
 
         dataFactory.deleteScene = function(projectId, sceneId) {

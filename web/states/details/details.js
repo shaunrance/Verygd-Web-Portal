@@ -12,9 +12,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', 'sceneFactory', 'screenFactory', 'ModalService', function($scope, $stateParams, sceneFactory, screenFactory, ModalService) {
-        $scope.screens = [];
+    .controller('detailsCtrl', ['$scope', '$stateParams', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', function($scope, $stateParams, projectFactory, sceneFactory, panelFactory, ModalService) {
+        $scope.panels = [];
         $scope.scenes = [];
+        $scope.firstLoad = true;
         $scope.currentSceneScreens = [];
         $scope.currentScene = '';
         $scope.emptyScene = false;
@@ -26,7 +27,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 $scope.files.length > 0 &&
                 typeof $scope.files[0] === 'object'
             ) {
-                uploadScreens($scope.files);
+                uploadPanels($scope.files);
             }
         });
         $scope.$watch('file', function() {
@@ -56,10 +57,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }).then(function(modal) {
                 modal.close.then(function(result) {
                     if (result) {
-                        screenFactory.deleteScreen(screenId)
+                        panelFactory.deleteScreen(screenId)
 
                         .then(function(response) {
-                                getScreens();
+                                //getScreens();
                             }, function(error) {
                                 $scope.status = 'Unable to delete screen: ' + error.message;
                             });
@@ -88,7 +89,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
-        function uploadScreens(files) {
+        function uploadPanels(files) {
             var lastItemOrder = 0;
             if ($scope.currentSceneScreens.length > 0) {
                 lastItemOrder = _.last($scope.currentSceneScreens).order + 1;
@@ -97,15 +98,14 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
 
-                    screenFactory.insertScreen(
+                    panelFactory.insertPanel(
                         file,
-                        $stateParams.projectId,
                         $scope.currentScene,
                         lastItemOrder + i
                     )
                         .then(function(response) {
                                 $scope.status = 'Success';
-                                getScreens();
+                                //getScreens();
                             }, function(error) {
                                 $scope.status = 'Unable to insert screen: ' + error.message;
                             });
@@ -123,56 +123,115 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             e.preventDefault();
         }, false);
 
-        function getScreens() {
-            screenFactory.getScreens($stateParams.projectId)
+        // function getScreens() {
+        //     panelFactory.getScreens($stateParams.projectId)
+        //
+        //         .then(function(response) {
+        //             $scope.screens = response.data.content;
+        //             $scope.screens = _.sortBy($scope.screens, 'order');
+        //             $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
+        //             _.each($scope.screens, function(screen) {
+        //                 // screens should now have saved names
+        //                 screen.screenName = screen.title !== 'name' ? screen.title : screen.url.split('https://verygd.imgix.net/images/').join('');
+        //                 if (parseInt(screen.tag, 10) > $scope.scenes.length) {
+        //                     $scope.currentScene = parseInt(screen.tag, 10);
+        //                 }
+        //             });
+        //             $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
+        //         }, function(error) {
+        //             $scope.status = 'Unable to load screen data: ' + error.message;
+        //         });
+        // }
 
+        function getPanels(sceneId) {
+            $scope.panels = [];
+
+            sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
-                    $scope.screens = response.data.content;
-                    $scope.screens = _.sortBy($scope.screens, 'order');
-                    $scope.currentSceneScreens = _.where($scope.screens, {tag: $scope.currentScene.toString()});
-                    _.each($scope.screens, function(screen) {
-                        // screens should now have saved names
-                        screen.screenName = screen.title !== 'name' ? screen.title : screen.url.split('https://verygd.imgix.net/images/').join('');
-                        if (parseInt(screen.tag, 10) > $scope.scenes.length) {
-                            $scope.currentScene = parseInt(screen.tag, 10);
-                        }
-                    });
-                    $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
-                }, function(error) {
-                    $scope.status = 'Unable to load screen data: ' + error.message;
+                    if (response.data.content.length > 0) {
+                        _.each(response.data.content, function(panel) {
+                            $scope.panels.push(panel);
+                        });
+                    } else {
+                        $scope.emptyScene = true;
+                    }
                 });
         }
 
         function getScenes() {
-            sceneFactory.getScenes($stateParams.projectId)
-
+            $scope.scenes = [];
+            projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
-                    console.log(response);
-                    if (response.data.project === $stateParams.projectId) {
-                        $scope.scenes.push(response.data);
-                    }
-                }, function(error) {
+                    if (response.data.content.length > 0) {
+                        _.each(response.data.content, function(scene) {
+                            $scope.scenes.push(scene);
+                        });
 
+                        //check if page is first load, if so, make first scene selected
+                        if ($scope.firstLoad) {
+                            $scope.changeScene($scope.scenes[0].id);
+                            $scope.firstLoad = false;
+                        }
+                    } else {
+                        //new project, create first scene by default
+                        var newScene = {
+                            name: 'Scene 1',
+                            description: ''
+                        };
+
+                        createScene(newScene);
+                    }
                 });
         }
 
-        $scope.changeScene = function(scenekey) {
+        $scope.changeScene = function(sceneId) {
             var scenes;
-            $scope.currentScene = scenekey;
-            scenes = _.where($scope.screens, {tag: scenekey.toString()});
+            $scope.currentScene = sceneId;
+            scenes = _.where($scope.screens, {tag: sceneId.toString()});
             $scope.currentSceneScreens = _.sortBy(scenes, 'order');
             $scope.showSceneList = false;
-            $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
+            getPanels(sceneId);
+        };
+
+        $scope.deleteScene = function(sceneId) {
+            if ($scope.scenes.length > 1) {
+                ModalService.showModal({
+                    templateUrl: 'modals/deleteModal.html',
+                    controller: 'deleteModalController',
+                    inputs: {
+                        fields:{
+                            title: 'Delete Scene',
+                            confirmText: 'Are you sure you would like to delete this scene?',
+                            submitButtonText: 'Delete'
+                        }
+                    }
+                }).then(function(modal) {
+                    modal.close.then(function(result) {
+                        if (result) {
+                            sceneFactory.deleteScene(sceneId)
+
+                            .then(function(response) {
+                                    $scope.currentScene = $scope.scenes[0].id;
+                                    getScenes();
+                                }, function(error) {
+                                    $scope.status = 'Unable to delete screen: ' + error.message;
+                                });
+                        }
+                    });
+                });
+            } else {
+
+                alert('All projects must have at least one scene');
+            }
+
         };
 
         function createScene(scene) {
             sceneFactory.addScene(scene, $scope.projectId)
 
                 .then(function(response) {
-                    $scope.currentScene = response.data.id;
-                    $scope.scenes.push(response.data);
-                    $scope.changeScene($scope.currentScene);
-
+                    getScenes();
+                    $scope.changeScene(response.data.id);
                 }, function(error) {
 
                 });
@@ -214,7 +273,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.dragControlListeners = {
             orderChanged: function(event) {
                 _.each($scope.currentSceneScreens, function(screen, key) {
-                    screenFactory.editScreen(screen.id, {order: key + 1});
+                    panelFactory.editScreen(screen.id, {order: key + 1});
                     //update the order in the view also:
                     screen.order = key + 1;
                 });
@@ -227,7 +286,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
 
         getScenes();
-
         //getScreens();
     }])
 ;

@@ -7,15 +7,15 @@ angular.module('ua5App.viewer')
             controller: 'viewerCtrl',
             controllerAs: 'ctrl',
             resolve: {
-                content: ['screenFactory', '$stateParams', function(screenFactory, $stateParams) {
-                    return screenFactory.getScreens($stateParams.projectId).then(function(response) {
+                content: ['panelFactory', '$stateParams', function(panelFactory, $stateParams) {
+                    return panelFactory.getScreens($stateParams.projectId).then(function(response) {
                         return response;
                     });
                 }]
             }
         });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'screenFactory', 'BrowserFactory', function($scope, $stateParams, content, screenFactory, BrowserFactory) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'panelFactory', 'BrowserFactory', function($scope, $stateParams, content, panelFactory, BrowserFactory) {
         var lastScene = 1;
         $scope.scene = parseInt($stateParams.scene, 10);
         $scope.projectId = $stateParams.projectId;

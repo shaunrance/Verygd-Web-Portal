@@ -1,6 +1,6 @@
 /* global angular, _ */
 angular.module('ua5App')
-    .controller('linkModalController', ['$scope', '$element', 'fields', 'close', 'screenFactory', function($scope, $element, fields, close, screenFactory) {
+    .controller('linkModalController', ['$scope', '$element', 'fields', 'close', 'panelFactory', function($scope, $element, fields, close, panelFactory) {
         var i;
         $scope.title = fields.title;
         $scope.formLabels = fields.formLabels;
@@ -24,7 +24,7 @@ angular.module('ua5App')
         }
         $scope.save = function() {
             fields.content.related_tag = $scope.selectedScene;
-            screenFactory.editScreen(fields.content.id, {related_tag: $scope.selectedScene});
+            panelFactory.editScreen(fields.content.id, {related_tag: $scope.selectedScene});
             close({
                 input: $scope.input.fields
             });

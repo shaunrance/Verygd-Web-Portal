@@ -7,8 +7,8 @@ angular.module('ua5App.scene')
             controller: 'sceneCtrl',
             controllerAs: 'ctrl',
             resolve: {
-                content: ['screenFactory', '$stateParams', function(screenFactory, $stateParams) {
-                    return screenFactory.getScreens($stateParams.projectId).then(function(response) {
+                content: ['panelFactory', '$stateParams', function(panelFactory, $stateParams) {
+                    return panelFactory.getScreens($stateParams.projectId).then(function(response) {
                         return response;
                     });
                 }]

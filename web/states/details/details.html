@@ -11,6 +11,10 @@
                         ng-click="changeScene(i.id)"
                         ng-class="{'active' : (currentScene === (i.id))}"
                         class="scene-list--link">{{i.title}}</a>
+                    <a ng-click="editScene(i.id)"
+                        class="scene-list--edit">Edit</a>
+                    <a ng-click="deleteScene(i.id)"
+                        class="scene-list--delete">Delete</a>
                 </li>
             </ul>
             <button
