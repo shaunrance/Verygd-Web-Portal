@@ -31,7 +31,11 @@ class TestProject(TestAPIBase):
         return msg['id']
 
     def test_add_project(self):
-        pass
+        detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
+
+        response, msg = self.get_as(self.member, detail_url)
+
+        self.assertEquals(response.status_code, 200)
 
     def test_public_project(self):
         detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)

@@ -10,6 +10,10 @@ class Panel(models.Model):
     related_tag = models.CharField(max_length=16, blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
 
+    @property
+    def media_group(self):
+        return self.scene.media_group
+
 
 class PanelImage(AlbumImage, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='images')
