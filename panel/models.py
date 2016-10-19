@@ -18,6 +18,11 @@ class Panel(models.Model):
 class PanelImage(AlbumImage, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='images')
 
+    @property
+    def serializer(self):
+        from panel.serializers import PanelImageSerializer
+        return PanelImageSerializer
+
 
 class PanelVideo(AlbumVideo, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='videos')
