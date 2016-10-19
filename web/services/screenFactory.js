@@ -13,17 +13,25 @@ angular.module('ua5App')
         dataFactory.insertScreen = function(file, projectId, scene, order) {
             var fileName = file.name;
             return Upload.upload({
-                url:'http://52.53.186.20/images',
-                data: {title: fileName, order: order, description: 'description', tag: scene, album: projectId, content: file}
+                url:'http://52.53.186.20/panel',
+                data: {
+                    title: fileName,
+                    order: order,
+                    description: 'description',
+                    tag: scene,
+                    album: projectId,
+                    content: file,
+                    scene: scene
+                }
             });
         };
 
         dataFactory.deleteScreen = function(id) {
-            return $http.delete('http://52.53.186.20/images/' + id); // jshint ignore:line
+            return $http.delete('http://52.53.186.20/panel/' + id); // jshint ignore:line
         };
 
         dataFactory.editScreen = function(id, data) {
-            return $http.put('http://52.53.186.20/images/' + id, data); // jshint ignore:line
+            return $http.put('http://52.53.186.20/panel/' + id, data); // jshint ignore:line
         };
 
         return dataFactory;

@@ -16,11 +16,13 @@ angular.module('ua5App')
             });
         };
 
-        dataFactory.addScene = function(newScene) {
+        dataFactory.addScene = function(newScene, projectId) {
             var data = {
+                project: projectId,
                 title: newScene.name,
                 description: newScene.description,
-                patient: 1
+                background: '#000000',
+                is_panorama: true
             };
 
             return $http.post('http://52.53.186.20/scene', data);

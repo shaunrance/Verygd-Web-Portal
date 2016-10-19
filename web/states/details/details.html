@@ -6,11 +6,11 @@
                 <li
                     class="scene-list--item"
 
-                    ng-repeat="i in getScene(scenes) track by $index">
+                    ng-repeat="i in scenes track by $index">
                     <a
-                        ng-click="changeScene($index + 1)"
-                        ng-class="{'active' : (currentScene === ($index + 1))}"
-                        class="scene-list--link">Scene {{$index + 1}}</a>
+                        ng-click="changeScene(i.id)"
+                        ng-class="{'active' : (currentScene === (i.id))}"
+                        class="scene-list--link">{{i.title}}</a>
                 </li>
             </ul>
             <button

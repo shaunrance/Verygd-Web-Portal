@@ -14,9 +14,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', 'sceneFactory', 'screenFactory', 'ModalService', function($scope, $stateParams, sceneFactory, screenFactory, ModalService) {
         $scope.screens = [];
+        $scope.scenes = [];
         $scope.currentSceneScreens = [];
-        $scope.currentScene = 1;
-        $scope.scenes = 1;
+        $scope.currentScene = '';
         $scope.emptyScene = false;
         $scope.hasTouch = Modernizr.touch;
         $scope.showSceneList = false;
@@ -133,8 +133,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     _.each($scope.screens, function(screen) {
                         // screens should now have saved names
                         screen.screenName = screen.title !== 'name' ? screen.title : screen.url.split('https://verygd.imgix.net/images/').join('');
-                        if (parseInt(screen.tag, 10) > $scope.scenes) {
-                            $scope.scenes = parseInt(screen.tag, 10);
+                        if (parseInt(screen.tag, 10) > $scope.scenes.length) {
+                            $scope.currentScene = parseInt(screen.tag, 10);
                         }
                     });
                     $scope.emptyScene = $scope.currentSceneScreens.length > 0 ? false : true;
@@ -143,7 +143,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 });
         }
 
-        $scope.changeScene = function(scenekey, sceneName) {
+        $scope.changeScene = function(scenekey) {
             var scenes;
             $scope.currentScene = scenekey;
             scenes = _.where($scope.screens, {tag: scenekey.toString()});
@@ -153,12 +153,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         };
 
         function createScene(scene) {
-            sceneFactory.addScene(scene)
+            sceneFactory.addScene(scene, $scope.projectId)
 
             .then(function(response) {
-                $scope.scenes++;
-                $scope.changeScene($scope.scenes);
-                //getProjects();
+                $scope.currentScene = response.data.id;
+                $scope.scenes.push(response.data);
+                $scope.changeScene($scope.currentScene);
             }, function(error) {
 
             });
@@ -192,12 +192,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.getScene = function(num) {
             return new Array(num);
         };
-
-        // $scope.$on('modal:add-scene', function(event, args) {
-        //
-        //     $scope.scenes++;
-        //     $scope.changeScene($scope.scenes);
-        // });
 
         $scope.$on('nav:add-scene', function() {
             $scope.addScene();
