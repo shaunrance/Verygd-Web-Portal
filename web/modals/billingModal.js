@@ -43,7 +43,7 @@ angular.module('ua5App')
                 }
             };
 
-            UsersResource.billingModal().update(user).$promise.then(
+            UsersResource.user().update(user).$promise.then(
                 function(response) {
                     AuthResource.token().retrieve({username: user.email, password: user.password}).$promise.then(
                         function(response) {

@@ -13,6 +13,8 @@ angular.module('ua5App.billing')
         });
     }])
     .controller('billingCtrl', ['$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
+        var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+
         $scope.showModal = function() {
             ModalService.showModal({
                 templateUrl: 'modals/billingModal.html',
@@ -28,46 +30,53 @@ angular.module('ua5App.billing')
             });
         };
 
-        $scope.updateUser = function(data) {
-            console.log('sdfkhsdj');
-            var user;
+        function initialValues() {
+            UsersResource.user().retrieve({id: userId}).$promise.then(
+                function(response) {
+                    $scope.moodel = {
+                        payment: {
+                            plan_name: response.paymentType,
+                            card: {
+                                name: response.cardName,
+                                number: response.cardNumber,
+                                exp_month: response.month,
+                                exp_year: response.year,
+                                cvc: response.cvc,
+                                address_zip: response.zip
+                            }
+                        }
+                    };
+                    console.log(response);
+                }
+            );
+        }
 
-            user = {
-                name: data.name,
-                email: data.email,
-                password: data.password,
-                payment: {
-                    plan_name: data.a_plan_name,
-                    card: {
-                        name: data.name_on_card,
-                        number: data.card_number,
-                        exp_month: data.month,
-                        exp_year: data.year,
-                        cvc: data.cvc,
-                        address_zip: data.zip
-                    }
+        $scope.updateUser = function(data) {
+            var paymentData;
+
+            paymentData = {
+                plan_name: data.paymentType,
+                card: {
+                    name: data.cardName,
+                    number: data.cardNumber,
+                    exp_month: data.month,
+                    exp_year: data.year,
+                    cvc: data.cvc,
+                    address_zip: data.zip
                 }
             };
 
-            UsersResource.user().update(user).$promise.then(
+            UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    AuthResource.token().retrieve({username: user.email, password: user.password}).$promise.then(
-                        function(response) {
-                            //set cookie token && then go to projects
-                            $cookies.put(APICONSTANTS.authCookie.token, response.token);
-                            $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
-
-                            $state.go('projects');
-                        },
-                        function(error) {
-                            $state.go('sign-up');
-                        }
-                    );
+                    debugger;
+                    $state.reload();
                 },
                 function(error) {
-
+                    debugger;
                 }
             );
         };
+
+        initialValues();
     }])
 ;
