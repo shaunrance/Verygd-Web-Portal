@@ -12,6 +12,10 @@ class Project(models.Model):
     public = models.BooleanField(default=False, blank=True, null=False)
 
     @property
+    def media_group(self):
+        return self.owner.media_group
+
+    @property
     def content(self):
         for content_type in ['scenes']:
             for content in getattr(self, str(content_type)).all():
