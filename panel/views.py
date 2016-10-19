@@ -1,5 +1,5 @@
-from media_portal.album.content.views import AlbumImagesViewSet as PanelViewSet
-from panel.models import Panel
+from media_portal.album.content.views import AlbumImagesViewSet as PanelImageViewSet
+from panel.models import PanelImage
 
 
-PanelViewSet.model = Panel
+PanelImageViewSet.model = PanelImage
