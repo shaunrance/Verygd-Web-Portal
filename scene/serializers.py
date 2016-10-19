@@ -16,9 +16,6 @@ class SceneSerializer(serializers.ModelSerializer):
 
             content_metadatum = content_serializer.data
 
-            content_metadatum['resource'] = content.resource_url
-            content_metadatum['type'] = content.type
-
             model_dict['content'].append(content_metadatum)
 
         return model_dict
