@@ -97,7 +97,9 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                    if (result.input) {
+                                    // check to see if name input is empty before calling 'addProject'
+                                    
+                                    if (result.input.name !== '') {
                                         $scope.$emit('addProject', result.input);
                                         $scope.menuToggle = false;
                                     }
