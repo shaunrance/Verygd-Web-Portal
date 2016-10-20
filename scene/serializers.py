@@ -5,6 +5,7 @@ from rest_framework import serializers
 class SceneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Scene
+        fields = '__all__'
 
     def to_representation(self, instance):
         model_dict = super(SceneSerializer, self).to_representation(instance)
