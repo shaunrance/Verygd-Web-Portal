@@ -12,8 +12,6 @@ angular.module('ua5App')
 
         dataFactory.insertPanel = function(file, sceneId, order) {
             var fileName = file.name;
-
-            console.log(order);
             return Upload.upload({
                 url:'http://52.53.186.20/panel',
                 data: {

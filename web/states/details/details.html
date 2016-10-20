@@ -12,9 +12,9 @@
                         ng-class="{'active' : (currentScene === (i.id))}"
                         class="scene-list--link">{{i.title}}</a>
                     <a ng-click="editScene(i.id)"
-                        class="scene-list--edit">Edit</a>
-                    <a ng-click="deleteScene(i.id)"
-                        class="scene-list--delete">Delete</a>
+                        class="scene-list--edit"></a>
+                    <a ng-click="deleteScene($index, i.id)"
+                        class="scene-list--delete"></a>
                 </li>
             </ul>
             <button
@@ -30,14 +30,14 @@
             ng-model="currentSceneScreens"
             ng-show="!emptyScene">
             <figure
-                ng-repeat="screen in currentSceneScreens"
+                ng-repeat="panel in panels"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper">
                 <a
                     class="vg__item--link scene--link"
                     as-sortable-item-handle>
                     <div class="vg__image--wrapper">
-                        <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
+                        <div class="vg__image" ng-style="{'background-image':'url({{panel.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
                         <div
                             class="link-icon---container"
                             ng-click="linkContent(screen)">
@@ -45,12 +45,12 @@
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
-                        <div class="vg__image--caption-name">{{screen.screenName}}</div>
+                        <div class="vg__image--caption-name">{{panel.title}}</div>
                         <div class="vg__image--caption-tag" ng-if="screen.related_tag && screen.related_tag > 0">
-                            Scene {{screen.related_tag}}
+                            Scene {{panel.related_tag}}
                         </div>
 
-                        <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
+                        <button class="scene__item--delete" ng-click="deletePanel(panel.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />
                         </button>
                     </figcaption>
