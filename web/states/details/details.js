@@ -72,7 +72,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             var scenes;
             $scope.currentScene = sceneId;
             scenes = _.where($scope.screens, {tag: sceneId.toString()});
-            $scope.currentSceneScreens = _.sortBy(scenes, 'order');
             $scope.showSceneList = false;
             getPanels(sceneId);
         };
@@ -169,7 +168,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         submitButtonTextCancel: 'Cancel',
                         scenes: $scope.scenes,
                         content: content,
-                        allScreens: $scope.screens
+                        allPanels: $scope.panels
                     }
                 }
             }).then(function(modal) {
@@ -206,13 +205,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.dragControlListeners = {
             orderChanged: function(event) {
                 _.each($scope.panels, function(panel, key) {
-                    panelFactory.editPanel(panel.id, {order: key + 1});
-                    //update the order in the view also:
+                    panelFactory.editPanel(panel.id, {order: (key + 1)});
+
                     panel.order = key + 1;
                 });
-
-                $scope.panels = _.sortBy($scope.panels, 'order');
-                console.log($scope.panels);
             }
         };
 
