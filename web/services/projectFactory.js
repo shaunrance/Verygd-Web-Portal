@@ -1,12 +1,12 @@
 /* global angular */
 angular.module('ua5App')
     .factory('projectFactory', ['$http', 'Upload', function($http, Upload) {
-        var urlBase = 'http://ec2-52-53-186-20.us-west-1.compute.amazonaws.com/album';
+        var urlBase = 'http://52.53.186.20/project';
         var dataFactory = {};
 
         dataFactory.getProjects = function() {
             return $http.get(urlBase, {
-                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
+                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 
@@ -18,11 +18,11 @@ angular.module('ua5App')
 
         dataFactory.addProject = function(newProject) {
             return Upload.upload({
-                // headers: {
-                //     Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
-                // },
+                headers: {
+                    Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
+                },
                 url: urlBase,
-                data: {title: newProject.name, description: newProject.description, patient: 1}
+                data: {name: newProject.name, description: newProject.description, patient: 1}
             });
         };
 

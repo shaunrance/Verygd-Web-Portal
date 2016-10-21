@@ -6,11 +6,15 @@
                 <li
                     class="scene-list--item"
 
-                    ng-repeat="i in getScene(scenes) track by $index">
+                    ng-repeat="i in scenes track by $index">
                     <a
-                        ng-click="changeScene($index + 1)"
-                        ng-class="{'active' : (currentScene === ($index + 1))}"
-                        class="scene-list--link">Scene {{$index + 1}}</a>
+                        ng-click="changeScene(i.id)"
+                        ng-class="{'active' : (currentScene === (i.id))}"
+                        class="scene-list--link">{{i.title}}</a>
+                    <a ng-click="editScene(i.id)"
+                        class="scene-list--edit"></a>
+                    <a ng-click="deleteScene($index, i.id)"
+                        class="scene-list--delete"></a>
                 </li>
             </ul>
             <button
@@ -23,30 +27,30 @@
             class="vg__items project__items"
             as-sortable="dragControlListeners"
             is-disabled="hasTouch"
-            ng-model="currentSceneScreens"
+            ng-model="panels"
             ng-show="!emptyScene">
             <figure
-                ng-repeat="screen in currentSceneScreens"
+                ng-repeat="panel in panels"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper">
                 <a
                     class="vg__item--link scene--link"
                     as-sortable-item-handle>
                     <div class="vg__image--wrapper">
-                        <div class="vg__image" ng-style="{'background-image':'url({{screen.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
+                        <div class="vg__image" ng-style="{'background-image':'url({{panel.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
                         <div
                             class="link-icon---container"
-                            ng-click="linkContent(screen)">
+                            ng-click="linkContent(panel)">
                             <img class="link-icon" src="assets/img/link.svg" />
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
-                        <div class="vg__image--caption-name">{{screen.screenName}}</div>
-                        <div class="vg__image--caption-tag" ng-if="screen.related_tag && screen.related_tag > 0">
-                            Scene {{screen.related_tag}}
+                        <div class="vg__image--caption-name">{{panel.title}}</div>
+                        <div class="vg__image--caption-tag" ng-if="panel.related_tag !== null">
+                            {{panel.related_tag}}
                         </div>
 
-                        <button class="scene__item--delete" ng-click="deleteScreen(screen.id)">
+                        <button class="scene__item--delete" ng-click="deletePanel(panel.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />
                         </button>
                     </figcaption>
@@ -59,19 +63,20 @@
                     <div class="toggle">
                         <div class="toggle-switch__icon poly"></div>
                         <toggle-switch
-                            ng-model="sceneTypeToggle">
+                            ng-model="sceneTypeToggle"
+                            disabled="panels.length===1 ? true : false">
                         </toggle-switch>
                         <div class="toggle-switch__icon pano"></div>
                     </div>
                 </div>
                 <div class="scene-preview__display">
-                    <div ng-if="currentSceneScreens.length === 1 || (currentSceneScreens.length > 2 && currentSceneScreens.length < 7)">
-                        <img class="preview-icon" ng-src="assets/img/{{currentSceneScreens.length}}.png">
+                    <div ng-if="panels.length === 1 || (panels.length > 2 && panels.length < 7)">
+                        <img class="preview-icon" ng-src="assets/img/{{panels.length}}.png">
                     </div>
-                    <div ng-if="currentSceneScreens.length > 6">
+                    <div ng-if="panels.length > 6">
                         <p>We recommend you keep your scene under 7 panels</p>
                     </div>
-                    <div ng-if="currentSceneScreens.length < 3 && currentSceneScreens.length > 1">
+                    <div ng-if="panels.length < 3 && panels.length > 1">
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
                     <h5>Preview</h5>

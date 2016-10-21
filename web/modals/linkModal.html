@@ -15,14 +15,14 @@
                 <div class="modal-body__scene">
                     <div class="modal-body__items">
                         <div
-                            ng-repeat="i in getScene(scenes) track by $index"
+                            ng-repeat="scene in scenes track by $index"
                             class="modal-body__item--wrapper">
                             <div
-                                ng-click="selectScreen($index + 1)"
-                                ng-class="{'selected': $index + 1 === selectedScene}"
+                                ng-click="selectScene(scene.title)"
+                                ng-class="{'selected': selectedScene === scene.title}"
                                 style="background-image: url('{{thumbs[$index].url}}?fm=jpg&q=60&h=200&w=200&fit=max&bg=000000')"
                                 class="modal-body__image"></div>
-                            <div class="modal-body__item--label">Scene {{$index + 1}}</div>
+                            <div class="modal-body__item--label">{{scene.title}}</div>
                         </div>
                     </div>
                 </div>

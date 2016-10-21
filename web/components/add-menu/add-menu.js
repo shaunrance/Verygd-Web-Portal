@@ -97,7 +97,9 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                    if (result.input) {
+                                    // check to see if name input is empty before calling 'addProject'
+
+                                    if (result.input.name !== '') {
                                         $scope.$emit('addProject', result.input);
                                         $scope.menuToggle = false;
                                     }
@@ -141,7 +143,7 @@ angular.module('ua5App')
                             $rootScope.$broadcast('nav:add-scene');
                             break;
                         case menu.screen:
-                            $rootScope.$broadcast('nav:add-screen');
+                            $rootScope.$broadcast('nav:add-panel');
                             break;
                         case menu.share:
                             ModalService.showModal({
