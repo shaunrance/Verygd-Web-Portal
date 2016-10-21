@@ -12,10 +12,12 @@ angular.module('ua5App.billing')
             }
         });
     }])
-    .controller('billingCtrl', ['$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
+    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
+        $scope.basicAccount = true;
 
         $scope.showModal = function() {
+
             ModalService.showModal({
                 templateUrl: 'modals/billingModal.html',
                 controller: 'billingModalController',
@@ -33,20 +35,28 @@ angular.module('ua5App.billing')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    $scope.moodel = {
-                        payment: {
-                            plan_name: response.paymentType,
-                            card: {
-                                name: response.cardName,
-                                number: response.cardNumber,
-                                exp_month: response.month,
-                                exp_year: response.year,
-                                cvc: response.cvc,
-                                address_zip: response.zip
-                            }
+                    $scope.type = 'Basic';
+                    if (response.payment) {
+                        $scope.name = response.payment.name;
+                        $scope.number = response.payment.last4;
+                        $scope.month = response.payment.exp_month;
+                        $scope.year = response.payment.exp_year;
+                        $scope.cvc = '***';
+                        $scope.zip = response.payment.address_zip;
+
+                        if (response.payment.interval) {
+                            $scope.type = 'Premium';
+                            $scope.basicAccount = false;
                         }
-                    };
-                    console.log(response);
+                    }
+                },
+                function(error) {
+                    $scope.name = 'card name';
+                    $scope.number = 'card number';
+                    $scope.month = 'exp month';
+                    $scope.year = 'exp year';
+                    $scope.cvc = 'cvc';
+                    $scope.zip = 'zip code';
                 }
             );
         }
@@ -55,7 +65,7 @@ angular.module('ua5App.billing')
             var paymentData;
 
             paymentData = {
-                plan_name: data.paymentType,
+                plan_name: data.paymentType ? 'annual' : 'monthly',
                 card: {
                     name: data.cardName,
                     number: data.cardNumber,
@@ -68,11 +78,9 @@ angular.module('ua5App.billing')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    debugger;
                     $state.reload();
                 },
                 function(error) {
-                    debugger;
                 }
             );
         };
