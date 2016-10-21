@@ -6,7 +6,8 @@ angular.module('ua5App')
             templateUrl: 'components/pano/pano.html',
             scope: {
                 useVr: '=',
-                panoContent: '='
+                panoContent: '=',
+                background: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
@@ -21,6 +22,8 @@ angular.module('ua5App')
                 var worldDirectionVector = new THREE.Vector3();
                 var cam;
                 var panoLink;
+                var backgroundColor = $scope.background;
+                var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
 
                 $scope.$watch(function() {
                     return $scope.useVr;
@@ -81,7 +84,6 @@ angular.module('ua5App')
                     var i;
                     var panels;
                     var pos = {x: 0, y: 0};
-                    
                     $$el.mousedown(function() {
                         pos = {x: cam.rotation.x, y: cam.rotation.y};
                     });
@@ -93,10 +95,15 @@ angular.module('ua5App')
                             clickHandler();
                         }
                     });
-                    
+
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
-                    $rootScope.renderer.setClearColor(0x000000);
-                    
+                    function componentToHex(c) {
+                        var hex = c.toString(16);
+                        return hex.length === 1 ? '0' + hex : hex;
+                    }
+
+                    $rootScope.renderer.setClearColor(componentToHex(backgroundColor));
+
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
                     panelCount = panels.length;
@@ -110,8 +117,9 @@ angular.module('ua5App')
                     }
 
                     if (useVr) {
-                        crosshair = makeCrosshair();    
+                        crosshair = makeCrosshair();
                     }
+
                     cam = scene.camera();
                     scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                 }
@@ -126,7 +134,7 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000',
+                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=' + backgroundHex,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
                             var linkMaterial;
@@ -148,7 +156,7 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
-                            
+
                             //TODO: validate that the linked scene exists
                             if (useVr) {
                                 linkMaterial = new THREE.MeshBasicMaterial({
@@ -176,7 +184,7 @@ angular.module('ua5App')
                                 }
                                 scene.addItem(plane);
                             }
-                            
+
                         }
                     );
                 }
@@ -236,7 +244,7 @@ angular.module('ua5App')
                                 return v;
                             });
                             geometry.elementsNeedUpdate = true; // update faces
-                            
+
                             cylinder = new THREE.Mesh(geometry, materialGroup);
                             cylinder.index = 0;
 
@@ -266,7 +274,7 @@ angular.module('ua5App')
                                 panoLink.sceneLink = data.related_tag;
                                 scene.addItem(cylinder);
                             }
-                            
+
                         }
                     );
                 }
@@ -290,7 +298,7 @@ angular.module('ua5App')
                                 scene.addItem(exitBtn);
                             }
                             if (typeof panoLink === 'object') {
-                                exitBtn.add(panoLink);    
+                                exitBtn.add(panoLink);
                             }
                         }
                     );
@@ -337,14 +345,14 @@ angular.module('ua5App')
                     midMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
                     midMesh = new THREE.Mesh(midGeo, midMat);
                     midMat.depthWrite = false;
-                    midMesh.position.set(0, 0, -5); 
+                    midMesh.position.set(0, 0, -5);
 
                     frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
                     frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.9, transparent: true});
                     frontMat.depthWrite = false;
                     frontMesh = new THREE.Mesh(frontGeo, frontMat);
                     frontMesh.position.set(0, 0, -5);
-                    
+
                     //add in in front of our camera:
                     cam.add(backMesh);
                     cam.add(midMesh);
@@ -372,7 +380,7 @@ angular.module('ua5App')
                     }
                     return dimensions;
                 }
-                
+
                 function onRender() {
                     if (typeof exitBtn === 'object' && useVr) {
                         cam.getWorldDirection(worldDirectionVector);
@@ -389,7 +397,7 @@ angular.module('ua5App')
                     if (panelCount === 1 && (typeof panoLink === 'object') && panoLink.sceneLink) {
                         TweenMax.to(panoLink.material.materials[1], 0.2, {opacity: 0.2});
                         TweenMax.to(panoLink.material.materials[1], 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
-                            $rootScope.$broadcast('scene:change', {link: panoLink.sceneLink});    
+                            $rootScope.$broadcast('scene:change', {link: panoLink.sceneLink});
                         }});
                         return;
                     }
@@ -401,14 +409,14 @@ angular.module('ua5App')
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                                 if (activeObject.hasOwnProperty('sceneLink')) {
-                                    $rootScope.$broadcast('scene:change', {link: activeObject.sceneLink});    
+                                    $rootScope.$broadcast('scene:change', {link: activeObject.sceneLink});
                                 }
-                            }});                            
+                            }});
                         } else if (scene.activeObject().name === 'exit') {
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                                 window.history.back();
-                            }});                            
+                            }});
                         }
                     }
                 }
@@ -431,10 +439,10 @@ angular.module('ua5App')
                         gazeStarted = false;
                         clearTimeout(gazeTimeout);
                         TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
-                        TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});                        
+                        TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
                     }
                 }
-                                
+
                 $rootScope.$on('app:resized', function() {
                     $$el.width($(window).width());
                     $$el.height($(window).height());
@@ -453,7 +461,7 @@ angular.module('ua5App')
                         );
                     }
                 });
-                
+
                 init();
 
                 // TODO: Add touch
@@ -462,7 +470,7 @@ angular.module('ua5App')
                 //     var mouseY = event.originalEvent.touches[0].pageY - $element.offset().top + $window.scrollTop();
                 //     map.setTouching(true);
                 //     map.setCursorPosition(mouseX, mouseY);
-                // });               
+                // });
             }
         };
     }])

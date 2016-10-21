@@ -125,9 +125,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.eventApi = {
             onChange: function(api, color, $event) {
-                $scope.myColor = color;
+                $scope.sceneColor = color;
                 sceneFactory.editScene($scope.currentScene, {
-                    background: $scope.myColor,
+                    background: $scope.sceneColor,
                     project: $stateParams.projectId,
                     title: $scope.sceneName
                 });
@@ -143,7 +143,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle = false;
                     }
-                    $scope.myColor = response.data.background;
+                    $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
                 });
         }
