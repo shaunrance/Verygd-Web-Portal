@@ -66,13 +66,13 @@ angular.module('ua5App.projects')
                 .then(function(response) {
                     $scope.projects = response.data;
                     _.each($scope.projects, function(project) {
-                        var screens = project.content;
-                        screens = _.sortBy(screens, 'order');
-                        screens = _.where(screens, {tag: '1'});
+                        var scenes = project.content;
+                        var sceneImage = '';
 
-                        if (screens.length > 0) {
-                            project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
-                        }
+                        scenes = _.sortBy(scenes, 'order');
+                        sceneImage = scenes[0].content.length > 0 ? scenes[0].content[0].url : '/assets/img/image-placeholder.jpg';
+
+                        project.cover_image = sceneImage + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
                     });
                 }, function(error) {
 
