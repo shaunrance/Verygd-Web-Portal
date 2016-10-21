@@ -97,7 +97,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.changeScene = function(sceneId) {
             $scope.currentScene = sceneId;
-            getSceneInfo();
+            getSceneInfo(sceneId);
             getPanels(sceneId);
             if ($scope.showMobileMenu) {
                 $scope.openMobileMenu();
@@ -123,8 +123,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                             project: $stateParams.projectId,
                             title: result.input.name
                         });
-
                         getScenes();
+                        getSceneInfo(sceneId);
                     }
                 });
             });
@@ -175,18 +175,19 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     project: $stateParams.projectId,
                     title: $scope.sceneName
                 });
-                getSceneInfo();
+                getSceneInfo($scope.currentScene);
             }
         };
 
-        function getSceneInfo() {
-            sceneFactory.getSceneById($scope.currentScene)
+        function getSceneInfo(sceneId) {
+            sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
                     if (response.data.is_panorama) {
                         $scope.sceneTypeToggle = true;
                     } else {
                         $scope.sceneTypeToggle = false;
                     }
+                    console.log('hey');
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
                 });

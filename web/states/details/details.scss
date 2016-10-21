@@ -478,7 +478,7 @@
 
     .scene-list--link {
         @include padding(10px 15px);
-        border-bottom: 1px solid $grey-2;
+        border-bottom: 1px solid $input-grey;
         width: 100%;
 
         &.active {
@@ -488,7 +488,24 @@
     }
 
     .scene-list--title {
-        width: 120px;
+        width: 73%;
+    }
+
+    .scene-list--icon {
+        opacity: 1;
+        top: 7px;
+    }
+
+    .scene-list--delete {
+        height: 28px;
+        right: 18px;
+        width: 17px;
+    }
+
+    .scene-list--edit {
+        height: 30px;
+        right: 52px;
+        width: 19px;
     }
 
     .scene-add {
@@ -567,7 +584,7 @@
         left: 0;
 
         &.slide-menu-open {
-            left: 50%;
+            left: 60%;
         }
 
         &::before {
@@ -606,16 +623,26 @@
     }
 
     .project-details__slide-menu {
-        @include position(fixed, 0 -50%);
-        @include size(50% 100%);
+        @include position(fixed, 0 -100%);
+        @include size(100% 100%);
         @include transition(left, $transition-speed);
-        background-color: $grey;
-        box-shadow: inset -10px 0px 25px -10px rgba($black, 0.5);
         z-index: $z-epsilon;
 
         &.slide-menu-open {
             left: 0;
         }
+    }
+
+    .project-details__slide-menu-inner {
+        @include size(60% 100%);
+        @include position(absolute, 0px 0px);
+        background-color: $grey;
+        box-shadow: inset -10px 0px 25px -10px rgba($black, 0.5);
+    }
+
+    .project-details__slide-menu-right {
+        @include size(40% 100%);
+        @include position(absolute, 0px 60%);
     }
 
     .project-details__mobile-menu-list {

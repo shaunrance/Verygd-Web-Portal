@@ -134,21 +134,24 @@
 </main>
 
 <div class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
-    <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
-        <h3 class="project-details__mobile-menu-header">Scenes</h3>
-        <li
-            class="scene-list--item"
-            ng-repeat="i in scenes track by $index">
-            <a
-                ng-click="changeScene(i.id)"
-                ng-class="{'active' : (currentScene === (i.id))}"
-                class="scene-list--link">
-                <div class="scene-list--title">{{i.title}}</div>
-            </a>
-            <a ng-click="editScene(i.id, i.title)"
-                class="scene-list--icon scene-list--edit"></a>
-            <a ng-click="deleteScene($index, i.id)"
-                class="scene-list--icon scene-list--delete"></a>
-        </li>
-    </ul>
+    <div class="project-details__slide-menu-inner">
+        <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
+            <h3 class="project-details__mobile-menu-header">Scenes</h3>
+            <li
+                class="scene-list--item"
+                ng-repeat="i in scenes track by $index">
+                <a
+                    ng-click="changeScene(i.id)"
+                    ng-class="{'active' : (currentScene === (i.id))}"
+                    class="scene-list--link">
+                    <div class="scene-list--title">{{i.title}}</div>
+                </a>
+                <a ng-click="editScene(i.id, i.title)"
+                    class="scene-list--icon scene-list--edit"></a>
+                <a ng-click="deleteScene($index, i.id)"
+                    class="scene-list--icon scene-list--delete"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="project-details__slide-menu-right" ng-click="openMobileMenu()"></div>
 </div>
