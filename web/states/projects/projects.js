@@ -65,13 +65,14 @@ angular.module('ua5App.projects')
 
                 .then(function(response) {
                     $scope.projects = response.data;
-                    _.each($scope.projects, function(project) {
-                        var screens = project.content;
-                        screens = _.sortBy(screens, 'order');
-                        screens = _.where(screens, {tag: '1'});
 
-                        if (screens.length > 0) {
-                            project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
+                    _.each($scope.projects, function(project) {
+                        var scenes = project.content;
+                        if (scenes.length > 0) {
+                            if (scenes[0].content.length > 0) {
+                                var screens = _.sortBy(scenes[0].content, 'order');
+                                project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
+                            }
                         }
                     });
                 }, function(error) {
