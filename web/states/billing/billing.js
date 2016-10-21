@@ -23,12 +23,16 @@ angular.module('ua5App.billing')
                 controller: 'billingModalController',
                 inputs: {
                     fields:{
-                        title: 'ksdjbdsj',
+                        title: '-',
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
                         showFileUpload: false,
                         submitButtonText: 'Add Project'
                     }
                 }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    console.log(result);
+                });
             });
         };
 

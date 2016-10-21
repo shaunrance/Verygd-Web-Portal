@@ -115,19 +115,19 @@
                                 class="account-info-data account-info-data--number"
                                 type="text"
                                 ng-model="model.cardNumber"
-                                placeholder="{{number}}"
+                                placeholder="{{number || 'Number'}}"
                                 required />
                             <input
                                 class="account-info-data account-info-data--month"
                                 type="{{number}}"
                                 ng-model="model.month"
-                                placeholder="{{month}}"
+                                placeholder="{{month || 'Month'}}"
                                 required />
                             <input
                                 class="account-info-data account-info-data--year"
                                 type="number"
                                 ng-model="model.year"
-                                placeholder="{{year}}"
+                                placeholder="{{year || 'Year'}}"
                                 required />
                         </div>
                         <div class="account-info-section">
@@ -135,19 +135,19 @@
                                 class="account-info-data account-info-data--name"
                                 type="name"
                                 ng-model="model.cardName"
-                                placeholder="{{name}}"
+                                placeholder="{{name || 'Name on Card'}}"
                                 required />
                             <input
                                 class="account-info-data account-info-data--cvc"
                                 type="number"
                                 ng-model="model.cvc"
-                                placeholder="{{cvc}}"
+                                placeholder="{{cvc || 'CVC'}}"
                                 required />
                             <input
                                 class="account-info-data account-info-data--zip"
                                 type="number"
                                 ng-model="model.zip"
-                                placeholder="{{zip}}"
+                                placeholder="{{zip|| 'Zip'}}"
                                 required />
                         </div>
                         <div class="account-info-section account-info-section--submit">

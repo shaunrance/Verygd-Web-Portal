@@ -55,9 +55,15 @@
                 <img class="logo" src="assets/img/vg-logo.svg">
             </a>
             <a
-            	ng-if="!basic"
-            	ng-click="logout()"
-            	class="user-login">
+                ng-if="!basic"
+                ui-sref="account"
+                class="user-login">
+                Account
+            </a>
+            <a
+                ng-if="!basic"
+                ng-click="logout()"
+                class="user-login">
                 Logout
             </a>
         </div>
