@@ -436,6 +436,10 @@
     transform: translate(-35%, -50%);
 }
 
+.project-details__slide-menu {
+    display: none;
+}
+
 @include media($tablet) {
 
     .project-details {
@@ -626,6 +630,7 @@
         @include position(fixed, 0 -100%);
         @include size(100% 100%);
         @include transition(left, $transition-speed);
+        display: block;
         z-index: $z-epsilon;
 
         &.slide-menu-open {
