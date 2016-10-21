@@ -19,7 +19,8 @@ angular.module('ua5App.projects')
             .then(function(response) {
                 var id = response.data.id;
                 $state.go('projects.details', {projectId:id});
-                getProjects();
+                //not really needed since the state changes anyways
+                //getProjects();
             }, function(error) {
 
             });

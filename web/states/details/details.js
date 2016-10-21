@@ -86,6 +86,32 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             getPanels(sceneId);
         };
 
+        $scope.editScene = function(sceneId, sceneTitle) {
+            ModalService.showModal({
+                templateUrl: 'modals/editModal.html',
+                controller: 'editModalController',
+                inputs: {
+                    fields:{
+                        title: 'Edit Scene',
+                        formLabels:[{name: 'name', title: sceneTitle}],
+                        showFileUpload: false,
+                        submitButtonText: 'Save'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result.input.name !== sceneTitle && result.input.name !== '') {
+                        sceneFactory.editScene(sceneId, {
+                            project: $stateParams.projectId,
+                            title: result.input.name
+                        });
+
+                        getScenes();
+                    }
+                });
+            });
+        };
+
         $scope.deleteScene = function($index, sceneId) {
             if ($scope.scenes.length > 1) {
                 ModalService.showModal({
