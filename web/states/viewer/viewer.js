@@ -20,6 +20,7 @@ angular.module('ua5App.viewer')
         $scope.scene = parseInt($stateParams.scene, 10);
         $scope.projectId = $stateParams.projectId;
         $scope.useVr = false;
+        $scope.background = content.data.background;
         $scope.touch = BrowserFactory.hasTouch();
         $scope.content = content.data.content;
         $scope.currentSceneScreens = $scope.content;
@@ -38,7 +39,7 @@ angular.module('ua5App.viewer')
         $scope.exit = function() {
             window.history.back();
         };
-        
+
         // right now we're going to simulate a scene change between two projects
         $scope.$on('scene:change', function(event, data) {
             var targetScene = parseInt(data.link, 10);
@@ -46,7 +47,7 @@ angular.module('ua5App.viewer')
                 $scope.scene = targetScene;
                 $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
                 $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
-                $scope.$apply();                
+                $scope.$apply();
             }
         });
     }])

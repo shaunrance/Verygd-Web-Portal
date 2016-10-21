@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('ua5App')
-    .directive('toggleSwitch', function() {
+    .directive('toggleSwitch', ['$rootScope', function($rootScope) {
         return {
             restrict: 'EA',
             replace: true,
@@ -15,9 +15,10 @@ angular.module('ua5App')
             compile: function(element, attrs) {
                 return this.link;
             },
-            link: function(scope, element, attrs, ngModelCtrl) {
-                element.on('click', function() {
+            link: function(scope, $element, $attrs, ngModelCtrl) {
+                $element.on('click', function() {
                     scope.$apply(scope.toggle);
+                    $rootScope.$broadcast('toggle:switched', $attrs.ngModel);
                 });
 
                 ngModelCtrl.$formatters.push(function(modelValue) {
@@ -29,7 +30,7 @@ angular.module('ua5App')
                 });
 
                 ngModelCtrl.$viewChangeListeners.push(function() {
-                    scope.$eval(attrs.ngChange);
+                    scope.$eval($attrs.ngChange);
                 });
 
                 ngModelCtrl.$render = function() {
@@ -37,11 +38,11 @@ angular.module('ua5App')
                 };
 
                 scope.toggle = function toggle() {
-                    if (!scope.disabled) {
+                    if (scope.disabled !== 'true') {
                         scope.model = !scope.model;
                         ngModelCtrl.$setViewValue(scope.model);
                     }
                 };
             }
         };
-    });
+    }]);

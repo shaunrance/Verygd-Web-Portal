@@ -10,7 +10,7 @@ angular.module('ua5App')
                     project:'Add Project',
                     //team: 'Add Team Member',
                     scene:'Add Scene',
-                    screen: 'Add Screen',
+                    screen: 'Add Panel',
                     share: 'Share Project'
                 };
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};

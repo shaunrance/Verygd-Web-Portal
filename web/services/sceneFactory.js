@@ -28,6 +28,10 @@ angular.module('ua5App')
             return $http.post('http://52.53.186.20/scene', data);
         };
 
+        dataFactory.editScene = function(sceneId, data) {
+            return $http.put(urlBase + '/' + sceneId, data);
+        };
+
         dataFactory.deleteScene = function(projectId, sceneId) {
             return $http.delete(urlBase  + '/' + projectId, { // jshint ignore:line
                 // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
