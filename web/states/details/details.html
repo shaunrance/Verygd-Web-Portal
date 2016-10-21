@@ -32,7 +32,8 @@
             <figure
                 ng-repeat="panel in panels"
                 as-sortable-item
-                class="vg__item--wrapper scene--wrapper">
+                class="vg__item--wrapper scene--wrapper"
+                ng-class="{'vg__item--wrapper-fade' : (sceneTypeToggle === true)}">
                 <a
                     class="vg__item--link scene--link"
                     as-sortable-item-handle>
@@ -64,8 +65,7 @@
                         <div class="toggle-switch__icon poly"></div>
                         <toggle-switch
                             ng-model="sceneTypeToggle"
-                            disabled="{{singlePanel}}"
-                            switched="{{panorama}}">
+                            disabled="{{singlePanel}}">
                         </toggle-switch>
                         <div class="toggle-switch__icon pano"></div>
                     </div>

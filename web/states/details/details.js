@@ -49,6 +49,16 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             $scope.addScene();
         });
 
+        $scope.$on('toggle:switched', function($event, args) {
+            if (args === 'sceneTypeToggle') {
+                sceneFactory.editScene($scope.currentScene, {
+                    is_panorama: $scope.sceneTypeToggle,
+                    title: $scope.sceneName,
+                    project: $stateParams.projectId
+                });
+            }
+        });
+
         $scope.addScene = function() {
             ModalService.showModal({
                 templateUrl: 'modals/addModal.html',
@@ -70,15 +80,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
-        $scope.$on('toggle:on', function(event, args) {
-            if (args === 'sceneTypeToggle') {
-                hidePanels();
-            }
-        });
-
         $scope.changeScene = function(sceneId) {
             $scope.currentScene = sceneId;
-            checkPanorama();
+            getSceneInfo();
             getPanels(sceneId);
         };
 
@@ -127,25 +131,17 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     project: $stateParams.projectId,
                     title: $scope.sceneName
                 });
-                checkPanorama();
+                getSceneInfo();
             }
         };
 
-        function hidePanels() {
-            _.each($scope.panels, function(panel, i) {
-                if (i > 0) {
-                    panel.hide = 'yo dawg';
-                }
-            });
-        }
-
-        function checkPanorama() {
+        function getSceneInfo() {
             sceneFactory.getSceneById($scope.currentScene)
                 .then(function(response) {
                     if (response.data.is_panorama) {
-                        $scope.panorama = true;
+                        $scope.sceneTypeToggle = true;
                     } else {
-                        $scope.panorama = false;
+                        $scope.sceneTypeToggle = false;
                     }
                     $scope.myColor = response.data.background;
                     $scope.sceneName = response.data.title;

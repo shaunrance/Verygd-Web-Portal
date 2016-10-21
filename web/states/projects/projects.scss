@@ -9,6 +9,14 @@
     position: relative;
 }
 
+.vg__item--wrapper-fade {
+    opacity: 0.5;
+
+    &:nth-child(1) {
+        opacity: 1;
+    }
+}
+
 .vg__image {
     background-color: $navy;
     background-position: center;

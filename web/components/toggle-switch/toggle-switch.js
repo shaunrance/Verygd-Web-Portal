@@ -7,7 +7,6 @@ angular.module('ua5App')
             require: 'ngModel',
             scope: {
                 disabled: '@',
-                switched: '@',
                 onLabel: '@',
                 offLabel: '@',
                 color: '@'
@@ -16,25 +15,10 @@ angular.module('ua5App')
             compile: function(element, attrs) {
                 return this.link;
             },
-            link: function($scope, $element, $attrs, ngModelCtrl) {
-                $scope.$watch('switched', function(value) {
-                    if (value === 'true') {
-                        $scope.model = true;
-                    } else {
-                        $scope.model = false;
-                    }
-                });
-
-                $scope.$watch('model', function(value) {
-                    if (value) {
-                        $rootScope.$broadcast('toggle:on', $attrs.ngModel);
-                    } else {
-                        $rootScope.$broadcast('toggle:off', $attrs.ngModel);
-                    }
-                });
-
+            link: function(scope, $element, $attrs, ngModelCtrl) {
                 $element.on('click', function() {
-                    $scope.$apply($scope.toggle);
+                    scope.$apply(scope.toggle);
+                    $rootScope.$broadcast('toggle:switched', $attrs.ngModel);
                 });
 
                 ngModelCtrl.$formatters.push(function(modelValue) {
@@ -46,17 +30,17 @@ angular.module('ua5App')
                 });
 
                 ngModelCtrl.$viewChangeListeners.push(function() {
-                    $scope.$eval($attrs.ngChange);
+                    scope.$eval($attrs.ngChange);
                 });
 
                 ngModelCtrl.$render = function() {
-                    $scope.model = ngModelCtrl.$viewValue;
+                    scope.model = ngModelCtrl.$viewValue;
                 };
 
-                $scope.toggle = function toggle() {
-                    if ($scope.disabled !== 'true') {
-                        $scope.model = !$scope.model;
-                        ngModelCtrl.$setViewValue($scope.model);
+                scope.toggle = function toggle() {
+                    if (scope.disabled !== 'true') {
+                        scope.model = !scope.model;
+                        ngModelCtrl.$setViewValue(scope.model);
                     }
                 };
             }
