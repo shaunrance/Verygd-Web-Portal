@@ -45,6 +45,14 @@
     }
 }
 
+.scene-list--title {
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 170px;
+}
+
 .scene-list--icon {
     background-repeat: no-repeat;
     background-size: 100% auto;
