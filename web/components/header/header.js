@@ -14,7 +14,6 @@ angular.module('ua5App')
 
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
-                $scope.projectTitle = '';
                 $scope.userMenuToggle = false;
                 $scope.isActive = false;
 

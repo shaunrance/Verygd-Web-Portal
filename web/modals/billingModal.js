@@ -1,41 +1,43 @@
 /* global angular */
-angular.module('ua5App.billing')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-        $stateProvider.state('account.billing', {
-            name: 'Billing',
-            url: '/billing',
-            templateUrl: 'states/billing/billing.html',
-            controller: 'billingCtrl',
-            controllerAs: 'ctrl',
-            data: {
-                settings:{displayName:'Billing'}
-            }
-        });
-    }])
-    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
+angular.module('ua5App')
+	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.basicAccount = true;
+        $scope.annualChecked = true;
+        $scope.monthlyChecked = false;
+        $scope.premiumClicked = false;
 
-        $scope.showModal = function() {
+        $scope.title = 'Professional Plan';
+        $scope.currentPlan = '$25.00/mo';
+        $scope.formLabels = 'dfdsf';
+        $scope.price = '$' + 25;
+        $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
+        $scope.input = {
+            fields: {
+                name: '',
+                description: ''
+            }
+        };
 
-            ModalService.showModal({
-                templateUrl: 'modals/billingModal.html',
-                controller: 'billingModalController',
-                inputs: {
-                    fields:{
-                        title: 'ksdjbdsj',
-                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
-                        showFileUpload: false,
-                        submitButtonText: 'Add Project'
-                    }
-                }
+        $scope.close = function() {
+            close({
+                input: $scope.input.fields
             });
+        };
+
+        $scope.cancel = function() {
+            close({
+                input: $scope.input.fields
+            });
+        };
+
+        $scope.showPremium = function() {
+            $scope.premiumClicked = true;
         };
 
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    $scope.type = 'Basic';
+
                     if (response.payment) {
                         $scope.name = response.payment.name;
                         $scope.number = response.payment.last4;
@@ -44,13 +46,13 @@ angular.module('ua5App.billing')
                         $scope.cvc = '***';
                         $scope.zip = response.payment.address_zip;
 
-                        if (response.payment.interval) {
-                            $scope.type = 'Premium';
-                            $scope.basicAccount = false;
+                        if (response.payment.last4) {
+                            $scope.premiumClicked = true;
                         }
                     }
                 },
                 function(error) {
+
                     $scope.name = 'card name';
                     $scope.number = 'card number';
                     $scope.month = 'exp month';
@@ -60,6 +62,16 @@ angular.module('ua5App.billing')
                 }
             );
         }
+
+        $scope.annualPlan = function() {
+            $scope.annualChecked = true;
+            $scope.monthlyChecked = false;
+        };
+
+        $scope.monthlyPlan = function() {
+            $scope.annualChecked = false;
+            $scope.monthlyChecked = true;
+        };
 
         $scope.updateUser = function(data) {
             var paymentData;
@@ -78,12 +90,17 @@ angular.module('ua5App.billing')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    $state.reload();
+                    $scope.$parent.close();
                 },
                 function(error) {
                 }
             );
         };
+
+        $rootScope.deferredTerms.promise.then(function(response) {
+            var data = $scope.model;
+            $scope.updateUser(data);
+        });
 
         initialValues();
     }])

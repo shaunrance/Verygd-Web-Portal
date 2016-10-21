@@ -1,12 +1,21 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <button class="menu-button" ng-click="toggleMenu()">
-                <img class="menu-icon" src="assets/img/hamburger.svg" />
+            <button
+                class="menu-button"
+                ng-click="toggleMenu()">
+                <img
+                    class="menu-icon"
+                    src="assets/img/hamburger.svg" />
             </button>
-            <div class="menu-container ng-hide" ng-click="toggleMenu()" ng-show="userMenuToggle">
+            <div
+                class="menu-container ng-hide"
+                ng-click="toggleMenu()"
+                ng-show="userMenuToggle">
                 <button class="close-menu-button">
-                    <img class="menu-icon" src="assets/img/close.svg" />
+                    <img
+                        class="menu-icon"
+                        src="assets/img/close.svg" />
                 </button>
                 <ul class="menu-list">
                     <li class="menu-list--item">
@@ -57,7 +66,7 @@
                 class="breadcrumb">
                 <a
                     class="breadcrumb__link"
-                    ui-sref="{{headerTitleData}}"
+                    ui-sref="headerTitleData"
                     data-ui-sref-opts="{reload: true}"
                     ng-bind="headerTitleData">
                 </a>

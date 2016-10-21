@@ -9,20 +9,17 @@
                 <div class="account-billing-title">
                     Current Plan
                 </div>
-                <div class="account-billing-image-container">
+                <div class="account-billing-plan">
                     <span class="account-info-billing">
-                        Team
-                    </span>
-                    <span class="account-info-billing-price">
-                        $29/mo
+                        {{type}}
                     </span>
                 </div>
                 <div class="account-billing-button-container">
-                    <a
-                        href=""
-                        class="account-billing-update-button">
+                    <button
+                        class="account-billing-update-button"
+                        ng-click="showModal(billing)">
                         Change Plan
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="account-billing-inner">
@@ -30,8 +27,9 @@
                         Annual Billing
                 </div>
                 <div class="account-billing-toggle">
-                    <div class="account-billing-toggle-dial"></div>
-                    <div class="account-billing-toggle-bg"></div>
+                    <toggle-switch
+                        ng-model="sceneTypeToggle">
+                    </toggle-switch>
                 </div>
                 <div class="account-billing-statement">
                     <span class="account-billing-statement-text">
@@ -40,17 +38,30 @@
                 </div>
             </div>
         </div>
-        <div class="account-info">
-            <form ng-submit="login(model)">
+        <div
+            class="account-billing-info"
+            ng-class="{'account-billing-info--hide': basicAccount};">
+            <form ng-submit="updateUser(model)">
+                    <div class="account-info-section">
+                        <input
+                            class="account-info-data"
+                            type="checkbox"
+                            name="paymentType"
+                            id="paymentType"
+                            value="year"
+                            ng-model="model.paymentType"
+                            ng-change="paymentType(model.paymentType)"/>
+                        <label for="paymentType">Professional Package @ $25/mo</label>
+                    </div>
                 <div class="account-info-section">
-                    <div class="account-info-title">
+                     <div class="account-info-title">
                         Name on Card
                     </div>
                     <input
                         class="account-info-data"
                         type="name"
-                        ng-model="user.cardName"
-                        placeholder="John Smith"
+                        ng-model="model.cardName"
+                        placeholder="{{name}}"
                         required />
                 </div>
                 <div class="account-info-section">
@@ -59,20 +70,29 @@
                     </div>
                     <input
                         class="account-info-data"
-                        type="number"
-                        ng-model="user.cardNumber"
-                        placeholder="**** **** **** 5555"
+                        type="text"
+                        ng-model="model.cardNumber"
+                        placeholder="{{number}}"
                         required />
                 </div>
                 <div class="account-info-section account-info-section-exp-sec">
                     <div class="account-info-title">
-                        Expiration date
+                        Expiration Month
                     </div>
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardDate"
-                        placeholder="10/19"
+                        ng-model="model.month"
+                        placeholder="{{month}}"
+                        required />
+                    <div class="account-info-title">
+                        Expiration Year
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="number"
+                        ng-model="model.year"
+                        placeholder="{{year}}"
                         required />
                     <div class="account-info-title ">
                         Security Code
@@ -80,8 +100,8 @@
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardCode"
-                        placeholder="5555"
+                        ng-model="model.cvc"
+                        placeholder="{{cvc}}"
                         required />
                 </div>
                 <div class="account-info-section">
@@ -91,16 +111,18 @@
                     <input
                         class="account-info-data"
                         type="number"
-                        ng-model="user.cardZip"
-                        placeholder="90055"
+                        ng-model="model.zip"
+                        placeholder="{{zip}}"
                         required />
                 </div>
-                <button
-                    class="button account-info-button modal-update modal-button"
-                    type="submit"
-                    ng-disabled="loginForm.$invalid">
-                    Update
-                </button>
+                <div class="account-info-section">
+                    <input
+                        class="modal-submit modal-button"
+                        type="submit"
+                        ng-disabled="model.$invalid"
+                        ng-class="{'button-disable': disableButton === true}"
+                        value="Update">
+                </div>
             </form>
         </div>
     </div>
