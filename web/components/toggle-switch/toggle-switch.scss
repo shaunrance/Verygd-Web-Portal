@@ -82,6 +82,10 @@
     .color .switch-on & {
         background-color: $red;
     }
+
+    .disabled & {
+        background-color: $grey;
+    }
 }
 
 .toggle-switch__button {

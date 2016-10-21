@@ -1,4 +1,4 @@
-<div role="radio" class="toggle-switch" ng-class="{ 'disabled' : disabled, 'color': color }">
+<div role="radio" class="toggle-switch" ng-class="{ 'disabled' : disabled === 'true', 'color': color }">
     <div class="toggle-switch__animate" ng-class="{ 'switch-off': !model, 'switch-on': model }">
         <span class="toggle-switch__label toggle-switch__label--left" ng-bind="onLabel"></span>
         <div class="toggle-switch__bar-wrap">
