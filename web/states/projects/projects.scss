@@ -1,7 +1,13 @@
 .projects {
+    @include transition(left, $transition-speed);
     @include outer-container;
     @include padding(50px $site-gutter 50px);
+    left: 0;
     position: relative;
+
+    &.slide-menu-open {
+        left: 50%;
+    }
 }
 
 .vg__item--wrapper {
@@ -33,7 +39,7 @@
     @include flex-wrap(wrap);
     @include flex(1);
     counter-reset: sceneImage;
-    width: 100%;
+    width: 800px;
 }
 
 .vg__item--link {
@@ -142,9 +148,14 @@
 
 
 @include media($tablet) {
+    .projects {
+        padding: 110px 30px 50px;
+        width: 100%;
+    }
 
     .vg__items {
         display: block;
+        width: 100%;
     }
 
     .vg__item--wrapper {

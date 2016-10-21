@@ -77,7 +77,9 @@ angular.module('ua5App')
                         disableScroll();
                     } else {
                         $scope.menuToggle = false;
-                        enableScroll();
+                        if (!$rootScope.showMobileMenu) {
+                            enableScroll();
+                        }
                     }
                 };
 

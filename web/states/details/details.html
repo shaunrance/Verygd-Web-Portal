@@ -1,7 +1,7 @@
 <main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
-    <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
+    <div class="project-details" ng-class="{'empty': emptyScene}">
         <nav class="scene-nav">
-            <div class="scene-nav--selector" ng-click="toggleSceneList()">Scene {{currentScene}}</div>
+            <div class="scene-nav--selector"><a href="/projects">{{projectName}}</a> > {{sceneName}}</div>
             <ul class="scene-list" ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
@@ -19,11 +19,11 @@
                         class="scene-list--icon scene-list--delete"></a>
                 </li>
             </ul>
-            <button
+            <!-- <button
                 ng-click="addScene()"
                 class="scene-add">
             <img class="add-icon" src="assets/img/add.svg" />
-            Add Scene</button>
+            Add Scene</button> -->
         </nav>
         <div
             class="vg__items project__items"
@@ -119,7 +119,12 @@
         </div>
     </div>
 
-    <footer class="project-details__footer">
+    <footer class="project-details__footer" ng-class="{'slide-menu-open':showMobileMenu}">
+        <div class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <button
             ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
             class="scene-preview__button">
@@ -127,3 +132,23 @@
         </button>
     </footer>
 </main>
+
+<div class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
+    <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
+        <h3 class="project-details__mobile-menu-header">Scenes</h3>
+        <li
+            class="scene-list--item"
+            ng-repeat="i in scenes track by $index">
+            <a
+                ng-click="changeScene(i.id)"
+                ng-class="{'active' : (currentScene === (i.id))}"
+                class="scene-list--link">
+                <div class="scene-list--title">{{i.title}}</div>
+            </a>
+            <a ng-click="editScene(i.id, i.title)"
+                class="scene-list--icon scene-list--edit"></a>
+            <a ng-click="deleteScene($index, i.id)"
+                class="scene-list--icon scene-list--delete"></a>
+        </li>
+    </ul>
+</div>

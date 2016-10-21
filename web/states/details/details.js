@@ -13,6 +13,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService) {
+        var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+        $rootScope.showMobileMenu = false;
+
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
         $scope.currentScene = '';
@@ -22,6 +26,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.showSceneList = false;
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
+        $scope.projectName = '';
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -59,6 +64,16 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         });
 
+        $scope.openMobileMenu = function() {
+            if (!$rootScope.showMobileMenu) {
+                $rootScope.showMobileMenu = true;
+                disableScroll();
+            } else {
+                $rootScope.showMobileMenu = false;
+                enableScroll();
+            }
+        };
+
         $scope.addScene = function() {
             ModalService.showModal({
                 templateUrl: 'modals/addModal.html',
@@ -84,6 +99,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             $scope.currentScene = sceneId;
             getSceneInfo();
             getPanels(sceneId);
+            if ($scope.showMobileMenu) {
+                $scope.openMobileMenu();
+            }
         };
 
         $scope.editScene = function(sceneId, sceneTitle) {
@@ -191,6 +209,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 .then(function(response) {
                     if (response.data.content.length > 0) {
                         $scope.scenes = response.data.content;
+                        $scope.projectName = response.data.name;
 
                         //check if page is first load, if so, make first scene selected
                         if ($scope.firstLoad) {
@@ -207,6 +226,41 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         createScene(newScene);
                     }
                 });
+        }
+
+        function preventDefault(e) {
+            e = e || window.event;
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.returnValue = false;
+        }
+
+        function preventDefaultForScrollKeys(e) {
+            if (keys[e.keyCode]) {
+                preventDefault(e);
+                return false;
+            }
+        }
+
+        function disableScroll() {
+            if (window.addEventListener) {
+                window.addEventListener('DOMMouseScroll', preventDefault, false);
+            }
+            window.onwheel = preventDefault; // modern standard
+            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+            window.ontouchmove  = preventDefault; // mobile
+            document.onkeydown  = preventDefaultForScrollKeys;
+        }
+
+        function enableScroll() {
+            if (window.removeEventListener) {
+                window.removeEventListener('DOMMouseScroll', preventDefault, false);
+            }
+            window.onmousewheel = document.onmousewheel = null;
+            window.onwheel = null;
+            window.ontouchmove = null;
+            document.onkeydown = null;
         }
 
         //PANEL methods ======================================================//

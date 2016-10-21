@@ -41,7 +41,6 @@
 
     &.active {
         background-color: $grey-dark;
-        border-radius: 2px;
     }
 }
 
@@ -49,6 +48,7 @@
     overflow: hidden;
     position: relative;
     text-overflow: ellipsis;
+    text-transform: uppercase;
     white-space: nowrap;
     width: 170px;
 }
@@ -87,8 +87,8 @@
 }
 
 .scene--wrapper {
-    margin-right: $item-wrapper-margin-desk;
-    width: 240px;
+    margin-right: 3.333%;
+    width: 30%;
 
     &::before {
         @include display(flex);
@@ -397,11 +397,11 @@
 
 .project-details__footer {
     @include position(fixed);
-    @include size(100% 40px);
+    @include size(100% 50px);
     background-color: $navy;
     bottom: 0;
     left: 0;
-    z-index: $z-epsilon;
+    z-index: $z-epsilon + 10;
 
     &::before {
         @extend %gradient;
@@ -461,27 +461,34 @@
 
     .scene-nav--selector {
         @include margin(0 20px 0 0);
-        @include padding(10px 15px);
-        background-color: $grey-dark;
-        border-radius: 2px;
         color: $black;
         display: block;
-        margin-bottom: 4px;
+        font-family: 'OpenSans', sans-serif;
+        font-size: 20px;
+        margin-bottom: 50px;
         text-decoration: none;
         width: 100%;
+
+        a {
+            color: $btn-blue;
+            font-size: 20px;
+            text-decoration: none;
+        }
     }
 
     .scene-list--link {
         @include padding(10px 15px);
-        background-color: $grey-dark;
-        border-radius: 2px;
-        margin-bottom: 4px;
-
+        border-bottom: 1px solid $grey-2;
+        width: 100%;
 
         &.active {
             background-color: $btn-blue;
             color: $white;
         }
+    }
+
+    .scene-list--title {
+        width: 120px;
     }
 
     .scene-add {
@@ -554,10 +561,41 @@
     }
 
     .project-details__footer {
+        @include transition(left, $transition-speed);
         background-color: $grey;
+        box-shadow: 4px 2px 12px rgba($black, 0.5);
+        left: 0;
+
+        &.slide-menu-open {
+            left: 50%;
+        }
 
         &::before {
             display: none;
+        }
+    }
+
+    .project-details__mobile-menu-btn {
+        @include position(absolute, 15px 20px);
+        @include size(25px 20px);
+
+        span {
+            @include position(absolute, 0 10px);
+            @include size(4px 4px);
+            background-color: $btn-blue;
+            border-radius: 4px;
+
+            &:nth-child(1) {
+                top: 0;
+            }
+
+            &:nth-child(2) {
+                top: 7px;
+            }
+
+            &:nth-child(3) {
+                top: 14px;
+            }
         }
     }
 
@@ -565,6 +603,27 @@
         background-color: $pink;
         border: 1px solid rgba($white, 0);
         box-shadow: 1px 2px 4px rgba($black, 0.2);
+    }
+
+    .project-details__slide-menu {
+        @include position(fixed, 0 -50%);
+        @include size(50% 100%);
+        @include transition(left, $transition-speed);
+        background-color: $grey;
+        box-shadow: inset -10px 0px 25px -10px rgba($black, 0.5);
+        z-index: $z-epsilon;
+
+        &.slide-menu-open {
+            left: 0;
+        }
+    }
+
+    .project-details__mobile-menu-list {
+        margin-top: 100px;
+    }
+
+    .project-details__mobile-menu-header {
+        @include margin(0 0 20px 17px);
     }
 }
 
