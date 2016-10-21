@@ -16,6 +16,10 @@ body {
 
 html {
     color: $black;
+
+    &.no-touch {
+        overflow-y: scroll;
+    }
 }
 
 ul {

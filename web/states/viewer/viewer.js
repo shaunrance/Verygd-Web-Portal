@@ -7,22 +7,22 @@ angular.module('ua5App.viewer')
             controller: 'viewerCtrl',
             controllerAs: 'ctrl',
             resolve: {
-                content: ['panelFactory', '$stateParams', function(panelFactory, $stateParams) {
-                    return panelFactory.getScreens($stateParams.projectId).then(function(response) {
+                content: ['sceneFactory', '$stateParams', function(sceneFactory, $stateParams) {
+                    return sceneFactory.getSceneById($stateParams.scene).then(function(response) {
                         return response;
                     });
                 }]
             }
         });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'panelFactory', 'BrowserFactory', function($scope, $stateParams, content, panelFactory, BrowserFactory) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', function($scope, $stateParams, content, sceneFactory, BrowserFactory) {
         var lastScene = 1;
         $scope.scene = parseInt($stateParams.scene, 10);
         $scope.projectId = $stateParams.projectId;
         $scope.useVr = false;
         $scope.touch = BrowserFactory.hasTouch();
         $scope.content = content.data.content;
-        $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
+        $scope.currentSceneScreens = $scope.content;
         $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
 
         _.each($scope.content, function(screen) {

@@ -3,3 +3,12 @@ from panel.models import PanelImage
 
 
 PanelImageViewSet.model = PanelImage
+
+
+def get_queryset(self):
+    request_member = self.request.user.member
+
+    return self.model.objects.filter()
+
+
+PanelImageViewSet.get_queryset = get_queryset

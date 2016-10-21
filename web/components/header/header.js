@@ -35,7 +35,7 @@ angular.module('ua5App')
                         projectFactory.getProjectById($stateParams.projectId)
 
                         .then(function(response) {
-                            $scope.projectTitle = response.data.title;
+                            $scope.projectTitle = response.data.name;
 
                         }, function(error) {
 
