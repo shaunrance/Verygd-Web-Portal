@@ -39,7 +39,7 @@
     @include flex-wrap(wrap);
     @include flex(1);
     counter-reset: sceneImage;
-    width: 800px;
+    width: 100%;
 }
 
 .vg__item--link {

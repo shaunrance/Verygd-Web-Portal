@@ -152,6 +152,30 @@
                     class="scene-list--icon scene-list--delete"></a>
             </li>
         </ul>
+
+        <div class="project-details__mobile-toggles">
+            <div class="project-details__mobile-pano">
+                <div class="toggle">
+                    <div class="toggle-switch__icon poly"></div>
+                    <toggle-switch
+                        ng-model="sceneTypeToggle"
+                        disabled="{{singlePanel}}">
+                    </toggle-switch>
+                    <div class="toggle-switch__icon pano"></div>
+                </div>
+            </div>
+
+            <div class="project-details__mobile-private">
+                <div class="toggle">
+                    <toggle-switch
+                        ng-model="scenePrivacyToggle"
+                        color="true"
+                        on-label="Public"
+                        off-label="Private">
+                    </toggle-switch>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="project-details__slide-menu-right" ng-click="openMobileMenu()"></div>
 </div>

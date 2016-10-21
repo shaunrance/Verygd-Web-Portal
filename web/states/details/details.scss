@@ -657,6 +657,26 @@
     .project-details__mobile-menu-header {
         @include margin(0 0 20px 17px);
     }
+
+    .project-details__mobile-toggles {
+        margin-top: 40px;
+        position: relative;
+        width: 100%;
+    }
+
+    .project-details__mobile-pano {
+        left: 50%;
+        margin: 0 0 25px -61px;
+        position: relative;
+        width: 122px;
+    }
+
+    .project-details__mobile-private {
+        left: 50%;
+        margin-left: -80px;
+        position: relative;
+        width: 160px;
+    }
 }
 
 @include media($phablet) {
