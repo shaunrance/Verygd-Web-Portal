@@ -187,7 +187,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle = false;
                     }
-                    console.log('hey');
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
                 });
