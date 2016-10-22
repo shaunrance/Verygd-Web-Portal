@@ -90,11 +90,37 @@
 
 .project__item--delete {
     @extend %icon-button;
+    @include size(20px 20px);
     position: absolute;
     right: 5px;
     top: 5px;
-    width: 20px;
+    transform-origin: 50% 50%;
     z-index: $z-beta;
+
+    span {
+        @include position(absolute);
+        @include size(100% 2px);
+        background-color: $white;
+        border-radius: 1px;
+        left: 0;
+
+        &:nth-child(1) {
+            box-shadow: 0px 0px 1.5px rgba($black, 0.85);
+            top: 8px;
+            transform: rotate(45deg);
+        }
+
+        &:nth-child(2) {
+            box-shadow: 0px 0px 1px rgba($black, 0.85);
+            top: 8px;
+            transform: rotate(-45deg);
+        }
+
+        &:nth-child(3) {
+            top: 8px;
+            transform: rotate(45deg);
+        }
+    }
 }
 
 .project-delete_icon {
