@@ -1,17 +1,10 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <button
-                class="menu-button"
-                ng-click="toggleMenu()">
-                <img
-                    class="menu-icon"
-                    src="assets/img/hamburger.svg" />
+            <button class="menu-button" ng-click="toggleMenuMobile()">
+                <img class="menu-icon" src="assets/img/hamburger.svg" />
             </button>
-            <div
-                class="menu-container ng-hide"
-                ng-click="toggleMenu()"
-                ng-show="userMenuToggle">
+            <div class="menu-container ng-hide" ng-click="toggleMenuMobile()" ng-show="mobileUserMenuToggle">
                 <button class="close-menu-button">
                     <img
                         class="menu-icon"
@@ -29,16 +22,16 @@
                         <a
                             class="menu-link"
                             href="#"
-                            ui-sref="projects"
+                            ui-sref="account"
                             data-ui-sref-opts="{reload: true}">
-                            My Projects
+                            My Account
                         </a>
                     </li>
                     <li class="menu-list--item">
                         <a
                             class="menu-link"
                             href="#">
-                            Settings
+                            Upgrade Plan
                         </a>
                     </li>
                     <li class="menu-list--item">
@@ -52,20 +45,66 @@
                 </ul>
             </div>
             <a class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
-                <img class="logo" src="assets/img/vg-logo.svg">
+                <img class="logo" src="assets/img/vg-logo-new-header.svg">
             </a>
-            <a
-                ng-if="!basic"
-                ui-sref="account"
-                class="user-login">
-                Account
-            </a>
-            <a
-                ng-if="!basic"
-                ng-click="logout()"
-                class="user-login">
-                Logout
-            </a>
+
+            <div class="header__user-container">
+                <div class="header__notification-container" ng-click="toggleNotification()">
+                    <div class="header__notification-icon" ng-class="{'pending': notifications.length > 0}"></div>
+                </div>
+
+                <div class="header__notification-menu" ng-class="{'show': notificationToggle}">
+                    <div ng-if="notifications.length > 0">
+                        <ul>
+                            <li
+                                ng-repeat="notification in notifications">
+                                {{notification}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-if="notifications.length == 0 || !notifications">
+                        No new notifications.
+                    </div>
+                </div>
+
+                <div class="header__user-name" ng-click="toggleMenu()">
+                    <div class="header__avatar"></div>
+                    <span>John Smith</span>
+                </div>
+
+                <div class="header__user-menu" ng-class="{'show': userMenuToggle}">
+                    <ul class="menu-list">
+                        <li class="menu-list--item">
+                            <div class="menu-link avatar"></div>
+                            <span>John Smith</span>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link"
+                                href="#"
+                                ui-sref="account"
+                                data-ui-sref-opts="{reload: true}">
+                                My Account
+                            </a>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link"
+                                href="#">
+                                Upgrade Plan
+                            </a>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link user-login mobile"
+                                href="#"
+                                ng-click="logout()">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <span ng-if="!basic">
             <span
