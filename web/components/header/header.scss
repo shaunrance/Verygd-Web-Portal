@@ -46,6 +46,7 @@
     @extend %h2;
     @extend %uppercase;
     display: inline-block;
+    margin-top: 50px;
 
     + .breadcrumb {
         margin-left: 5px;
