@@ -112,7 +112,6 @@ angular.module('ua5App')
                 };
 
                 $scope.toggleNotification = function() {
-                    console.log('hey');
                     if ($scope.userMenuToggle) {
                         $scope.userMenuToggle = false;
                     }
@@ -133,12 +132,10 @@ angular.module('ua5App')
                 $('body').on('click', function(event) {
                     if (!$(event.target).closest('.header__user-container').length) {
                         var scope = angular.element($('.header')).scope();
-                        if (scope.userMenuToggle || scope.notificationToggle) {
-                            scope.$apply(function() {
-                                scope.userMenuToggle = false;
-                                scope.notificationToggle = false;
-                            });
-                        }
+                        scope.$apply(function() {
+                            scope.userMenuToggle = false;
+                            scope.notificationToggle = false;
+                        });
                     }
                 });
             }]
