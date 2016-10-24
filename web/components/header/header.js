@@ -86,8 +86,8 @@ angular.module('ua5App')
                     //remove cookies
                     $cookies.remove(APICONSTANTS.authCookie.token);
                     $cookies.remove(APICONSTANTS.authCookie.user_id);
-                    $cookies.remove(APICONSTANTS.authCookie.visited);
-
+                    $cookies.remove(APICONSTANTS.authCookie.patient_id);
+                    $('body').off('click');
                     //TODO hit endpoint to expire auth token
                     //redirect to login
                     $state.go('sign-in');
@@ -123,19 +123,16 @@ angular.module('ua5App')
                     $scope.mobileUserMenuToggle = false;
                 };
 
-                // destroy body click event on state change
-                $scope.$on('$destroy', function() {
-                    $('body').off('click');
-                });
-
                 // Body click event to close dekstop user menu
                 $('body').on('click', function(event) {
                     if (!$(event.target).closest('.header__user-container').length) {
                         var scope = angular.element($('.header')).scope();
-                        scope.$apply(function() {
-                            scope.userMenuToggle = false;
-                            scope.notificationToggle = false;
-                        });
+                        if (scope.userMenuToggle || scope.notificationToggle) {
+                            scope.$apply(function() {
+                                scope.userMenuToggle = false;
+                                scope.notificationToggle = false;
+                            });
+                        }
                     }
                 });
             }]
