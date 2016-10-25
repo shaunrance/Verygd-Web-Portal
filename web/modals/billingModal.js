@@ -6,6 +6,7 @@ angular.module('ua5App')
         $scope.monthlyChecked = true;
         $scope.annualChosen = true;
         $scope.plan_name = {};
+        $scope.plan_name.type = 'monthly';
         $scope.name = {};
         $scope.card = {};
         $scope.month = {};
@@ -43,10 +44,10 @@ angular.module('ua5App')
                     if (response.payment) {
                         $scope.plan_name.type = response.payment.plan_name;
                         $scope.name.name = response.payment.name;
-                        $scope.card.number = '************' + response.payment.last4;
+                        $scope.card.number = '';
                         $scope.month.number = response.payment.exp_month < 10 ? '0' + response.payment.exp_month.toString() : response.payment.exp_month.toString();
                         $scope.year.number = response.payment.exp_year.toString();
-                        $scope.cvc.number = '***';
+                        $scope.cvc.number = '';
                         $scope.zip.number = response.payment.address_zip;
 
                         if (response.payment.last4) {
@@ -97,13 +98,9 @@ angular.module('ua5App')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(response);
-                    //debugger;
                     $state.reload();
                 },
                 function(error) {
-                    console.log(error.config);
-                    //debugger;
                 }
             );
         };

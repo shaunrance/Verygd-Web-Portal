@@ -77,12 +77,10 @@ angular.module('ua5App.billing')
 
         $scope.$on('annualPlanChosen', function() {
             $scope.annualBilling = false;
-            console.log('transmitted annual');
         });
 
         $scope.$on('monthlyPlanChosen', function() {
             $scope.annualBilling = true;
-            console.log('transmitted monthly');
         });
 
         $scope.switchBilling = function(data) {
@@ -111,13 +109,11 @@ angular.module('ua5App.billing')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(response);
-                    //debugger;
+
                     $state.reload();
                 },
                 function(error) {
-                    console.log(error.config);
-                    //debugger;
+
                 }
             );
         };
