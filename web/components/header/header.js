@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App')
     .directive('header', ['$state', '$http', 'APICONSTANTS', '$cookies', '$rootScope', function($state, $http, APICONSTANTS, $cookies, $rootScope) {
         return {
@@ -14,7 +14,10 @@ angular.module('ua5App')
 
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
+                $scope.projectTitle = '';
+                $scope.mobileUserMenuToggle = false;
                 $scope.userMenuToggle = false;
+                $scope.notificationToggle = false;
                 $scope.isActive = false;
 
                 $scope.backButtonHide = true;
@@ -83,26 +86,55 @@ angular.module('ua5App')
                     //remove cookies
                     $cookies.remove(APICONSTANTS.authCookie.token);
                     $cookies.remove(APICONSTANTS.authCookie.user_id);
-                    $cookies.remove(APICONSTANTS.authCookie.visited);
-
+                    $cookies.remove(APICONSTANTS.authCookie.patient_id);
+                    $('body').off('click');
                     //TODO hit endpoint to expire auth token
                     //redirect to login
                     $state.go('sign-in');
                 };
 
-                $scope.toggleMenu = function() {
-                    if (!$scope.userMenuToggle) {
-                        $scope.userMenuToggle = true;
+                $scope.toggleMenuMobile = function() {
+                    if (!$scope.mobileUserMenuToggle) {
+                        $scope.mobileUserMenuToggle = true;
                         disableScroll();
                     } else {
-                        $scope.userMenuToggle = false;
+                        $scope.mobileUserMenuToggle = false;
                         enableScroll();
                     }
                 };
 
-                $scope.closeMenu = function() {
-                    $scope.userMenuToggle = false;
+                $scope.toggleMenu = function() {
+                    if ($scope.notificationToggle) {
+                        $scope.notificationToggle = false;
+                    }
+
+                    $scope.userMenuToggle = !$scope.userMenuToggle;
                 };
+
+                $scope.toggleNotification = function() {
+                    if ($scope.userMenuToggle) {
+                        $scope.userMenuToggle = false;
+                    }
+
+                    $scope.notificationToggle = !$scope.notificationToggle;
+                };
+
+                $scope.closeMenu = function() {
+                    $scope.mobileUserMenuToggle = false;
+                };
+
+                // Body click event to close dekstop user menu
+                $('body').on('click', function(event) {
+                    if (!$(event.target).closest('.header__user-container').length) {
+                        var scope = angular.element($('.header')).scope();
+                        if (scope.userMenuToggle || scope.notificationToggle) {
+                            scope.$apply(function() {
+                                scope.userMenuToggle = false;
+                                scope.notificationToggle = false;
+                            });
+                        }
+                    }
+                });
             }]
         };
     }])
