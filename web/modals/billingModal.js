@@ -2,12 +2,17 @@
 angular.module('ua5App')
 	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.annualChecked = false;
-        $scope.monthlyChecked = true;
+        $scope.plan_name = {};
+        $scope.card = {};
+        $scope.name = {};
+        $scope.cvc = {};
+        $scope.zip = {};
+        $scope.year = {};
+        $scope.month = {};
 
         $scope.title = 'Professional Plan';
+        $scope.formLabels = fields.formLabels;
         $scope.currentPlan = '$25.00/mo';
-        $scope.formLabels = 'dfdsf';
         $scope.price = '$' + 25;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {
@@ -32,15 +37,16 @@ angular.module('ua5App')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    console.log(response.payment.name);
                     if (response.payment) {
-                        $scope.plan_name = response.payment.month;
-                        $scope.name = response.payment.name;
-                        $scope.number = '************' + response.payment.last4;
-                        $scope.month = response.payment.exp_month;
-                        $scope.year = response.payment.exp_year;
-                        $scope.cvc = '***';
-                        $scope.zip = response.payment.address_zip;
+                        $scope.annualChecked = response.payment.plan_name === 'annual' ? true : false;
+                        $scope.monthlyChecked = response.payment.plan_name === 'monthly' ? true : false;
+                        $scope.plan_name.type = response.payment.plan_name;
+                        $scope.name.name = response.payment.name;
+                        $scope.card.number = '************' + response.payment.last4;
+                        $scope.month.number = response.payment.exp_month < 10 ? '0' + response.payment.exp_month.toString() : response.payment.exp_month.toString();
+                        $scope.year.number = response.payment.exp_year.toString();
+                        $scope.cvc.number = '***';
+                        $scope.zip.number = response.payment.address_zip;
 
                         if (response.payment.last4) {
                             $scope.premiumClicked = true;
@@ -62,31 +68,35 @@ angular.module('ua5App')
         $scope.annualPlan = function() {
             $scope.annualChecked = true;
             $scope.monthlyChecked = false;
+            $scope.plan_name.type = 'annual';
         };
 
         $scope.monthlyPlan = function() {
             $scope.annualChecked = false;
             $scope.monthlyChecked = true;
+            $scope.plan_name.type = 'monthly';
         };
 
-        $scope.updateUser = function(data) {
+        $scope.updateUser = function() {
             var paymentData;
-
             paymentData = {
-                plan_name: data.paymentType ? 'annual' : 'monthly',
+                plan_name: $scope.plan_name.type,
                 card: {
-                    name: data.name,
-                    number: data.cardNumber,
-                    exp_month: data.month,
-                    exp_year: data.year,
-                    cvc: data.cvc,
-                    address_zip: data.zip
+                    name: $scope.name.name,
+                    number: $scope.card.number,
+                    exp_month: $scope.month.number,
+                    exp_year: $scope.year.number,
+                    cvc: $scope.cvc.number,
+                    address_zip: $scope.zip.number
                 }
             };
 
+            console.log(paymentData.plan_name);
+
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(paymentData.plan_name);
+                    console.log(response);
+                    //console.log(paymentData.plan_name);
                     if (paymentData.plan_name === 'year') {
                         console.log('annual plan chosen');
                         $rootScope.$broadcast('annualPlanChosen');
@@ -97,7 +107,7 @@ angular.module('ua5App')
                     $state.reload();
                 },
                 function(error) {
-                    debugger;
+                    console.log(error);
                 }
             );
         };
