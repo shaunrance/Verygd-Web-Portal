@@ -18,7 +18,6 @@ angular.module('ua5App')
                         remove: {method: 'DELETE'}
                     }
                 );
-
             },
             signup: function() {
                 return $resource(APICONSTANTS.apiHost + '/users/signup', {},

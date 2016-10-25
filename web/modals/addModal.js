@@ -19,7 +19,7 @@ angular.module('ua5App')
         $scope.cancel = function() {
             close({
                 input: $scope.input.fields
-            }); 
+            });
         };
     }])
 ;

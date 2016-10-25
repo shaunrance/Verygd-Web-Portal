@@ -1,5 +1,17 @@
-<div header header-title-data="title"></div>
+<div
+    header
+    header-title-data="title">
+</div>
 <div ui-view class="projects">
+    <div
+        ng-hide="hideCta"
+        class="projects-paid-plan-cta">
+        <span class="projects-paid-plan-cta-bold">Try our Premium plan.</span>
+        <span>All of your projects are public until you <a ui-sref="account.billing">select from one of our paid plans</a>.</span>
+        <button class="projects-paid-plan-cta-button" type="button" ng-click="closeCta()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+    </div>
     <div  class="vg__items">
         <figure
             ng-repeat="project in projects"

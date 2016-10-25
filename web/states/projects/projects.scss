@@ -4,6 +4,30 @@
     position: relative;
 }
 
+.projects-paid-plan-cta {
+    @include padding(15px 10px);
+    border: 1px solid $pink;
+    color: $pink;
+    font-size: 14px;
+    margin-bottom: 20px;
+    position: relative;
+
+    a {
+        color: $btn-blue;
+    }
+}
+
+.projects-paid-plan-cta-bold {
+    font-weight: bold;
+}
+
+.projects-paid-plan-cta-button {
+    @extend %icon-button;
+    max-width: 15px;
+    position: absolute;
+    right: 15px;
+}
+
 .vg__item--wrapper {
     margin-bottom: $item-wrapper-margin-desk;
     position: relative;

@@ -45,12 +45,14 @@ angular.module('ua5App.sign-up')
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
 
                     $state.go('projects');
+
                 },
                 function(error) {
                     $state.go('sign-up');
                 }
             );
         };
+        console.log($cookies.get(APICONSTANTS.authCookie.visited))
 
         $scope.createUser = function(data) {
             var user;
