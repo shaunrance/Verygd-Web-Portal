@@ -4,6 +4,8 @@ angular.module('ua5App')
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualChecked = false;
         $scope.monthlyChecked = true;
+        $scope.annualChosen = true;
+        $scope.plan_name = 'annual';
 
         $scope.title = 'Professional Plan';
         $scope.currentPlan = '$25.00/mo';
@@ -32,7 +34,6 @@ angular.module('ua5App')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    console.log(response.payment.name);
                     if (response.payment) {
                         $scope.plan_name = response.payment.month;
                         $scope.name = response.payment.name;
@@ -67,6 +68,20 @@ angular.module('ua5App')
         $scope.monthlyPlan = function() {
             $scope.annualChecked = false;
             $scope.monthlyChecked = true;
+        };
+
+        $scope.switchBilling = function(data) {
+            if ($scope.annualChosen) {
+                $scope.annualChosen = false;
+                console.log($scope.annualChosen);
+                console.log($scope.plan_name);
+                $scope.plan_name = 'monthly';
+            } else {
+                $scope.annualChosen = true;
+                console.log($scope.annualChosen);
+                console.log($scope.plan_name);
+                $scope.plan_name = 'annual';
+            }
         };
 
         $scope.updateUser = function(data) {

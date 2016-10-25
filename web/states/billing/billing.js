@@ -20,6 +20,8 @@ angular.module('ua5App.billing')
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
         $scope.errorMessage = null;
         $scope.disableButton = true;
+        $scope.annualChosen = true;
+        $scope.plan_name = 'annual';
 
         $scope.showModal = function() {
 
@@ -36,7 +38,6 @@ angular.module('ua5App.billing')
                 }
             }).then(function(modal) {
                 modal.close.then(function(result) {
-                    console.log(result);
                 });
             });
         };
@@ -44,10 +45,9 @@ angular.module('ua5App.billing')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    console.log(response);
                     $scope.type = 'Basic';
                     if (response.payment) {
-                        $scope.plan_name = response.payment.interval;
+                        $scope.plan_name = response.payment.plan_name;
                         $scope.name = response.payment.name;
                         $scope.number = response.payment.last4;
                         $scope.month = response.payment.exp_month;
@@ -80,11 +80,21 @@ angular.module('ua5App.billing')
             $scope.annualBilling = false;
         });
 
+        $scope.switchBilling = function(data) {
+            if ($scope.annualChosen) {
+                $scope.annualChosen = false;
+                $scope.plan_name = 'monthly';
+            } else {
+                $scope.annualChosen = true;
+                $scope.plan_name = 'annual';
+            }
+        };
+
         $scope.updateUser = function(data) {
             var paymentData;
 
             paymentData = {
-                plan_name: data.paymentType ? 'annual' : 'monthly',
+                plan_name: $scope.plan_name,
                 card: {
                     name: data.cardName,
                     number: data.cardNumber,
@@ -97,9 +107,13 @@ angular.module('ua5App.billing')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
+                    console.log(paymentData);
+                    debugger;
                     $state.reload();
                 },
                 function(error) {
+                    console.log(error.config)
+                    debugger;
                 }
             );
         };
