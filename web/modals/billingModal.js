@@ -2,8 +2,6 @@
 angular.module('ua5App')
 	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.annualChecked = false;
-        $scope.monthlyChecked = true;
         $scope.annualChosen = true;
         $scope.plan_name = {};
         $scope.plan_name.type = 'monthly';
@@ -42,6 +40,14 @@ angular.module('ua5App')
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
                     if (response.payment) {
+                        if (response.payment.plan_name === 'monthly') {
+                            $scope.annualChecked = false;
+                            $scope.monthlyChecked = true;
+                        } else {
+                            $scope.annualChecked = true;
+                            $scope.monthlyChecked = false;
+                        }
+
                         $scope.plan_name.type = response.payment.plan_name;
                         $scope.name.name = response.payment.name;
                         $scope.card.number = '';
