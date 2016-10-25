@@ -52,6 +52,7 @@ angular.module('ua5App.sign-up')
                 }
             );
         };
+        console.log($cookies.get(APICONSTANTS.authCookie.visited))
 
         $scope.createUser = function(data) {
             var user;

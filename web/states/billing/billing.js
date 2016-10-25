@@ -15,6 +15,11 @@ angular.module('ua5App.billing')
     .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.basicAccount = true;
+        $scope.annualBilling = true;
+        $scope.annualStatement = 'Next Payment of $348 will be processed on 12/01/2017';
+        $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
+        $scope.errorMessage = null;
+        $scope.disableButton = true;
 
         $scope.showModal = function() {
 
@@ -39,8 +44,10 @@ angular.module('ua5App.billing')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
+                    console.log(response);
                     $scope.type = 'Basic';
                     if (response.payment) {
+                        $scope.plan_name = response.payment.interval;
                         $scope.name = response.payment.name;
                         $scope.number = response.payment.last4;
                         $scope.month = response.payment.exp_month;
@@ -64,6 +71,14 @@ angular.module('ua5App.billing')
                 }
             );
         }
+
+        $scope.$on('annualPlanChosen', function() {
+            $scope.annualBilling = true;
+        });
+
+        $scope.$on('monthlyPlanChosen', function() {
+            $scope.annualBilling = false;
+        });
 
         $scope.updateUser = function(data) {
             var paymentData;

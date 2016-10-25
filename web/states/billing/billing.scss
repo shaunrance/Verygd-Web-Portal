@@ -52,6 +52,12 @@
     text-decoration: none;
 }
 
+.account-billing-toggle-switch {
+    @extend %h7;
+    @include position(relative, -3px null null);
+    color: $grey-darkest;
+}
+
 .account-info-section {
     @include clearfix;
     @include padding(10px);
@@ -91,7 +97,7 @@
 }
 
 .account-billing-toggle {
-    margin-top: 6px;
+    margin-top: 15px;
     position: relative;
 }
 

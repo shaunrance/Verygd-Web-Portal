@@ -172,9 +172,9 @@
     .account-info-section {
         margin-top: 0;
 
-        &:first-of-type {
-            display: none;
-        }
+        // &:first-of-type {
+        //     display: none;
+        // }
 
         .account-info-data {
             border-bottom: 1px solid $grey-dark;
@@ -187,7 +187,7 @@
         .account-info-data--number,
         .account-info-data--name {
             margin-right: 5%;
-            width: 35%;
+            width: 43%;
         }
 
         .account-info-data--month,
@@ -195,7 +195,7 @@
         .account-info-data--cvc,
         .account-info-data--zip {
             margin-right: 5%;
-            width: 25%;
+            width: 17%;
 
             & + & {
                 margin-right: 0;
