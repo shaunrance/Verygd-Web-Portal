@@ -20,7 +20,6 @@ angular.module('ua5App.billing')
         $scope.errorMessage = null;
         $scope.disableButton = true;
         $scope.annualChosen = true;
-        $scope.plan_name = 'annual';
 
         $scope.showModal = function() {
 
@@ -87,18 +86,17 @@ angular.module('ua5App.billing')
         });
 
         $scope.switchBilling = function(data) {
-            if ($scope.annualChosen) {
-                $scope.annualChosen = false;
+            if (!$scope.annualChosen) {
+                $scope.annualChosen = true;
                 $scope.plan_name = 'monthly';
             } else {
-                $scope.annualChosen = true;
+                $scope.annualChosen = false;
                 $scope.plan_name = 'annual';
             }
         };
 
         $scope.updateUser = function(data) {
             var paymentData;
-
             paymentData = {
                 plan_name: $scope.plan_name,
                 card: {

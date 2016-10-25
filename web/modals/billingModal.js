@@ -95,8 +95,6 @@ angular.module('ua5App')
                 }
             };
 
-            console.log(paymentData);
-
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
                     console.log(response);
