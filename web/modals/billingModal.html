@@ -22,13 +22,13 @@
                 <a
                     class="modal-overlay-options-billing modal-overlay-options-billing--annual"
                     ng-class="{'active': annualChecked}"
-                    ng-click="annualPlan()">
+                    ng-click="annualPlan();">
                     Annual Billing
                 </a>
                 <a
                     class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
                     ng-class="{'active': monthlyChecked}"
-                    ng-click="monthlyPlan()">
+                    ng-click="monthlyPlan();">
                     Monthly Billing
                 </a>
             </div>
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <form ng-submit="updateUser(model)">
+                <form ng-submit="updateUser()">
                     <div class="account-info-section">
                         <input
                             class="modal-baccount-info-data--checkbox"
@@ -91,8 +91,8 @@
                             name="paymentType"
                             id="paymentType"
                             value="plan_name"
-                            ng-model="model.paymentType"
-                            ng-change="paymentType(model.paymentType)"
+                            ng-model="plan_name.type"
+                            ng-change="paymentType(plan_name.type)"
                             ng-checked="annualChecked" />
                     </div>
                     <div class="account-info-section">
@@ -110,8 +110,7 @@
                         <input
                             class="account-info-data account-info-data--number"
                             type="text"
-                            ng-model="model.cardNumber"
-                            placeholder="{{number}}"
+                            placeholder="Card Number"
                             required />
                         <select
                             class="account-info-data account-info-data--month"
@@ -119,20 +118,20 @@
                             id="month"
                             onchange=""
                             size="1"
-                            ng-model="model.month"
+                            ng-model="month.number"
                             required >
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
                         </select>
                         <select
                             class="account-info-data account-info-data--year"
@@ -140,7 +139,7 @@
                             id="year"
                             onchange=""
                             size="1"
-                            ng-model="model.year"
+                            ng-model="year.number"
                             required >
                             <option value="2016">2016</option>
                             <option value="2017">2017</option>
@@ -171,20 +170,17 @@
                         <input
                             class="account-info-data account-info-data--name"
                             type="text"
-                            ng-model="model.name"
-                            value="{{name}}"
+                            ng-model="name.name"
                             required />
                         <input
                             class="account-info-data account-info-data--cvc"
-                            type="number"
-                            ng-model="model.cvc"
-                            placeholder="{{cvc}}"
+                            type="tel"
+                            placeholder="CVC"
                             required />
                         <input
                             class="account-info-data account-info-data--zip"
-                            type="number"
-                            ng-model="model.zip"
-                            value=""
+                            type="tel"
+                            ng-model="zip.number"
                             required />
                     </div>
                     <div class="account-info-section account-info-section--submit">

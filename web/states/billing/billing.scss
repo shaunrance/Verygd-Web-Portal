@@ -130,3 +130,7 @@
     position: relative;
     top: 10px;
 }
+
+.billing-info-button {
+    @include size(120px 40px);
+}

@@ -31,26 +31,28 @@
                 <div class="account-billing-toggle">
                     <toggle-switch
                         color="true"
-                        ng-model="sceneTypeToggle"
-                        ng-click="annualBilling=!annualBilling">
+                        ng-model="annualBilling"
+                        on-label="ON"
+                        off-label="OFF"
+                        ng-click="switchBilling();">
                     </toggle-switch>
-                    <span
+                    <!-- <span
                         class="account-billing-toggle-switch"
                         ng-show="annualBilling">ON</span>
                     <span
                         class="account-billing-toggle-switch"
-                        ng-hide="annualBilling">OFF</span>
+                        ng-hide="annualBilling">OFF</span> -->
                 </div>
                 <div class="account-billing-statement">
                     <span
                         class="account-billing-statement-text"
                         ng-show="annualBilling"
-                        ng-bind="annualStatement">
+                        ng-bind="monthlyStatement">
                     </span>
                     <span
                         class="account-billing-statement-text"
                         ng-hide="annualBilling"
-                        ng-bind="monthlyStatement">
+                        ng-bind="annualStatement">
                     </span>
                 </div>
             </div>
@@ -166,10 +168,8 @@
                 </div>
                 <div class="account-info-section">
                     <input
-                        class="modal-submit modal-button"
+                        class="billing-info-button modal-submit modal-update modal-button"
                         type="submit"
-                        ng-disabled='!model.cardName || !model.cardNumber || !model.month || !model.year || !model.cvc || !model.zip'
-                        ng-class="{'button-disable': disableButton === true}"
                         value="Update">
                 </div>
             </form>

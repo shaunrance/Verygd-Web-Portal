@@ -4,6 +4,14 @@ angular.module('ua5App')
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualChecked = false;
         $scope.monthlyChecked = true;
+        $scope.annualChosen = true;
+        $scope.plan_name = {};
+        $scope.name = {};
+        $scope.card = {};
+        $scope.month = {};
+        $scope.year = {};
+        $scope.cvc = {};
+        $scope.zip = {};
 
         $scope.title = 'Professional Plan';
         $scope.currentPlan = '$25.00/mo';
@@ -32,15 +40,14 @@ angular.module('ua5App')
         function initialValues() {
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
-                    console.log(response.payment.name);
                     if (response.payment) {
-                        $scope.plan_name = response.payment.month;
-                        $scope.name = response.payment.name;
-                        $scope.number = '************' + response.payment.last4;
-                        $scope.month = response.payment.exp_month;
-                        $scope.year = response.payment.exp_year;
-                        $scope.cvc = '***';
-                        $scope.zip = response.payment.address_zip;
+                        $scope.plan_name.type = response.payment.plan_name;
+                        $scope.name.name = response.payment.name;
+                        $scope.card.number = '************' + response.payment.last4;
+                        $scope.month.number = response.payment.exp_month < 10 ? '0' + response.payment.exp_month.toString() : response.payment.exp_month.toString();
+                        $scope.year.number = response.payment.exp_year.toString();
+                        $scope.cvc.number = '***';
+                        $scope.zip.number = response.payment.address_zip;
 
                         if (response.payment.last4) {
                             $scope.premiumClicked = true;
@@ -62,42 +69,41 @@ angular.module('ua5App')
         $scope.annualPlan = function() {
             $scope.annualChecked = true;
             $scope.monthlyChecked = false;
+            $scope.plan_name.type = 'annual';
+            $rootScope.$broadcast('annualPlanChosen');
         };
 
         $scope.monthlyPlan = function() {
             $scope.annualChecked = false;
             $scope.monthlyChecked = true;
+            $scope.plan_name.type = 'monthly';
+            $rootScope.$broadcast('monthlyPlanChosen');
         };
 
-        $scope.updateUser = function(data) {
+        $scope.updateUser = function() {
             var paymentData;
 
             paymentData = {
-                plan_name: data.paymentType ? 'annual' : 'monthly',
+                plan_name: $scope.plan_name.type,
                 card: {
-                    name: data.name,
-                    number: data.cardNumber,
-                    exp_month: data.month,
-                    exp_year: data.year,
-                    cvc: data.cvc,
-                    address_zip: data.zip
+                    name: $scope.name.name,
+                    number: $scope.card.number,
+                    exp_month: $scope.month.number,
+                    exp_year: $scope.year.number,
+                    cvc: $scope.cvc.number,
+                    address_zip: $scope.zip.number
                 }
             };
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(paymentData.plan_name);
-                    if (paymentData.plan_name === 'year') {
-                        console.log('annual plan chosen');
-                        $rootScope.$broadcast('annualPlanChosen');
-                    } else {
-                        console.log('monthly plan chosen');
-                        $rootScope.$broadcast('monthlyPlanChosen');
-                    }
+                    console.log(response);
+                    //debugger;
                     $state.reload();
                 },
                 function(error) {
-                    debugger;
+                    console.log(error.config);
+                    //debugger;
                 }
             );
         };
