@@ -15,7 +15,6 @@ angular.module('ua5App.billing')
     .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.basicAccount = true;
-        $scope.annualBilling = {};
         $scope.annualStatement = 'Next Payment of $348 will be processed on 12/01/2017';
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
         $scope.errorMessage = null;
@@ -47,6 +46,11 @@ angular.module('ua5App.billing')
                 function(response) {
                     $scope.type = 'Basic';
                     if (response.payment) {
+                        if (response.payment.plan_name === 'annual') {
+                            $scope.annualBilling = false;
+                        } else {
+                            $scope.annualBilling = true;
+                        }
                         $scope.plan_name = response.payment.plan_name;
                         $scope.name = response.payment.name;
                         $scope.number = '************' + response.payment.last4;
@@ -73,12 +77,12 @@ angular.module('ua5App.billing')
         }
 
         $scope.$on('annualPlanChosen', function() {
-            $scope.annualBilling.annual = true;
+            $scope.annualBilling = false;
             console.log('transmitted annual');
         });
 
         $scope.$on('monthlyPlanChosen', function() {
-            $scope.annualBilling.annual = false;
+            $scope.annualBilling = true;
             console.log('transmitted monthly');
         });
 
@@ -109,13 +113,13 @@ angular.module('ua5App.billing')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(paymentData);
-                    debugger;
+                    console.log(response);
+                    //debugger;
                     $state.reload();
                 },
                 function(error) {
-                    console.log(error.config)
-                    debugger;
+                    console.log(error.config);
+                    //debugger;
                 }
             );
         };
