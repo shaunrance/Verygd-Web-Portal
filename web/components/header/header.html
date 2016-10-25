@@ -68,14 +68,14 @@
                 </div>
 
                 <div class="header__user-name" ng-click="toggleMenu()">
-                    <div class="header__avatar"></div>
+<!--                     <div class="header__avatar"></div> -->
                     <span>John Smith</span>
                 </div>
 
                 <div class="header__user-menu" ng-class="{'show': userMenuToggle}">
                     <ul class="menu-list">
                         <li class="menu-list--item">
-                            <div class="menu-link avatar"></div>
+<!--                             <div class="menu-link avatar"></div> -->
                             <span>John Smith</span>
                         </li>
                         <li class="menu-list--item">
@@ -90,7 +90,8 @@
                         <li class="menu-list--item">
                             <a
                                 class="menu-link"
-                                href="#">
+                                href="#"
+                                ui-sref="account.billing">
                                 Upgrade Plan
                             </a>
                         </li>
