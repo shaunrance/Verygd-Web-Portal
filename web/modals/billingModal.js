@@ -94,7 +94,7 @@ angular.module('ua5App')
                     $state.reload();
                 },
                 function(error) {
-                    debugger;
+                    console.log(error);
                 }
             );
         };
