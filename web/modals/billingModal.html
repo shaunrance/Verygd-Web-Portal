@@ -1,0 +1,203 @@
+<div class="modal-overlay modal-billing">
+    <div class="modal modal--payment">
+        <button class="modal-close" type="button" ng-click="cancel()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+        <div class="modal-overlay-sections">
+            <div class="modal-header">
+                <div
+                    ng-show="annualChecked"
+                    class="modal-header-plan">
+                    <h3 class="modal-header-plan-title">Professional Plan</h3>
+                    <h3 class="modal-header-price">$250.00/YR</h3>
+                </div>
+                <div
+                    ng-show="monthlyChecked"
+                    class="modal-header-plan">
+                    <h3 class="modal-header-plan-title">Professional Plan</h3>
+                    <h3 class="modal-header-price">$25.00/MO</h3>
+                </div>
+            </div>
+            <div class="modal-overlay-options-billing-wrap">
+<!--                 <a
+                    class="modal-overlay-options-billing modal-overlay-options-billing--annual"
+                    ng-class="{'active': annualChecked}"
+                    ng-click="annualPlan()">
+                    Annual Billing
+                </a> -->
+                <a
+                    class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
+                    ng-class="{'active': monthlyChecked}"
+                    ng-click="monthlyPlan()">
+                    Monthly Billing
+                </a>
+            </div>
+            <div class="modal-body modal-body--grey">
+                <div class="form-group">
+                    <label class="modal-label">Payment Details</label>
+                </div>
+                <div class="modal-overlay-payment-plan">
+                    <div class="modal-overlay-payment-plan-title">
+                        Payment Plan
+                    </div>
+                    <div class="modal-overlay-payment-plan-details">
+                        <div
+                            ng-show="annualChecked"
+                            class="modal-overlay-payment-plan">
+                            <div class="modal-overlay-payment-inner">
+                                <div class="modal-overlay-payment-due">
+                                    Due today:
+                                </div>
+                                <div class="modal-overlay-payment-amount">
+                                    $250.00
+                                </div>
+                            </div>
+                            <div class="modal-overlay-payment-inner">
+                                <div class="modal-overlay-payment-due">
+                                    Next billing date:
+                                </div>
+                                <div class="modal-overlay-payment-amount">
+                                    10/10/2017
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            ng-show="monthlyChecked"
+                            class="modal-overlay-payment-plan">
+                            <div class="modal-overlay-payment-inner">
+                                <div class="modal-overlay-payment-due">
+                                    Due today:
+                                </div>
+                                <div class="modal-overlay-payment-amount">
+                                    $25.00
+                                </div>
+                            </div>
+                            <div class="modal-overlay-payment-inner">
+                                <div class="modal-overlay-payment-due">
+                                    Next billing date:
+                                </div>
+                                <div class="modal-overlay-payment-amount">
+                                    11/10/2016
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form ng-submit="updateUser(model)">
+                    <div class="account-info-section">
+                        <input
+                            class="modal-baccount-info-data--checkbox"
+                            type="checkbox"
+                            name="paymentType"
+                            id="paymentType"
+                            value="plan_name"
+                            ng-model="model.paymentType"
+                            ng-change="paymentType(model.paymentType)"
+                            ng-checked="annualChecked" />
+                    </div>
+                    <div class="account-info-section">
+                        <span class="account-info-title account-info-data--number">
+                            Credit Card Number
+                        </span>
+                        <span class="account-info-title account-info-data--month">
+                            Month
+                        </span>
+                        <span class="account-info-title account-info-data--year">
+                            Year
+                        </span>
+                    </div>
+                    <div class="account-info-section">
+                        <input
+                            class="account-info-data account-info-data--number"
+                            type="text"
+                            ng-model="model.cardNumber"
+                            placeholder="{{number}}"
+                            required />
+                        <select
+                            class="account-info-data account-info-data--month"
+                            name="month"
+                            id="month"
+                            onchange=""
+                            size="1"
+                            ng-model="model.month"
+                            required >
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <select
+                            class="account-info-data account-info-data--year"
+                            name="year"
+                            id="year"
+                            onchange=""
+                            size="1"
+                            ng-model="model.year"
+                            required >
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                    <div class="account-info-section">
+                        <span class="account-info-title account-info-data--name">
+                            Name on Card
+                        </span>
+                        <span class="account-info-title account-info-data--cvc">
+                            cvc
+                        </span>
+                        <span class="account-info-title account-info-data--zip">
+                            zip code
+                        </span>
+                    </div>
+                    <div class="account-info-section">
+                        <input
+                            class="account-info-data account-info-data--name"
+                            type="text"
+                            ng-model="model.name"
+                            value="{{name}}"
+                            required />
+                        <input
+                            class="account-info-data account-info-data--cvc"
+                            type="number"
+                            ng-model="model.cvc"
+                            placeholder="{{cvc}}"
+                            required />
+                        <input
+                            class="account-info-data account-info-data--zip"
+                            type="number"
+                            ng-model="model.zip"
+                            value=""
+                            required />
+                    </div>
+                    <div class="account-info-section account-info-section--submit">
+                        <input
+                            class="modal-submit modal-button"
+                            type="submit"
+                            ng-disabled="model.$invalid"
+                            ng-class="{'button-disable': disableButton === true}"
+                            value="Charge my card now"
+                            ng-click="close()">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

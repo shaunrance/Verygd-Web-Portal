@@ -14,7 +14,6 @@ angular.module('ua5App')
 
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
-                $scope.projectTitle = '';
                 $scope.userMenuToggle = false;
                 $scope.isActive = false;
 
@@ -84,7 +83,7 @@ angular.module('ua5App')
                     //remove cookies
                     $cookies.remove(APICONSTANTS.authCookie.token);
                     $cookies.remove(APICONSTANTS.authCookie.user_id);
-                    $cookies.remove(APICONSTANTS.authCookie.patient_id);
+                    $cookies.remove(APICONSTANTS.authCookie.visited);
 
                     //TODO hit endpoint to expire auth token
                     //redirect to login

@@ -25,6 +25,8 @@ angular.module('ua5App.sign-in')
             $state.go('projects');
         }
 
+        console.log(APICONSTANTS.authCookie);
+
         $scope.login = function(data) {
             if (!data && (!data.email || !data.password)) {
                 return false;

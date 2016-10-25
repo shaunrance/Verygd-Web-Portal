@@ -1,0 +1,132 @@
+.billing {
+
+    .account-info-data {
+
+        @include placeholder {
+            color: rgba($black, 0.5);
+        }
+    }
+}
+
+.account-info-data--checkbox {
+    opacity: 0.2;
+}
+
+
+.account-billing-inner {
+    @include clearfix;
+    padding-bottom: 30px;
+    position: relative;
+
+    & + & {
+        border-bottom: 1px solid $grey-dark;
+    }
+}
+
+.account-billing-button-container {
+    display: block;
+    float: left;
+}
+
+.account-billing-info--hide {
+    display: none;
+}
+
+.account-billing-title {
+    @extend %uppercase;
+    @extend %h7;
+    color: $coal;
+    margin-top: 15px;
+    position: relative;
+    width: 20%;
+}
+
+.account-billing-update-button {
+    @extend %h7;
+    @include padding(12px 25px);
+    background-color: rgba($white, 0);
+    border: 1px solid $btn-blue;
+    color: $btn-blue;
+    margin-left: 20px;
+    position: relative;
+    text-decoration: none;
+}
+
+.account-billing-toggle-switch {
+    @extend %h7;
+    @include position(relative, -3px null null);
+    color: $grey-darkest;
+}
+
+.account-info-section {
+    @include clearfix;
+    @include padding(10px);
+    margin-top: 60px;
+    position: relative;
+
+    &:first-of-type {
+        display: none;
+    }
+
+    &.account-info-section-exp-sec {
+
+        .account-info-title {
+            margin-right: 2%;
+            width: 10%;
+        }
+
+        .account-info-data {
+            margin-right: 2%;
+            width: 10%;
+        }
+    }
+}
+
+.account-info-billing,
+.account-info-billing-price {
+    @extend %h2;
+    color: $navy;
+    float: left;
+}
+
+.account-billing-title,
+.account-billing-toggle,
+.account-billing-statement {
+    display: block;
+    float: left;
+}
+
+.account-billing-toggle {
+    margin-top: 15px;
+    position: relative;
+}
+
+.account-billing-toggle-bg,
+.account-billing-toggle-dial {
+    position: absolute;
+}
+
+.account-billing-toggle-bg {
+    @include size(50px 20px);
+    background-color: #67C500;
+    border-radius: 10px;
+    // box-shadow: inset 1px 1px 5px rgba($black, 0.5);
+    margin-top: 6px;
+}
+
+.account-billing-toggle-dial {
+    @include size(30px);
+    background-color: $white;
+    border-radius: 50%;
+    box-shadow: 2px 2px 6px rgba($black, 0.5);
+    z-index: 1;
+}
+
+.account-billing-statement-text {
+    @extend %h7;
+    color: $navy;
+    font-style: italic;
+    margin-left: 80px;
+    position: relative;
+    top: 10px;
+}
