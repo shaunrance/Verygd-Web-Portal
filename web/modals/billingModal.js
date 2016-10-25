@@ -1,8 +1,10 @@
 /* global angular */
 angular.module('ua5App')
-	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
+    .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualChosen = true;
+        $scope.annualChecked = false;
+        $scope.monthlyChecked = true;
         $scope.plan_name = {};
         $scope.plan_name.type = 'monthly';
         $scope.name = {};
