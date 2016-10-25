@@ -15,7 +15,7 @@ angular.module('ua5App.billing')
     .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.basicAccount = true;
-        $scope.annualBilling = true;
+        $scope.annualBilling = {};
         $scope.annualStatement = 'Next Payment of $348 will be processed on 12/01/2017';
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
         $scope.errorMessage = null;
@@ -49,7 +49,7 @@ angular.module('ua5App.billing')
                     if (response.payment) {
                         $scope.plan_name = response.payment.plan_name;
                         $scope.name = response.payment.name;
-                        $scope.number = response.payment.last4;
+                        $scope.number = '************' + response.payment.last4;
                         $scope.month = response.payment.exp_month;
                         $scope.year = response.payment.exp_year;
                         $scope.cvc = '***';
@@ -73,11 +73,13 @@ angular.module('ua5App.billing')
         }
 
         $scope.$on('annualPlanChosen', function() {
-            $scope.annualBilling = true;
+            $scope.annualBilling.annual = true;
+            console.log('transmitted annual');
         });
 
         $scope.$on('monthlyPlanChosen', function() {
-            $scope.annualBilling = false;
+            $scope.annualBilling.annual = false;
+            console.log('transmitted monthly');
         });
 
         $scope.switchBilling = function(data) {

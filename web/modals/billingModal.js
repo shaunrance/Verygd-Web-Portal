@@ -5,7 +5,7 @@ angular.module('ua5App')
         $scope.annualChecked = false;
         $scope.monthlyChecked = true;
         $scope.annualChosen = true;
-        $scope.plan_name = 'annual';
+        $scope.plan_name = {};
 
         $scope.title = 'Professional Plan';
         $scope.currentPlan = '$25.00/mo';
@@ -35,7 +35,7 @@ angular.module('ua5App')
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
                     if (response.payment) {
-                        $scope.plan_name = response.payment.month;
+                        $scope.plan_name.type = response.payment.plan_name;
                         $scope.name = response.payment.name;
                         $scope.number = '************' + response.payment.last4;
                         $scope.month = response.payment.exp_month;
@@ -63,32 +63,22 @@ angular.module('ua5App')
         $scope.annualPlan = function() {
             $scope.annualChecked = true;
             $scope.monthlyChecked = false;
+            $scope.plan_name.type = 'annual';
+            $rootScope.$broadcast('annualPlanChosen');
         };
 
         $scope.monthlyPlan = function() {
             $scope.annualChecked = false;
             $scope.monthlyChecked = true;
-        };
-
-        $scope.switchBilling = function(data) {
-            if ($scope.annualChosen) {
-                $scope.annualChosen = false;
-                console.log($scope.annualChosen);
-                console.log($scope.plan_name);
-                $scope.plan_name = 'monthly';
-            } else {
-                $scope.annualChosen = true;
-                console.log($scope.annualChosen);
-                console.log($scope.plan_name);
-                $scope.plan_name = 'annual';
-            }
+            $scope.plan_name.type = 'monthly';
+            $rootScope.$broadcast('monthlyPlanChosen');
         };
 
         $scope.updateUser = function(data) {
             var paymentData;
 
             paymentData = {
-                plan_name: data.paymentType ? 'annual' : 'monthly',
+                plan_name: $scope.plan_name,
                 card: {
                     name: data.name,
                     number: data.cardNumber,
@@ -101,14 +91,6 @@ angular.module('ua5App')
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-                    console.log(paymentData.plan_name);
-                    if (paymentData.plan_name === 'year') {
-                        console.log('annual plan chosen');
-                        $rootScope.$broadcast('annualPlanChosen');
-                    } else {
-                        console.log('monthly plan chosen');
-                        $rootScope.$broadcast('monthlyPlanChosen');
-                    }
                     $state.reload();
                 },
                 function(error) {
