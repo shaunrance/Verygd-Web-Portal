@@ -60,6 +60,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     is_panorama: $scope.sceneTypeToggle,
                     title: $scope.sceneName,
                     project: $stateParams.projectId
+                }).then(function() {
+                    if (!$scope.singlePanel) {
+                        getSceneInfo($scope.currentScene);
+                    }
                 });
             }
         });
@@ -182,6 +186,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         function getSceneInfo(sceneId) {
             sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
+                    if (response.data.content.length > 1) {
+                        $scope.singlePanel = false;
+                    } else {
+                        $scope.singlePanel = true;
+                    }
+
                     if (response.data.is_panorama) {
                         $scope.sceneTypeToggle = true;
                     } else {
@@ -336,10 +346,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.panels = _.sortBy($scope.panels, 'order');
                         if ($scope.panels.length === 1) {
                             $scope.singlePanel = true;
-                            $scope.panorama = true;
-                        } else {
-                            $scope.singlePanel = false;
                         }
+
                         $scope.emptyScene = false;
                     } else {
                         $scope.emptyScene = true;

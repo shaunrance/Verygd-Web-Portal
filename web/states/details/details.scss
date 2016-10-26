@@ -181,10 +181,28 @@
     @include padding(23px 0);
 }
 
+.scene-preview__copy {
+    @include position(absolute);
+    bottom: 25px;
+    left: 0;
+    width: 100%;
+
+    &.hide {
+        display: none;
+    }
+}
+
+.scene-preview__message {
+    @include align-all(absolute);
+    width: 80%;
+}
+
 .scene-preview__display {
     @include padding(20px 20px 40px);
     background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(244, 244, 244, 1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f4f4f4', GradientType=1);
+    min-height: 290px;
+    position: relative;
 }
 
 .scene-preview__icon {
