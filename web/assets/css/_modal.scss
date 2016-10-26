@@ -79,6 +79,77 @@
 }
 
 .modal-billing {
+    background: radial-gradient(ellipse at center, rgba(54, 59, 111, 1) 0%, rgba(19, 21, 42, 1) 100%);
+    display: block;
+
+    .modal-overlay-header {
+        font-family: "OpenSans", sans-serif;
+        margin-top: 5%;
+        position: relative;
+    }
+
+    .modal-overlay-header__title {
+        color: $white;
+        font-size: 48px;
+        margin-bottom: 50px;
+        text-align: center;
+        text-transform: none;
+    }
+
+    .modal-overlay-header__desc {
+        color: $neon-blue;
+        font-size: 24px;
+        margin: 0;
+        text-align: center;
+    }
+
+    .modal--payment-options {
+        margin: 115px auto;
+        position: relative;
+        width: 450px;
+    }
+
+    .modal--payment-options-inner {
+        display: flex;
+        flex-wrap: row wrap;
+    }
+
+    .modal-overlay-options-billing {
+        @include padding(1em 0);
+        @include transition(background-color, $transition-speed);
+        border-bottom: 1px solid $neon-blue;
+        border-top: 1px solid $neon-blue;
+        color: $white;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        width: 50%;
+
+        &.active {
+            background-color: $btn-blue;
+        }
+
+        &:nth-child(1) {
+            border-bottom-left-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-top-left-radius: 2em;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-right: 1px solid $neon-blue;
+            border-top-right-radius: 2em;
+        }
+    }
+
+    .modal--payment-tooltip {
+        @include position(absolute);
+        color: $white;
+        right: -80px;
+        top: -50px;
+    }
 
     .modal-body {
         padding-top: 10px;
@@ -89,6 +160,7 @@
     }
 
     .modal-close {
+        position: absolute;
         right: 15px;
         top: 15px;
     }
@@ -99,20 +171,6 @@
 
     .modal-header-price {
         @include position(absolute, 15px 0 null null);
-    }
-
-    .modal-overlay-options-billing {
-        @include padding(10px 5px);
-        display: inline-block;
-
-        &.modal-overlay-options-billing--monthly {
-            margin-left: 30px;
-        }
-
-        &.active {
-            border-bottom: 2px solid $btn-blue;
-            color: $btn-blue;
-        }
     }
 
     .modal-billing-options {
@@ -241,4 +299,3 @@
         margin-top: 15px;
     }
 }
-

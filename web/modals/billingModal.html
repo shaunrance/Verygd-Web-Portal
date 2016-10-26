@@ -1,8 +1,30 @@
 <div class="modal-overlay modal-billing">
+    <button class="modal-close" type="button" ng-click="cancel()">
+        <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+    </button>
+    <div class="modal-overlay-header">
+        <h1 class="modal-overlay-header__title">{{title}}</h1>
+        <p class="modal-overlay-header__desc">You're currently on our {{planName}} plan.</p>
+        <p class="modal-overlay-header__desc">Upgrade now to lock in our exclusive Beta pricing for 12 months.</p>
+    </div>
+    <div class="modal--payment-options">
+        <div class="modal--payment-options-inner">
+            <a
+                class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
+                ng-class="{'active': monthlyChecked}"
+                ng-click="monthlyPlan();">
+                Monthly Billing
+            </a>
+            <a
+                class="modal-overlay-options-billing modal-overlay-options-billing--annual"
+                ng-class="{'active': annualChecked}"
+                ng-click="annualPlan();">
+                Annual Billing
+            </a>
+        </div>
+        <div class="modal--payment-tooltip">Save 20%</div>
+    </div>
     <div class="modal modal--payment">
-        <button class="modal-close" type="button" ng-click="cancel()">
-            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
-        </button>
         <div class="modal-overlay-sections">
             <div class="modal-header">
                 <div
@@ -17,20 +39,6 @@
                     <h3 class="modal-header-plan-title">Professional Plan</h3>
                     <h3 class="modal-header-price">$25.00/MO</h3>
                 </div>
-            </div>
-            <div class="modal-overlay-options-billing-wrap">
-                <a
-                    class="modal-overlay-options-billing modal-overlay-options-billing--annual"
-                    ng-class="{'active': annualChecked}"
-                    ng-click="annualPlan();">
-                    Annual Billing
-                </a>
-                <a
-                    class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
-                    ng-class="{'active': monthlyChecked}"
-                    ng-click="monthlyPlan();">
-                    Monthly Billing
-                </a>
             </div>
             <div class="modal-body modal-body--grey">
                 <div class="form-group">

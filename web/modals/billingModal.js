@@ -1,12 +1,13 @@
 /* global angular */
 angular.module('ua5App')
-	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
+    .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualChecked = false;
-        $scope.monthlyChecked = true;
-        $scope.annualChosen = true;
+        $scope.monthlyChecked = false;
+        $scope.basicChecked = true;
+        $scope.annualChosen = false;
         $scope.plan_name = {};
-        $scope.plan_name.type = 'monthly';
+        $scope.plan_name.type = 'basic';
         $scope.name = {};
         $scope.card = {};
         $scope.month = {};
@@ -14,7 +15,7 @@ angular.module('ua5App')
         $scope.cvc = {};
         $scope.zip = {};
 
-        $scope.title = 'Professional Plan';
+        $scope.title = 'Pricing';
         $scope.currentPlan = '$25.00/mo';
         $scope.formLabels = 'dfdsf';
         $scope.price = '$' + 25;
