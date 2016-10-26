@@ -289,7 +289,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         title: 'Link Panel',
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
                         showFileUpload: false,
-                        submitButtonTextLink: 'Link',
+                        submitButtonTextLink: 'Save',
                         submitButtonTextCancel: 'Cancel',
                         scenes: $scope.scenes,
                         content: content,
@@ -297,7 +297,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 }
             }).then(function(modal) {
-
+                modal.close.then(function() {
+                    getPanels($scope.currentScene);
+                });
             });
         };
 
@@ -344,6 +346,17 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;
                         $scope.panels = _.sortBy($scope.panels, 'order');
+
+                        _.each($scope.panels, function(panel) {
+                            if (panel.related_tag !== null) {
+                                _.each($scope.scenes, function(scene) {
+                                    if (parseInt(panel.related_tag, 10) === scene.id) {
+                                        panel.relatedSceneName = scene.title;
+                                    }
+                                });
+                            }
+                        });
+
                         if ($scope.panels.length === 1) {
                             $scope.singlePanel = true;
                         }

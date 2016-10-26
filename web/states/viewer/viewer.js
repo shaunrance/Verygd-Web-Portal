@@ -22,15 +22,17 @@ angular.module('ua5App.viewer')
         $scope.useVr = false;
         $scope.background = content.data.background;
         $scope.touch = BrowserFactory.hasTouch();
-        $scope.content = content.data.content;
-        $scope.currentSceneScreens = $scope.content;
-        $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
+        $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 1}) : content.data.content;
+        $scope.currentScenePanels = $scope.content;
+        $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
 
-        _.each($scope.content, function(screen) {
-            if (parseInt(screen.tag, 10) > lastScene) {
-                lastScene = parseInt(screen.tag, 10);
-            }
-        });
+        if ($scope.content.length > 1) {
+            _.each($scope.content, function(panel) {
+                if (panel.id > lastScene) {
+                    lastScene = panel.id;
+                }
+            });
+        }
 
         $scope.toggleCardboard = function() {
             $scope.useVr = !$scope.useVr;
@@ -43,11 +45,16 @@ angular.module('ua5App.viewer')
         // right now we're going to simulate a scene change between two projects
         $scope.$on('scene:change', function(event, data) {
             var targetScene = parseInt(data.link, 10);
-            if (targetScene > 0) {
+
+            if (targetScene !== '') {
                 $scope.scene = targetScene;
-                $scope.currentSceneScreens = _.where($scope.content, {tag: $scope.scene.toString()});
-                $scope.currentSceneScreens = _.sortBy($scope.currentSceneScreens, 'order');
-                $scope.$apply();
+                sceneFactory.getSceneById($scope.scene)
+                    .then(function(response) {
+                        $scope.currentScenePanels = response.data.content;
+                        $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
+                        //this was causing $digest error, removing for now
+                        //$scope.$apply();
+                    });
             }
         });
     }])

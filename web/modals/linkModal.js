@@ -17,18 +17,19 @@ angular.module('ua5App')
         $scope.scenes = fields.scenes;
 
         _.each($scope.scenes, function(scene) {
-            if (scene.title === $scope.panel.related_tag) {
-                $scope.selectedScene = scene.title;
+            if (scene.id === parseInt($scope.panel.related_tag, 10)) {
+                $scope.selectedScene = scene.id;
             }
         });
 
         $scope.save = function() {
             fields.content.related_tag = $scope.selectedScene;
-            panelFactory.editPanel(fields.content.id, {related_tag: $scope.selectedScene});
-
-            close({
-                input: $scope.input.fields
-            });
+            panelFactory.editPanel(fields.content.id, {related_tag: $scope.selectedScene})
+                .then(function() {
+                    close({
+                        input: $scope.input.fields
+                    });
+                });
         };
 
         $scope.cancel = function() {
