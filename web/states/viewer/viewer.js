@@ -1,4 +1,4 @@
-/* global angular, _ */
+/* global angular, $, _ */
 angular.module('ua5App.viewer')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('viewer', {
@@ -57,5 +57,7 @@ angular.module('ua5App.viewer')
                     });
             }
         });
+
+        $('body').off('click');
     }])
 ;

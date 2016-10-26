@@ -12,7 +12,7 @@ angular.module('ua5App.projects')
             }
         });
     }])
-    .controller('projectsCtrl', ['$scope', '$state', 'projectFactory', 'ModalService', function($scope, $state, projectFactory, ModalService) {
+    .controller('projectsCtrl', ['$scope', '$rootScope', '$state', 'projectFactory', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', function($scope, $rootScope, $state, projectFactory, ModalService, AuthResource, APICONSTANTS, $cookies) {
         var addProject = function(project) {
             projectFactory.addProject(project)
 
@@ -25,6 +25,8 @@ angular.module('ua5App.projects')
 
             });
         };
+        $scope.hideCta = false;
+
         $scope.title = 'projects';
 
         $scope.newProject = {};
@@ -61,6 +63,10 @@ angular.module('ua5App.projects')
 
         };
 
+        $scope.closeCta = function() {
+            $scope.hideCta = true;
+        };
+
         function getProjects() {
             projectFactory.getProjects()
 
@@ -80,5 +86,20 @@ angular.module('ua5App.projects')
                 });
         }
 
+        function checkUser() {
+            var visited = $cookies.get(APICONSTANTS.authCookie.visited);
+            if (visited === 'visited') {
+                $scope.hideCta = true;
+            }
+        }
+
+        $scope.$on('$locationChangeStart', function(event) {
+            if ($state.current.name === 'projects') {
+                $cookies.put(APICONSTANTS.authCookie.visited, 'visited');
+
+            }
+        });
+
         getProjects();
+        checkUser();
     }]);

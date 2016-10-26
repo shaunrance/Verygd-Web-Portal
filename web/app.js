@@ -50,10 +50,11 @@ angular.module('ua5App', [
     })
     .constant('APICONSTANTS', {
         //TODO add option for production server
-        apiHost: 'http://52.53.186.20/',
+        apiHost: 'http://52.53.186.20',
         authCookie: {
             token: 'vg-user',
-            user_id: 'vg-member'
+            user_id: 'vg-member',
+            visited: 'string'
         }
     })
     .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {

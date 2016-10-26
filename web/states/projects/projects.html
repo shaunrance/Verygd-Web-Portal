@@ -1,9 +1,28 @@
-<div header header-title-data="title"></div>
-<div ui-view class="projects" ng-class="{'slide-menu-open' : showMobileMenu}">
+<div
+    header
+    header-title-data="title">
+</div>
+<div ui-view class="projects">
+    <div
+        ng-hide="hideCta"
+        class="projects-paid-plan-cta">
+        <span class="projects-paid-plan-cta-bold">Try our Premium plan.</span>
+        <span>All of your projects are public until you <a ui-sref="account.billing">select from one of our paid plans</a>.</span>
+        <button class="projects-paid-plan-cta-button" type="button" ng-click="closeCta()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+    </div>
     <div  class="vg__items">
         <figure
             ng-repeat="project in projects"
             class="vg__item--wrapper project--wrapper">
+            <button
+                class="project__item--delete"
+                ng-click="deleteProject(project.id)">
+                <img
+                    class="project-delete_icon"
+                    src="assets/img/close.svg" />
+            </button>
             <a
                 class="vg__item--link project--link"
                 ui-sref="projects.details({ projectId: project.id })">
@@ -17,9 +36,6 @@
                     {{project.name}}
                 </figcaption>
             </a>
-            <button class="project__item--delete" ng-click="deleteProject(project.id)">
-                <img class="project-delete_icon" src="assets/img/delete.svg" />
-            </button>
         </figure>
-</div>
+    </div>
 </div>
