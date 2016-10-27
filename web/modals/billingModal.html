@@ -11,13 +11,13 @@
         <div class="modal--payment-options-inner">
             <a
                 class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
-                ng-class="{'active': currentPlan === 'monthly'}"
+                ng-class="{'active': selectedPlan === 'monthly'}"
                 ng-click="monthlyPlan();">
                 Monthly Billing
             </a>
             <a
                 class="modal-overlay-options-billing modal-overlay-options-billing--annual"
-                ng-class="{'active': currentPlay === 'annual'}"
+                ng-class="{'active': selectedPlan === 'annual'}"
                 ng-click="annualPlan();">
                 Annual Billing
             </a>
@@ -47,16 +47,16 @@
             </div>
             <div class="modal--payment-module-price-wrap">
                 <h1><span>$</span>{{price}}</h1>
-                <p ng-if="currentPlan === 'monthly'">Per Month</p>
-                <p ng-if="currentPlan === 'annual'">Per Year</p>
+                <p ng-if="selectedPlan === 'monthly'">Per Month</p>
+                <p ng-if="selectedPlan === 'annual'">Per Year</p>
             </div>
             <ul class="modal--payment-module-features">
                 <li>Unlimited Public Projects</li>
-                <li>Unlimited Private Project</li>
+                <li>Unlimited Private Projects</li>
                 <li>5 GB Limit</li>
             </ul>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="plan_name.type !== currentPlan" ng-click="">Change Plan</button>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="plan_name.type === currentPlan" ng-click="">Keep Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan !== currentPlan" ng-click="">Change Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan === currentPlan" ng-click="">Keep Plan</button>
         </div>
     </div>
     <div class="modal modal--payment">

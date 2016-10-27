@@ -3,9 +3,8 @@ angular.module('ua5App')
     .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.currentPlan = 'monthly';
+        $scope.selectedPlan = $scope.currentPlan;
         $scope.isBasic = true;
-        $scope.plan_name = {};
-        $scope.plan_name.type = 'basic';
         $scope.name = {};
         $scope.card = {};
         $scope.month = {};
@@ -40,13 +39,13 @@ angular.module('ua5App')
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
                     if (response.payment) {
-                        $scope.currentPlan = 'annual';
+                        $scope.currentPlan = response.payment.plan_name;
 
-                        if ($scope.plan_name.type === 'annual') {
+                        if ($scope.currentPlan === 'annual') {
                             $scope.isBasic = false;
                             $scope.planType = 'Premium';
                             $scope.price = 250;
-                        } else if ($scope.plan_name.type === 'monthly') {
+                        } else if ($scope.currentPlan === 'monthly') {
                             $scope.isBasic = false;
                             $scope.planType = 'Premium';
                             $scope.price = 25;
@@ -81,17 +80,14 @@ angular.module('ua5App')
         }
 
         $scope.annualPlan = function() {
-            $scope.currentPlan = 'annual';
+            $scope.selectedPlan = 'annual';
             $scope.price = 250;
-            $scope.plan_name.type = 'annual';
             $rootScope.$broadcast('annualPlanChosen');
         };
 
         $scope.monthlyPlan = function() {
-            $scope.annualChecked = false;
-            $scope.monthlyChecked = true;
+            $scope.selectedPlan = 'monthly';
             $scope.price = 25;
-            $scope.plan_name.type = 'monthly';
             $rootScope.$broadcast('monthlyPlanChosen');
         };
 
