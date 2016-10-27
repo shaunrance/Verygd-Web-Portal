@@ -75,16 +75,16 @@
     border-radius: 10px;
     transition-delay: 0.05s;
 
+    .disabled & {
+        background-color: $grey;
+    }
+
     .color & {
         background-color: $green;
     }
 
     .color .switch-on & {
         background-color: $red;
-    }
-
-    .disabled & {
-        background-color: $grey;
     }
 }
 

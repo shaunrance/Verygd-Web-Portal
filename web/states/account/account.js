@@ -17,7 +17,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
 
         $scope.userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         if (!$scope.userId) {
-            $scope.go('login');
+            $state.go('sign-in');
         }
 
         function getUserInfo() {
@@ -32,7 +32,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
                 var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
 
                 if (!userId) {
-                    $state.go('login');
+                    $state.go('sign-in');
                 } else {
                     UsersResource.user().retrieve({id: userId}).$promise.then(
                         function(response) {
@@ -47,7 +47,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
                         },
                         function(error) {
                             if (error.status === 401) {
-                                $state.go('login');
+                                $state.go('sign-in');
                             }
                         }
                     );
