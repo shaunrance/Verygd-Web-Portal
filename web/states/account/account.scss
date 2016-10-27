@@ -114,3 +114,9 @@
     @include size(120px 40px);
     margin-top: 124px;
 }
+
+@include media($phablet) {
+    .account {
+        padding: 50px 0;
+    }
+}

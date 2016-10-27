@@ -1,0 +1,16 @@
+@include media($phablet) {
+    .account-account-nav {
+        float: none;
+        margin-bottom: 50px;
+        width: 100%;
+    }
+
+    .account-nav {
+        align-items: center;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        position: relative;
+        width: 100%;
+    }
+}
