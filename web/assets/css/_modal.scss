@@ -5,6 +5,7 @@
     background-color: rgba(0, 0, 0, 0.5);
     height: 100%;
     left: 0;
+    overflow-y: auto;
     position: fixed;
     right: 0;
     top: 0;
@@ -21,15 +22,9 @@
 }
 
 .modal--payment {
-
-    .modal-body {
-
-        &.modal-body--grey {
-            background-color: $grey;
-            left: -30px;
-            width: 111%;
-        }
-    }
+    background-color: $grey;
+    display: none;
+    margin: 0 auto;
 }
 
 .modal-header {
@@ -54,14 +49,6 @@
     color: #999;
     max-height: 430px;
     overflow-y: auto;
-    padding: 20px 0;
-    width: 105%;
-
-    &.modal-body--grey {
-        background-color: $grey;
-        left: -30px;
-        width: 111%;
-    }
 }
 
 .modal-footer {
@@ -79,9 +66,183 @@
 }
 
 .modal-billing {
+    background: radial-gradient(ellipse at center, rgba(54, 59, 111, 1) 0%, rgba(19, 21, 42, 1) 100%);
+    display: block;
+    font-family: "OpenSans", sans-serif;
+
+    .modal-overlay-header {
+        margin-top: 5%;
+        position: relative;
+    }
+
+    .modal-overlay-header__title {
+        color: $white;
+        font-size: 48px;
+        margin-bottom: 50px;
+        text-align: center;
+        text-transform: none;
+    }
+
+    .modal-overlay-header__desc {
+        color: $neon-blue;
+        font-size: 24px;
+        margin: 0;
+        text-align: center;
+    }
+
+    .modal--payment-options {
+        margin: 115px auto;
+        position: relative;
+        width: 450px;
+    }
+
+    .modal--payment-options-inner {
+        display: flex;
+        flex-wrap: row wrap;
+    }
+
+    .modal-overlay-options-billing {
+        @include padding(1em 0);
+        @include transition(background-color, $transition-speed);
+        border-bottom: 1px solid $neon-blue;
+        border-top: 1px solid $neon-blue;
+        color: $white;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        width: 50%;
+
+        &.active {
+            background-color: $btn-blue;
+        }
+
+        &:nth-child(1) {
+            border-bottom-left-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-top-left-radius: 2em;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-right: 1px solid $neon-blue;
+            border-top-right-radius: 2em;
+        }
+    }
+
+    .modal--payment-tooltip {
+        @include position(absolute);
+        color: $white;
+        right: -78px;
+        top: -65px;
+
+        &::after {
+            @include size(26px 44px);
+            @include position(absolute, 22px 20px);
+            background-image: url('/assets/img/icon-billing-arrow.svg');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            content: '';
+        }
+    }
+
+    .modal--payment-pricing {
+        display: flex;
+        flex-wrap: row wrap;
+        margin: 0 auto;
+        max-width: 600px;
+        position: relative;
+    }
+
+    .modal--payment-module {
+        @include padding(25px 0);
+        background-color: $white;
+        box-shadow: 0 2px 4px rgba($black, 0.5);
+        max-height: 475px;
+        position: relative;
+        width: 50%;
+
+        &.featured {
+            height: 520px;
+            margin-top: -23px;
+            max-height: 520px;
+
+            .modal--payment-module-header {
+                margin-bottom: 48px;
+
+                h1 {
+                    color: $white;
+                }
+
+                &::before {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .modal--payment-module-header {
+        color: $btn-blue;
+        margin-bottom: 25px;
+        text-align: center;
+
+        h1 {
+            position: relative;
+            text-transform: none;
+            z-index: 1;
+        }
+
+        &::before {
+            @include size(100% 100px);
+            @include position(absolute, 0 0);
+            background-color: $btn-blue;
+            content: '';
+            opacity: 0;
+            z-index: 0;
+        }
+    }
+
+    .modal--payment-module-price-wrap h1,
+    .modal--payment-module-price-wrap p {
+        text-align: center;
+    }
+
+    .modal--payment-module-price-wrap span {
+        font-size: 16px;
+    }
+
+    .modal--payment-module-price-wrap p {
+        color: $grey-2;
+        margin: 0;
+    }
+
+    .modal--payment-module-features {
+        margin-top: 25px;
+
+        li {
+            color: $grey-2;
+            padding: 10px 25px;
+            text-align: center;
+
+            &:nth-child(odd) {
+                background-color: $grey;
+                border-bottom: 1px solid $grey-2;
+                border-top: 1px solid $grey-2;
+            }
+        }
+    }
+
+    .modal--payment-module-button {
+        @include padding(0.5em 2em);
+        display: block;
+        margin: 55px auto 25px;
+        position: relative;
+        width: 180px;
+    }
 
     .modal-body {
-        padding-top: 10px;
+        padding: 0;
     }
 
     .modal-header-plan {
@@ -89,6 +250,7 @@
     }
 
     .modal-close {
+        position: absolute;
         right: 15px;
         top: 15px;
     }
@@ -99,20 +261,6 @@
 
     .modal-header-price {
         @include position(absolute, 15px 0 null null);
-    }
-
-    .modal-overlay-options-billing {
-        @include padding(10px 5px);
-        display: inline-block;
-
-        &.modal-overlay-options-billing--monthly {
-            margin-left: 30px;
-        }
-
-        &.active {
-            border-bottom: 2px solid $btn-blue;
-            color: $btn-blue;
-        }
     }
 
     .modal-billing-options {
@@ -187,7 +335,7 @@
         .account-info-data--number,
         .account-info-data--name {
             margin-right: 5%;
-            width: 43%;
+            width: 50%;
         }
 
         .account-info-data--month,
@@ -195,16 +343,13 @@
         .account-info-data--cvc,
         .account-info-data--zip {
             margin-right: 5%;
-            width: 17%;
-
-            & + & {
-                margin-right: 0;
-            }
+            width: 20%;
         }
-    }
 
-    .modal-body--grey {
-        padding-bottom: 0;
+        .account-info-data--year,
+        .account-info-data--zip {
+            margin-right: 0;
+        }
     }
 
     .account-info-section--submit {
@@ -224,9 +369,11 @@
 @include media($phablet) {
     .modal {
         max-width: 400px;
+        padding: 10px;
     }
 
     .modal-header::after {
+        left: -10px;
         width: 400px;
     }
 }
@@ -241,4 +388,3 @@
         margin-top: 15px;
     }
 }
-

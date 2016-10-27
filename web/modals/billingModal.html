@@ -1,8 +1,65 @@
 <div class="modal-overlay modal-billing">
+    <button class="modal-close" type="button" ng-click="cancel()">
+        <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+    </button>
+    <div class="modal-overlay-header">
+        <h1 class="modal-overlay-header__title">{{title}}</h1>
+        <p class="modal-overlay-header__desc">You're currently on our {{planType}} plan.</p>
+        <p ng-show="{{isBasic}}" class="modal-overlay-header__desc">Upgrade now to lock in our exclusive Beta pricing for 12 months.</p>
+    </div>
+    <div class="modal--payment-options">
+        <div class="modal--payment-options-inner">
+            <a
+                class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
+                ng-class="{'active': currentPlan === 'monthly'}"
+                ng-click="monthlyPlan();">
+                Monthly Billing
+            </a>
+            <a
+                class="modal-overlay-options-billing modal-overlay-options-billing--annual"
+                ng-class="{'active': currentPlay === 'annual'}"
+                ng-click="annualPlan();">
+                Annual Billing
+            </a>
+        </div>
+        <div class="modal--payment-tooltip">Save 20%</div>
+    </div>
+    <div class="modal--payment-pricing">
+        <div class="modal--payment-module">
+            <div class="modal--payment-module-header">
+                <h1>Free</h2>
+            </div>
+            <div class="modal--payment-module-price-wrap">
+                <h1><span>$</span>0</h1>
+                <p>Per Month</p>
+            </div>
+            <ul class="modal--payment-module-features">
+                <li>Unlimited Public Projects</li>
+                <li>1 Private Project</li>
+                <li>100 MB Limit</li>
+            </ul>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="basicChecked" ng-click="">Keep This Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="!basicChecked" ng-click="">Change Plan</button>
+        </div>
+        <div class="modal--payment-module featured">
+            <div class="modal--payment-module-header">
+                <h1>Beta Pricing</h2>
+            </div>
+            <div class="modal--payment-module-price-wrap">
+                <h1><span>$</span>{{price}}</h1>
+                <p ng-if="currentPlan === 'monthly'">Per Month</p>
+                <p ng-if="currentPlan === 'annual'">Per Year</p>
+            </div>
+            <ul class="modal--payment-module-features">
+                <li>Unlimited Public Projects</li>
+                <li>Unlimited Private Project</li>
+                <li>5 GB Limit</li>
+            </ul>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="plan_name.type !== currentPlan" ng-click="">Change Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="plan_name.type === currentPlan" ng-click="">Keep Plan</button>
+        </div>
+    </div>
     <div class="modal modal--payment">
-        <button class="modal-close" type="button" ng-click="cancel()">
-            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
-        </button>
         <div class="modal-overlay-sections">
             <div class="modal-header">
                 <div
@@ -18,70 +75,9 @@
                     <h3 class="modal-header-price">$25.00/MO</h3>
                 </div>
             </div>
-            <div class="modal-overlay-options-billing-wrap">
-                <a
-                    class="modal-overlay-options-billing modal-overlay-options-billing--annual"
-                    ng-class="{'active': annualChecked}"
-                    ng-click="annualPlan();">
-                    Annual Billing
-                </a>
-                <a
-                    class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
-                    ng-class="{'active': monthlyChecked}"
-                    ng-click="monthlyPlan();">
-                    Monthly Billing
-                </a>
-            </div>
-            <div class="modal-body modal-body--grey">
+            <div class="modal-body">
                 <div class="form-group">
                     <label class="modal-label">Payment Details</label>
-                </div>
-                <div class="modal-overlay-payment-plan">
-                    <div class="modal-overlay-payment-plan-title">
-                        Payment Plan
-                    </div>
-                    <div class="modal-overlay-payment-plan-details">
-                        <div
-                            ng-show="annualChecked"
-                            class="modal-overlay-payment-plan">
-                            <div class="modal-overlay-payment-inner">
-                                <div class="modal-overlay-payment-due">
-                                    Due today:
-                                </div>
-                                <div class="modal-overlay-payment-amount">
-                                    $250.00
-                                </div>
-                            </div>
-                            <div class="modal-overlay-payment-inner">
-                                <div class="modal-overlay-payment-due">
-                                    Next billing date:
-                                </div>
-                                <div class="modal-overlay-payment-amount">
-                                    10/10/2017
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            ng-show="monthlyChecked"
-                            class="modal-overlay-payment-plan">
-                            <div class="modal-overlay-payment-inner">
-                                <div class="modal-overlay-payment-due">
-                                    Due today:
-                                </div>
-                                <div class="modal-overlay-payment-amount">
-                                    $25.00
-                                </div>
-                            </div>
-                            <div class="modal-overlay-payment-inner">
-                                <div class="modal-overlay-payment-due">
-                                    Next billing date:
-                                </div>
-                                <div class="modal-overlay-payment-amount">
-                                    11/10/2016
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <form ng-submit="updateUser()">
                     <div class="account-info-section">

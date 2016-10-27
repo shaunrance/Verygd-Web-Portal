@@ -1,12 +1,11 @@
 /* global angular */
 angular.module('ua5App')
-	.controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
+    .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.annualChecked = false;
-        $scope.monthlyChecked = true;
-        $scope.annualChosen = true;
+        $scope.currentPlan = 'monthly';
+        $scope.isBasic = true;
         $scope.plan_name = {};
-        $scope.plan_name.type = 'monthly';
+        $scope.plan_name.type = 'basic';
         $scope.name = {};
         $scope.card = {};
         $scope.month = {};
@@ -14,10 +13,9 @@ angular.module('ua5App')
         $scope.cvc = {};
         $scope.zip = {};
 
-        $scope.title = 'Professional Plan';
-        $scope.currentPlan = '$25.00/mo';
+        $scope.title = 'Pricing';
         $scope.formLabels = 'dfdsf';
-        $scope.price = '$' + 25;
+        $scope.price = 25;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {
             fields: {
@@ -42,7 +40,22 @@ angular.module('ua5App')
             UsersResource.user().retrieve({id: userId}).$promise.then(
                 function(response) {
                     if (response.payment) {
-                        $scope.plan_name.type = response.payment.plan_name;
+                        $scope.currentPlan = 'annual';
+
+                        if ($scope.plan_name.type === 'annual') {
+                            $scope.isBasic = false;
+                            $scope.planType = 'Premium';
+                            $scope.price = 250;
+                        } else if ($scope.plan_name.type === 'monthly') {
+                            $scope.isBasic = false;
+                            $scope.planType = 'Premium';
+                            $scope.price = 25;
+                        } else {
+                            $scope.monthlyChecked = true;
+                            $scope.isBasic = true;
+                            $scope.planType = 'Basic';
+                        }
+
                         $scope.name.name = response.payment.name;
                         $scope.card.number = '';
                         $scope.month.number = response.payment.exp_month < 10 ? '0' + response.payment.exp_month.toString() : response.payment.exp_month.toString();
@@ -68,8 +81,8 @@ angular.module('ua5App')
         }
 
         $scope.annualPlan = function() {
-            $scope.annualChecked = true;
-            $scope.monthlyChecked = false;
+            $scope.currentPlan = 'annual';
+            $scope.price = 250;
             $scope.plan_name.type = 'annual';
             $rootScope.$broadcast('annualPlanChosen');
         };
@@ -77,6 +90,7 @@ angular.module('ua5App')
         $scope.monthlyPlan = function() {
             $scope.annualChecked = false;
             $scope.monthlyChecked = true;
+            $scope.price = 25;
             $scope.plan_name.type = 'monthly';
             $rootScope.$broadcast('monthlyPlanChosen');
         };

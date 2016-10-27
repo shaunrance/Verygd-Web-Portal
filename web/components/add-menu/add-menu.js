@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App')
     .directive('addMenu', [function() {
         return {
@@ -84,6 +84,7 @@ angular.module('ua5App')
                 $scope.showModal = function(type) {
                     switch (type){
                         case menu.project:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/addModal.html',
                                 controller: 'addModalController',
@@ -103,6 +104,7 @@ angular.module('ua5App')
                                         $scope.$emit('addProject', result.input);
                                         $scope.menuToggle = false;
                                     }
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;
@@ -146,6 +148,7 @@ angular.module('ua5App')
                             $rootScope.$broadcast('nav:add-panel');
                             break;
                         case menu.share:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/shareModal.html',
                                 controller: 'shareModalController',
@@ -159,7 +162,7 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;

@@ -1,4 +1,4 @@
-/* global angular, _ */
+/* global angular, _, $ */
 angular.module('ua5App.projects')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('projects', {
@@ -35,6 +35,7 @@ angular.module('ua5App.projects')
         });
 
         $scope.deleteProject = function(projectId) {
+            $('body').addClass('no-scroll');
             ModalService.showModal({
                 templateUrl: 'modals/deleteModal.html',
                 controller: 'deleteModalController',
@@ -48,6 +49,7 @@ angular.module('ua5App.projects')
             }).then(function(modal) {
                 modal.close.then(function(result) {
                     if (result) {
+                        $('body').removeClass('no-scroll');
                         projectFactory.deleteScreen(projectId)
 
                             .then(function(response) {
