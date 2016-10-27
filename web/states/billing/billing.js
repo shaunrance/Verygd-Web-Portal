@@ -30,6 +30,12 @@ angular.module('ua5App.billing')
                     fields:{
                         title: '-',
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        plan: $scope.plan_name,
+                        name: $scope.name,
+                        number: $scope.number,
+                        month: $scope.month,
+                        year: $scope.year,
+                        zip: $scope.zip,
                         showFileUpload: false,
                         submitButtonText: 'Add Project'
                     }

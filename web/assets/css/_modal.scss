@@ -22,7 +22,6 @@
 
 .modal--payment {
     background-color: $grey;
-    display: none;
     margin: 0 auto;
 }
 
@@ -276,6 +275,25 @@
         &:first-of-type {
             border-right: 1px solid $black;
         }
+    }
+
+    .modal-message {
+        color: $green;
+        display: block;
+        position: relative;
+        text-align: center;
+
+        &.error {
+            color: $red;
+        }
+    }
+
+    .modal-link {
+        color: $btn-blue;
+        display: block;
+        margin-top: 15px;
+        position: relative;
+        text-align: center;
     }
 
     .modal-billing-options--hide {

@@ -24,7 +24,7 @@
         </div>
         <div class="modal--payment-tooltip">Save 20%</div>
     </div>
-    <div class="modal--payment-pricing">
+    <div class="modal--payment-pricing" ng-hide="paymentShowing">
         <div class="modal--payment-module">
             <div class="modal--payment-module-header">
                 <h1>Free</h2>
@@ -38,8 +38,8 @@
                 <li>1 Private Project</li>
                 <li>100 MB Limit</li>
             </ul>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="basicChecked" ng-click="">Keep This Plan</button>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="!basicChecked" ng-click="">Change Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="isBasic" ng-click="close()">Keep This Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="!isBasic" ng-click="updateBasic()">Change Plan</button>
         </div>
         <div class="modal--payment-module featured">
             <div class="modal--payment-module-header">
@@ -55,23 +55,23 @@
                 <li>Unlimited Private Projects</li>
                 <li>5 GB Limit</li>
             </ul>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan !== currentPlan" ng-click="">Change Plan</button>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan === currentPlan" ng-click="">Keep Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan !== currentPlan" ng-click="showPayment()">Change Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan === currentPlan" ng-click="close()">Keep Plan</button>
         </div>
     </div>
-    <div class="modal modal--payment">
+    <div class="modal modal--payment" ng-hide="!paymentShowing">
         <div class="modal-overlay-sections">
             <div class="modal-header">
                 <div
-                    ng-show="annualChecked"
+                    ng-show="selectedPlan === 'annual'"
                     class="modal-header-plan">
-                    <h3 class="modal-header-plan-title">Professional Plan</h3>
+                    <h3 class="modal-header-plan-title">Annual Plan</h3>
                     <h3 class="modal-header-price">$250.00/YR</h3>
                 </div>
                 <div
-                    ng-show="monthlyChecked"
+                    ng-show="selectedPlan === 'monthly'"
                     class="modal-header-plan">
-                    <h3 class="modal-header-plan-title">Professional Plan</h3>
+                    <h3 class="modal-header-plan-title">Monthly Plan</h3>
                     <h3 class="modal-header-price">$25.00/MO</h3>
                 </div>
             </div>
@@ -172,9 +172,9 @@
                         <input
                             class="account-info-data account-info-data--cvc"
                             type="tel"
-                            ng-model="cvc.number"
                             placeholder="CVC"
-                            required />
+                            ng-model="cvc.number"
+                            maxlength="4"/>
                         <input
                             class="account-info-data account-info-data--zip"
                             type="tel"
@@ -186,9 +186,21 @@
                             class="modal-submit modal-button"
                             type="submit"
                             ng-disabled="model.$invalid"
+                            ng-show="selectedPlan !== currentPlan"
                             ng-class="{'button-disable': disableButton === true}"
-                            value="Charge my card now"
-                            ng-click="close()">
+                            value="Charge My Card">
+
+                        <input
+                            class="modal-submit modal-button"
+                            type="submit"
+                            ng-disabled="model.$invalid"
+                            ng-show="selectedPlan === currentPlan"
+                            ng-class="{'button-disable': disableButton === true}"
+                            value="Update Card">
+
+                        <a class="modal-link" ng-click="showPayment()">Back</a>
+
+                        <p class="modal-message" ng-class="{'error': errorMessage}">{{message}}</p>
                     </div>
                 </form>
             </div>
