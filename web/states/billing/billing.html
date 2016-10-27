@@ -24,24 +24,18 @@
             </div>
             <div
                 class="account-billing-inner"
-                ng-class="{'account-billing-info--hide': basicAccount};">
+                ng-class="{'account-billing-info--hide': !showCardInfo};">
                 <div class="account-billing-title">
                         Annual Billing
                 </div>
                 <div class="account-billing-toggle">
                     <toggle-switch
+                        disabled="true"
                         color="true"
-                        ng-model="annualBilling"
+                        ng-model="monthlyBilling"
                         on-label="ON"
-                        off-label="OFF"
-                        ng-click="switchBilling();">
+                        off-label="OFF">
                     </toggle-switch>
-                    <!-- <span
-                        class="account-billing-toggle-switch"
-                        ng-show="annualBilling">ON</span>
-                    <span
-                        class="account-billing-toggle-switch"
-                        ng-hide="annualBilling">OFF</span> -->
                 </div>
                 <div class="account-billing-statement">
                     <span
@@ -59,7 +53,7 @@
         </div>
         <div
             class="account-billing-info"
-            ng-class="{'account-billing-info--hide': basicAccount};">
+            ng-class="{'account-billing-info--hide': !showCardInfo};">
             <form ng-submit="updateUser(model)">
                     <div class="account-info-section">
                         <input
