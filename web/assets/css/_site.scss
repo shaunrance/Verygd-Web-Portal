@@ -12,6 +12,10 @@ body {
 
 body {
     background-color: $grey;
+
+    &.no-scroll {
+        overflow-y: hidden;
+    }
 }
 
 html {

@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App.billing')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('account.billing', {
@@ -22,7 +22,7 @@ angular.module('ua5App.billing')
         $scope.annualChosen = true;
 
         $scope.showModal = function() {
-
+            $('body').addClass('no-scroll');
             ModalService.showModal({
                 templateUrl: 'modals/billingModal.html',
                 controller: 'billingModalController',
@@ -36,6 +36,7 @@ angular.module('ua5App.billing')
                 }
             }).then(function(modal) {
                 modal.close.then(function(result) {
+                    $('body').removeClass('no-scroll');
                 });
             });
         };
