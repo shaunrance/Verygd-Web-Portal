@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App.sign-up')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.when('', '/sign-up');
@@ -26,6 +26,7 @@ angular.module('ua5App.sign-up')
         $scope.disableButton = false;
 
         $scope.showModal = function() {
+            $('body').addClass('no-scroll');
             ModalService.showModal({
                 templateUrl: 'modals/signUpModal.html',
                 controller: 'signUpModalController',
@@ -45,6 +46,7 @@ angular.module('ua5App.sign-up')
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
 
                     $state.go('projects');
+                    $('body').removeClass('no-scroll');
 
                 },
                 function(error) {

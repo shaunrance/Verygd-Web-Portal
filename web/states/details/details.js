@@ -60,6 +60,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
 
         $scope.addScene = function() {
+            $('body').addClass('no-scroll');
+            console.log('here');
             ModalService.showModal({
                 templateUrl: 'modals/addModal.html',
                 controller: 'addModalController',
@@ -72,6 +74,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 }
             }).then(function(modal) {
+                $('body').removeClass('no-scroll');
                 modal.close.then(function(result) {
                     if (result.input.name !== '') {
                         createScene(result.input);
