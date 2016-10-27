@@ -17,9 +17,13 @@ angular.module('ua5App')
         $scope.scenes = fields.scenes;
 
         _.each($scope.scenes, function(scene) {
+            var sceneImage = scene.content.length > 0 ? scene.content[0].url : '/assets/img/image-placeholder.jpg';
+
             if (scene.id === parseInt($scope.panel.related_tag, 10)) {
                 $scope.selectedScene = scene.id;
             }
+
+            scene.thumb = sceneImage + '?fm=jpg&q=60&h=200&w=200&fit=max&bg=000000';
         });
 
         $scope.save = function() {
