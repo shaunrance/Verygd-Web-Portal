@@ -129,6 +129,7 @@
             <span></span>
         </div>
         <button
+            ng-hide="emptyScene"
             ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
             class="scene-preview__button">
             <span class="scene-preview__button__icon"></span>

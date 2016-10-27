@@ -22,7 +22,14 @@ angular.module('ua5App.viewer')
         $scope.useVr = false;
         $scope.background = content.data.background;
         $scope.touch = BrowserFactory.hasTouch();
-        $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 1}) : content.data.content;
+
+        if (content.data.content.length > 1) {
+            // first check to see if more than one panel exists, then check if its panorama
+            $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 1}) : content.data.content;
+        } else {
+            $scope.content = content.data.content;
+        }
+
         $scope.currentScenePanels = $scope.content;
         $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
 

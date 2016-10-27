@@ -190,6 +190,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.singlePanel = false;
                     } else {
                         $scope.singlePanel = true;
+                        $scope.sceneTypeToggle = true;
                     }
 
                     if (response.data.is_panorama) {
@@ -359,6 +360,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
                         if ($scope.panels.length === 1) {
                             $scope.singlePanel = true;
+                            $scope.sceneTypeToggle = true;
+                        } else {
+                            $scope.singlePanel = false;
                         }
 
                         $scope.emptyScene = false;
