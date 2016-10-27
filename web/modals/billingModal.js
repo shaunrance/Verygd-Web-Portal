@@ -18,7 +18,7 @@ angular.module('ua5App')
         $scope.title = 'Pricing';
         $scope.currentPlan = '$25.00/mo';
         $scope.formLabels = 'dfdsf';
-        $scope.price = '$' + 25;
+        $scope.price = 25;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {
             fields: {

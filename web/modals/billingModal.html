@@ -24,6 +24,40 @@
         </div>
         <div class="modal--payment-tooltip">Save 20%</div>
     </div>
+    <div class="modal--payment-pricing">
+        <div class="modal--payment-module">
+            <div class="modal--payment-module-header">
+                <h1>Free</h2>
+            </div>
+            <div class="modal--payment-module-price-wrap">
+                <h1><span>$</span>0</h1>
+                <p>Per Month</p>
+            </div>
+            <ul class="modal--payment-module-features">
+                <li>Unlimited Public Projects</li>
+                <li>1 Private Project</li>
+                <li>100 MB Limit</li>
+            </ul>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="basicChecked" ng-click="">Keep This Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="!basicChecked" ng-click="">Change Plan</button>
+        </div>
+        <div class="modal--payment-module featured">
+            <div class="modal--payment-module-header">
+                <h1>Beta Pricing</h2>
+            </div>
+            <div class="modal--payment-module-price-wrap">
+                <h1><span>$</span>{{price}}</h1>
+                <p ng-if="monthlyChecked || basicChecked">Per Month</p>
+                <p ng-if="annualChecked">Per Year</p>
+            </div>
+            <ul class="modal--payment-module-features">
+                <li>Unlimited Public Projects</li>
+                <li>1 Private Project</li>
+                <li>100 MB Limit</li>
+            </ul>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-click="">Upgrade Now</button>
+        </div>
+    </div>
     <div class="modal modal--payment">
         <div class="modal-overlay-sections">
             <div class="modal-header">
