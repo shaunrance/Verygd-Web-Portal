@@ -147,8 +147,9 @@
     }
 
     .modal--payment-pricing {
+        align-items: stretch;
         display: flex;
-        flex-wrap: row wrap;
+        flex-flow: row wrap;
         margin: 0 auto;
         max-width: 600px;
         position: relative;
@@ -252,6 +253,7 @@
         position: absolute;
         right: 15px;
         top: 15px;
+        z-index: 9999;
     }
 
     .modal-header {
@@ -393,6 +395,43 @@
     .modal-header::after {
         left: -10px;
         width: 400px;
+    }
+
+    .modal-billing {
+
+        .modal--payment-pricing {
+            max-width: 100%;
+        }
+
+        .modal--payment-options {
+            margin: 70px auto 21px;
+            width: 100%;
+        }
+
+        .modal-overlay-options-billing {
+            &:nth-child(1) {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+
+            &:last-child {
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+
+        .modal--payment-module {
+            flex: 1 100%;
+            order: 2;
+
+            &.featured {
+                order: 1;
+            }
+        }
+
+        .modal--payment-tooltip {
+            display: none;
+        }
     }
 }
 
