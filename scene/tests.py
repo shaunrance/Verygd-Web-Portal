@@ -2,6 +2,7 @@ import string
 
 from very_gd.tests.base import TestAPIBase
 from project.tests import TestProject
+
 alphabet = list(string.ascii_lowercase)
 
 
@@ -15,16 +16,6 @@ class TestScene(TestAPIBase):
         self.scene_id = None
         self.member = None
         self.project_id = None
-
-    def add_scene(self, member, *args, **kwargs):
-        data = self.strategies.get_create_scene_strategy().example()
-        data.update(kwargs)
-
-        response, msg = self.post_as(member, '/{0}'.format(self.endpoint), data=data)
-
-        self.assertEquals(response.status_code, 201)
-
-        return msg['id']
 
     def setUp(self):
         super(TestScene, self).setUp()
