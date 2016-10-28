@@ -1,7 +1,7 @@
 <main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
-    <div class="project-details" ng-class="emptyScene ? 'empty' : ''">
+    <div class="project-details" ng-class="{'empty': emptyScene}">
         <nav class="scene-nav">
-            <div class="scene-nav--selector" ng-click="toggleSceneList()">Scene {{currentScene}}</div>
+            <div class="scene-nav--selector"><a href="/projects">{{projectName}}</a> > {{sceneName}}</div>
             <ul class="scene-list" ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
@@ -10,18 +10,20 @@
                     <a
                         ng-click="changeScene(i.id)"
                         ng-class="{'active' : (currentScene === (i.id))}"
-                        class="scene-list--link">{{i.title}}</a>
-                    <a ng-click="editScene(i.id)"
-                        class="scene-list--edit"></a>
+                        class="scene-list--link">
+                        <div class="scene-list--title">{{i.title}}</div>
+                    </a>
+                    <a ng-click="editScene(i.id, i.title)"
+                        class="scene-list--icon scene-list--edit"></a>
                     <a ng-click="deleteScene($index, i.id)"
-                        class="scene-list--delete"></a>
+                        class="scene-list--icon scene-list--delete"></a>
                 </li>
             </ul>
-            <button
+            <!-- <button
                 ng-click="addScene()"
                 class="scene-add">
             <img class="add-icon" src="assets/img/add.svg" />
-            Add Scene</button>
+            Add Scene</button> -->
         </nav>
         <div
             class="vg__items project__items"
@@ -48,7 +50,7 @@
                     <figcaption class="vg__image--caption">
                         <div class="vg__image--caption-name">{{panel.title}}</div>
                         <div class="vg__image--caption-tag" ng-if="panel.related_tag !== null">
-                            {{panel.related_tag}}
+                            {{panel.relatedSceneName}}
                         </div>
 
                         <button class="scene__item--delete" ng-click="deletePanel(panel.id)">
@@ -71,16 +73,19 @@
                     </div>
                 </div>
                 <div class="scene-preview__display">
-                    <div ng-if="panels.length === 1 || (panels.length > 2 && panels.length < 7)">
+                    <div ng-if="sceneTypeToggle">
+                        <img class="preview-icon" ng-src="assets/img/1.png">
+                    </div>
+                    <div ng-if="(panels.length > 2 && panels.length < 7 && !sceneTypeToggle)">
                         <img class="preview-icon" ng-src="assets/img/{{panels.length}}.png">
                     </div>
-                    <div ng-if="panels.length > 6">
+                    <div class="scene-preview__message" ng-if="panels.length > 6 && !sceneTypeToggle">
                         <p>We recommend you keep your scene under 7 panels</p>
                     </div>
-                    <div ng-if="panels.length < 3 && panels.length > 1">
+                    <div class="scene-preview__message" ng-if="panels.length < 3 && panels.length > 1 && !sceneTypeToggle">
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
-                    <h5>Preview</h5>
+                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3 && panels.length > 1) && !sceneTypeToggle || panels.length > 6 && !sceneTypeToggle}">Preview</h5>
                 </div>
                 <div class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
@@ -117,11 +122,64 @@
         </div>
     </div>
 
-    <footer class="project-details__footer">
+    <footer class="project-details__footer" ng-class="{'slide-menu-open':showMobileMenu}">
+        <div class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <button
+            ng-hide="emptyScene"
             ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
             class="scene-preview__button">
             <span class="scene-preview__button__icon"></span>
         </button>
     </footer>
 </main>
+
+<div class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
+    <div class="project-details__slide-menu-inner">
+        <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
+            <h3 class="project-details__mobile-menu-header">Scenes</h3>
+            <li
+                class="scene-list--item"
+                ng-repeat="i in scenes track by $index">
+                <a
+                    ng-click="changeScene(i.id)"
+                    ng-class="{'active' : (currentScene === (i.id))}"
+                    class="scene-list--link">
+                    <div class="scene-list--title">{{i.title}}</div>
+                </a>
+                <a ng-click="editScene(i.id, i.title)"
+                    class="scene-list--icon scene-list--edit"></a>
+                <a ng-click="deleteScene($index, i.id)"
+                    class="scene-list--icon scene-list--delete"></a>
+            </li>
+        </ul>
+
+        <div class="project-details__mobile-toggles">
+            <div class="project-details__mobile-pano">
+                <div class="toggle">
+                    <div class="toggle-switch__icon poly"></div>
+                    <toggle-switch
+                        ng-model="sceneTypeToggle"
+                        disabled="{{singlePanel}}">
+                    </toggle-switch>
+                    <div class="toggle-switch__icon pano"></div>
+                </div>
+            </div>
+
+            <div class="project-details__mobile-private">
+                <div class="toggle">
+                    <toggle-switch
+                        ng-model="scenePrivacyToggle"
+                        color="true"
+                        on-label="Public"
+                        off-label="Private">
+                    </toggle-switch>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="project-details__slide-menu-right" ng-click="openMobileMenu()"></div>
+</div>

@@ -19,7 +19,8 @@ angular.module('ua5App.projects')
             .then(function(response) {
                 var id = response.data.id;
                 $state.go('projects.details', {projectId:id});
-                getProjects();
+                //not really needed since the state changes anyways
+                //getProjects();
             }, function(error) {
 
             });
@@ -73,15 +74,14 @@ angular.module('ua5App.projects')
 
                 .then(function(response) {
                     $scope.projects = response.data;
-
                     _.each($scope.projects, function(project) {
                         var scenes = project.content;
-                        if (scenes.length > 0) {
-                            if (scenes[0].content.length > 0) {
-                                var screens = _.sortBy(scenes[0].content, 'order');
-                                project.cover_image = screens[0].url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
-                            }
-                        }
+                        var sceneImage = '';
+
+                        scenes = _.sortBy(scenes, 'order');
+                        sceneImage = scenes[0].content.length > 0 ? scenes[0].content[0].url : '/assets/img/image-placeholder.jpg';
+
+                        project.cover_image = sceneImage + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
                     });
                 }, function(error) {
 
