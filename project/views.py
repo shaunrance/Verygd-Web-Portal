@@ -34,5 +34,7 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
     authentication_classes = []
     permission_classes = []
 
+    lookup_field = 'short_uuid'
+
     def get_queryset(self):
         return self.model.objects.filter(public=True).prefetch_related('scenes')

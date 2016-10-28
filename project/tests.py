@@ -46,6 +46,6 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 200)
 
-        response, msg = self.get_as(self.anonymous_member, ''.join(['/public', detail_url]))
+        response, msg = self.get_as(self.anonymous_member, '/'.join(['/public/project', msg['short_uuid']]))
 
         self.assertEquals(response.status_code, 200)
