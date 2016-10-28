@@ -24,3 +24,6 @@ class TestUserAPI(TestUserAPIBase):
 
     def test_update_member(self):
         super(TestUserAPI, self).test_update_member()
+
+    def test_payment_update(self):
+        super(TestUserAPI, self).test_payment_update()
