@@ -12,7 +12,7 @@ angular.module('ua5App.billing')
             }
         });
     }])
-    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, UsersResource) {
+    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, user, UsersResource) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualStatement = 'Next Payment of $250 will be processed on 12/01/2017';
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
@@ -48,39 +48,29 @@ angular.module('ua5App.billing')
         };
 
         function initialValues() {
-            UsersResource.user().retrieve({id: userId}).$promise.then(
-                function(response) {
-                    if (response.payment) {
-                        $scope.plan_name = response.payment.plan_name;
-                        $scope.showCardInfo = true;
+            //$scope.user passed in from parent Account State
 
-                        if ($scope.plan_name === 'annual') {
-                            $scope.monthlyBilling = false;
-                            $scope.type = 'Premium';
-                        } else if ($scope.plan_name === 'monthly') {
-                            $scope.monthlyBilling = true;
-                            $scope.type = 'Premium';
-                        } else {
-                            $scope.type = 'Basic';
-                        }
+            if ($scope.user.payment) {
+                $scope.plan_name = $scope.user.payment.plan_name;
+                $scope.showCardInfo = true;
 
-                        $scope.name = response.payment.name;
-                        $scope.number = '************' + response.payment.last4;
-                        $scope.month = response.payment.exp_month;
-                        $scope.year = response.payment.exp_year;
-                        $scope.cvc = '***';
-                        $scope.zip = response.payment.address_zip;
-                    }
-                },
-                function(error) {
-                    $scope.name = 'card name';
-                    $scope.number = 'card number';
-                    $scope.month = 'exp month';
-                    $scope.year = 'exp year';
-                    $scope.cvc = 'cvc';
-                    $scope.zip = 'zip code';
+                if ($scope.plan_name === 'annual') {
+                    $scope.monthlyBilling = false;
+                    $scope.type = 'Premium';
+                } else if ($scope.plan_name === 'monthly') {
+                    $scope.monthlyBilling = true;
+                    $scope.type = 'Premium';
+                } else {
+                    $scope.type = 'Basic';
                 }
-            );
+
+                $scope.name = $scope.user.payment.name;
+                $scope.number = '************' + $scope.user.payment.last4;
+                $scope.month = $scope.user.payment.exp_month;
+                $scope.year = $scope.user.payment.exp_year;
+                $scope.cvc = '***';
+                $scope.zip = $scope.user.payment.address_zip;
+            }
         }
 
         // $scope.$on('annualPlanChosen', function() {

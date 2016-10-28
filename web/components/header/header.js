@@ -6,7 +6,8 @@ angular.module('ua5App')
             templateUrl: 'components/header/header.html',
             scope: {
                 basic: '@',
-                headerTitleData: '='
+                headerTitleData: '=',
+                user: '='
             },
             link: function($scope, element, attrs) {
             },

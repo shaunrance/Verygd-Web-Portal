@@ -15,7 +15,7 @@
                         <a
                             class="menu-link account-name"
                             href="#">
-                            John Smith
+                            {{user.name}}
                         </a>
                     </li>
                     <li class="menu-list--item">
@@ -69,14 +69,14 @@
 
                 <div class="header__user-name" ng-click="toggleMenu()">
 <!--                     <div class="header__avatar"></div> -->
-                    <span>John Smith</span>
+                    <span>{{user.name}}</span>
                 </div>
 
                 <div class="header__user-menu" ng-class="{'show': userMenuToggle}">
                     <ul class="menu-list">
                         <li class="menu-list--item">
 <!--                             <div class="menu-link avatar"></div> -->
-                            <span>John Smith</span>
+                            <span>{{user.name}}</span>
                         </li>
                         <li class="menu-list--item">
                             <a

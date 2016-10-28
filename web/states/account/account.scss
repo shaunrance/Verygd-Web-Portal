@@ -81,6 +81,16 @@
     }
 }
 
+#confirm-message {
+    color: $green;
+    margin: 20px 0 0 20%;
+    position: relative;
+
+    &.error {
+        color: $red;
+    }
+}
+
 .account-info-title {
     @extend %uppercase;
     @extend %h7;

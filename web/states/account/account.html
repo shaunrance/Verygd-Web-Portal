@@ -1,4 +1,5 @@
 <div
+    user="user"
     header-title-data="title"
     header>
 </div>
@@ -28,7 +29,7 @@
             </div>
         </div> -->
         <div class="account-info">
-            <form ng-submit="login(model)">
+            <form ng-submit="saveUser(model)">
                 <div class="account-info-section">
                     <div class="account-info-title">
                         Name
@@ -37,8 +38,7 @@
                         class="account-info-data"
                         type="name"
                         ng-model="user.name"
-                        placeholder="{{userName}}"
-                        required />
+                        placeholder="{{userName}}"/>
                 </div>
                 <div class="account-info-section">
                     <div class="account-info-title">
@@ -47,9 +47,8 @@
                     <input
                         class="account-info-data"
                         type="name"
-                        ng-model="user.name"
-                        placeholder="{{email}}"
-                        required />
+                        ng-model="user.email"
+                        placeholder="{{email}}"/>
                 </div>
                 <div class="account-info-section">
                     <div class="account-info-title">
@@ -58,10 +57,24 @@
                     <input
                         class="account-info-data"
                         type="password"
+                        id="password"
                         ng-model="user.password"
-                        placeholder="**********"
-                        required />
+                        placeholder="**********"/>
+                    <div class="account-info-title">
+                        Confirm Password
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="password"
+                        id="confirm-password"
+                        ng-keyup="checkPass()"
+                        placeholder="**********"/>
+                    <span
+                        id="confirm-message"
+                        ng-class="{'error': passMismatch}"
+                        ng-bind="passMessage"></span>
                 </div>
+
                 <button
                     class="account-info-button modal-update modal-button"
                     type="submit"
