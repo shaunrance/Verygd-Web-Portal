@@ -35,6 +35,11 @@ class TestProject(TestAPIBase):
         for i in range(0, 2):
             scene_ids[self.add_scene(self.member, project=self.project_id)] = 1
 
+        # add some panels
+        for scene_id in scene_ids:
+            response, msg = self.add_panel(self.member, scene_id)
+            self.assertEquals(response.status_code, 201)
+
         detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
 
         response, msg = self.patch_as(self.member, detail_url, data={'public': True})
