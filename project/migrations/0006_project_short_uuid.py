@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='short_uuid',
-            field=models.CharField(default=shortuuid.uuid(), editable=False, max_length=22, unique=True),
+            field=models.CharField(default=shortuuid.uuid, editable=False, max_length=22, unique=True),
         ),
     ]

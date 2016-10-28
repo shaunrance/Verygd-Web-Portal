@@ -5,7 +5,7 @@ from users.models import Member
 
 
 class Project(models.Model):
-    short_uuid = models.CharField(max_length=22, unique=True, default=shortuuid.uuid(), editable=False, null=False)
+    short_uuid = models.CharField(max_length=22, unique=True, default=shortuuid.uuid, editable=False, null=False)
 
     name = models.CharField(max_length=32, blank=False, null=False)
     owner = models.ForeignKey(Member, null=False)
