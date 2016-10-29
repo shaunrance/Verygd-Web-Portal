@@ -49,6 +49,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             $scope.addScene();
         });
 
+        $scope.$on('public:true', function() {
+            $scope.projectPrivacy = false;
+        });
+
         $scope.$on('toggle:switched', function($event, args) {
             if (args === 'sceneTypeToggle') {
                 sceneFactory.editScene($scope.currentScene, {
@@ -56,12 +60,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     title: $scope.sceneName,
                     project: $stateParams.projectId
                 });
+            } else if (args === 'projectPrivacy') {
+                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
             }
         });
 
         $scope.addScene = function() {
             $('body').addClass('no-scroll');
-            console.log('here');
             ModalService.showModal({
                 templateUrl: 'modals/addModal.html',
                 controller: 'addModalController',
@@ -166,8 +171,11 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             //$scope.scenes = [];
             projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
+                    $scope.project = response.data;
+                    $scope.projectPrivacy = !$scope.project.public; //jshint ignore:line
+
                     if (response.data.content.length > 0) {
-                        $scope.scenes = response.data.content;
+                        $scope.scenes = $scope.project.content;
 
                         //check if page is first load, if so, make first scene selected
                         if ($scope.firstLoad) {

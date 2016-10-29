@@ -5,7 +5,7 @@ angular.module('ua5App')
             restrict: 'A',
             templateUrl: 'components/add-menu/add-menu.html',
             link: function($scope, element, attrs) {},
-            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', function($scope, $state, $stateParams, ModalService, $rootScope) {
+            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, ModalService, $rootScope, projectFactory) {
                 var menu = {
                     project:'Add Project',
                     //team: 'Add Team Member',
@@ -14,7 +14,6 @@ angular.module('ua5App')
                     share: 'Share Project'
                 };
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
                 var getOptions = function() {
                     if ($state.current.name !== 'projects.details') {
                         $scope.menuItems = {
@@ -157,7 +156,8 @@ angular.module('ua5App')
                                         title: menu.share,
                                         formLabels:[{title: 'URL'}],
                                         showFileUpload: false,
-                                        submitButtonText: 'Share'
+                                        submitButtonText: 'Share',
+                                        project: $stateParams.projectId
                                     }
                                 }
                             }).then(function(modal) {
@@ -168,7 +168,6 @@ angular.module('ua5App')
                             break;
                     }
                 };
-
             }]
         };
     }])
