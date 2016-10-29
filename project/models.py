@@ -1,8 +1,16 @@
+import shortuuid
+
 from django.db import models
 from users.models import Member
 
 
+def get_default_shortuuid():
+    return shortuuid.uuid()
+
+
 class Project(models.Model):
+    short_uuid = models.CharField(max_length=22, unique=True, default=get_default_shortuuid, editable=False, null=False)
+
     name = models.CharField(max_length=32, blank=False, null=False)
     owner = models.ForeignKey(Member, null=False)
 

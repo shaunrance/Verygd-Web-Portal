@@ -13,6 +13,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService) {
+        var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+        $rootScope.showMobileMenu = false;
+
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
         $scope.currentScene = '';
@@ -22,6 +26,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.showSceneList = false;
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
+        $scope.projectName = '';
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -59,11 +64,25 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     is_panorama: $scope.sceneTypeToggle,
                     title: $scope.sceneName,
                     project: $stateParams.projectId
+                }).then(function() {
+                    if (!$scope.singlePanel) {
+                        getSceneInfo($scope.currentScene);
+                    }
                 });
             } else if (args === 'projectPrivacy') {
                 projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
             }
         });
+
+        $scope.openMobileMenu = function() {
+            if (!$rootScope.showMobileMenu) {
+                $rootScope.showMobileMenu = true;
+                disableScroll();
+            } else {
+                $rootScope.showMobileMenu = false;
+                enableScroll();
+            }
+        };
 
         $scope.addScene = function() {
             $('body').addClass('no-scroll');
@@ -90,8 +109,37 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.changeScene = function(sceneId) {
             $scope.currentScene = sceneId;
-            getSceneInfo();
+            getSceneInfo(sceneId);
             getPanels(sceneId);
+            if ($scope.showMobileMenu) {
+                $scope.openMobileMenu();
+            }
+        };
+
+        $scope.editScene = function(sceneId, sceneTitle) {
+            ModalService.showModal({
+                templateUrl: 'modals/editModal.html',
+                controller: 'editModalController',
+                inputs: {
+                    fields:{
+                        title: 'Edit Scene',
+                        formLabels:[{name: 'name', title: sceneTitle}],
+                        showFileUpload: false,
+                        submitButtonText: 'Save'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    if (result.input.name !== sceneTitle && result.input.name !== '') {
+                        sceneFactory.editScene(sceneId, {
+                            project: $stateParams.projectId,
+                            title: result.input.name
+                        });
+                        getScenes();
+                        getSceneInfo(sceneId);
+                    }
+                });
+            });
         };
 
         $scope.deleteScene = function($index, sceneId) {
@@ -139,13 +187,20 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     project: $stateParams.projectId,
                     title: $scope.sceneName
                 });
-                getSceneInfo();
+                getSceneInfo($scope.currentScene);
             }
         };
 
-        function getSceneInfo() {
-            sceneFactory.getSceneById($scope.currentScene)
+        function getSceneInfo(sceneId) {
+            sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
+                    if (response.data.content.length > 1) {
+                        $scope.singlePanel = false;
+                    } else {
+                        $scope.singlePanel = true;
+                        $scope.sceneTypeToggle = true;
+                    }
+
                     if (response.data.is_panorama) {
                         $scope.sceneTypeToggle = true;
                     } else {
@@ -175,7 +230,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     $scope.projectPrivacy = !$scope.project.public; //jshint ignore:line
 
                     if (response.data.content.length > 0) {
-                        $scope.scenes = $scope.project.content;
+                        $scope.scenes = response.data.content;
+                        $scope.projectName = response.data.name;
 
                         //check if page is first load, if so, make first scene selected
                         if ($scope.firstLoad) {
@@ -194,6 +250,41 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 });
         }
 
+        function preventDefault(e) {
+            e = e || window.event;
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.returnValue = false;
+        }
+
+        function preventDefaultForScrollKeys(e) {
+            if (keys[e.keyCode]) {
+                preventDefault(e);
+                return false;
+            }
+        }
+
+        function disableScroll() {
+            if (window.addEventListener) {
+                window.addEventListener('DOMMouseScroll', preventDefault, false);
+            }
+            window.onwheel = preventDefault; // modern standard
+            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+            window.ontouchmove  = preventDefault; // mobile
+            document.onkeydown  = preventDefaultForScrollKeys;
+        }
+
+        function enableScroll() {
+            if (window.removeEventListener) {
+                window.removeEventListener('DOMMouseScroll', preventDefault, false);
+            }
+            window.onmousewheel = document.onmousewheel = null;
+            window.onwheel = null;
+            window.ontouchmove = null;
+            document.onkeydown = null;
+        }
+
         //PANEL methods ======================================================//
         //====================================================================//
         $scope.$on('nav:add-panel', function() {
@@ -210,7 +301,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         title: 'Link Panel',
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
                         showFileUpload: false,
-                        submitButtonTextLink: 'Link',
+                        submitButtonTextLink: 'Save',
                         submitButtonTextCancel: 'Cancel',
                         scenes: $scope.scenes,
                         content: content,
@@ -218,7 +309,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 }
             }).then(function(modal) {
-
+                modal.close.then(function() {
+                    getPanels($scope.currentScene);
+                });
             });
         };
 
@@ -265,12 +358,24 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;
                         $scope.panels = _.sortBy($scope.panels, 'order');
+
+                        _.each($scope.panels, function(panel) {
+                            if (panel.related_tag !== null) {
+                                _.each($scope.scenes, function(scene) {
+                                    if (parseInt(panel.related_tag, 10) === scene.id) {
+                                        panel.relatedSceneName = scene.title;
+                                    }
+                                });
+                            }
+                        });
+
                         if ($scope.panels.length === 1) {
                             $scope.singlePanel = true;
-                            $scope.panorama = true;
+                            $scope.sceneTypeToggle = true;
                         } else {
                             $scope.singlePanel = false;
                         }
+
                         $scope.emptyScene = false;
                     } else {
                         $scope.emptyScene = true;
