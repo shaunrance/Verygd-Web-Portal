@@ -25,7 +25,7 @@ angular.module('ua5App.viewer')
 
         if (content.data.content.length > 1) {
             // first check to see if more than one panel exists, then check if its panorama
-            $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 1}) : content.data.content;
+            $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 0}) : content.data.content;
         } else {
             $scope.content = content.data.content;
         }
