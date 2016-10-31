@@ -12,11 +12,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
         $rootScope.showMobileMenu = false;
-
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
         $scope.currentScene = '';
@@ -33,6 +32,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             swatchPos: 'right'
         };
 
+        $scope.isWkWebView = BrowserFactory.isWkWebView();
+
         $scope.$watch('files', function() {
             if (
                 typeof $scope.files === 'object' &&
@@ -47,6 +48,14 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 $scope.files = [$scope.file];
             }
         });
+
+        $scope.launchSceneiOS = function() {
+            window.webkit.messageHandlers.observe.postMessage({
+                sceneId: $scope.currentScene,
+                projectId: $scope.projectId,
+                authToken: $cookies.get(APICONSTANTS.authCookie.token)
+            });
+        };
 
         $scope.closeCta = function() {
             $scope.hideCta = true;
