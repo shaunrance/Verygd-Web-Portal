@@ -43,10 +43,10 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     $state.go('sign-in');
                 } else {
                     $scope.user = user[0];
-
+                    $scope.title = $scope.user.name;
                     // $scope.email = $scope.user.email;
                     // $scope.userName = $scope.user.name;
-                    // $scope.title = $scope.user.userName;
+
                     // $scope.userAdmin = true; //TODO set this correctly after other members can be added
                     // UsersResource.get({id: userId}).then(function(response) {
                     //     $scope.user = response[0];
