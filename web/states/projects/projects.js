@@ -97,11 +97,9 @@ angular.module('ua5App.projects')
         }
 
         function getUser() {
-            var visited = $cookies.get(APICONSTANTS.authCookie.visited);
-            if (visited === 'visited') {
+            if ($scope.user.payment.plan_name !== 'free_test_plan') {
                 $scope.hideCta = true;
             }
-
         }
 
         $scope.$on('$locationChangeStart', function(event) {

@@ -48,6 +48,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         });
 
+        $scope.closeCta = function() {
+            $scope.hideCta = true;
+        };
+
         //SCENE methods ======================================================//
         //====================================================================//
         $scope.$on('nav:add-scene', function() {
@@ -70,7 +74,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 });
             } else if (args === 'projectPrivacy') {
-                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
+                if (!$scope.isBasic) {
+                    projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
+                }
             }
         });
 
@@ -224,6 +230,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         function getScenes() {
             //$scope.scenes = [];
+            if ($scope.user.payment.plan_name === 'free_test_plan') {
+                $scope.isBasic = true;
+                $scope.hideCta = !$scope.isBasic;
+                $scope.scenePrivacyToggle = false;
+            }
+
             projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
                     $scope.project = response.data;
