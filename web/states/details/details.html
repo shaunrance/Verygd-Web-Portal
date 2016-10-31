@@ -130,7 +130,14 @@
         </div>
         <button
             ng-hide="emptyScene"
+            ng-if="!isWkWebView"
             ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+        <button
+            ng-if="isWkWebView"
+            ng-click="launchSceneiOS()"
             class="scene-preview__button">
             <span class="scene-preview__button__icon"></span>
         </button>
