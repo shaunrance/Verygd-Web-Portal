@@ -33,8 +33,11 @@ class TestUserAPI(TestUserAPIBase):
 
 class TestLoginAPI(TestLogInOutAPI):
     def setUp(self):
+        self.setup_email_settings()
+
         super(TestLoginAPI, self).setUp()
 
+    def setup_email_settings(self):
         reset_email_settings = UserPasswordResetEmail()
         signup_email_settings = UserSignUpEmail()
 
