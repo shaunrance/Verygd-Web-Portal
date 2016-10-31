@@ -57,6 +57,7 @@ angular.module('ua5App')
                 $scope.zip.number = fields.zip;
             } else {
                 $scope.currentPlan = 'free_test_plan';
+                $scope.planType = 'Basic';
             }
         }
 
