@@ -24,6 +24,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEBUG = False
 
 SITE_ID = 1
+SITE_EMAIL_FROM_ADDRESS = 'noreply@very.gd'
 
 if os.getenv('DEV_ENV', None):
     DEBUG = True
@@ -117,7 +118,8 @@ INSTALLED_APPS += (
     'panel',
     'scene',
     'rest_framework_docs',
-    'storages'
+    'storages',
+    'users'
 )
 
 MIDDLEWARE_CLASSES = (
