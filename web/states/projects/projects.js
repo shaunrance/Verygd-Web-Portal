@@ -97,8 +97,10 @@ angular.module('ua5App.projects')
         }
 
         function getUser() {
-            if ($scope.user.payment.plan_name !== 'free_test_plan') {
-                $scope.hideCta = true;
+            if ($scope.user.payment) {
+                if ($scope.user.payment.plan_name !== 'free_test_plan') {
+                    $scope.hideCta = true;
+                }
             }
         }
 

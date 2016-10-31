@@ -26,10 +26,14 @@ angular.module('ua5App')
                     $state.go('projects', {}, {reload: true});
                 };
 
-                if ($scope.user.payment.plan_name === 'free_test_plan') {
-                    $scope.upgradePlan = 'Upgrade Plan';
+                if ($scope.user.payment) {
+                    if ($scope.user.payment.plan_name === 'free_test_plan') {
+                        $scope.upgradePlan = 'Upgrade Plan';
+                    } else {
+                        $scope.upgradePlan = 'Change Plan';
+                    }
                 } else {
-                    $scope.upgradePlan = 'Change Plan';
+                    $scope.upgradePlan = 'Upgrade Plan';
                 }
 
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {

@@ -239,10 +239,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         function getScenes() {
             //$scope.scenes = [];
-            if ($scope.user.payment.plan_name === 'free_test_plan') {
-                $scope.isBasic = true;
-                $scope.hideCta = !$scope.isBasic;
-                $scope.scenePrivacyToggle = false;
+            if ($scope.user.payment) {
+                if ($scope.user.payment.plan_name === 'free_test_plan') {
+                    $scope.isBasic = true;
+                    $scope.hideCta = !$scope.isBasic;
+                    $scope.scenePrivacyToggle = false;
+                }
             }
 
             projectFactory.getProjectById($stateParams.projectId)
