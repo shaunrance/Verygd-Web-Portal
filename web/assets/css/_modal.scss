@@ -82,6 +82,15 @@
     overflow-y: auto;
 }
 
+#share-link {
+    color: $grey-2;
+    display: block;
+    font-style: italic;
+    margin-bottom: 20px;
+    position: relative;
+    text-decoration: none;
+}
+
 .modal-footer {
     @include display(flex);
     @include justify-content(space-around);

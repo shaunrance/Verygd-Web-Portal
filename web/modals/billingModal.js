@@ -16,12 +16,7 @@ angular.module('ua5App')
         $scope.title = 'Pricing';
         $scope.price = 25;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
-        $scope.input = {
-            fields: {
-                name: '',
-                description: ''
-            }
-        };
+        $scope.input = {};
 
         $scope.close = function() {
             close({
@@ -36,29 +31,33 @@ angular.module('ua5App')
         };
 
         function initialValues() {
-            $scope.currentPlan = fields.plan;
-            if ($scope.currentPlan === 'monthly') {
-                $scope.isBasic = false;
-                $scope.selectedPlan = 'monthly';
-                $scope.planType = 'Monthly';
-                $scope.price = 25;
-            } else if ($scope.currentPlan === 'annual') {
-                $scope.isBasic = false;
-                $scope.selectedPlan = 'annual';
-                $scope.planType = 'Annual';
-                $scope.price = 250;
-            } else {
-                $scope.monthlyChecked = true;
-                $scope.isBasic = true;
-                $scope.planType = 'Basic';
-            }
+            if (fields.payment) {
+                $scope.currentPlan = fields.plan;
+                if ($scope.currentPlan === 'monthly') {
+                    $scope.isBasic = false;
+                    $scope.selectedPlan = 'monthly';
+                    $scope.planType = 'Monthly';
+                    $scope.price = 25;
+                } else if ($scope.currentPlan === 'annual') {
+                    $scope.isBasic = false;
+                    $scope.selectedPlan = 'annual';
+                    $scope.planType = 'Annual';
+                    $scope.price = 250;
+                } else {
+                    $scope.monthlyChecked = true;
+                    $scope.isBasic = true;
+                    $scope.planType = 'Basic';
+                }
 
-            $scope.name.name = fields.name;
-            $scope.card.number = '';
-            $scope.month.number = fields.month < 10 ? '0' + fields.month.toString() : fields.month.toString();
-            $scope.year.number = fields.year.toString();
-            $scope.cvc.number = '';
-            $scope.zip.number = fields.zip;
+                $scope.name.name = fields.name;
+                $scope.card.number = '';
+                $scope.month.number = fields.month;
+                $scope.year.number = fields.year;
+                $scope.cvc.number = '';
+                $scope.zip.number = fields.zip;
+            } else {
+                $scope.currentPlan = 'free_test_plan';
+            }
         }
 
         $scope.annualPlan = function() {
@@ -75,36 +74,36 @@ angular.module('ua5App')
             var paymentData;
 
             if ($scope.cvc.number !== '') {
-                if ($scope.card.number.includes('*')) {
-                    paymentData = {
-                        plan_name: $scope.selectedPlan,
-                        card: {
-                            name: $scope.name.name,
-                            exp_month: $scope.month.number,
-                            exp_year: $scope.year.number,
-                            cvc: $scope.cvc.number,
-                            address_zip: $scope.zip.number
-                        }
-                    };
-                } else {
-                    paymentData = {
-                        plan_name: $scope.selectedPlan,
-                        card: {
-                            name: $scope.name.name,
-                            number: $scope.card.number,
-                            exp_month: $scope.month.number,
-                            exp_year: $scope.year.number,
-                            cvc: $scope.cvc.number,
-                            address_zip: $scope.zip.number
-                        }
-                    };
-                }
+                paymentData = {
+                    plan_name: $scope.selectedPlan,
+                    card: {
+                        name: $scope.name.name,
+                        number: $scope.card.number,
+                        exp_month: $scope.month.number,
+                        exp_year: $scope.year.number,
+                        cvc: $scope.cvc.number,
+                        address_zip: $scope.zip.number
+                    }
+                };
 
                 UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                     function(response) {
+                        UsersResource.resetUser();
                         $state.reload();
                         $scope.message = 'Information saved!';
                         $scope.errorMessage = false;
+                        $scope.currentPlan = $scope.selectedPlan;
+                        $scope.input = {
+                            fields: {
+                                name: $scope.name.name,
+                                number: $scope.card.number,
+                                exp_month: $scope.month.number,
+                                exp_year: $scope.year.number,
+                                cvc: $scope.cvc.number,
+                                address_zip: $scope.zip.number,
+                                plan_name: $scope.currentPlan
+                            }
+                        };
 
                         setTimeout(function() {
                             $scope.close();
@@ -133,7 +132,19 @@ angular.module('ua5App')
         $scope.updateBasic = function() {
             UsersResource.user().update({id: userId, payment: {plan_name: 'free_test_plan'}}).$promise.then(
                 function(response) {
+                    UsersResource.resetUser();
                     $state.reload();
+                    $scope.input = {
+                        fields: {
+                            name: $scope.name.name,
+                            number: $scope.card.number,
+                            exp_month: $scope.month.number,
+                            exp_year: $scope.year.number,
+                            cvc: $scope.cvc.number,
+                            address_zip: $scope.zip.number,
+                            plan_name: 'free_test_plan'
+                        }
+                    };
                     $scope.close();
                 },
                 function(error) {

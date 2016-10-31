@@ -11,7 +11,7 @@ angular.module('ua5App')
             },
             link: function($scope, element, attrs) {
             },
-            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
+            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', 'UsersResource', function($scope, $state, $stateParams, $rootScope, projectFactory, UsersResource) {
 
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
@@ -89,6 +89,7 @@ angular.module('ua5App')
                     $cookies.remove(APICONSTANTS.authCookie.user_id);
                     $cookies.remove(APICONSTANTS.authCookie.patient_id);
                     $('body').off('click');
+                    UsersResource.resetUser();
                     //TODO hit endpoint to expire auth token
                     //redirect to login
                     $state.go('sign-in');

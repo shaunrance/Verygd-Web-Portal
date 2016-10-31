@@ -19,6 +19,10 @@ angular.module('ua5App')
                 }
                 return d.promise;
             },
+            resetUser: function() {
+                initialized = false;
+                d = $q.defer();
+            },
             users: function() {
                 return $resource(APICONSTANTS.apiHost + '/users', {},
                     {

@@ -16,10 +16,16 @@ angular.module('ua5App.billing')
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualStatement = 'Next Payment of $250 will be processed on 12/01/2017';
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
-        $scope.errorMessage = null;
+        $scope.message = null;
         $scope.disableButton = true;
         $scope.annualChosen = true;
         $scope.showCardInfo = false;
+        $scope.name = {};
+        $scope.card = {};
+        $scope.month = {};
+        $scope.year = {};
+        $scope.cvc = {};
+        $scope.zip = {};
 
         $scope.showModal = function() {
             $('body').addClass('no-scroll');
@@ -30,12 +36,13 @@ angular.module('ua5App.billing')
                     fields:{
                         title: '-',
                         formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        payment: $scope.user.payment ? true : false,
                         plan: $scope.plan_name,
-                        name: $scope.name,
-                        number: $scope.number,
-                        month: $scope.month,
-                        year: $scope.year,
-                        zip: $scope.zip,
+                        name: $scope.name.name,
+                        number: $scope.card.number,
+                        month: $scope.month.number,
+                        year: $scope.year.number,
+                        zip: $scope.zip.number,
                         showFileUpload: false,
                         submitButtonText: 'Add Project'
                     }
@@ -57,61 +64,51 @@ angular.module('ua5App.billing')
                 if ($scope.plan_name === 'annual') {
                     $scope.monthlyBilling = false;
                     $scope.type = 'Premium';
+                    $scope.showAnnualToggle = true;
                 } else if ($scope.plan_name === 'monthly') {
                     $scope.monthlyBilling = true;
                     $scope.type = 'Premium';
+                    $scope.showAnnualToggle = true;
                 } else {
                     $scope.type = 'Basic';
+                    $scope.showAnnualToggle = false;
                 }
 
-                $scope.name = $scope.user.payment.name;
-                $scope.number = '************' + $scope.user.payment.last4;
-                $scope.month = $scope.user.payment.exp_month;
-                $scope.year = $scope.user.payment.exp_year;
-                $scope.cvc = '***';
-                $scope.zip = $scope.user.payment.address_zip;
+                $scope.name.name = $scope.user.payment.name;
+                $scope.card.number = '';
+                $scope.card.placeHolder = '************' + $scope.user.payment.last4;
+                $scope.month.number = $scope.user.payment.exp_month < 10 ? '0' + $scope.user.payment.exp_month.toString() : $scope.user.payment.exp_month.toString();
+                $scope.year.number = $scope.user.payment.exp_year.toString();
+                $scope.cvc.number = '';
+                $scope.zip.number = parseInt($scope.user.payment.address_zip, 10);
+            } else {
+                $scope.type = 'Basic';
+                $scope.showAnnualToggle = false;
             }
         }
-
-        // $scope.$on('annualPlanChosen', function() {
-        //     $scope.monthlyBilling = false;
-        // });
-        //
-        // $scope.$on('monthlyPlanChosen', function() {
-        //     $scope.monthlyBilling = true;
-        // });
-
-        // $scope.switchBilling = function(data) {
-        //     if (!$scope.annualChosen) {
-        //         $scope.annualChosen = true;
-        //         $scope.plan_name = 'monthly';
-        //     } else {
-        //         $scope.annualChosen = false;
-        //         $scope.plan_name = 'annual';
-        //     }
-        // };
 
         $scope.updateUser = function(data) {
             var paymentData;
             paymentData = {
                 plan_name: $scope.plan_name,
                 card: {
-                    name: data.cardName,
-                    number: data.cardNumber,
-                    exp_month: data.month,
-                    exp_year: data.year,
-                    cvc: data.cvc,
-                    address_zip: data.zip
+                    name: $scope.name.name,
+                    number: $scope.card.number,
+                    exp_month: $scope.month.number,
+                    exp_year: $scope.year.number,
+                    cvc: $scope.cvc.number,
+                    address_zip: $scope.zip.number
                 }
             };
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
                 function(response) {
-
+                    UsersResource.resetUser();
                     $state.reload();
                 },
                 function(error) {
-
+                    $scope.message = 'There was an issue with your payment details. Please try again.';
+                    $scope.errorMessage = true;
                 }
             );
         };
