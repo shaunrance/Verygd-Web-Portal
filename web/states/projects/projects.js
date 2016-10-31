@@ -9,10 +9,17 @@ angular.module('ua5App.projects')
             controllerAs: 'ctrl',
             data: {
                 settings:{displayName:'My Projects'}
+            },
+            resolve: {
+                user: ['UsersResource', function(UsersResource) {
+                    return UsersResource.get().then(function(user) {
+                        return user;
+                    });
+                }]
             }
         });
     }])
-    .controller('projectsCtrl', ['$scope', '$rootScope', '$state', 'projectFactory', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', function($scope, $rootScope, $state, projectFactory, ModalService, AuthResource, APICONSTANTS, $cookies) {
+    .controller('projectsCtrl', ['$scope', '$rootScope', '$state', 'projectFactory', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', function($scope, $rootScope, $state, projectFactory, ModalService, AuthResource, APICONSTANTS, $cookies, user) {
         var addProject = function(project) {
             projectFactory.addProject(project)
 
@@ -26,6 +33,7 @@ angular.module('ua5App.projects')
             });
         };
         $scope.hideCta = false;
+        $scope.user = user[0];
 
         $scope.title = 'projects';
 
@@ -88,10 +96,11 @@ angular.module('ua5App.projects')
                 });
         }
 
-        function checkUser() {
-            var visited = $cookies.get(APICONSTANTS.authCookie.visited);
-            if (visited === 'visited') {
-                $scope.hideCta = true;
+        function getUser() {
+            if ($scope.user.payment) {
+                if ($scope.user.payment.plan_name !== 'free_test_plan') {
+                    $scope.hideCta = true;
+                }
             }
         }
 
@@ -103,5 +112,5 @@ angular.module('ua5App.projects')
         });
 
         getProjects();
-        checkUser();
+        getUser();
     }]);

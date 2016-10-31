@@ -56,7 +56,7 @@
                 <li>5 GB Limit</li>
             </ul>
             <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan !== currentPlan" ng-click="showPayment()">Change Plan</button>
-            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan === currentPlan" ng-click="close()">Keep Plan</button>
+            <button class="modal--payment-module-button modal-button modal-accept" ng-if="selectedPlan === currentPlan" ng-click="close()">Keep This Plan</button>
         </div>
     </div>
     <div class="modal modal--payment" ng-hide="!paymentShowing">
@@ -80,7 +80,7 @@
                     <label class="modal-label">Payment Details</label>
                 </div>
                 <form ng-submit="updateUser()">
-                    <div class="account-info-section">
+                    <!-- <div class="account-info-section">
                         <input
                             class="modal-baccount-info-data--checkbox"
                             type="checkbox"
@@ -90,7 +90,7 @@
                             ng-model="plan_name.type"
                             ng-change="paymentType(plan_name.type)"
                             ng-checked="annualChecked" />
-                    </div>
+                    </div> -->
                     <div class="account-info-section">
                         <span class="account-info-title account-info-data--number">
                             Credit Card Number

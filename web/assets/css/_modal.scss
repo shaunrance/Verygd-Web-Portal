@@ -40,6 +40,38 @@
     }
 }
 
+.modal-submenu {
+    margin-top: 20px;
+    position: relative;
+}
+
+.modal-message {
+    color: $red;
+}
+
+.modal-submenu__list li {
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'OpenSans', sans-serif;
+    font-size: 0.9em;
+    margin-right: 25px;
+    position: relative;
+    text-transform: uppercase;
+
+    &.active {
+        color: $btn-blue;
+
+        &::after {
+            border-bottom: 2px solid $btn-blue;
+            bottom: -9px;
+            content: '';
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+    }
+}
+
 .modal-header-section {
     display: inline-block;
 }
@@ -48,6 +80,15 @@
     color: #999;
     max-height: 430px;
     overflow-y: auto;
+}
+
+#share-link {
+    color: $grey-2;
+    display: block;
+    font-style: italic;
+    margin-bottom: 20px;
+    position: relative;
+    text-decoration: none;
 }
 
 .modal-footer {

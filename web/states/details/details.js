@@ -57,10 +57,18 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
+        $scope.closeCta = function() {
+            $scope.hideCta = true;
+        };
+
         //SCENE methods ======================================================//
         //====================================================================//
         $scope.$on('nav:add-scene', function() {
             $scope.addScene();
+        });
+
+        $scope.$on('public:true', function() {
+            $scope.projectPrivacy = false;
         });
 
         $scope.$on('toggle:switched', function($event, args) {
@@ -74,6 +82,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         getSceneInfo($scope.currentScene);
                     }
                 });
+            } else if (args === 'projectPrivacy') {
+                if (!$scope.isBasic) {
+                    projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
+                }
             }
         });
 
@@ -89,7 +101,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.addScene = function() {
             $('body').addClass('no-scroll');
-            console.log('here');
             ModalService.showModal({
                 templateUrl: 'modals/addModal.html',
                 controller: 'addModalController',
@@ -228,8 +239,19 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         function getScenes() {
             //$scope.scenes = [];
+            if ($scope.user.payment) {
+                if ($scope.user.payment.plan_name === 'free_test_plan') {
+                    $scope.isBasic = true;
+                    $scope.hideCta = !$scope.isBasic;
+                    $scope.scenePrivacyToggle = false;
+                }
+            }
+
             projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
+                    $scope.project = response.data;
+                    $scope.projectPrivacy = !$scope.project.public; //jshint ignore:line
+
                     if (response.data.content.length > 0) {
                         $scope.scenes = response.data.content;
                         $scope.projectName = response.data.name;

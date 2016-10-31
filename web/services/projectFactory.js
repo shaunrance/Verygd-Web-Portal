@@ -26,6 +26,10 @@ angular.module('ua5App')
             });
         };
 
+        dataFactory.editProject = function(projectId, data) {
+            return $http.put(urlBase + '/' + projectId, data);
+        };
+
         dataFactory.deleteScreen = function(id) {
             return $http.delete(urlBase + '/' + id, { // jshint ignore:line
                 // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}

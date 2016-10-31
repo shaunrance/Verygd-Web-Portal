@@ -81,6 +81,16 @@
     }
 }
 
+#confirm-message {
+    color: $green;
+    margin: 20px 0 0 20%;
+    position: relative;
+
+    &.error {
+        color: $red;
+    }
+}
+
 .account-info-title {
     @extend %uppercase;
     @extend %h7;
@@ -113,4 +123,10 @@
 .account-info-button {
     @include size(120px 40px);
     margin-top: 124px;
+}
+
+@include media($phablet) {
+    .account {
+        padding: 50px 0;
+    }
 }

@@ -64,9 +64,9 @@
     margin-top: 60px;
     position: relative;
 
-    &:first-of-type {
-        display: none;
-    }
+    // &:first-of-type {
+    //     display: none;
+    // }
 
     &.account-info-section-exp-sec {
 
@@ -133,4 +133,68 @@
 
 .billing-info-button {
     @include size(120px 40px);
+}
+
+@include media($phablet) {
+    .account-body {
+        float: none;
+        margin: 0 auto;
+        max-width: 500px;
+        width: 90%;
+    }
+
+    .account-info-billing {
+        display: inline-block;
+        float: none;
+        font-size: 22px;
+        margin: 0 10px 10px;
+    }
+
+    .account-billing-button-container {
+        float: none;
+    }
+
+    .account-billing-update-button {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .account-billing-title,
+    .account-billing-toggle {
+        display: inline-block;
+        float: none;
+    }
+
+    .account-billing-title {
+        width: 30%;
+    }
+
+    .account-billing-plan {
+        display: inline-block;
+    }
+
+    .account-billing-statement-text {
+        font-size: 12px;
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .account-info-section {
+        margin-top: 30px;
+    }
+
+    .account-info-section.account-info-section-exp-sec {
+        .account-info-title {
+            width: 44%;
+        }
+
+        .account-info-data {
+            width: 46%;
+
+            &:first-of-type {
+                padding-left: 7px;
+                width: 46%;
+            }
+        }
+    }
 }

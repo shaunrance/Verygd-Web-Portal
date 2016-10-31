@@ -22,7 +22,7 @@ angular.module('ua5App.sign-up')
             }
         });
     }])
-    .controller('signUpCtrl', ['$scope', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', function($scope, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope) {
+    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope) {
         $scope.disableButton = false;
 
         $scope.showModal = function() {
@@ -44,6 +44,8 @@ angular.module('ua5App.sign-up')
                     //set cookie token && then go to projects
                     $cookies.put(APICONSTANTS.authCookie.token, response.token);
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
+
+                    $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
 
                     $state.go('projects');
                     $('body').removeClass('no-scroll');
