@@ -13,7 +13,6 @@ angular.module('ua5App')
             }
         };
         $scope.showFileUpload = fields.showFileUpload;
-        $scope.url = window.location.href.replace('projects', 'scene');
         $scope.urlShowing = true;
         $scope.projectId = fields.project;
 
@@ -47,7 +46,7 @@ angular.module('ua5App')
                     transform: 'translateY(0)'
                 });
             } else {
-                window.location.href = 'mailto:' + $scope.email.address + '?subject=Very.gd Project Link&body=Hello, someone has shared a Very.gd link with you: ' + $scope.url;
+                window.location.href = 'mailto:' + $scope.email.address + '?subject=&body=' + $scope.project.name + ': ' + $scope.url;
                 $scope.close();
             }
         };
@@ -61,7 +60,7 @@ angular.module('ua5App')
         function init() {
             projectFactory.getProjectById($scope.projectId).then(function(response) {
                 $scope.project = response.data;
-
+                $scope.url = 'http://projects.very.gd/p/' + $scope.project.short_uuid;
                 if ($scope.project.public) { //jshint ignore:line
                     $scope.publicProject = true;
                 } else {

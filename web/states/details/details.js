@@ -14,11 +14,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
+        var ctaCookie = $cookies.get(APICONSTANTS.authCookie.cta);
         $rootScope.showMobileMenu = false;
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
         $scope.currentScene = '';
+        $scope.hideCta = true;
         $scope.singlePanel = false;
         $scope.privateProject = true;
         $scope.hasTouch = Modernizr.touch;
@@ -59,6 +60,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.closeCta = function() {
             $scope.hideCta = true;
+            if (ctaCookie !== 'closeCta') {
+                $cookies.put(APICONSTANTS.authCookie.cta, 'closeCta');
+            }
         };
 
         //SCENE methods ======================================================//
@@ -238,12 +242,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         }
 
         function getScenes() {
-            //$scope.scenes = [];
             if ($scope.user.payment) {
                 if ($scope.user.payment.plan_name === 'free_test_plan') {
                     $scope.isBasic = true;
-                    $scope.hideCta = !$scope.isBasic;
                     $scope.scenePrivacyToggle = false;
+                    if (ctaCookie !== 'closeCta') {
+                        $scope.hideCta = false;
+                    }
                 }
             }
 

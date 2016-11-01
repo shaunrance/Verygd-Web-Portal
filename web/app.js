@@ -54,7 +54,8 @@ angular.module('ua5App', [
         authCookie: {
             token: 'vg-user',
             user_id: 'vg-member',
-            visited: 'string'
+            visited: 'string',
+            cta: 'cta'
         }
     })
     .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {

@@ -32,16 +32,51 @@ angular.module('ua5App.projects')
 
             });
         };
-        $scope.hideCta = false;
+        var ctaCookie = $cookies.get(APICONSTANTS.authCookie.cta);
+        $scope.hideCta = true;
         $scope.user = user[0];
+        $scope.name = {};
+        $scope.card = {};
+        $scope.month = {};
+        $scope.year = {};
+        $scope.cvc = {};
+        $scope.zip = {};
 
         $scope.title = 'projects';
+        $scope.link = 'projects';
 
         $scope.newProject = {};
 
         $scope.$on('addProject', function(event, args) {
             addProject(args);
         });
+
+        $scope.plansModal = function() {
+            $('body').addClass('no-scroll');
+            ModalService.showModal({
+                templateUrl: 'modals/billingModal.html',
+                controller: 'billingModalController',
+                inputs: {
+                    fields:{
+                        title: '-',
+                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        payment: $scope.user.payment ? true : false,
+                        plan: $scope.plan_name,
+                        name: $scope.name.name,
+                        number: $scope.card.number,
+                        month: $scope.month.number,
+                        year: $scope.year.number,
+                        zip: $scope.zip.number,
+                        showFileUpload: false,
+                        submitButtonText: 'Add Project'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    $('body').removeClass('no-scroll');
+                });
+            });
+        };
 
         $scope.deleteProject = function(projectId) {
             $('body').addClass('no-scroll');
@@ -75,6 +110,9 @@ angular.module('ua5App.projects')
 
         $scope.closeCta = function() {
             $scope.hideCta = true;
+            if (ctaCookie !== 'closeCta') {
+                $cookies.put(APICONSTANTS.authCookie.cta, 'closeCta');
+            }
         };
 
         function getProjects() {
@@ -97,17 +135,22 @@ angular.module('ua5App.projects')
         }
 
         function getUser() {
-            if ($scope.user.payment) {
-                if ($scope.user.payment.plan_name !== 'free_test_plan') {
-                    $scope.hideCta = true;
+            if ($scope.user.payment && ctaCookie !== 'closeCta') {
+                if ($scope.user.payment.plan_name === 'free_test_plan') {
+                    $scope.hideCta = false;
                 }
+
+                $scope.month.number = $scope.user.payment.exp_month < 10 ? '0' + $scope.user.payment.exp_month.toString() : $scope.user.payment.exp_month.toString();
+                $scope.year.number = $scope.user.payment.exp_year.toString();
+                $scope.zip.number = $scope.user.payment.address_zip;
             }
+
+            $scope.name.name = $scope.user.name;
         }
 
         $scope.$on('$locationChangeStart', function(event) {
             if ($state.current.name === 'projects') {
                 $cookies.put(APICONSTANTS.authCookie.visited, 'visited');
-
             }
         });
 
