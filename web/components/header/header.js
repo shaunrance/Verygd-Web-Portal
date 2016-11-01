@@ -12,7 +12,6 @@ angular.module('ua5App')
             link: function($scope, element, attrs) {
             },
             controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', 'UsersResource', function($scope, $state, $stateParams, $rootScope, projectFactory, UsersResource) {
-
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 $scope.projectTitle = '';
