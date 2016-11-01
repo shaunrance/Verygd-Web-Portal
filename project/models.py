@@ -24,6 +24,10 @@ class Project(models.Model):
         return self.owner.media_group
 
     @property
+    def group_owner(self):
+        return self.owner.group_owner
+
+    @property
     def content(self):
         for content_type in ['scenes']:
             for content in getattr(self, str(content_type)).all():
