@@ -22,7 +22,7 @@ angular.module('ua5App.sign-up')
             }
         });
     }])
-    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope) {
+    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', 'ngMeta', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope, ngMeta) {
         $scope.disableButton = false;
 
         $scope.showModal = function() {
@@ -97,5 +97,6 @@ angular.module('ua5App.sign-up')
                 }
             );
         };
+        ngMeta.setTitle('Sign Up');
     }])
 ;

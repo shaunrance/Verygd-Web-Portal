@@ -15,7 +15,7 @@ angular.module('ua5App.viewer')
             }
         });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', function($scope, $stateParams, content, sceneFactory, BrowserFactory) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta) {
         var lastScene = 1;
         $scope.scene = parseInt($stateParams.scene, 10);
         $scope.projectId = $stateParams.projectId;
@@ -29,6 +29,8 @@ angular.module('ua5App.viewer')
         } else {
             $scope.content = content.data.content;
         }
+
+        ngMeta.setTitle('Viewer');
 
         $scope.currentScenePanels = $scope.content;
         $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
