@@ -4,6 +4,7 @@ from project.models import Project
 from project.serializers import ProjectSerializer
 from project.permissions import ProjectPermissions
 from very_gd.views import RequestSetup
+from rest_framework.permissions import IsAuthenticated
 
 
 class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
@@ -12,7 +13,7 @@ class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
     serializer_class = ProjectSerializer
 
     authentication_classes = BaseViewSet.authentication_classes
-    permission_classes = (ProjectPermissions, )
+    permission_classes = (IsAuthenticated, ProjectPermissions, )
     pagination_class = BaseViewSet.pagination_class
 
     def get_queryset(self):

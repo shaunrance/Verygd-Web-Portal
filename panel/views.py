@@ -1,7 +1,7 @@
 from media_portal.album.content.views import AlbumImagesViewSet as PanelImageViewSet
 from panel.models import PanelImage
 from panel.permissions import PanelPermissions
-
+from rest_framework.permissions import IsAuthenticated
 PanelImageViewSet.model = PanelImage
 
 
@@ -12,4 +12,4 @@ def get_queryset(self):
 
 
 PanelImageViewSet.get_queryset = get_queryset
-PanelImageViewSet.permission_classes = (PanelPermissions, )
+PanelImageViewSet.permission_classes = (IsAuthenticated, PanelPermissions, )
