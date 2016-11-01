@@ -2,15 +2,18 @@ from rest_framework import viewsets, mixins
 from media_portal.album.views import AlbumViewSet as BaseViewSet
 from project.models import Project
 from project.serializers import ProjectSerializer
+from project.permissions import ProjectPermissions
+from very_gd.views import RequestSetup
+from rest_framework.permissions import IsAuthenticated
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
     model = Project
 
     serializer_class = ProjectSerializer
 
     authentication_classes = BaseViewSet.authentication_classes
-    permission_classes = BaseViewSet.permission_classes
+    permission_classes = (IsAuthenticated, ProjectPermissions, )
     pagination_class = BaseViewSet.pagination_class
 
     def get_queryset(self):
@@ -26,7 +29,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return self.model.objects.filter(**params).prefetch_related('scenes')
 
 
-class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, RequestSetup):
     model = Project
 
     serializer_class = ProjectSerializer

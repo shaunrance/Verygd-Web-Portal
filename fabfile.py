@@ -1,6 +1,6 @@
 from fabric.api import env
 from fabric.context_managers import cd
-from fabric.operations import run
+from fabric.operations import run, sudo
 
 from server_setup import initial_install as init
 
@@ -22,11 +22,16 @@ def install_upgrade_reqs():
 
 
 def restart_uwsgi():
-    run('uwsgi --reload /tmp/uwsgi.pid')
+    sudo('uwsgi --reload /tmp/uwsgi.pid')
 
 
 def run_migrations():
-    run('source {venv_dir}/bin/activate && ./manage.py migrate'.format(venv_dir=remote_venv))
+    export_secret_env = 'for i in `cat /etc/uwsgi/very.gd.staging.env`; do export $i; done'
+
+    run('{export_env} && source {venv_dir}/bin/activate && ./manage.py migrate'.format(
+        venv_dir=remote_venv,
+        export_env=export_secret_env
+    ))
 
 
 def setup():

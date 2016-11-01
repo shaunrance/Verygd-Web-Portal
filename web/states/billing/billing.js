@@ -12,7 +12,7 @@ angular.module('ua5App.billing')
             }
         });
     }])
-    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, user, UsersResource) {
+    .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', 'ngMeta', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, user, UsersResource, ngMeta) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.annualStatement = 'Next Payment of $250 will be processed on 12/01/2017';
         $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
@@ -114,5 +114,6 @@ angular.module('ua5App.billing')
         };
 
         initialValues();
+        ngMeta.setTitle('Billing');
     }])
 ;

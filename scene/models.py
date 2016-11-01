@@ -18,6 +18,10 @@ class Scene(models.Model):
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
 
     @property
+    def owner(self):
+        return self.project.owner
+
+    @property
     def content(self):
         for content_type in 'videos', 'images':
             for content in getattr(self, str(content_type)).all():

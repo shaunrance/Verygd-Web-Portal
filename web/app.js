@@ -65,7 +65,7 @@ angular.module('ua5App', [
         //intercept $resolves to add token authorization to header
         $httpProvider.interceptors.push('authInterceptor');
         ngMetaProvider.useTitleSuffix(true);
-        ngMetaProvider.setDefaultTitleSuffix(' | Site Name');
+        ngMetaProvider.setDefaultTitleSuffix(' | very.gd');
         ngMetaProvider.setDefaultTitle('Page');
         ngMetaProvider.setDefaultTag('url', 'URL');
         ngMetaProvider.setDefaultTag('description', 'Site description');

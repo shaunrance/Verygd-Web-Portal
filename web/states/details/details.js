@@ -23,7 +23,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 }
             });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
         var ctaCookie = $cookies.get(APICONSTANTS.authCookie.cta);
         $rootScope.showMobileMenu = false;
@@ -271,6 +271,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     if (response.data.content.length > 0) {
                         $scope.scenes = response.data.content;
                         $scope.projectName = response.data.name;
+                        ngMeta.setTitle($scope.projectName + ' | My Projects');
 
                         //check if page is first load, if so, make first scene selected
                         if ($scope.firstLoad) {
@@ -461,6 +462,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         //INIT ===============================================================//
         //====================================================================//
         getScenes();
+
     }])
     .controller('detailsPublicCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {
         $scope.hideCta = true;

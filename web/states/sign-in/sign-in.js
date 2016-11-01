@@ -20,7 +20,7 @@ angular.module('ua5App.sign-in')
             }
         });
     }])
-    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
+    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', 'ngMeta', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http, ngMeta) {
         if (user) {
             $state.go('projects');
             $('body').removeClass('no-scroll');
@@ -69,5 +69,7 @@ angular.module('ua5App.sign-in')
                 }
             });
         };
+
+        ngMeta.setTitle('Sign In');
     }])
 ;

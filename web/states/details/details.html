@@ -13,8 +13,8 @@
     </h1>
     <div class="project-details" ng-class="{'empty': emptyScene}">
         <nav class="scene-nav">
-            <div ng-if="!publicView" class="scene-nav--selector"><a href="/projects">{{projectName}}</a> > {{sceneName}}</div>
-            <div ng-if="publicView" class="scene-nav--selector">{{projectName}} > {{sceneName}}</div>
+            <div ng-if="!publicView" class="scene-nav--selector"><a href="/projects">{{projectName}}</a> › {{sceneName}}</div>
+            <div ng-if="publicView" class="scene-nav--selector">{{projectName}} › {{sceneName}}</div>
             <ul class="scene-list" ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
@@ -82,8 +82,7 @@
                     <div class="toggle">
                         <div class="toggle-switch__icon poly"></div>
                         <toggle-switch
-                            ng-model="sceneTypeToggle"
-                            disabled="{{singlePanel}}">
+                            ng-model="sceneTypeToggle">
                         </toggle-switch>
                         <div class="toggle-switch__icon pano"></div>
                     </div>

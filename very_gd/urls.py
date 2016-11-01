@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from rest_framework import routers
 
-from media_portal.users.auth.views import MediaPortalAuthToken as VeryGDAuthToken
+from users.auth.views import VeryGDAuthToken
 from media_portal.users.views import MembersViewSet, MemberCreateView
 
 from media_portal.payment.views import available_stripe_plans
@@ -14,6 +14,8 @@ from media_portal.admin import admin_site
 from project.views import ProjectViewSet, PublicProjectViewSet
 from scene.views import SceneViewSet
 from panel.views import PanelImageViewSet
+
+from media_portal.users.auth.views import reset_password, confirm_password
 
 router = routers.DefaultRouter(trailing_slash=False)
 
@@ -32,9 +34,13 @@ urlpatterns = router.urls
 urlpatterns = [
     url(r'^plans/available/?$', available_stripe_plans, name='available_plans'),
 
-    # TODO(andrew.silvernail): password reset link TBD
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$', lambda r: r,
-        name='password_reset_confirm'),
+    # this is used by the stock django template to build the password reset URL
+    # this is the frontend URL displayed in user emails
+    url(r'reset-password/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/?$',
+        lambda r: r, name='password_reset_confirm'),
+    url(r'^reset_password/confirm/?', confirm_password, name='password_reset_confirm'),
+    url(r'^reset_password/?$', reset_password, name='reset_password'),
+
     url(r'^auth/token/?', VeryGDAuthToken.as_view()),
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
     url(r'^admin/?', admin_site.urls, name='admin'),

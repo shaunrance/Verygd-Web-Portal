@@ -20,7 +20,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
             }
         });
     }])
-    .controller('accountCtrl', ['$rootScope', '$scope', '$state', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', function($rootScope, $scope, $state, APICONSTANTS, $cookies, user, UsersResource) {
+    .controller('accountCtrl', ['$rootScope', '$scope', '$state', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', 'ngMeta', function($rootScope, $scope, $state, APICONSTANTS, $cookies, user, UsersResource, ngMeta) {
         $scope.userId = $cookies.get(APICONSTANTS.authCookie.user_id);
         $scope.user = {};
 
@@ -126,5 +126,6 @@ angular.module('ua5App.account', ['ngFileUpload'])
             getUserInfo();
         }
         init();
+        ngMeta.setTitle('My Account');
     }])
 ;

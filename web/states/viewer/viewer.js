@@ -29,7 +29,7 @@ angular.module('ua5App.viewer')
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', function($scope, $stateParams, content, sceneFactory, BrowserFactory) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta) {
         var lastScene = 1;
         $scope.scenes = content;
 
@@ -55,18 +55,16 @@ angular.module('ua5App.viewer')
                     }
                 });
             }
+
+            ngMeta.setTitle('Viewer');
         }
 
-        if (content.length > 0) {
-            _.each(content, function(scene) {
-                if (scene.id === parseInt($stateParams.scene, 10)) {
-                    content = scene;
-                    init();
-                }
-            });
-        } else {
-            init();
-        }
+        _.each(content, function(scene) {
+            if (scene.id === parseInt($stateParams.scene, 10)) {
+                content = scene;
+                init();
+            }
+        });
 
         $scope.toggleCardboard = function() {
             $scope.useVr = !$scope.useVr;
