@@ -1,7 +1,7 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <button class="menu-button" ng-click="toggleMenuMobile()">
+            <button class="menu-button" ng-hide="public" ng-click="toggleMenuMobile()">
                 <img class="menu-icon" src="assets/img/hamburger.svg" />
             </button>
             <div class="menu-container ng-hide" ng-click="toggleMenuMobile()" ng-show="mobileUserMenuToggle">
@@ -44,11 +44,14 @@
                     </li>
                 </ul>
             </div>
-            <a class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
+            <a ng-if="!public" class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
+                <img class="logo" src="assets/img/vg-logo-new-header.svg">
+            </a>
+            <a ng-if="public" class="logo-link" href="/" data-ui-sref-opts="{reload: true}">
                 <img class="logo" src="assets/img/vg-logo-new-header.svg">
             </a>
 
-            <div class="header__user-container">
+            <div class="header__user-container" ng-hide="public">
                 <div class="header__notification-container" ng-click="toggleNotification()">
                     <div class="header__notification-icon" ng-class="{'pending': notifications.length > 0}"></div>
                 </div>
@@ -72,7 +75,7 @@
                     <span>{{user.name}}</span>
                 </div>
 
-                <div class="header__user-menu" ng-class="{'show': userMenuToggle}">
+                <div class="header__user-menu" ng-hide="public" ng-class="{'show': userMenuToggle}">
                     <ul class="menu-list">
                         <li class="menu-list--item">
 <!--                             <div class="menu-link avatar"></div> -->
@@ -122,6 +125,6 @@
                 {{projectTitle}}
             </span>
         </span>
-        <div add-menu class="add-menu--controls"></div>
+        <div add-menu ng-hide="public" class="add-menu--controls"></div>
     </div>
 </header>

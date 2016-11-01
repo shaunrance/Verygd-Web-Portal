@@ -154,6 +154,20 @@
     }
 }
 
+.public:hover {
+    .link-icon---container {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .link-icon {
+        opacity: 0;
+    }
+
+    .scene__item--delete {
+        opacity: 0;
+    }
+}
+
 .scene-nav,
 .scene-preview {
     max-width: 240px;

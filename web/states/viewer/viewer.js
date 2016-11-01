@@ -1,46 +1,73 @@
 /* global angular, $, _ */
 angular.module('ua5App.viewer')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-        $stateProvider.state('viewer', {
-            url: '/viewer/:projectId/:scene',
-            templateUrl: 'states/viewer/viewer.html',
-            controller: 'viewerCtrl',
-            controllerAs: 'ctrl',
-            resolve: {
-                content: ['sceneFactory', '$stateParams', function(sceneFactory, $stateParams) {
-                    return sceneFactory.getSceneById($stateParams.scene).then(function(response) {
-                        return response;
-                    });
-                }]
-            }
-        });
+        $stateProvider
+            .state('viewer', {
+                url: '/viewer/:projectId/:scene',
+                templateUrl: 'states/viewer/viewer.html',
+                controller: 'viewerCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    content: ['projectFactory', '$stateParams', function(projectFactory, $stateParams) {
+                        return projectFactory.getProjectById($stateParams.projectId).then(function(response) {
+                            return response.data.content;
+                        });
+                    }]
+                }
+            })
+            .state('v', {
+                url: '/p/:projectId/:scene',
+                templateUrl: 'states/viewer/viewer.html',
+                controller: 'viewerCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    content: ['projectFactory', '$stateParams', '$q', function(projectFactory, $stateParams, $q) {
+                        return projectFactory.getProjectByPubId($stateParams.projectId).then(function(response) {
+                            return response.data.content;
+                        });
+                    }]
+                }
+            });
     }])
     .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta) {
         var lastScene = 1;
-        $scope.scene = parseInt($stateParams.scene, 10);
-        $scope.projectId = $stateParams.projectId;
-        $scope.useVr = false;
-        $scope.background = content.data.background;
-        $scope.touch = BrowserFactory.hasTouch();
-
-        if (content.data.content.length > 1) {
-            // first check to see if more than one panel exists, then check if its panorama
-            $scope.content = content.data.is_panorama ? _.where(content.data.content, {order: 0}) : content.data.content;
-        } else {
-            $scope.content = content.data.content;
-        }
+        $scope.scenes = content;
 
         ngMeta.setTitle('Viewer');
 
-        $scope.currentScenePanels = $scope.content;
-        $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
+        function init() {
+            $scope.useVr = false;
+            $scope.background = content.background;
+            $scope.touch = BrowserFactory.hasTouch();
 
-        if ($scope.content.length > 1) {
-            _.each($scope.content, function(panel) {
-                if (panel.id > lastScene) {
-                    lastScene = panel.id;
+            if (content.content.length > 1) {
+                // first check to see if more than one panel exists, then check if its panorama
+                $scope.content = content.is_panorama ? _.where(content.content, {order: 0}) : content.content;
+            } else {
+                $scope.content = content.content;
+            }
+
+            $scope.currentScenePanels = $scope.content;
+            $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
+
+            if ($scope.content.length > 1) {
+                _.each($scope.content, function(panel) {
+                    if (panel.id > lastScene) {
+                        lastScene = panel.id;
+                    }
+                });
+            }
+        }
+
+        if (content.length > 0) {
+            _.each(content, function(scene) {
+                if (scene.id === parseInt($stateParams.scene, 10)) {
+                    content = scene;
+                    init();
                 }
             });
+        } else {
+            init();
         }
 
         $scope.toggleCardboard = function() {
@@ -56,14 +83,13 @@ angular.module('ua5App.viewer')
             var targetScene = parseInt(data.link, 10);
 
             if (targetScene !== '') {
-                $scope.scene = targetScene;
-                sceneFactory.getSceneById($scope.scene)
-                    .then(function(response) {
-                        $scope.currentScenePanels = response.data.content;
+                _.each($scope.scenes, function(scene) {
+                    if (scene.id === targetScene) {
+                        $scope.currentScenePanels = scene.content;
                         $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
-                        //this was causing $digest error, removing for now
-                        //$scope.$apply();
-                    });
+                        $scope.$apply();
+                    }
+                });
             }
         });
 
