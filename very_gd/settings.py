@@ -80,6 +80,10 @@ EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
 
+INTERCOM_SECURE_KEY = os.getenv('INTERCOM_SECURE_KEY', None)
+INTERCOM_APP_NAME = os.getenv('INTERCOM_APP_NAME', None)
+INTERCOM_APP_ID = os.getenv('INTERCOM_APP_ID', None)
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
