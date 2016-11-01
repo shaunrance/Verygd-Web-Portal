@@ -1,5 +1,5 @@
 <div class="modal-overlay">
-    <div class="modal">
+    <div class="modal modal--share">
         <div class="modal-header">
             <h3>{{title}}</h3>
             <div class="modal-submenu">
@@ -32,7 +32,7 @@
                 <form ng-hide="!publicProject">
                     <div class="form-group" ng-repeat="label in formLabels">
                         <div class="modal-message">{{message}}</div>
-                        <input class="modal-input" ng-model="email.address" placeholder="Enter E-mail Address" type="text" required />
+                        <input class="modal-input" ng-model="email.address" placeholder="Recipient’s Email Address" type="text" required />
                     </div>
                     <div class="modal-footer">
                         <button class="modal-submit modal-button" ng-click="emailSubmit()">{{buttonText}}</button>

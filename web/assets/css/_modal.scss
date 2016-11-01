@@ -21,6 +21,37 @@
     width: 100%;
 }
 
+.modal--share {
+    max-width: 450px;
+    padding: 50px;
+
+    .modal-header {
+        padding: 0 0 10px;
+
+        &::after {
+            left: -50px;
+            width: 450px;
+        }
+    }
+
+    .modal-body {
+        padding: 20px 0 0;
+    }
+
+    .modal-input {
+        margin: 20px 0 30px;
+    }
+
+    #share-link {
+        color: $btn-blue;
+        display: block;
+        font-style: italic;
+        margin-bottom: 40px;
+        position: relative;
+        text-decoration: none;
+    }
+}
+
 .modal--payment {
     background-color: $grey;
     margin: 0 auto;
@@ -50,6 +81,7 @@
 }
 
 .modal-submenu__list li {
+    color: $grey-2;
     cursor: pointer;
     display: inline-block;
     font-family: 'OpenSans', sans-serif;
@@ -80,15 +112,6 @@
     color: #999;
     max-height: 430px;
     overflow-y: auto;
-}
-
-#share-link {
-    color: $grey-2;
-    display: block;
-    font-style: italic;
-    margin-bottom: 20px;
-    position: relative;
-    text-decoration: none;
 }
 
 .modal-footer {
