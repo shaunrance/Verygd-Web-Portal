@@ -1,4 +1,3 @@
-from media_portal.album.content.tests import TestImageAPI
 from very_gd.tests.base import TestAPIBase
 from project.tests import TestProject
 
