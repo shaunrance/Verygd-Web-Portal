@@ -8,7 +8,8 @@ angular.module('ua5App')
                 basic: '@',
                 headerTitleData: '=',
                 headerLink: '=',
-                user: '='
+                user: '=',
+                public: '@' //jshint ignore:line
             },
             link: function($scope, element, attrs) {
             },
@@ -26,14 +27,16 @@ angular.module('ua5App')
                     $state.go('projects', {}, {reload: true});
                 };
 
-                if ($scope.user.payment) {
-                    if ($scope.user.payment.plan_name === 'free_test_plan') {
-                        $scope.upgradePlan = 'Upgrade Plan';
+                if ($scope.user) {
+                    if ($scope.user.payment) {
+                        if ($scope.user.payment.plan_name === 'free_test_plan') {
+                            $scope.upgradePlan = 'Upgrade Plan';
+                        } else {
+                            $scope.upgradePlan = 'Change Plan';
+                        }
                     } else {
-                        $scope.upgradePlan = 'Change Plan';
+                        $scope.upgradePlan = 'Upgrade Plan';
                     }
-                } else {
-                    $scope.upgradePlan = 'Upgrade Plan';
                 }
 
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
@@ -139,11 +142,13 @@ angular.module('ua5App')
                 $('body').on('click', function(event) {
                     if (!$(event.target).closest('.header__user-container').length) {
                         var scope = angular.element($('.header')).scope();
-                        if (scope.userMenuToggle || scope.notificationToggle) {
-                            scope.$apply(function() {
-                                scope.userMenuToggle = false;
-                                scope.notificationToggle = false;
-                            });
+                        if (scope) {
+                            if (scope.userMenuToggle || scope.notificationToggle) {
+                                scope.$apply(function() {
+                                    scope.userMenuToggle = false;
+                                    scope.notificationToggle = false;
+                                });
+                            }
                         }
                     }
                 });
