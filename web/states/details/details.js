@@ -25,7 +25,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.hasTouch = Modernizr.touch;
         $scope.showSceneList = false;
         $scope.log = '';
-        $scope.title = 'projects';
         $scope.projectId = $stateParams.projectId;
         $scope.projectName = '';
         $scope.colorOptions = {

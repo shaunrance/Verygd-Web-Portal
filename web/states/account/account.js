@@ -44,6 +44,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
                 } else {
                     $scope.user = user[0];
                     $scope.title = $scope.user.name;
+                    $scope.link = 'account';
                     // $scope.email = $scope.user.email;
                     // $scope.userName = $scope.user.name;
 

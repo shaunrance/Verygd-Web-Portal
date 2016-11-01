@@ -43,6 +43,7 @@ angular.module('ua5App.projects')
         $scope.zip = {};
 
         $scope.title = 'projects';
+        $scope.link = 'projects';
 
         $scope.newProject = {};
 

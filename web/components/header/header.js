@@ -7,6 +7,7 @@ angular.module('ua5App')
             scope: {
                 basic: '@',
                 headerTitleData: '=',
+                headerLink: '=',
                 user: '='
             },
             link: function($scope, element, attrs) {
