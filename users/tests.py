@@ -66,3 +66,6 @@ class TestLoginAPI(TestLogInOutAPI):
 
     def test_password_reset(self):
         return super(TestLoginAPI, self).test_password_reset()
+
+    def test_intercom_token(self):
+        self.assertTrue('intercom_token' in self.member['auth'] and self.member['auth']['intercom_token'])
