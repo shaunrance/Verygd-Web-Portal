@@ -16,7 +16,7 @@ class PanelSerializer(ContentSerializer):
 class PanelImageSerializer(PanelSerializer):
     class Meta:
         model = PanelImage
-        fields = '__all__'
+        exclude = ('owner', )
 
     def validate_content(self, value):
         try:

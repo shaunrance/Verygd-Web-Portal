@@ -12,6 +12,7 @@ class TestAPIBase(Base):
 
         self.scene_endpoint = 'scene'
         self.project_endpoint = 'project'
+        self.panel_endpoint = 'panel'
 
     def add_new_project(self, member, *args, **kwargs):
         data = self.strategies.get_create_new_project_strategy().example()
@@ -29,7 +30,8 @@ class TestAPIBase(Base):
 
         response, msg = self.post_as(member, '/{0}'.format(self.scene_endpoint), data=data)
 
-        self.assertEquals(response.status_code, 201)
+        self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 msg))
 
         return msg['id']
 

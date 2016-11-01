@@ -1,15 +1,18 @@
-from media_portal.album.content.views import AlbumImagesViewSet as PanelImageViewSet
+from media_portal.album.content.views import ContentViewSet
+
 from panel.models import PanelImage
 from panel.permissions import PanelPermissions
+from panel.serializers import PanelImageSerializer
 from rest_framework.permissions import IsAuthenticated
-PanelImageViewSet.model = PanelImage
+
+from very_gd.views import RequestSetup
 
 
-def get_queryset(self):
-    request_member = self.request.user.member
+class PanelImageViewSet(ContentViewSet, RequestSetup):
+    model = PanelImage
+    permission_classes = (IsAuthenticated, PanelPermissions, )
+    serializer_class = PanelImageSerializer
 
-    return self.model.objects.filter()
+    def get_queryset(self):
+        return self.model.objects.filter()
 
-
-PanelImageViewSet.get_queryset = get_queryset
-PanelImageViewSet.permission_classes = (IsAuthenticated, PanelPermissions, )
