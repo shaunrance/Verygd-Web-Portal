@@ -11,6 +11,8 @@ angular.module('ua5App.sign-up', []);
 angular.module('ua5App.account', []);
 angular.module('ua5App.billing', []);
 angular.module('ua5App.notifications', []);
+angular.module('ua5App.terms-of-service', []);
+angular.module('ua5App.privacy-policy', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -38,6 +40,8 @@ angular.module('ua5App', [
     'ua5App.projects',
     'ua5App.viewer',
     'ua5App.sign-in',
+    'ua5App.terms-of-service',
+    'ua5App.privacy-policy',
     'ngAnimate'
     // end add states as app dependency
 ])
