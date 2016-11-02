@@ -5,6 +5,7 @@ from very_gd.tests.strategies import TestStrategies
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
 from media_portal.users.tests import TestLogInOutAPI
 from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings
+from users.models import Member
 
 TestUserAPIBase.strategy = TestStrategies
 
@@ -36,6 +37,10 @@ class TestLoginAPI(TestLogInOutAPI):
         self.setup_email_settings()
 
         super(TestLoginAPI, self).setUp()
+
+        member = Member.objects.get(pk=self.member['id'])
+        member.user.email = 'andrew@useallfive.com'
+        member.save()
 
     def setup_email_settings(self):
         reset_email_settings = UserPasswordResetEmail()
