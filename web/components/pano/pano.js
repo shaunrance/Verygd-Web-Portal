@@ -7,7 +7,8 @@ angular.module('ua5App')
             scope: {
                 useVr: '=',
                 panoContent: '=',
-                background: '='
+                background: '=',
+                isPanorama: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
@@ -108,7 +109,8 @@ angular.module('ua5App')
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    if (panelCount > 1) {
+
+                    if (!$scope.isPanorama) {
                         while (i--) {
                             makePanel($scope.panoContent[i], panels[i]);
                         }
@@ -316,7 +318,7 @@ angular.module('ua5App')
                     background = $scope.background;
                     backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
                     $rootScope.renderer.setClearColor(componentToHex(background));
-                    if (panelCount > 1) {
+                    if (!$scope.isPanorama) {
                         while (i--) {
                             makePanel($scope.panoContent[i], panels[i]);
                         }
