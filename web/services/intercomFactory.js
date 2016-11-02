@@ -19,8 +19,14 @@ angular.module('ua5App')
                             app_id: 'jdy4df93',
                             name: response[0].name,
                             email: response[0].email,
-                            user_hash: $cookies.get(APICONSTANTS.authCookie.intercom_token),
-                            created_at: Date.now()
+                            user_hash: $cookies.get(APICONSTANTS.authCookie.intercom_token)
+                        });
+                    } else {
+                        window.Intercom('update', {
+                            app_id: 'jdy4df93',
+                            name: response[0].name,
+                            email: response[0].email,
+                            user_hash: $cookies.get(APICONSTANTS.authCookie.intercom_token)
                         });
                     }
                 });
