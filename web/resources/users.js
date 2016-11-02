@@ -67,7 +67,10 @@ angular.module('ua5App')
                 var p = $q.defer();
                 if (typeof id === 'string') {
                     dataFactory.get(id).then(function(response) {
-                        if (response[0].payment.plan_name === 'monthly' || response[0].payment.plan_name === 'annual') {
+                        if (
+                            response[0].payment &&
+                            (response[0].payment.plan_name === 'monthly' || response[0].payment.plan_name === 'annual'))
+                        {
                             p.resolve(10000000);
                         } else {
                             p.resolve(1);

@@ -57,8 +57,8 @@ angular.module('ua5App')
                 };
 
                 function getUser() {
-                    if ($scope.user.payment && ctaCookie !== 'closeCta') {
-                        if ($scope.user.payment.plan_name === 'free_test_plan') {
+                    if (ctaCookie !== 'closeCta') {
+                        if (!$scope.user.payment || $scope.user.payment.plan_name === 'free_test_plan') {
                             $scope.hideCta = false;
                         }
 
