@@ -36,6 +36,12 @@ angular.module('ua5App')
                 });
         };
 
+        $scope.close = function() {
+            close({
+                input: $scope.input.fields
+            });
+        };
+
         $scope.cancel = function() {
             close({
                 input: $scope.input.fields

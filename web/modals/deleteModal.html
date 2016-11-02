@@ -1,4 +1,5 @@
 <div class="modal-overlay">
+    <div class="modal-background" ng-click="close()"></div>
     <div class="modal">
         <form>
             <div class="modal-header">
@@ -13,7 +14,7 @@
             <div class="modal-footer">
                 <button class="modal-button modal-delete" type="button" ng-click="close(true)">{{buttonText}}</button>
                 <button class="modal-button modal-cancel" type="button" ng-click="close(false)">Cancel</button>
-            
+
         </form>
     </div>
 </div>

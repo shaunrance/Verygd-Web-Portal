@@ -15,47 +15,16 @@
 
 .modal {
     background-color: $white;
-    max-width: 600px;
-    padding: 30px;
+    max-width: 450px;
+    padding: 50px;
     position: relative;
     width: 100%;
 }
 
-.modal--share {
-    max-width: 450px;
-    padding: 50px;
-
-    .modal-header {
-        padding: 0 0 10px;
-
-        &::after {
-            left: -50px;
-            width: 450px;
-        }
-    }
-
-    .modal-body {
-        padding: 20px 0 0;
-    }
-
-    .modal-input {
-        margin: 20px 0 30px;
-    }
-
-    #share-link {
-        color: $btn-blue;
-        cursor: text;
-        display: block;
-        font-style: italic;
-        margin-bottom: 40px;
-        position: relative;
-        text-decoration: none;
-    }
-}
-
-.modal--payment {
-    background-color: $grey;
-    margin: 0 auto;
+.modal-background {
+    height: 100%;
+    position: fixed;
+    width: 100%;
 }
 
 .modal-header {
@@ -66,9 +35,9 @@
         border-bottom: 1px solid $grey-dark;
         bottom: 0;
         content: '';
-        left: -30px;
+        left: -50px;
         position: absolute;
-        width: 600px;
+        width: 450px;
     }
 }
 
@@ -110,6 +79,7 @@
 }
 
 .modal-body {
+    @include padding(20px 0);
     color: #999;
     max-height: 430px;
     overflow-y: auto;
@@ -119,6 +89,7 @@
     @include display(flex);
     @include justify-content(space-around);
     @include align-items(center);
+    margin-top: 20px;
 }
 
 .modal-close {
@@ -127,6 +98,107 @@
     position: absolute;
     right: -20px;
     top: -20px;
+}
+
+.modal--share {
+    max-width: 450px;
+    padding: 50px;
+
+    .modal-header {
+        padding: 0 0 10px;
+
+        &::after {
+            left: -50px;
+            width: 450px;
+        }
+    }
+
+    .modal-body {
+        padding: 20px 0 0;
+    }
+
+    .modal-input {
+        margin: 20px 0 30px;
+    }
+
+    #share-link {
+        color: $btn-blue;
+        cursor: text;
+        display: block;
+        font-style: italic;
+        margin-bottom: 40px;
+        position: relative;
+        text-decoration: none;
+        word-break: break-word;
+    }
+}
+
+.modal--link {
+    max-width: 645px;
+
+    .modal-header::after {
+        width: 645px;
+    }
+
+    .modal-body {
+        @include outer-container;
+        @include padding(50px 0);
+        position: relative;
+    }
+
+    .modal-body__items {
+        @include display(flex);
+        @include flex-direction(row);
+        @include flex-wrap(wrap);
+        @include justify-content(left);
+        counter-reset: sceneImage;
+        width: 100%;
+    }
+
+    .modal-body__item--wrapper {
+        @include size(125px 100px);
+        background-color: rgba(#edbbf4, 0.5);
+        margin: 0 13px 30px 0;
+        position: relative;
+
+        &:nth-child(4n) {
+            margin-right: 0;
+        }
+    }
+
+    .modal-body__image {
+        background-color: $navy;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border: 2px solid $white;
+        box-sizing: border-box;
+        cursor: pointer;
+        height: 100%;
+        padding-top: 14px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+
+        &.selected {
+            border: 2px solid $btn-blue;
+        }
+    }
+
+    .modal-body__item--label {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        margin-top: 80%;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        top: 3px;
+    }
+}
+
+.modal--payment {
+    background-color: $grey;
+    margin: 0 auto;
 }
 
 .modal-billing {
@@ -452,14 +524,42 @@
 }
 
 @include media($phablet) {
-    .modal {
-        max-width: 400px;
-        padding: 10px;
+    .modal,
+    .modal--share {
+        max-width: 340px;
+        padding: 50px;
+    }
+
+    .modal--share {
+        max-width: 340px;
+        padding: 50px;
+
+        .modal-header::after {
+            left: -50px;
+            width: 340px;
+        }
     }
 
     .modal-header::after {
-        left: -10px;
-        width: 400px;
+        left: -50px;
+        width: 340px;
+    }
+
+    .modal--link {
+        max-width: 376px;
+
+        .modal-header::after {
+            width: 376px;
+        }
+
+        .modal-body__item--wrapper {
+            @include size(120px);
+            margin: 0 20px 30px 0;
+
+            &:nth-child(2n) {
+                margin-right: 0;
+            }
+        }
     }
 
     .modal-billing {
@@ -508,5 +608,27 @@
 
     .modal-footer {
         margin-top: 15px;
+    }
+
+    .modal--link {
+        .modal-body__item--wrapper {
+            height: 0;
+            margin: 0 0 30px;
+            padding-bottom: 50%;
+            width: 50%;
+
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
+
+            &:nth-child(4n) {
+                margin-right: 0;
+            }
+        }
+
+        .modal-body__item--label {
+            margin-top: 100%;
+            top: 0;
+        }
     }
 }
