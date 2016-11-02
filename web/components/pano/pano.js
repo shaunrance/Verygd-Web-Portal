@@ -22,7 +22,7 @@ angular.module('ua5App')
                 var worldDirectionVector = new THREE.Vector3();
                 var cam;
                 var panoLink;
-                var backgroundColor = $scope.background;
+                var background = $scope.background;
                 var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
 
                 $scope.$watch(function() {
@@ -80,6 +80,11 @@ angular.module('ua5App')
                     return panels;
                 }
 
+                function componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                }
+
                 function init() {
                     var i;
                     var panels;
@@ -97,12 +102,8 @@ angular.module('ua5App')
                     });
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
-                    function componentToHex(c) {
-                        var hex = c.toString(16);
-                        return hex.length === 1 ? '0' + hex : hex;
-                    }
 
-                    $rootScope.renderer.setClearColor(componentToHex(backgroundColor));
+                    $rootScope.renderer.setClearColor(componentToHex(background));
 
                     i = $scope.panoContent.length;
                     panels = getPanels(i);
@@ -312,6 +313,9 @@ angular.module('ua5App')
                     // make new panels
                     panels = getPanels(i);
                     panelCount = panels.length;
+                    background = $scope.background;
+                    backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                    $rootScope.renderer.setClearColor(componentToHex(background));
                     if (panelCount > 1) {
                         while (i--) {
                             makePanel($scope.panoContent[i], panels[i]);

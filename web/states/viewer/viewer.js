@@ -32,17 +32,17 @@ angular.module('ua5App.viewer')
     .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta) {
         var lastScene = 1;
         $scope.scenes = content;
+        $scope.touch = BrowserFactory.hasTouch();
+        $scope.useVr = false;
 
-        function init() {
-            $scope.useVr = false;
-            $scope.background = content.background;
-            $scope.touch = BrowserFactory.hasTouch();
+        function applyContent() {
+            $scope.background = $scope.currentScene.background;
 
-            if (content.content.length > 1) {
+            if ($scope.currentScene.content.length > 1) {
                 // first check to see if more than one panel exists, then check if its panorama
-                $scope.content = content.is_panorama ? _.where(content.content, {order: 0}) : content.content;
+                $scope.content = $scope.currentScene.is_panorama ? _.where($scope.currentScene.content, {order: 0}) : $scope.currentScene.content;
             } else {
-                $scope.content = content.content;
+                $scope.content = $scope.currentScene.content;
             }
 
             $scope.currentScenePanels = $scope.content;
@@ -55,16 +55,16 @@ angular.module('ua5App.viewer')
                     }
                 });
             }
-
-            ngMeta.setTitle('Viewer');
         }
 
-        _.each(content, function(scene) {
-            if (scene.id === parseInt($stateParams.scene, 10)) {
-                content = scene;
-                init();
-            }
-        });
+        function filterScenes() {
+            _.each($scope.scenes, function(scene) {
+                if (scene.id === parseInt($stateParams.scene, 10)) {
+                    $scope.currentScene = scene;
+                    applyContent();
+                }
+            });
+        }
 
         $scope.toggleCardboard = function() {
             $scope.useVr = !$scope.useVr;
@@ -81,8 +81,8 @@ angular.module('ua5App.viewer')
             if (targetScene !== '') {
                 _.each($scope.scenes, function(scene) {
                     if (scene.id === targetScene) {
-                        $scope.currentScenePanels = scene.content;
-                        $scope.currentScenePanels = _.sortBy($scope.currentScenePanels, 'order');
+                        $scope.currentScene = scene;
+                        applyContent();
                         $scope.$apply();
                     }
                 });
@@ -90,5 +90,9 @@ angular.module('ua5App.viewer')
         });
 
         $('body').off('click');
+
+        filterScenes();
+
+        ngMeta.setTitle('Viewer');
     }])
 ;
