@@ -38,8 +38,8 @@
                     <input
                         class="account-info-data"
                         type="name"
-                        ng-model="user.name"
-                        placeholder="{{userName}}"/>
+                        ng-model="name.name"
+                        placeholder="Name"/>
                 </div>
                 <div class="account-info-section">
                     <div class="account-info-title">
@@ -47,9 +47,9 @@
                     </div>
                     <input
                         class="account-info-data"
-                        type="name"
-                        ng-model="user.email"
-                        placeholder="{{email}}"/>
+                        type="text"
+                        ng-model="email.email"
+                        placeholder="Email"/>
                 </div>
                 <div class="account-info-section">
                     <div class="account-info-title">
@@ -59,7 +59,7 @@
                         class="account-info-data"
                         type="password"
                         id="password"
-                        ng-model="user.password"
+                        ng-model="password.password"
                         placeholder="**********"/>
                     <div class="account-info-title">
                         Confirm Password
@@ -68,6 +68,7 @@
                         class="account-info-data"
                         type="password"
                         id="confirm-password"
+                        ng-model="password.confirm"
                         ng-keyup="checkPass()"
                         placeholder="**********"/>
                     <span
@@ -82,6 +83,7 @@
                     ng-disabled="loginForm.$invalid">
                     Update
                 </button>
+                <div class="account-message">{{accountMessage}}</div>
             </form>
         </div>
     </div>

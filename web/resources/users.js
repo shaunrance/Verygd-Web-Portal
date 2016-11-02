@@ -41,6 +41,13 @@ angular.module('ua5App')
                 );
             },
             update: function() {
+                return $resource(APICONSTANTS.apiHost + '/users/:id', {id: '@userId'},
+                    {
+                        save: {method: 'PUT', params: {id: '@id'}}
+                    }
+                );
+            },
+            updatePass: function() {
                 return $resource(APICONSTANTS.apiHost + '/users/:id/reset_password', {id: '@userId'},
                     {
                         save: {method: 'POST', params: {id: '@id'}}
