@@ -11,7 +11,8 @@ angular.module('ua5App.sign-up', []);
 angular.module('ua5App.account', []);
 angular.module('ua5App.billing', []);
 angular.module('ua5App.notifications', []);
-angular.module('ua5App.forgot-password', []);
+angular.module('ua5App.terms-of-service', []);
+angular.module('ua5App.privacy-policy', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -39,7 +40,8 @@ angular.module('ua5App', [
     'ua5App.projects',
     'ua5App.viewer',
     'ua5App.sign-in',
-    'ua5App.forgot-password',
+    'ua5App.terms-of-service',
+    'ua5App.privacy-policy',
     'ngAnimate'
     // end add states as app dependency
 ])
@@ -52,10 +54,13 @@ angular.module('ua5App', [
     })
     .constant('APICONSTANTS', {
         //TODO add option for production server
-        apiHost: 'http://52.53.186.20/',
+        apiHost: 'http://52.53.186.20',
         authCookie: {
             token: 'vg-user',
-            user_id: 'vg-member'
+            user_id: 'vg-member',
+            visited: 'string',
+            cta: 'cta',
+            intercom_token: 'intercom_token'
         }
     })
     .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {
@@ -65,7 +70,7 @@ angular.module('ua5App', [
         //intercept $resolves to add token authorization to header
         $httpProvider.interceptors.push('authInterceptor');
         ngMetaProvider.useTitleSuffix(true);
-        ngMetaProvider.setDefaultTitleSuffix(' | Site Name');
+        ngMetaProvider.setDefaultTitleSuffix(' | very.gd');
         ngMetaProvider.setDefaultTitle('Page');
         ngMetaProvider.setDefaultTag('url', 'URL');
         ngMetaProvider.setDefaultTag('description', 'Site description');
@@ -78,7 +83,7 @@ angular.module('ua5App', [
         $rootScope.deferredUser = $q.defer();
         $rootScope.deferredTerms = $q.defer();
     }])
-    .directive('app', ['$rootScope', function($rootScope) {
+    .directive('app', ['$rootScope', 'intercomFactory', function($rootScope, intercomFactory) {
         return {
             link: function($scope, $element, $attrs) {
                 var $$window;
@@ -115,6 +120,9 @@ angular.module('ua5App', [
                     if (toStateParent !== fromStateParent) {
                         $$window.scrollTop(0);
                     }
+
+                    intercomFactory.ping();
+
                 });
 
                 $rootScope.renderer = new THREE.WebGLRenderer({

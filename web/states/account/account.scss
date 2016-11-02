@@ -22,23 +22,11 @@
     position: relative;
 }
 
-.account-avatar-inner,
-.account-billing-inner {
+.account-avatar-inner {
     @include clearfix;
+    border-bottom: 1px solid $grey-dark;
     padding-bottom: 30px;
     position: relative;
-}
-
-.account-avatar-inner {
-    border-bottom: 1px solid $grey-dark;
-}
-
-.account-billing-inner {
-    @include clearfix;
-
-    & + & {
-        border-bottom: 1px solid $grey-dark;
-    }
 }
 
 .account-avatar-title,
@@ -49,8 +37,7 @@
     float: left;
 }
 
-.account-avatar-title,
-.account-billing-title {
+.account-avatar-title {
     @extend %uppercase;
     @extend %h7;
     color: $coal;
@@ -58,25 +45,12 @@
     width: 20%;
 }
 
-.billing {
-
-    .account-avatar-title,
-    .account-billing-title {
-        margin-top: 15px;
-    }
-
-    .account-avatar-image-upload {
-        top: 5px;
-    }
-}
-
 .account-avatar-image {
     @include size(120px);
     border-radius: 50%;
 }
 
-.account-avatar-image-upload,
-.account-billing-update-button {
+.account-avatar-image-upload {
     @extend %h7;
     @include padding(12px 25px);
     @include position(relative, 50px null null 50px);
@@ -85,14 +59,10 @@
     text-decoration: none;
 }
 
-.account-billing-update-button {
-    @include position(relative, 8px null null 20px);
-}
-
 .account-info-section {
     @include clearfix;
     @include padding(10px);
-    margin-top: 60px;
+    margin-bottom: 60px;
     position: relative;
 
     &.account-info-section-exp-sec {
@@ -111,6 +81,15 @@
     }
 }
 
+#confirm-message {
+    color: $green;
+    margin: 20px 0 0 20%;
+    position: relative;
+
+    &.error {
+        color: $red;
+    }
+}
 
 .account-info-title {
     @extend %uppercase;
@@ -136,66 +115,23 @@
     }
 }
 
-.account-info-billing,
-.account-info-billing-price {
-    @extend %h2;
-    color: $navy;
-    float: left;
-}
-
 .account-info-billing-price {
     color: $grey-darkest;
     margin-left: 0.8em;
 }
 
-
 .account-info-button {
     @include size(120px 40px);
-    margin-top: 124px;
 }
 
-.account-billing-title,
-.account-billing-toggle,
-.account-billing-statement {
-    display: block;
-    float: left;
+@include media($tablet) {
+    .account {
+        padding: 130px 30px;
+    }
 }
 
-.account-billing-title {
-    position: relative;
-}
-
-.account-billing-toggle {
-    margin-top: 6px;
-    position: relative;
-}
-
-.account-billing-toggle-bg,
-.account-billing-toggle-dial {
-    position: absolute;
-}
-
-.account-billing-toggle-bg {
-    @include size(50px 20px);
-    background-color: #67C500;
-    border-radius: 10px;
-    // box-shadow: inset 1px 1px 5px rgba($black, 0.5);
-    margin-top: 6px;
-}
-
-.account-billing-toggle-dial {
-    @include size(30px);
-    background-color: $white;
-    border-radius: 50%;
-    box-shadow: 2px 2px 6px rgba($black, 0.5);
-    z-index: 1;
-}
-
-.account-billing-statement-text {
-    @extend %h7;
-    color: $navy;
-    font-style: italic;
-    margin-left: 80px;
-    position: relative;
-    top: 10px;
+@include media($phablet) {
+    .account {
+        padding: 110px 0;
+    }
 }

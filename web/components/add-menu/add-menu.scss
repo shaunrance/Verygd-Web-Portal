@@ -120,24 +120,3 @@
         padding-top: $header-height-tablet + 60px;
     }
 }
-
-@include media($phablet) {
-    .modal {
-        max-width: 400px;
-    }
-
-    .modal-header::after {
-        width: 400px;
-    }
-}
-
-@include media($mobile) {
-    .modal-body {
-        height: 100%;
-        max-width: 100%;
-    }
-
-    .modal-footer {
-        margin-top: 15px;
-    }
-}

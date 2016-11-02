@@ -1,0 +1,38 @@
+.tac__inner {
+    @include padding(20px 10%);
+    @include outer-container;
+
+    a {
+        color: $pink;
+    }
+}
+
+.tac__logo {
+    position: relative;
+    width: 15%;
+}
+
+.tac__header {
+    @include margin(50px 0);
+    text-decoration: underline;
+}
+
+.tac__subheader {
+    margin-top: 40px;
+}
+
+.tac__list {
+    font-family: 'OpenSans', sans-serif;
+    font-size: 14px;
+
+    li {
+        list-style-type: disc;
+        margin-left: 40px;
+    }
+}
+
+@include media($phablet) {
+    .tac__logo {
+        width: 35%;
+    }
+}

@@ -12,5 +12,7 @@ angular.module('ua5App.notifications')
             }
         });
     }])
-    .controller('notificationsCtrl', [function() {}])
+    .controller('notificationsCtrl', ['ngMeta', function(ngMeta) {
+        ngMeta.setTitle('Notifications');
+    }])
 ;

@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App')
     .directive('header', ['$state', '$http', 'APICONSTANTS', '$cookies', '$rootScope', function($state, $http, APICONSTANTS, $cookies, $rootScope) {
         return {
@@ -6,21 +6,60 @@ angular.module('ua5App')
             templateUrl: 'components/header/header.html',
             scope: {
                 basic: '@',
-                headerTitleData: '='
+                headerTitleData: '=',
+                headerLink: '=',
+                public: '@' //jshint ignore:line
             },
             link: function($scope, element, attrs) {
             },
-            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, $rootScope, projectFactory) {
-
+            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', 'UsersResource', 'ModalService', 'intercomFactory', function($scope, $state, $stateParams, $rootScope, projectFactory, UsersResource, ModalService, intercomFactory) {
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 $scope.projectTitle = '';
+                $scope.mobileUserMenuToggle = false;
                 $scope.userMenuToggle = false;
+                $scope.notificationToggle = false;
                 $scope.isActive = false;
+                $scope.billingMenuName = 'Upgrade Plan';
 
                 $scope.backButtonHide = true;
                 $scope.goBack = function() {
                     $state.go('projects', {}, {reload: true});
+                };
+
+                $scope.openShare = function() {
+                    ModalService.showModal({
+                        templateUrl: 'modals/shareModal.html',
+                        controller: 'shareModalController',
+                        inputs: {
+                            fields:{
+                                title: 'Share Project',
+                                formLabels:[{title: 'URL'}],
+                                showFileUpload: false,
+                                submitButtonText: 'Share',
+                                project: $stateParams.projectId
+                            }
+                        }
+                    }).then(function(modal) {
+                        modal.close.then(function(result) {
+                            $('body').removeClass('no-scroll');
+                        });
+                    });
+                };
+
+                UsersResource.get().then(function(response) {
+                    $scope.user = response[0];
+                    if ($scope.user.payment) {
+                        if ($scope.user.payment.plan_name === 'basic') {
+                            $scope.billingMenuName = 'Upgrade Plan';
+                        } else {
+                            $scope.billingMenuName = 'Billing';
+                        }
+                    }
+                });
+
+                $scope.goLink = function() {
+                    $state.go($scope.headerLink, {}, {reload: true});
                 };
 
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
@@ -85,25 +124,59 @@ angular.module('ua5App')
                     $cookies.remove(APICONSTANTS.authCookie.token);
                     $cookies.remove(APICONSTANTS.authCookie.user_id);
                     $cookies.remove(APICONSTANTS.authCookie.patient_id);
-
+                    $cookies.remove(APICONSTANTS.authCookie.intercom_token);
+                    intercomFactory.shutdown();
+                    $('body').off('click');
+                    UsersResource.resetUser();
                     //TODO hit endpoint to expire auth token
                     //redirect to login
                     $state.go('sign-in');
                 };
 
-                $scope.toggleMenu = function() {
-                    if (!$scope.userMenuToggle) {
-                        $scope.userMenuToggle = true;
+                $scope.toggleMenuMobile = function() {
+                    if (!$scope.mobileUserMenuToggle) {
+                        $scope.mobileUserMenuToggle = true;
                         disableScroll();
                     } else {
-                        $scope.userMenuToggle = false;
+                        $scope.mobileUserMenuToggle = false;
                         enableScroll();
                     }
                 };
 
-                $scope.closeMenu = function() {
-                    $scope.userMenuToggle = false;
+                $scope.toggleMenu = function() {
+                    if ($scope.notificationToggle) {
+                        $scope.notificationToggle = false;
+                    }
+
+                    $scope.userMenuToggle = !$scope.userMenuToggle;
                 };
+
+                $scope.toggleNotification = function() {
+                    if ($scope.userMenuToggle) {
+                        $scope.userMenuToggle = false;
+                    }
+
+                    $scope.notificationToggle = !$scope.notificationToggle;
+                };
+
+                $scope.closeMenu = function() {
+                    $scope.mobileUserMenuToggle = false;
+                };
+
+                // Body click event to close dekstop user menu
+                $('body').on('click', function(event) {
+                    if (!$(event.target).closest('.header__user-container').length) {
+                        var scope = angular.element($('.header')).scope();
+                        if (scope) {
+                            if (scope.userMenuToggle || scope.notificationToggle) {
+                                scope.$apply(function() {
+                                    scope.userMenuToggle = false;
+                                    scope.notificationToggle = false;
+                                });
+                            }
+                        }
+                    }
+                });
             }]
         };
     }])

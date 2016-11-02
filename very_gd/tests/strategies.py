@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import string
 
 from hypothesis.extra import fakefactory as ff
-from hypothesis.strategies import just, text, fixed_dictionaries, one_of
+from hypothesis.strategies import just, text, fixed_dictionaries, one_of, integers
 from media_portal.tests.base.strategies import MediaPortalTestStrategies
 
 alphabet = list(string.ascii_lowercase)

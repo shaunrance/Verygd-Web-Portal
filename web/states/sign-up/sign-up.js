@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App.sign-up')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.when('', '/sign-up');
@@ -22,10 +22,11 @@ angular.module('ua5App.sign-up')
             }
         });
     }])
-    .controller('signUpCtrl', ['$scope', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', function($scope, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope) {
+    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', 'ngMeta', 'intercomFactory', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope, ngMeta, intercomFactory) {
         $scope.disableButton = false;
 
         $scope.showModal = function() {
+            $('body').addClass('no-scroll');
             ModalService.showModal({
                 templateUrl: 'modals/signUpModal.html',
                 controller: 'signUpModalController',
@@ -44,7 +45,12 @@ angular.module('ua5App.sign-up')
                     $cookies.put(APICONSTANTS.authCookie.token, response.token);
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
 
+                    $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
+
                     $state.go('projects');
+                    intercomFactory.ping();
+                    $('body').removeClass('no-scroll');
+
                 },
                 function(error) {
                     $state.go('sign-up');
@@ -92,5 +98,6 @@ angular.module('ua5App.sign-up')
                 }
             );
         };
+        ngMeta.setTitle('Sign Up');
     }])
 ;

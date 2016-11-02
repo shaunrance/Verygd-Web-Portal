@@ -42,10 +42,158 @@
     width: 20px;
 }
 
+.header__user-container {
+    display: block;
+    position: relative;
+}
+
+.header__notification-container {
+    display: inline-block;
+    margin-right: 25px;
+    margin-top: 10px;
+    position: relative;
+    vertical-align: top;
+}
+
+.header__notification-icon {
+    @include size(18px 21px);
+    background-image: url('/assets/img/icon-notification.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+
+    &::after {
+        @include size(10px 10px);
+        background-color: $pink;
+        border-radius: 10px;
+        bottom: -3px;
+        content: '';
+        opacity: 0;
+        position: absolute;
+        right: -5px;
+    }
+
+    &.pending {
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+.header__notification-menu {
+    background-color: $white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    color: $black;
+    display: none;
+    font-family: 'OpenSans', sans-serif;
+    padding: 30px;
+    position: absolute;
+    right: 175px;
+    top: 50px;
+    width: 250px;
+
+    &.show {
+        display: block;
+    }
+}
+
+.header__user-name {
+    display: inline-block;
+    padding-right: 15px;
+    position: relative;
+
+    span {
+        display: inline-block;
+        font-family: 'OpenSans', sans-serif;
+        margin-top: 7px;
+        position: relative;
+        vertical-align: top;
+    }
+
+    &::after {
+        background-image: url('/assets/img/icon-arrow.svg');
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        content: '';
+        height: 4px;
+        position: absolute;
+        right: 0;
+        top: 17px;
+        width: 8px;
+    }
+}
+
+.header__avatar {
+    @include size(40px 40px);
+    background-color: $pink;
+    border-radius: 40px;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+.header__user-menu {
+    @include position(absolute);
+    background-color: $white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    display: none;
+    padding-bottom: 10px;
+    right: 0;
+    top: 50px;
+    width: 280px;
+    z-index: $z-epsilon + 10;
+
+    .menu-list--item:nth-child(1) {
+        margin: 20px 0;
+
+        span {
+            color: $black;
+            font-family: 'OpenSans', sans-serif;
+        }
+
+        &::after {
+            border-bottom: 1px solid $grey-dark;
+            content: '';
+            left: 3%;
+            padding-top: 15px;
+            position: absolute;
+            width: 94%;
+        }
+    }
+
+    .avatar {
+        @include size(50px 50px);
+        background-color: $pink;
+        border-radius: 50px;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    .menu-link {
+        @include transition(color, $transition-speed);
+        color: $grey-darkest;
+        display: inline-block;
+        padding: 5px 0;
+        vertical-align: middle;
+
+        &:hover {
+            color: $black;
+        }
+    }
+
+    .account-name {
+        color: $black;
+    }
+
+    &.show {
+        display: block;
+    }
+}
+
 .breadcrumb {
     @extend %h2;
     @extend %uppercase;
     display: inline-block;
+    margin-top: 50px;
 
     + .breadcrumb {
         margin-left: 5px;
@@ -66,6 +214,16 @@
     &:hover {
         color: $white;
     }
+}
+
+.breadcrumb--share {
+    @include size(18px 20px);
+    background-image: url('/assets/img/icon-share-teal.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
 }
 
 .menu-container {
@@ -111,6 +269,7 @@
 
 .user-login {
     color: $pink;
+    text-decoration: none;
 }
 
 .close-menu-button {
@@ -126,6 +285,13 @@
 }
 
 @include media($tablet) {
+    .header {
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 9999;
+    }
 
     .header__container {
         @include justify-content(center);
@@ -133,6 +299,10 @@
         height: $header-height-tablet;
         margin-left: -($logo-width / 2);
         padding: (0 $site-gutter 0 0);
+    }
+
+    .header__user-container {
+        display: none;
     }
 
     .header__meta {

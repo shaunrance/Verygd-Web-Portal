@@ -1,4 +1,4 @@
-/* global angular, THREE, $, TweenMax, Linear */
+/* global angular, THREE, $, TweenMax, Linear, _ */
 angular.module('ua5App')
     .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', function($rootScope, BaseThreeScene, BrowserFactory) {
         return {
@@ -7,7 +7,8 @@ angular.module('ua5App')
             scope: {
                 useVr: '=',
                 panoContent: '=',
-                background: '='
+                background: '=',
+                isPanorama: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
@@ -22,7 +23,7 @@ angular.module('ua5App')
                 var worldDirectionVector = new THREE.Vector3();
                 var cam;
                 var panoLink;
-                var backgroundColor = $scope.background;
+                var background = $scope.background;
                 var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
 
                 $scope.$watch(function() {
@@ -80,9 +81,15 @@ angular.module('ua5App')
                     return panels;
                 }
 
+                function componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                }
+
                 function init() {
                     var i;
                     var panels;
+                    var trueCount;
                     var pos = {x: 0, y: 0};
                     $$el.mousedown(function() {
                         pos = {x: cam.rotation.x, y: cam.rotation.y};
@@ -97,19 +104,27 @@ angular.module('ua5App')
                     });
 
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
-                    function componentToHex(c) {
-                        var hex = c.toString(16);
-                        return hex.length === 1 ? '0' + hex : hex;
+
+                    $rootScope.renderer.setClearColor(componentToHex(background));
+
+                    trueCount = i = $scope.panoContent.length;
+
+                    if (trueCount < 3) {
+                        i = 4;
+                    }
+                    if (trueCount === 2) {
+                        $scope.panoContent[2] = _.clone($scope.panoContent[1]);
+                        $scope.panoContent[1] = undefined;
                     }
 
-                    $rootScope.renderer.setClearColor(componentToHex(backgroundColor));
-
-                    i = $scope.panoContent.length;
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    if (panelCount > 1) {
+
+                    if (!$scope.isPanorama) {
                         while (i--) {
-                            makePanel($scope.panoContent[i], panels[i]);
+                            if ($scope.panoContent[i]) {
+                                makePanel($scope.panoContent[i], panels[i]);
+                            }
                         }
                         createExitBtn();
                     } else {
@@ -305,14 +320,32 @@ angular.module('ua5App')
                 }
 
                 function reload() {
-                    var i = $scope.panoContent.length;
+                    var i;
+                    var trueCount;
                     var panels;
                     // empty the scene, except for our camera:
                     scene.destroyAllSceneObjects(['PerspectiveCamera']);
                     // make new panels
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    if (panelCount > 1) {
+                    background = $scope.background;
+                    backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                    $rootScope.renderer.setClearColor(componentToHex(background));
+
+                    trueCount = i = $scope.panoContent.length;
+
+                    if (trueCount < 3) {
+                        i = 4;
+                    }
+                    if (trueCount === 2) {
+                        $scope.panoContent[2] = _.clone($scope.panoContent[1]);
+                        $scope.panoContent[1] = undefined;
+                    }
+
+                    panels = getPanels(i);
+                    panelCount = panels.length;
+
+                    if (!$scope.isPanorama) {
                         while (i--) {
                             makePanel($scope.panoContent[i], panels[i]);
                         }

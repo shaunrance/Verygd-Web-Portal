@@ -1,11 +1,11 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App')
     .directive('addMenu', [function() {
         return {
             restrict: 'A',
             templateUrl: 'components/add-menu/add-menu.html',
             link: function($scope, element, attrs) {},
-            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', function($scope, $state, $stateParams, ModalService, $rootScope) {
+            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, ModalService, $rootScope, projectFactory) {
                 var menu = {
                     project:'Add Project',
                     //team: 'Add Team Member',
@@ -14,12 +14,11 @@ angular.module('ua5App')
                     share: 'Share Project'
                 };
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
                 var getOptions = function() {
                     if ($state.current.name !== 'projects.details') {
                         $scope.menuItems = {
-                            project:'Add Project',
-                            team: 'Add Team Member'
+                            project:'Add Project'
+                            // team: 'Add Team Member'
                         };
                     } else {
                         $scope.menuItems = menu;
@@ -77,13 +76,16 @@ angular.module('ua5App')
                         disableScroll();
                     } else {
                         $scope.menuToggle = false;
-                        enableScroll();
+                        if (!$rootScope.showMobileMenu) {
+                            enableScroll();
+                        }
                     }
                 };
 
                 $scope.showModal = function(type) {
                     switch (type){
                         case menu.project:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/addModal.html',
                                 controller: 'addModalController',
@@ -103,6 +105,7 @@ angular.module('ua5App')
                                         $scope.$emit('addProject', result.input);
                                         $scope.menuToggle = false;
                                     }
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;
@@ -146,6 +149,7 @@ angular.module('ua5App')
                             $rootScope.$broadcast('nav:add-panel');
                             break;
                         case menu.share:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/shareModal.html',
                                 controller: 'shareModalController',
@@ -154,18 +158,18 @@ angular.module('ua5App')
                                         title: menu.share,
                                         formLabels:[{title: 'URL'}],
                                         showFileUpload: false,
-                                        submitButtonText: 'Share'
+                                        submitButtonText: 'Share',
+                                        project: $stateParams.projectId
                                     }
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;
                     }
                 };
-
             }]
         };
     }])

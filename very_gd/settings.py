@@ -16,13 +16,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', None)
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+SITE_ID = 1
+SITE_EMAIL_FROM_ADDRESS = 'noreply@very.gd'
 
 if os.getenv('DEV_ENV', None):
     DEBUG = True
@@ -70,13 +72,17 @@ SERVER_EMAIL = 'andrew@useallfive.com'
 
 ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
 
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
-EMAIL_PORT = 465
-
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', None)
+
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
+
+INTERCOM_SECURE_KEY = os.getenv('INTERCOM_SECURE_KEY', None)
+INTERCOM_APP_NAME = os.getenv('INTERCOM_APP_NAME', None)
+INTERCOM_APP_ID = os.getenv('INTERCOM_APP_ID', None)
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -116,7 +122,8 @@ INSTALLED_APPS += (
     'panel',
     'scene',
     'rest_framework_docs',
-    'storages'
+    'storages',
+    'users'
 )
 
 MIDDLEWARE_CLASSES = (

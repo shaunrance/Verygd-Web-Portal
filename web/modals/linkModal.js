@@ -17,15 +17,26 @@ angular.module('ua5App')
         $scope.scenes = fields.scenes;
 
         _.each($scope.scenes, function(scene) {
-            if (scene.title === $scope.panel.related_tag) {
-                $scope.selectedScene = scene.title;
+            var sceneImage = scene.content.length > 0 ? scene.content[0].url : '/assets/img/image-placeholder.jpg';
+
+            if (scene.id === parseInt($scope.panel.related_tag, 10)) {
+                $scope.selectedScene = scene.id;
             }
+
+            scene.thumb = sceneImage + '?fm=jpg&q=60&h=200&w=200&fit=max&bg=000000';
         });
 
         $scope.save = function() {
             fields.content.related_tag = $scope.selectedScene;
-            panelFactory.editPanel(fields.content.id, {related_tag: $scope.selectedScene});
+            panelFactory.editPanel(fields.content.id, {related_tag: $scope.selectedScene})
+                .then(function() {
+                    close({
+                        input: $scope.input.fields
+                    });
+                });
+        };
 
+        $scope.close = function() {
             close({
                 input: $scope.input.fields
             });

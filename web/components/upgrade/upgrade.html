@@ -1,0 +1,13 @@
+<div class="upgrade">
+    <div
+        ng-if="!useSimple"
+        ng-hide="hideCta"
+        class="projects-paid-plan-cta">
+        <span class="projects-paid-plan-cta-bold">Try our Premium plan.</span>
+        <span>Only one project can be public until you <button class="projects-paid-plan-cta-bold__link" ng-click="plansModal()">upgrade to one of our paid plans</button>.</span>
+        <button class="projects-paid-plan-cta-button" type="button" ng-click="closeCta()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+    </div>
+    <div ng-if="useSimple"><button class="projects-paid-plan-cta-bold__link" ng-click="plansModal()">Upgrade to one of our&nbsp;paid&nbsp;plans</button></a>
+</div>

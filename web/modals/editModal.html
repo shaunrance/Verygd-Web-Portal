@@ -1,0 +1,22 @@
+<div class="modal-overlay">
+    <div class="modal-background" ng-click="close()"></div>
+    <div class="modal">
+        <form>
+            <div class="modal-header">
+                <h3>{{title}}</h3>
+                <button class="modal-close" type="button" ng-click="cancel()">
+                    <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" ng-repeat="label in formLabels">
+                    <label class="modal-label">{{label.title}}</label>
+                    <input class="modal-input" ng-model="input.fields[label.name]" type="text" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-submit modal-button" type="button" ng-click="close()">{{buttonText}}</button>
+            </div>
+        </form>
+    </div>
+</div>

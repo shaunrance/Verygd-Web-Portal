@@ -1,35 +1,37 @@
 <header class="header">
     <div class="header__container">
         <div class="header__meta">
-            <button class="menu-button" ng-click="toggleMenu()">
+            <button class="menu-button" ng-hide="public" ng-click="toggleMenuMobile()">
                 <img class="menu-icon" src="assets/img/hamburger.svg" />
             </button>
-            <div class="menu-container ng-hide" ng-click="toggleMenu()" ng-show="userMenuToggle">
+            <div class="menu-container ng-hide" ng-click="toggleMenuMobile()" ng-show="mobileUserMenuToggle">
                 <button class="close-menu-button">
-                    <img class="menu-icon" src="assets/img/close.svg" />
+                    <img
+                        class="menu-icon"
+                        src="assets/img/close.svg" />
                 </button>
                 <ul class="menu-list">
                     <li class="menu-list--item">
                         <a
                             class="menu-link account-name"
                             href="#">
-                            John Smith
+                            {{user.name}}
                         </a>
                     </li>
                     <li class="menu-list--item">
                         <a
                             class="menu-link"
                             href="#"
-                            ui-sref="projects"
+                            ui-sref="account"
                             data-ui-sref-opts="{reload: true}">
-                            My Projects
+                            My Account
                         </a>
                     </li>
                     <li class="menu-list--item">
                         <a
                             class="menu-link"
-                            href="#">
-                            Settings
+                            ui-sref="account.billing">
+                            {{billingMenuName}}
                         </a>
                     </li>
                     <li class="menu-list--item">
@@ -42,23 +44,78 @@
                     </li>
                 </ul>
             </div>
-            <a class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
-                <img class="logo" src="assets/img/vg-logo.svg">
+            <a ng-if="!public" class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
+                <img class="logo" src="assets/img/vg-logo-new-header.svg">
             </a>
-            <a
-            	ng-if="!basic"
-            	ng-click="logout()"
-            	class="user-login">
-                Logout
+            <a ng-if="public" class="logo-link" href="/" data-ui-sref-opts="{reload: true}">
+                <img class="logo" src="assets/img/vg-logo-new-header.svg">
             </a>
+
+            <div class="header__user-container" ng-hide="public">
+                <div class="header__notification-container" ng-click="toggleNotification()">
+                    <div class="header__notification-icon" ng-class="{'pending': notifications.length > 0}"></div>
+                </div>
+
+                <div class="header__notification-menu" ng-class="{'show': notificationToggle}">
+                    <div ng-if="notifications.length > 0">
+                        <ul>
+                            <li
+                                ng-repeat="notification in notifications">
+                                {{notification}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-if="notifications.length == 0 || !notifications">
+                        No new notifications.
+                    </div>
+                </div>
+
+                <div class="header__user-name" ng-click="toggleMenu()">
+<!--                     <div class="header__avatar"></div> -->
+                    <span>{{user.name}}</span>
+                </div>
+
+                <div class="header__user-menu" ng-hide="public" ng-class="{'show': userMenuToggle}">
+                    <ul class="menu-list">
+                        <li class="menu-list--item">
+<!--                             <div class="menu-link avatar"></div> -->
+                            <span>{{user.name}}</span>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link"
+                                href="#"
+                                ui-sref="account"
+                                data-ui-sref-opts="{reload: true}">
+                                My Account
+                            </a>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link"
+                                href="#"
+                                ui-sref="account.billing">
+                                {{billingMenuName}}
+                            </a>
+                        </li>
+                        <li class="menu-list--item">
+                            <a
+                                class="menu-link user-login mobile"
+                                href="#"
+                                ng-click="logout()">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <span ng-if="!basic">
             <span
                 class="breadcrumb">
                 <a
+                    ng-click="goLink()"
                     class="breadcrumb__link"
-                    ui-sref="{{headerTitleData}}"
-                    data-ui-sref-opts="{reload: true}"
                     ng-bind="headerTitleData">
                 </a>
             </span>
@@ -66,8 +123,9 @@
                 class="breadcrumb"
                 ng-if="projectTitle != ''">
                 {{projectTitle}}
+                <div class="breadcrumb--share" ng-click="openShare()"></div>
             </span>
         </span>
-        <div add-menu class="add-menu--controls"></div>
+        <div add-menu ng-hide="public" class="add-menu--controls"></div>
     </div>
 </header>

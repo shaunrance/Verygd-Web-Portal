@@ -12,6 +12,10 @@ body {
 
 body {
     background-color: $grey;
+
+    &.no-scroll {
+        overflow-y: hidden;
+    }
 }
 
 html {
@@ -20,6 +24,10 @@ html {
     &.no-touch {
         overflow-y: scroll;
     }
+}
+
+.app {
+    overflow: hidden;
 }
 
 ul {
@@ -35,4 +43,18 @@ figure {
 a,
 button {
     cursor: pointer;
+}
+
+[ng\:cloak],
+[ng-cloak],
+.ng-cloak {
+    display: none !important;
+}
+
+.body--page-viewer {
+
+    #intercom-container,
+    #intercom-frame {
+        display: none;
+    }
 }

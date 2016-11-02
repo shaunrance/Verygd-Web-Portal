@@ -22,7 +22,7 @@ angular.module('ua5App')
                 title: newScene.name,
                 description: newScene.description,
                 background: '#000000',
-                is_panorama: true
+                is_panorama: false
             };
 
             return $http.post('http://52.53.186.20/scene', data);
