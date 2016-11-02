@@ -7,8 +7,7 @@ angular.module('ua5App')
             scope: {
                 basic: '@',
                 headerTitleData: '=',
-                headerLink: '=',
-                user: '='
+                headerLink: '='
             },
             link: function($scope, element, attrs) {
             },
@@ -20,21 +19,27 @@ angular.module('ua5App')
                 $scope.userMenuToggle = false;
                 $scope.notificationToggle = false;
                 $scope.isActive = false;
+                $scope.billingMenuName = 'Upgrade Plan';
 
                 $scope.backButtonHide = true;
                 $scope.goBack = function() {
                     $state.go('projects', {}, {reload: true});
                 };
 
-                if ($scope.user.payment) {
-                    if ($scope.user.payment.plan_name === 'free_test_plan') {
-                        $scope.upgradePlan = 'Upgrade Plan';
-                    } else {
-                        $scope.upgradePlan = 'Change Plan';
+                UsersResource.get().then(function(response) {
+                    $scope.user = response[0];
+                    if ($scope.user.payment) {
+                        if ($scope.user.payment.plan_name === 'free_test_plan') {
+                            $scope.billingMenuName = 'Upgrade Plan';
+                        } else {
+                            $scope.billingMenuName = 'Billing';
+                        }
                     }
-                } else {
-                    $scope.upgradePlan = 'Upgrade Plan';
-                }
+                });
+
+                $scope.goLink = function() {
+                    $state.go($scope.headerLink, {}, {reload: true});
+                };
 
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;

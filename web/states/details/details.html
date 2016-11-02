@@ -1,12 +1,6 @@
 <main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
     <div
-        ng-hide="hideCta"
-        class="projects-paid-plan-cta">
-        <span class="projects-paid-plan-cta-bold">Try our Premium plan.</span>
-        <span>All of your projects are public until you <button class="projects-paid-plan-cta-bold__link" ng-click="plansModal()">select from one of our paid plans</button>.</span>
-        <button class="projects-paid-plan-cta-button" type="button" ng-click="closeCta()">
-            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
-        </button>
+        upgrade>
     </div>
     <div class="project-details" ng-class="{'empty': emptyScene}">
         <nav class="scene-nav">
@@ -115,10 +109,16 @@
                         <toggle-switch
                             ng-model="projectPrivacy"
                             color="true"
-                            disabled="{{isBasic}}"
                             on-label="Public"
+                            disabled="{{privateProjectsRemaining < 1 && !projectPrivacy}}"
                             off-label="Private">
                         </toggle-switch>
+
+                        <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining < 1 && !projectPrivacy">
+                            <div
+                                upgrade
+                                use-simple="true"></div>
+                        </div>
                     </div>
                 </div>
             </div>

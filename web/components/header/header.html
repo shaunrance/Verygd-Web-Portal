@@ -31,7 +31,7 @@
                         <a
                             class="menu-link"
                             ui-sref="account.billing">
-                            {{upgradePlan}}
+                            {{billingMenuName}}
                         </a>
                     </li>
                     <li class="menu-list--item">
@@ -92,7 +92,7 @@
                                 class="menu-link"
                                 href="#"
                                 ui-sref="account.billing">
-                                {{upgradePlan}}
+                                {{billingMenuName}}
                             </a>
                         </li>
                         <li class="menu-list--item">
@@ -111,9 +111,8 @@
             <span
                 class="breadcrumb">
                 <a
-                    href="/{{headerLink}}"
+                    ng-click="goLink()"
                     class="breadcrumb__link"
-                    data-ui-sref-opts="{reload: true}"
                     ng-bind="headerTitleData">
                 </a>
             </span>

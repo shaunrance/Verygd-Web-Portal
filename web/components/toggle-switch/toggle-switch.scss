@@ -6,6 +6,10 @@
 .toggle-switch {
     display: inline-block;
     vertical-align: top;
+
+    &.disabled {
+        opacity: 0.3;
+    }
 }
 
 .toggle-switch__icon {
@@ -52,6 +56,13 @@
     }
 }
 
+.disabled {
+
+    .toggle-switch__label {
+        color: $input-grey !important;
+    }
+}
+
 .toggle-switch__label--right {
     @include margin(-2px 0 0 7px);
 
@@ -75,16 +86,16 @@
     border-radius: 10px;
     transition-delay: 0.05s;
 
-    .disabled & {
-        background-color: $grey;
-    }
-
     .color & {
         background-color: $green;
     }
 
     .color .switch-on & {
         background-color: $red;
+    }
+
+    .disabled & {
+        background-color: $input-grey;
     }
 }
 

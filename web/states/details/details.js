@@ -9,17 +9,22 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             controllerAs: 'ctrl',
             data: {
                 settings:{displayName:'First Project'}
+            },
+            resolve: {
+                privateProjectsRemaining: ['UsersResource', function(UsersResource) {
+                    return UsersResource.getPrivateProjectsRemaining().then(function(privateProjectsRemaining) {
+                        return privateProjectsRemaining;
+                    });
+                }]
             }
         });
     }])
-    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta) {
+    .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', 'privateProjectsRemaining', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta, privateProjectsRemaining) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-        var ctaCookie = $cookies.get(APICONSTANTS.authCookie.cta);
         $rootScope.showMobileMenu = false;
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
         $scope.currentScene = '';
-        $scope.hideCta = true;
         $scope.singlePanel = false;
         $scope.privateProject = true;
         $scope.hasTouch = Modernizr.touch;
@@ -27,6 +32,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
         $scope.projectName = '';
+        $scope.privateProjectsRemaining = privateProjectsRemaining;
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -58,13 +64,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
-        $scope.closeCta = function() {
-            $scope.hideCta = true;
-            if (ctaCookie !== 'closeCta') {
-                $cookies.put(APICONSTANTS.authCookie.cta, 'closeCta');
-            }
-        };
-
         //SCENE methods ======================================================//
         //====================================================================//
         $scope.$on('nav:add-scene', function() {
@@ -87,9 +86,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 });
             } else if (args === 'projectPrivacy') {
-                if (!$scope.isBasic) {
-                    projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
-                }
+                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
+            }
+
+            if ($scope.projectPrivacy === true) {
+                $scope.privateProjectsRemaining--;
+            } else {
+                $scope.privateProjectsRemaining++;
             }
         });
 
@@ -242,16 +245,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         }
 
         function getScenes() {
-            if ($scope.user.payment) {
-                if ($scope.user.payment.plan_name === 'free_test_plan') {
-                    $scope.isBasic = true;
-                    $scope.scenePrivacyToggle = false;
-                    if (ctaCookie !== 'closeCta') {
-                        $scope.hideCta = false;
-                    }
-                }
-            }
-
             projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
                     $scope.project = response.data;
@@ -276,7 +269,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
                         createScene(newScene);
                     }
-                });
+                })
+            ;
         }
 
         function preventDefault(e) {

@@ -18,7 +18,6 @@ angular.module('ua5App')
             link: function(scope, $element, $attrs, ngModelCtrl) {
                 $element.on('click', function() {
                     scope.$apply(scope.toggle);
-                    $rootScope.$broadcast('toggle:switched', $attrs.ngModel);
                 });
 
                 ngModelCtrl.$formatters.push(function(modelValue) {
@@ -41,6 +40,7 @@ angular.module('ua5App')
                     if (scope.disabled !== 'true') {
                         scope.model = !scope.model;
                         ngModelCtrl.$setViewValue(scope.model);
+                        $rootScope.$broadcast('toggle:switched', $attrs.ngModel);
                     }
                 };
             }

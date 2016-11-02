@@ -252,9 +252,14 @@
 }
 
 .scene-preview__privacy {
-    @include position(relative);
-    @include size(100% 60px);
     @include padding(23px 0);
+    @include position(relative);
+    width: 100%;
+}
+
+.scene-preview__privacy__cta {
+    margin: 20px 0 0;
+    padding: 0 20px;
 }
 
 .add-icon {

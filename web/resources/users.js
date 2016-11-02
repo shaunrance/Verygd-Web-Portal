@@ -1,11 +1,12 @@
-/* global angular */
+/* global angular, _ */
 angular.module('ua5App')
-    .factory('UsersResource', ['$resource', '$q', 'APICONSTANTS', function($resource, $q, APICONSTANTS) {
+    .factory('UsersResource', ['$resource', '$q', 'APICONSTANTS', '$cookies', 'projectFactory', function($resource, $q, APICONSTANTS, $cookies, projectFactory) {
         var d;
+        var dataFactory;
         var initialized;
         d = $q.defer();
 
-        return {
+        dataFactory = {
             get: function() {
                 if (!initialized) {
                     initialized = true;
@@ -53,7 +54,36 @@ angular.module('ua5App')
                         create: {method:'POST'}
                     }
                 );
+            },
+            getPrivatePlanLimit: function() {
+                var id = $cookies.get(APICONSTANTS.authCookie.user_id);
+                var p = $q.defer();
+                if (typeof id === 'string') {
+                    dataFactory.get(id).then(function(response) {
+                        if (response[0].payment.plan_name === 'monthly' || response[0].payment.plan_name === 'annual') {
+                            p.resolve(10000000);
+                        } else {
+                            p.resolve(1);
+                        }
+                    });
+                } else {
+                    p.resolve(1);
+                }
+                return p.promise;
+            },
+            getPrivateProjectsRemaining: function() {
+                var p = $q.defer();
+                var privateProjects = [];
+                projectFactory.getProjects().then(function(response) {
+                    privateProjects = _.where(response.data, {public: false}); // jshint ignore:line
+                    dataFactory.getPrivatePlanLimit().then(function(response) {
+                        p.resolve(response - privateProjects.length);
+                    });
+                });
+                return p.promise;
             }
         };
+
+        return dataFactory;
     }])
 ;
