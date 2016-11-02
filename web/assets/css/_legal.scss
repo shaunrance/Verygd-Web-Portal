@@ -30,3 +30,9 @@
         margin-left: 40px;
     }
 }
+
+@include media($phablet) {
+    .tac__logo {
+        width: 35%;
+    }
+}
