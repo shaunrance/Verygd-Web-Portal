@@ -64,8 +64,20 @@ class TestLoginAPI(TestLogInOutAPI):
 
         user_settings.save()
 
-    def test_password_reset(self):
+    def test_password_reset(self, endpoint='/reset_password'):
         return super(TestLoginAPI, self).test_password_reset()
+
+    def test_logged_in_user_password_reset(self, *args, **kwargs):
+        endpoint = '/users/{0}/reset_password'.format(self.member['id'])
+
+        reset_password_details = self.send_reset_password(endpoint)
+
+        self.assertTrue(reset_password_details)
+
+        response, msg = self.respond_to_reset_email(**reset_password_details)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(msg['status'] == 'password_reset_complete', msg['msg'] == 'Password reset successfully.')
 
     def test_intercom_token(self):
         self.assertTrue('intercom_token' in self.member['auth'] and self.member['auth']['intercom_token'])
