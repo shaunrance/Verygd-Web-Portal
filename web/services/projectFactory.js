@@ -1,8 +1,8 @@
 /* global angular */
 angular.module('ua5App')
-    .factory('projectFactory', ['$http', 'Upload', '$q', function($http, Upload, $q) {
-        var urlBase = 'http://52.53.186.20/project';
-        var pubUrlBase = 'http://52.53.186.20/public/project';
+    .factory('projectFactory', ['$http', 'Upload', '$q', 'APICONSTANTS', function($http, Upload, $q, APICONSTANTS) {
+        var urlBase = APICONSTANTS.apiHost + '/project';
+        var pubUrlBase = APICONSTANTS.apiHost + '/public/project';
         var dataFactory = {};
 
         dataFactory.getProjects = function() {

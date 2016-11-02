@@ -1,7 +1,7 @@
 /* global angular */
 angular.module('ua5App')
-    .factory('panelFactory', ['$http', 'Upload', function($http, Upload) {
-        var urlBase = 'http://52.53.186.20/panel';
+    .factory('panelFactory', ['$http', 'Upload', 'APICONSTANTS', function($http, Upload, APICONSTANTS) {
+        var urlBase = APICONSTANTS.apiHost + '/panel';
         var dataFactory = {};
 
         // $http.defaults.headers.common['Authorization'] = 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'; // jshint ignore:line
@@ -13,7 +13,7 @@ angular.module('ua5App')
         dataFactory.insertPanel = function(file, sceneId, order) {
             var fileName = file.name;
             return Upload.upload({
-                url:'http://52.53.186.20/panel',
+                url: urlBase,
                 data: {
                     title: fileName,
                     order: order,
@@ -25,11 +25,11 @@ angular.module('ua5App')
         };
 
         dataFactory.deletePanel = function(id) {
-            return $http.delete('http://52.53.186.20/panel/' + id); // jshint ignore:line
+            return $http.delete(urlBase + '/' + id); // jshint ignore:line
         };
 
         dataFactory.editPanel = function(id, data) {
-            return $http.put('http://52.53.186.20/panel/' + id, data); // jshint ignore:line
+            return $http.put(urlBase + '/' + id, data); // jshint ignore:line
         };
 
         return dataFactory;
