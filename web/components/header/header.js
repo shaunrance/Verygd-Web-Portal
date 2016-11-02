@@ -12,7 +12,7 @@ angular.module('ua5App')
             },
             link: function($scope, element, attrs) {
             },
-            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', 'UsersResource', 'intercomFactory', function($scope, $state, $stateParams, $rootScope, projectFactory, UsersResource, intercomFactory) {
+            controller: ['$scope', '$state', '$stateParams', '$rootScope', 'projectFactory', 'UsersResource', 'ModalService', 'intercomFactory', function($scope, $state, $stateParams, $rootScope, projectFactory, UsersResource, ModalService, intercomFactory) {
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 $scope.projectTitle = '';
@@ -25,6 +25,26 @@ angular.module('ua5App')
                 $scope.backButtonHide = true;
                 $scope.goBack = function() {
                     $state.go('projects', {}, {reload: true});
+                };
+
+                $scope.openShare = function() {
+                    ModalService.showModal({
+                        templateUrl: 'modals/shareModal.html',
+                        controller: 'shareModalController',
+                        inputs: {
+                            fields:{
+                                title: 'Share Project',
+                                formLabels:[{title: 'URL'}],
+                                showFileUpload: false,
+                                submitButtonText: 'Share',
+                                project: $stateParams.projectId
+                            }
+                        }
+                    }).then(function(modal) {
+                        modal.close.then(function(result) {
+                            $('body').removeClass('no-scroll');
+                        });
+                    });
                 };
 
                 UsersResource.get().then(function(response) {
