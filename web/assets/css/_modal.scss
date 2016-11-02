@@ -196,15 +196,29 @@
     }
 }
 
-.modal--payment {
-    background-color: $grey;
-    margin: 0 auto;
-}
-
 .modal-billing {
     background: radial-gradient(ellipse at center, rgba(54, 59, 111, 1) 0%, rgba(19, 21, 42, 1) 100%);
     display: block;
     font-family: "OpenSans", sans-serif;
+
+    .modal--payment {
+        background-color: $grey;
+        margin: 0 auto;
+        max-width: 600px;
+
+        .modal-header::after {
+            width: 600px;
+        }
+
+        .account-info-section {
+            margin-bottom: 0;
+            padding: 10px 0;
+        }
+
+        .modal-button + .modal-button {
+            margin-left: 0;
+        }
+    }
 
     .modal-overlay-header {
         margin-top: 5%;
