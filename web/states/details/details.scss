@@ -607,6 +607,16 @@
         }
     }
 
+    .project-details__mobile-share-btn {
+        @include size(18px 20px);
+        background-image: url('/assets/img/icon-share.svg');
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        bottom: 18px;
+        position: absolute;
+        right: 20px;
+    }
+
     .scene-preview__button {
         background-color: $pink;
         border: 1px solid rgba($white, 0);

@@ -118,6 +118,26 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         };
 
+        $scope.openShare = function() {
+            ModalService.showModal({
+                templateUrl: 'modals/shareModal.html',
+                controller: 'shareModalController',
+                inputs: {
+                    fields:{
+                        title: 'Share Project',
+                        formLabels:[{title: 'URL'}],
+                        showFileUpload: false,
+                        submitButtonText: 'Share',
+                        project: $stateParams.projectId
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    $('body').removeClass('no-scroll');
+                });
+            });
+        };
+
         $scope.addScene = function() {
             $('body').addClass('no-scroll');
             ModalService.showModal({

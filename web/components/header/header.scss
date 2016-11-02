@@ -216,6 +216,16 @@
     }
 }
 
+.breadcrumb--share {
+    @include size(18px 20px);
+    background-image: url('/assets/img/icon-share-teal.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
+}
+
 .menu-container {
     background-color: rgba(0, 0, 0, 0.8);
     height: 100vh;
