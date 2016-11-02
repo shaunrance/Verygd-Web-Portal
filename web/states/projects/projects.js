@@ -117,7 +117,6 @@ angular.module('ua5App.projects')
 
         getProjects();
         ngMeta.setTitle('My Projects');
-        getUser();
     }])
     .controller('pCtrl', ['$scope', '$state', function($scope, $state) {
         //$state.go('sign-up');

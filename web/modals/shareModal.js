@@ -60,7 +60,7 @@ angular.module('ua5App')
         function init() {
             projectFactory.getProjectById($scope.projectId).then(function(response) {
                 $scope.project = response.data;
-                $scope.url = 'http://projects.very.gd/p/' + $scope.project.short_uuid;
+                $scope.url = 'http://' + window.location.host + '/p/' + $scope.project.short_uuid;
                 if ($scope.project.public) { //jshint ignore:line
                     $scope.publicProject = true;
                 } else {
