@@ -31,6 +31,15 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue('payment' in user_meta and not user_meta['payment'])
 
+    def test_payment_info(self):
+        # test adds payment info
+        super(TestUserAPI, self).test_payment_update()
+
+        response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+        self.assertTrue(response.status_code == 200, 'expected 200 got {0} ({1})'.format(response.status_code, msg))
+
+        self.assertTrue('next_billing_date' in msg['payment'] and msg['payment']['next_billing_date'])
+
     def test_update_member(self):
         response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
 
