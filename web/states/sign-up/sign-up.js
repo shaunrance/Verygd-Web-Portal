@@ -22,7 +22,7 @@ angular.module('ua5App.sign-up')
             }
         });
     }])
-    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', 'ngMeta', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope, ngMeta) {
+    .controller('signUpCtrl', ['$scope', '$http', 'user', 'ModalService', 'UsersResource', 'AuthResource', '$state', 'APICONSTANTS', '$cookies', '$rootScope', 'ngMeta', 'intercomFactory', function($scope, $http, ModalService, user, UsersResource, AuthResource, $state, APICONSTANTS, $cookies, $rootScope, ngMeta, intercomFactory) {
         $scope.disableButton = false;
 
         $scope.showModal = function() {
@@ -48,6 +48,7 @@ angular.module('ua5App.sign-up')
                     $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
 
                     $state.go('projects');
+                    intercomFactory.ping();
                     $('body').removeClass('no-scroll');
 
                 },
