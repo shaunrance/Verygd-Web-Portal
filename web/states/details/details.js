@@ -1,16 +1,27 @@
 /* global angular, _, Modernizr, $ */
 angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-        $stateProvider.state('projects.details', {
-            name: 'Details',
-            url: '/{projectId}',
-            templateUrl: 'states/details/details.html',
-            controller: 'detailsCtrl',
-            controllerAs: 'ctrl',
-            data: {
-                settings:{displayName:'First Project'}
-            }
-        });
+        $stateProvider
+            .state('projects.details', {
+                name: 'Details',
+                url: '/{projectId}',
+                templateUrl: 'states/details/details.html',
+                controller: 'detailsCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    settings:{displayName:'First Project'}
+                }
+            })
+            .state('p.details', {
+                name: 'Details',
+                url: '/{projectId}',
+                templateUrl: 'states/details/details.html',
+                controller: 'detailsPublicCtrl',
+                controllerAs: 'ctrl',
+                data: {
+                    settings:{displayName:'First Project'}
+                }
+            });
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
@@ -452,5 +463,69 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         //====================================================================//
         getScenes();
 
+    }])
+    .controller('detailsPublicCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {
+        $scope.hideCta = true;
+        $scope.publicView = true;
+        $scope.firstLoad = true;
+        $scope.hasTouch = true;
+        $scope.projectId = $stateParams.projectId;
+
+        $scope.changeScene = function(sceneId) {
+            $scope.currentScene = sceneId;
+            getPanels(sceneId);
+            if ($scope.showMobileMenu) {
+                $scope.openMobileMenu();
+            }
+        };
+
+        function getPublicScenes() {
+            var validScenes = [];
+            projectFactory.getProjectByPubId($stateParams.projectId)
+                .then(function(response) {
+                    $scope.project = response.data;
+
+                    if (response.data.content.length > 0) {
+                        $scope.scenes = response.data.content;
+                        _.each($scope.scenes, function(scene) {
+                            if (scene.content.length > 0) {
+                                validScenes.push(scene);
+                            }
+                        });
+                        $scope.scenes = validScenes;
+                        //check if page is first load, if so, make first scene selected
+                        if ($scope.firstLoad) {
+                            $scope.changeScene($scope.scenes[0].id);
+                            $scope.firstLoad = false;
+                        }
+                    }
+
+                }, function(error) {
+                    $scope.projectsMessage = 'This project does not exist';
+                });
+        }
+
+        function getPanels(sceneId) {
+            $scope.panels = [];
+            _.each($scope.scenes, function(scene) {
+                if (scene.id === sceneId) {
+                    $scope.panels = scene.content;
+                    $scope.sceneName = scene.title;
+                    $scope.sceneTypeToggle = scene.is_panorama;
+                }
+            });
+
+            _.each($scope.panels, function(panel) {
+                if (panel.related_tag !== null) {
+                    _.each($scope.scenes, function(scene) {
+                        if (parseInt(panel.related_tag, 10) === scene.id) {
+                            panel.relatedSceneName = scene.title;
+                        }
+                    });
+                }
+            });
+        }
+
+        getPublicScenes();
     }])
 ;

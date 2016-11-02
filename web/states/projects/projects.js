@@ -17,6 +17,16 @@ angular.module('ua5App.projects')
                     });
                 }]
             }
+        })
+        .state('p', {
+            name:'Projects',
+            url: '/p',
+            templateUrl: 'states/projects/p.html',
+            controller: 'pCtrl',
+            controllerAs: 'ctrl',
+            data: {
+                settings:{displayName:'My Projects'}
+            }
         });
     }])
     .controller('projectsCtrl', ['$scope', '$rootScope', '$state', 'projectFactory', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', 'ngMeta', function($scope, $rootScope, $state, projectFactory, ModalService, AuthResource, APICONSTANTS, $cookies, user, ngMeta) {
@@ -156,5 +166,9 @@ angular.module('ua5App.projects')
 
         getProjects();
         getUser();
+
         ngMeta.setTitle('My Projects');
+    }])
+    .controller('pCtrl', ['$scope', '$state', function($scope, $state) {
+        //$state.go('sign-up');
     }]);
