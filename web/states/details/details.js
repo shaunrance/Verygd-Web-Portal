@@ -96,12 +96,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 });
             } else if (args === 'projectPrivacy') {
                 projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
-            }
 
-            if ($scope.projectPrivacy === true) {
-                $scope.privateProjectsRemaining--;
-            } else {
-                $scope.privateProjectsRemaining++;
+                if ($scope.projectPrivacy === true) {
+                    $scope.privateProjectsRemaining--;
+                } else {
+                    $scope.privateProjectsRemaining++;
+                }
             }
         });
 
