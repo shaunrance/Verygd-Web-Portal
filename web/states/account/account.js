@@ -22,7 +22,14 @@ angular.module('ua5App.account', ['ngFileUpload'])
     }])
     .controller('accountCtrl', ['$rootScope', '$scope', '$state', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', 'ngMeta', function($rootScope, $scope, $state, APICONSTANTS, $cookies, user, UsersResource, ngMeta) {
         $scope.userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.user = {};
+        $scope.name = {};
+        $scope.email = {};
+        $scope.password = {};
+
+        $rootScope.$on('$locationChangeStart', function() {
+            $scope.passMessage = '';
+            $scope.password.password = '';
+        });
 
         if (!$scope.userId) {
             $state.go('sign-in');
@@ -43,35 +50,10 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     $state.go('sign-in');
                 } else {
                     $scope.user = user[0];
+                    $scope.name.name = $scope.user.name;
+                    $scope.email.email = $scope.user.email;
                     $scope.title = $scope.user.name;
                     $scope.link = 'account';
-                    // $scope.email = $scope.user.email;
-                    // $scope.userName = $scope.user.name;
-
-                    // $scope.userAdmin = true; //TODO set this correctly after other members can be added
-                    // UsersResource.get({id: userId}).then(function(response) {
-                    //     $scope.user = response[0];
-                    //     $scope.email = $scope.user.email;
-                    //     $scope.userName = $scope.user.name;
-                    //     $scope.title = $scope.user.userName;
-                    // });
-                    // UsersResource.user().retrieve({id: userId}).$promise.then(
-                    //     function(response) {
-                    //         $rootScope.userResponse = response;
-                    //         $rootScope.deferredUser.resolve(response);
-                    //
-                    //         $scope.email = response.email;
-                    //         $scope.userName = response.name;
-                    //         $scope.title = $scope.userName;
-                    //
-                    //         $scope.userAdmin = true; //TODO set this correctly after other members can be added
-                    //     },
-                    //     function(error) {
-                    //         if (error.status === 401) {
-                    //             $state.go('sign-in');
-                    //         }
-                    //     }
-                    // );
                 }
             }
         }
@@ -91,36 +73,76 @@ angular.module('ua5App.account', ['ngFileUpload'])
 
         $scope.saveUser = function() {
             var userObj;
-            if ($scope.user.email !== '' && $scope.user.name !== '' && $scope.user.password !== '') {
+            var passObj;
+
+            if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email && $scope.name.name !== '' && $scope.name.name !== $scope.user.name) {
                 userObj = {
+                    id: $scope.userId,
+                    name: $scope.name.name,
+                    email: $scope.email.email
+                };
+                update(userObj);
+            } else if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email) {
+                userObj = {
+                    id: $scope.userId,
+                    email: $scope.email.email
+                };
+                update(userObj);
+            } else if ($scope.name.name !== '' && $scope.name.name !== $scope.user.name) {
+                userObj = {
+                    id: $scope.userId,
+                    name: $scope.name.name
+                };
+                update(userObj);
+            }
+
+            if ($scope.password.password !== '' && $scope.password.confirm !== '' && $scope.password.password !== undefined) {
+                passObj = {
                     id: $scope.userId,
                     name: $scope.user.name,
                     email: $scope.user.email,
-                    password: $scope.user.password
+                    password: $scope.password.password
                 };
-
-                UsersResource.update().save(userObj).$promise.then(
-                    function(response) {
-
-                        console.log(response);
-                    },
-                    function(error) {
-
-                    }
-                );
+                checkValidPassword(passObj);
             }
         };
 
-        // function checkValidPassword() {
-        //     if (pass1.value !== '' && pass2.value !== '') {
-        //         if (pass1.value === pass2.value) {
-        //             return true;
-        //         } else {
-        //             alert('Passwords do not match!');
-        //             return false;
-        //         }
-        //     }
-        // }
+        function update(userObj) {
+            UsersResource.update().save(userObj).$promise.then(
+                function(response) {
+                    $scope.accountMessage = 'Account Updated.';
+                    $state.reload();
+                },
+                function(error) {
+                    console.log(error);
+                }
+            );
+        }
+
+        function checkValidPassword(passObj) {
+            var pass1 = $('#password');
+            var pass2 = $('#confirm-password');
+
+            if (pass1.val() === pass2.val()) {
+                if (pass1.val() === pass2.val()) {
+                    UsersResource.updatePass().save(passObj).$promise.then(
+                        function(response) {
+                            $scope.accountMessage = 'Account Updated.';
+                            $state.reload();
+                        },
+                        function(error) {
+                            console.log(error);
+                        }
+                    );
+                } else {
+                    alert('Passwords do not match!');
+                    return false;
+                }
+            } else {
+                alert('Passwords do not match!');
+                return false;
+            }
+        }
 
         function init() {
             getUserInfo();
