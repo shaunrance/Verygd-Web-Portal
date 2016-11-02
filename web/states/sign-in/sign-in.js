@@ -20,7 +20,7 @@ angular.module('ua5App.sign-in')
             }
         });
     }])
-    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', 'ngMeta', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http, ngMeta) {
+    .controller('SignInCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', 'ngMeta', 'intercomFactory', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http, ngMeta, intercomFactory) {
         if (user) {
             $state.go('projects');
             $('body').removeClass('no-scroll');
@@ -42,14 +42,16 @@ angular.module('ua5App.sign-in')
                         expireDate.setDate(todayDate.getDate() + 365);
                         $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
                         $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
+                        $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
                     } else {
                         expireDate.setDate(todayDate.getDate() + 1);
                         $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
                         $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
+                        $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
                     }
 
                     $http.defaults.headers.common['Authorization'] = 'Token ' + APICONSTANTS.authCookie.token; // jshint ignore:line
-
+                    intercomFactory.ping();
                     $state.go('projects');
                 },
                 function(error) {

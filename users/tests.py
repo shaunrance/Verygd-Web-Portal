@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import json
+import hypothesis.extra.fakefactory as ff
+
 from very_gd.tests.strategies import TestStrategies
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
 from media_portal.users.tests import TestLogInOutAPI
 from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings
+from users.models import Member
+
+from django.contrib.auth import get_user_model
+
 
 TestUserAPIBase.strategy = TestStrategies
 
@@ -24,8 +31,53 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue('payment' in user_meta and not user_meta['payment'])
 
+    def test_payment_info(self):
+        # test adds payment info
+        super(TestUserAPI, self).test_payment_update()
+
+        response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+        self.assertTrue(response.status_code == 200, 'expected 200 got {0} ({1})'.format(response.status_code, msg))
+
+        self.assertTrue('next_billing_date' in msg['payment'] and msg['payment']['next_billing_date'])
+
     def test_update_member(self):
-        super(TestUserAPI, self).test_update_member()
+        response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+
+        prev_user_info = msg
+
+        self.assertTrue(response.status_code == 200, 'expected 200 got {0} ({1})'.format(response.status_code, msg))
+
+        # trying an existing email should fail
+        response, msg = self.put_as(self.member, '/users/{0}'.format(self.member['id']),
+                                    data=json.dumps({'email': self.second_member['post_params']['email']}),
+                                    content_type='application/json')
+
+        self.assertTrue(response.status_code == 400)
+        self.assertTrue('email' in msg and msg['email'] == [u'This e-mail already exists.'])
+
+        def unique_email():
+            email = ff.fake_factory(u'email', locale='en').example()
+
+            while get_user_model().objects.filter(email=email).count():
+                email = ff.fake_factory(u'email', locale='en').example()
+
+            return email
+
+        response, msg = self.put_as(self.member, '/users/{0}'.format(self.member['id']), data={
+                                        'email': unique_email(),
+                                    }, content_type='application/json')
+
+        self.assertTrue(response.status_code == 200, 'got {} ({}): {}'.format(
+            response.status_code,
+            response.status_text,
+            msg
+        ))
+
+        # verify info was updated
+        response, new_user_info = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+
+        # new email
+        self.assertTrue(new_user_info['email'] != prev_user_info['email'])
 
     def test_payment_update(self):
         super(TestUserAPI, self).test_payment_update()
@@ -36,6 +88,10 @@ class TestLoginAPI(TestLogInOutAPI):
         self.setup_email_settings()
 
         super(TestLoginAPI, self).setUp()
+
+        member = Member.objects.get(pk=self.member['id'])
+        member.user.email = 'andrew@useallfive.com'
+        member.save()
 
     def setup_email_settings(self):
         reset_email_settings = UserPasswordResetEmail()

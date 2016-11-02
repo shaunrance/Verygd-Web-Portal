@@ -6,3 +6,4 @@ drfdocs
 django-storages
 boto
 shortuuid
+sendgrid-django

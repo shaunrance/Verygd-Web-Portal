@@ -55,7 +55,8 @@ angular.module('ua5App', [
             token: 'vg-user',
             user_id: 'vg-member',
             visited: 'string',
-            cta: 'cta'
+            cta: 'cta',
+            intercom_token: 'intercom_token'
         }
     })
     .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {
@@ -78,7 +79,7 @@ angular.module('ua5App', [
         $rootScope.deferredUser = $q.defer();
         $rootScope.deferredTerms = $q.defer();
     }])
-    .directive('app', ['$rootScope', function($rootScope) {
+    .directive('app', ['$rootScope', 'intercomFactory', function($rootScope, intercomFactory) {
         return {
             link: function($scope, $element, $attrs) {
                 var $$window;
@@ -115,6 +116,9 @@ angular.module('ua5App', [
                     if (toStateParent !== fromStateParent) {
                         $$window.scrollTop(0);
                     }
+
+                    intercomFactory.ping();
+
                 });
 
                 $rootScope.renderer = new THREE.WebGLRenderer({

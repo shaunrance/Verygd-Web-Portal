@@ -91,10 +91,10 @@
                     <div class="scene-preview__message" ng-if="panels.length > 6 && !sceneTypeToggle">
                         <p>We recommend you keep your scene under 7 panels</p>
                     </div>
-                    <div class="scene-preview__message" ng-if="panels.length < 3 && panels.length > 1 && !sceneTypeToggle">
+                    <div class="scene-preview__message" ng-if="panels.length < 3 && !sceneTypeToggle">
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
-                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3 && panels.length > 1) && !sceneTypeToggle || panels.length > 6 && !sceneTypeToggle}">Preview</h5>
+                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && !sceneTypeToggle || panels.length > 6 && !sceneTypeToggle}">Preview</h5>
                 </div>
                 <div class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
