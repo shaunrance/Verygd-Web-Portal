@@ -62,7 +62,7 @@
 .account-info-section {
     @include clearfix;
     @include padding(10px);
-    margin-top: 60px;
+    margin-bottom: 60px;
     position: relative;
 
     &.account-info-section-exp-sec {
@@ -122,7 +122,12 @@
 
 .account-info-button {
     @include size(120px 40px);
-    margin-top: 124px;
+}
+
+@include media($tablet) {
+    .account {
+        padding: 130px 30px;
+    }
 }
 
 @include media($phablet) {

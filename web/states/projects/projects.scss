@@ -189,6 +189,7 @@
     .vg__item--wrapper {
         display: inline-block;
         margin-right: 0;
+        vertical-align: top;
         width: calc(50% - #{$item-wrapper-margin-tablet});
 
         &:nth-child(odd) {

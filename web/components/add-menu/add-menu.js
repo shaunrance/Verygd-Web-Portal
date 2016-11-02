@@ -17,8 +17,8 @@ angular.module('ua5App')
                 var getOptions = function() {
                     if ($state.current.name !== 'projects.details') {
                         $scope.menuItems = {
-                            project:'Add Project',
-                            team: 'Add Team Member'
+                            project:'Add Project'
+                            // team: 'Add Team Member'
                         };
                     } else {
                         $scope.menuItems = menu;
