@@ -69,7 +69,7 @@ angular.module('ua5App')
                     dataFactory.get(id).then(function(response) {
                         if (
                             response[0].payment &&
-                            (response[0].payment.plan_name === 'monthly' || response[0].payment.plan_name === 'annual'))
+                            (response[0].payment.plan_name === 'beta_monthly' || response[0].payment.plan_name === 'beta_yearly'))
                         {
                             p.resolve(10000000);
                         } else {

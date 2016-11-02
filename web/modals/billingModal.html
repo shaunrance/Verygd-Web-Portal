@@ -11,13 +11,13 @@
         <div class="modal--payment-options-inner">
             <a
                 class="modal-overlay-options-billing modal-overlay-options-billing--monthly"
-                ng-class="{'active': selectedPlan === 'monthly'}"
+                ng-class="{'active': selectedPlan === 'beta_monthly'}"
                 ng-click="monthlyPlan();">
                 Monthly Billing
             </a>
             <a
                 class="modal-overlay-options-billing modal-overlay-options-billing--annual"
-                ng-class="{'active': selectedPlan === 'annual'}"
+                ng-class="{'active': selectedPlan === 'beta_yearly'}"
                 ng-click="annualPlan();">
                 Annual Billing
             </a>
@@ -47,8 +47,8 @@
             </div>
             <div class="modal--payment-module-price-wrap">
                 <h1><span>$</span>{{price}}</h1>
-                <p ng-if="selectedPlan === 'monthly'">Per Month</p>
-                <p ng-if="selectedPlan === 'annual'">Per Year</p>
+                <p ng-if="selectedPlan === 'beta_monthly'">Per Month</p>
+                <p ng-if="selectedPlan === 'beta_yearly'">Per Year</p>
             </div>
             <ul class="modal--payment-module-features">
                 <li>Unlimited Public Projects</li>
@@ -63,13 +63,13 @@
         <div class="modal-overlay-sections">
             <div class="modal-header">
                 <div
-                    ng-show="selectedPlan === 'annual'"
+                    ng-show="selectedPlan === 'beta_yearly'"
                     class="modal-header-plan">
                     <h3 class="modal-header-plan-title">Annual Plan</h3>
                     <h3 class="modal-header-price">$250.00/YR</h3>
                 </div>
                 <div
-                    ng-show="selectedPlan === 'monthly'"
+                    ng-show="selectedPlan === 'beta_monthly'"
                     class="modal-header-plan">
                     <h3 class="modal-header-plan-title">Monthly Plan</h3>
                     <h3 class="modal-header-price">$25.00/MO</h3>

@@ -2,7 +2,7 @@
 angular.module('ua5App')
     .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.currentPlan = 'monthly';
+        $scope.currentPlan = 'beta_monthly';
         $scope.selectedPlan = $scope.currentPlan;
         $scope.paymentShowing = false;
         $scope.isBasic = true;
@@ -33,16 +33,16 @@ angular.module('ua5App')
         function initialValues() {
             if (fields.payment) {
                 $scope.currentPlan = fields.plan;
-                if ($scope.currentPlan === 'monthly') {
+                if ($scope.currentPlan === 'beta_monthly') {
                     $scope.isBasic = false;
-                    $scope.selectedPlan = 'monthly';
+                    $scope.selectedPlan = 'beta_monthly';
                     $scope.planType = 'Monthly';
                     $scope.price = 25;
-                } else if ($scope.currentPlan === 'annual') {
+                } else if ($scope.currentPlan === 'beta_yearly') {
                     $scope.isBasic = false;
-                    $scope.selectedPlan = 'annual';
+                    $scope.selectedPlan = 'beta_yearly';
                     $scope.planType = 'Annual';
-                    $scope.price = 250;
+                    $scope.price = 240;
                 } else {
                     $scope.monthlyChecked = true;
                     $scope.isBasic = true;
@@ -56,18 +56,18 @@ angular.module('ua5App')
                 $scope.cvc.number = '';
                 $scope.zip.number = fields.zip;
             } else {
-                $scope.currentPlan = 'free_test_plan';
+                $scope.currentPlan = 'basic';
                 $scope.planType = 'Basic';
             }
         }
 
         $scope.annualPlan = function() {
-            $scope.selectedPlan = 'annual';
-            $scope.price = 250;
+            $scope.selectedPlan = 'beta_yearly';
+            $scope.price = 240;
         };
 
         $scope.monthlyPlan = function() {
-            $scope.selectedPlan = 'monthly';
+            $scope.selectedPlan = 'beta_monthly';
             $scope.price = 25;
         };
 
@@ -131,7 +131,7 @@ angular.module('ua5App')
         };
 
         $scope.updateBasic = function() {
-            UsersResource.user().update({id: userId, payment: {plan_name: 'free_test_plan'}}).$promise.then(
+            UsersResource.user().update({id: userId, payment: {plan_name: 'basic'}}).$promise.then(
                 function(response) {
                     UsersResource.resetUser();
                     $state.reload();
@@ -143,7 +143,7 @@ angular.module('ua5App')
                             exp_year: $scope.year.number,
                             cvc: $scope.cvc.number,
                             address_zip: $scope.zip.number,
-                            plan_name: 'free_test_plan'
+                            plan_name: 'basic'
                         }
                     };
                     $scope.close();

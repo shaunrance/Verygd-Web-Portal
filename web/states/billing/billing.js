@@ -14,8 +14,6 @@ angular.module('ua5App.billing')
     }])
     .controller('billingCtrl', ['$rootScope', '$scope', '$state', 'ModalService', 'AuthResource', 'APICONSTANTS', '$cookies', 'user', 'UsersResource', 'ngMeta', function($rootScope, $scope, $state, ModalService, AuthResource, APICONSTANTS, $cookies, user, UsersResource, ngMeta) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.annualStatement = 'Next Payment of $250 will be processed on 12/01/2017';
-        $scope.monthlyStatement = 'Next Payment of $25 will be processed on 11/01/2016';
         $scope.message = null;
         $scope.disableButton = true;
         $scope.annualChosen = true;
@@ -61,13 +59,13 @@ angular.module('ua5App.billing')
                 $scope.plan_name = $scope.user.payment.plan_name;
                 $scope.showCardInfo = true;
 
-                if ($scope.plan_name === 'annual') {
-                    $scope.monthlyBilling = false;
-                    $scope.type = 'Premium';
-                    $scope.showAnnualToggle = true;
-                } else if ($scope.plan_name === 'monthly') {
+                if ($scope.plan_name === 'beta_monthly') {
                     $scope.monthlyBilling = true;
-                    $scope.type = 'Premium';
+                    $scope.type = 'Paid Beta';
+                    $scope.showAnnualToggle = true;
+                } else if ($scope.plan_name === 'beta_yearly') {
+                    $scope.monthlyBilling = false;
+                    $scope.type = 'Paid Beta';
                     $scope.showAnnualToggle = true;
                 } else {
                     $scope.type = 'Basic';

@@ -41,14 +41,8 @@
                 </div>
                 <div class="account-billing-statement">
                     <span
-                        class="account-billing-statement-text"
-                        ng-show="monthlyBilling"
-                        ng-bind="monthlyStatement">
-                    </span>
-                    <span
-                        class="account-billing-statement-text"
-                        ng-hide="monthlyBilling"
-                        ng-bind="annualStatement">
+                        class="account-billing-statement-text">
+                        Next Payment of ${{user.payment.amount/100}} will be processed on {{user.payment.next_billing_date | date:'EEEE, MMMM d, y' }}
                     </span>
                 </div>
             </div>

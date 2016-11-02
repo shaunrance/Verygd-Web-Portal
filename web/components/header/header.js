@@ -50,7 +50,7 @@ angular.module('ua5App')
                 UsersResource.get().then(function(response) {
                     $scope.user = response[0];
                     if ($scope.user.payment) {
-                        if ($scope.user.payment.plan_name === 'free_test_plan') {
+                        if ($scope.user.payment.plan_name === 'basic') {
                             $scope.billingMenuName = 'Upgrade Plan';
                         } else {
                             $scope.billingMenuName = 'Billing';
