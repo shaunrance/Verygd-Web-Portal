@@ -293,6 +293,12 @@
         z-index: 9999;
     }
 
+    .logo-link {
+        left: 50%;
+        margin-left: calc(135 / 2 * -1px);
+        position: absolute;
+    }
+
     .header__container {
         @include justify-content(center);
         @include align-items(flex-end);
@@ -303,10 +309,6 @@
 
     .header__user-container {
         display: none;
-    }
-
-    .header__meta {
-        width: 56%;
     }
 
     .menu-button {
