@@ -64,10 +64,10 @@ angular.module('ua5App.account', ['ngFileUpload'])
 
             if (pass1.val() === pass2.val()) {
                 $scope.passMismatch = false;
-                $scope.passMessage = 'Passwords Match!';
+                $scope.passMessage = 'Passwords match!';
             } else {
                 $scope.passMismatch = true;
-                $scope.passMessage = 'Passwords Do Not Match!';
+                $scope.passMessage = 'Passwords do not match!';
             }
         };
 
@@ -111,7 +111,14 @@ angular.module('ua5App.account', ['ngFileUpload'])
             UsersResource.update().save(userObj).$promise.then(
                 function(response) {
                     $scope.accountMessage = 'Account Updated.';
-                    $state.reload();
+                    $scope.name.name = $scope.name.name;
+                    $scope.email.email = $scope.email.email;
+                    $scope.title = $scope.name.name;
+                    $('.account-message').fadeIn(300);
+
+                    setTimeout(function() {
+                        $('.account-message').fadeOut(700);
+                    }, 1500);
                 },
                 function(error) {
                     console.log(error);
@@ -128,7 +135,13 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     UsersResource.updatePass().save(passObj).$promise.then(
                         function(response) {
                             $scope.accountMessage = 'Account Updated.';
-                            $state.reload();
+                            console.log(response);
+                            $('.account-message').fadeIn(300);
+
+                            setTimeout(function() {
+                                $('.account-message').fadeOut(700);
+                                $scope.passMessage = '';
+                            }, 1500);
                         },
                         function(error) {
                             console.log(error);
