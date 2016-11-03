@@ -500,7 +500,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             projectFactory.getProjectByPubId($stateParams.projectId)
                 .then(function(response) {
                     $scope.project = response.data;
-
+                    $scope.projectName = $scope.projectName = response.data.name;
                     if (response.data.content.length > 0) {
                         $scope.scenes = response.data.content;
                         _.each($scope.scenes, function(scene) {

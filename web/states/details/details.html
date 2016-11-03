@@ -28,6 +28,7 @@
             </ul>
             <button
                 ng-click="addScene()"
+                ng-if="!publicView"
                 class="scene-add">
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
@@ -142,7 +143,7 @@
     </div>
 
     <footer class="project-details__footer" ng-class="{'slide-menu-open':showMobileMenu}">
-        <div class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
+        <div ng-if="!publicView" class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
             <span></span>
             <span></span>
             <span></span>
@@ -177,11 +178,11 @@
                 <span class="scene-preview__button__icon"></span>
             </button>
         </div>
-        <div class="project-details__mobile-share-btn" ng-click="openShare()"></div>
+        <div ng-if="!publicView" class="project-details__mobile-share-btn" ng-click="openShare()"></div>
     </footer>
 </main>
 
-<div class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
+<div  ng-if="!publicView" class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
     <div class="project-details__slide-menu-inner">
         <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
             <h3 class="project-details__mobile-menu-header">Scenes</h3>
