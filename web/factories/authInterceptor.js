@@ -8,7 +8,7 @@ angular.module('ua5App')
                 var cookies = $cookies.get(APICONSTANTS.authCookie.token),
                     currentState = $injector.get('$state').current.name;
 
-                if ((currentState === 'sign-in' && (config.url.indexOf('/users')) < 0) || (currentState === 'sign-up') || currentState === 'p.details' || currentState === 'v') {
+                if ((currentState === 'sign-in' && (config.url.indexOf('/users')) < 0) || (currentState === 'sign-up') || currentState === 'p.details' || currentState === 'v' || currentState === 'forgot-password' || currentState === 'reset-password') {
                     return config;
                 }
 
