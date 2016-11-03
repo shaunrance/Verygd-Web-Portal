@@ -541,21 +541,26 @@
     .modal,
     .modal--share {
         max-width: 340px;
-        padding: 50px;
+        padding: 25px;
+    }
+
+    .modal-close {
+        right: -10px;
+        top: -10px;
     }
 
     .modal--share {
         max-width: 340px;
-        padding: 50px;
+        padding: 25px;
 
         .modal-header::after {
-            left: -50px;
+            left: -25px;
             width: 340px;
         }
     }
 
     .modal-header::after {
-        left: -50px;
+        left: -25px;
         width: 340px;
     }
 
@@ -577,6 +582,12 @@
     }
 
     .modal-billing {
+
+        .modal--payment {
+            .modal-header::after {
+                width: 320px;
+            }
+        }
 
         .modal--payment-pricing {
             max-width: 100%;
@@ -625,6 +636,10 @@
     }
 
     .modal--link {
+        .modal-body {
+            max-height: 240px;
+        }
+
         .modal-body__item--wrapper {
             height: 0;
             margin: 0 0 30px;
