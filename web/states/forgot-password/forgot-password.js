@@ -27,10 +27,11 @@ angular.module('ua5App.forgot-password')
                 return false;
             }
 
-            AuthResource.token().retrieve({username: data.email}).$promise.then(
+            UsersResource.forgotPass().send({email: data.email}).$promise.then(
                 function(response) {
                     //send email code
-                    console.log(response);
+                    $scope.forgotMessage = response.msg;
+                    $scope.model.email = '';
                 },
                 function(error) {
                     console.log(error);

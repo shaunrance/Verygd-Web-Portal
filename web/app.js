@@ -8,6 +8,7 @@ angular.module('ua5App.viewer', []);
 angular.module('ua5App.details', []);
 angular.module('ua5App.scene', []);
 angular.module('ua5App.sign-up', []);
+angular.module('ua5App.forgot-password', []);
 angular.module('ua5App.account', []);
 angular.module('ua5App.billing', []);
 angular.module('ua5App.notifications', []);
@@ -40,6 +41,7 @@ angular.module('ua5App', [
     'ua5App.projects',
     'ua5App.viewer',
     'ua5App.sign-in',
+    'ua5App.forgot-password',
     'ua5App.terms-of-service',
     'ua5App.privacy-policy',
     'ngAnimate'
