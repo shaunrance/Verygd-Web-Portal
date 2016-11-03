@@ -433,7 +433,7 @@
 
 @include media($tablet) {
     .scene-empty__mobile {
-        border: 5px dashed $pink;
+        border: 2px dashed $pink;
         display: none;
         left: 2.5%;
         min-height: 375px;
