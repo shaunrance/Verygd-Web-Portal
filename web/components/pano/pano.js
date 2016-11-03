@@ -148,6 +148,10 @@ angular.module('ua5App')
                     var plane;
                     var textureLoader = new THREE.TextureLoader();
 
+                    if (!data) {
+                        return;
+                    }
+
                     textureLoader.load(
                         data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=' + backgroundHex,
                         function(texture) {

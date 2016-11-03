@@ -44,6 +44,7 @@ angular.module('ua5App.sign-up')
                     //set cookie token && then go to projects
                     $cookies.put(APICONSTANTS.authCookie.token, response.token);
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
+                    $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token);
 
                     $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
 
