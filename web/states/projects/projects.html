@@ -7,6 +7,10 @@
     <div
         upgrade>
     </div>
+    <div class="projects__empty" ng-class="{'show': emptyProjects}">
+        <p>You don't have any projects yet.</p>
+        <button class="button" ng-click="createProject()">Create Project</button>
+    </div>
     <div  class="vg__items">
         <figure
             ng-repeat="project in projects"

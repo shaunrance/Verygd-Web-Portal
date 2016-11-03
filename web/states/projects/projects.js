@@ -35,6 +35,7 @@ angular.module('ua5App.projects')
 
             .then(function(response) {
                 var id = response.data.id;
+                $scope.emptyProjects = false;
                 $state.go('projects.details', {projectId:id});
                 //not really needed since the state changes anyways
                 //getProjects();
@@ -44,6 +45,7 @@ angular.module('ua5App.projects')
         };
         $scope.title = 'projects';
         $scope.link = 'projects';
+        $scope.emptyProjects = false;
 
         $scope.newProject = {};
 
@@ -51,6 +53,31 @@ angular.module('ua5App.projects')
             args.isPublic = ($scope.limit < 1);
             addProject(args);
         });
+
+        $scope.createProject = function() {
+            $('body').addClass('no-scroll');
+            ModalService.showModal({
+                templateUrl: 'modals/addModal.html',
+                controller: 'addModalController',
+                inputs: {
+                    fields:{
+                        title: 'Add Project',
+                        formLabels:[{name: 'name', title: 'Name'}, {name:'description', title: 'Description'}],
+                        showFileUpload: false,
+                        submitButtonText: 'Add Project'
+                    }
+                }
+            }).then(function(modal) {
+                modal.close.then(function(result) {
+                    // check to see if name input is empty before calling 'addProject'
+
+                    if (result.input.name !== '') {
+                        $scope.$emit('addProject', result.input);
+                    }
+                    $('body').removeClass('no-scroll');
+                });
+            });
+        };
 
         $scope.deleteProject = function(projectId) {
             $('body').addClass('no-scroll');
@@ -86,6 +113,11 @@ angular.module('ua5App.projects')
             projectFactory.getProjects()
 
                 .then(function(response) {
+                    console.log(response);
+                    if (response.data.length === 0) {
+                        $scope.emptyProjects = true;
+                    }
+                    console.log($scope.emptyProjects);
                     $scope.projects = response.data;
                     _.each($scope.projects, function(project) {
                         var scenes = project.content;
