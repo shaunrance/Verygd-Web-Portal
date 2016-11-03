@@ -46,6 +46,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.projectId = $stateParams.projectId;
         $scope.projectName = '';
         $scope.privateProjectsRemaining = privateProjectsRemaining;
+        $scope.sceneTypeToggle = {};
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -256,9 +257,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
                     if (response.data.is_panorama) {
-                        $scope.sceneTypeToggle = true;
+                        $scope.sceneTypeToggle.active = true;
                     } else {
-                        $scope.sceneTypeToggle = false;
+                        $scope.sceneTypeToggle.active = false;
                     }
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
@@ -411,9 +412,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
                     if (response.data.is_panorama) {
-                        $scope.sceneTypeToggle = true;
+                        $scope.sceneTypeToggle.active = true;
                     } else {
-                        $scope.sceneTypeToggle = false;
+                        $scope.sceneTypeToggle.active = false;
                     }
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
@@ -527,7 +528,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 if (scene.id === sceneId) {
                     $scope.panels = scene.content;
                     $scope.sceneName = scene.title;
-                    $scope.sceneTypeToggle = scene.is_panorama;
+                    $scope.sceneTypeToggle.active = scene.is_panorama;
                 }
             });
 

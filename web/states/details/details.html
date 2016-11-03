@@ -46,7 +46,7 @@
                 ng-repeat="panel in panels"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper"
-                ng-class="{'vg__item--wrapper-fade' : (sceneTypeToggle)}">
+                ng-class="{'vg__item--wrapper-fade' : (sceneTypeToggle.active)}">
 
                 <a
                     class="vg__item--link scene--link"
@@ -80,25 +80,25 @@
                     <div class="toggle">
                         <div class="toggle-switch__icon poly"></div>
                         <toggle-switch
-                            ng-model="sceneTypeToggle">
+                            ng-model="sceneTypeToggle.active">
                         </toggle-switch>
                         <div class="toggle-switch__icon pano"></div>
                     </div>
                 </div>
                 <div class="scene-preview__display">
-                    <div ng-if="sceneTypeToggle">
+                    <div ng-if="sceneTypeToggle.active">
                         <img class="preview-icon" ng-src="assets/img/1.png">
                     </div>
-                    <div ng-if="(panels.length > 2 && panels.length < 7 && !sceneTypeToggle)">
+                    <div ng-if="(panels.length > 2 && panels.length < 7 && !sceneTypeToggle.active)">
                         <img class="preview-icon" ng-src="assets/img/{{panels.length}}.png">
                     </div>
-                    <div class="scene-preview__message" ng-if="panels.length > 6 && !sceneTypeToggle">
+                    <div class="scene-preview__message" ng-if="panels.length > 6 && !sceneTypeToggle.active">
                         <p>We recommend you keep your scene under 7 panels</p>
                     </div>
-                    <div class="scene-preview__message" ng-if="panels.length < 3 && !sceneTypeToggle">
+                    <div class="scene-preview__message" ng-if="panels.length < 3 && !sceneTypeToggle.active">
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
-                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && !sceneTypeToggle || panels.length > 6 && !sceneTypeToggle}">Preview</h5>
+                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && !sceneTypeToggle.active || panels.length > 6 && !sceneTypeToggle.active}">Preview</h5>
                 </div>
                 <div class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
@@ -182,7 +182,7 @@
     </footer>
 </main>
 
-<div  ng-if="!publicView" class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
+<div ng-if="!publicView" class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
     <div class="project-details__slide-menu-inner">
         <ul class="project-details__mobile-menu-list" ng-class="{'active':showSceneList}">
             <h3 class="project-details__mobile-menu-header">Scenes</h3>
@@ -207,8 +207,7 @@
                 <div class="toggle">
                     <div class="toggle-switch__icon poly"></div>
                     <toggle-switch
-                        ng-model="sceneTypeToggle"
-                        disabled="{{singlePanel}}">
+                        ng-model="sceneTypeToggle.active">
                     </toggle-switch>
                     <div class="toggle-switch__icon pano"></div>
                 </div>
@@ -217,11 +216,18 @@
             <div class="project-details__mobile-private">
                 <div class="toggle">
                     <toggle-switch
-                        ng-model="scenePrivacyToggle"
+                        ng-model="projectPrivacy"
                         color="true"
                         on-label="Public"
+                        disabled="{{privateProjectsRemaining < 1 && !projectPrivacy}}"
                         off-label="Private">
                     </toggle-switch>
+
+                    <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining < 1 && !projectPrivacy">
+                        <div
+                            upgrade
+                            use-simple="true"></div>
+                    </div>
                 </div>
             </div>
         </div>
