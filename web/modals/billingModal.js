@@ -2,7 +2,7 @@
 angular.module('ua5App')
     .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
-        $scope.currentPlan = 'beta_monthly';
+        $scope.currentPlan = 'beta_yearly';
         $scope.selectedPlan = $scope.currentPlan;
         $scope.paymentShowing = false;
         $scope.isBasic = true;
@@ -14,7 +14,7 @@ angular.module('ua5App')
         $scope.zip = {};
 
         $scope.title = 'Pricing';
-        $scope.price = 29;
+        $scope.price = 19;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {};
 
@@ -42,7 +42,7 @@ angular.module('ua5App')
                     $scope.isBasic = false;
                     $scope.selectedPlan = 'beta_yearly';
                     $scope.planType = 'Annual';
-                    $scope.price = 228;
+                    $scope.price = 19;
                 } else {
                     $scope.monthlyChecked = true;
                     $scope.isBasic = true;
@@ -63,7 +63,7 @@ angular.module('ua5App')
 
         $scope.annualPlan = function() {
             $scope.selectedPlan = 'beta_yearly';
-            $scope.price = 228;
+            $scope.price = 19;
         };
 
         $scope.monthlyPlan = function() {
