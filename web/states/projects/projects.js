@@ -113,11 +113,9 @@ angular.module('ua5App.projects')
             projectFactory.getProjects()
 
                 .then(function(response) {
-                    console.log(response);
                     if (response.data.length === 0) {
                         $scope.emptyProjects = true;
                     }
-                    console.log($scope.emptyProjects);
                     $scope.projects = response.data;
                     _.each($scope.projects, function(project) {
                         var scenes = project.content;

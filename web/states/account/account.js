@@ -75,13 +75,17 @@ angular.module('ua5App.account', ['ngFileUpload'])
             var userObj;
             var passObj;
 
-            if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email && $scope.name.name !== '' && $scope.name.name !== $scope.user.name) {
-                userObj = {
-                    id: $scope.userId,
-                    name: $scope.name.name,
-                    email: $scope.email.email
-                };
-                update(userObj);
+            if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email && $scope.name.name !== '' && $scope.name.name !== $scope.user.name && $scope.password.password !== '') {
+                if (checkValidPassword()) {
+                    console.log('hey');
+                    userObj = {
+                        id: $scope.userId,
+                        name: $scope.name.name,
+                        email: $scope.email.email,
+                        password: $scope.password.password
+                    };
+                    update(userObj);
+                }
             } else if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email) {
                 userObj = {
                     id: $scope.userId,
@@ -94,6 +98,14 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     name: $scope.name.name
                 };
                 update(userObj);
+            } else if ($scope.password.password !== '') {
+                if (checkValidPassword()) {
+                    userObj = {
+                        id: $scope.userId,
+                        password: $scope.password.password
+                    };
+                    update(userObj);
+                }
             }
 
             if ($scope.password.password !== '' && $scope.password.confirm !== '' && $scope.password.password !== undefined) {
@@ -115,7 +127,7 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     $scope.email.email = $scope.email.email;
                     $scope.title = $scope.name.name;
                     $('.account-message').fadeIn(300);
-
+                    console.log(response);
                     setTimeout(function() {
                         $('.account-message').fadeOut(700);
                     }, 1500);
@@ -126,31 +138,12 @@ angular.module('ua5App.account', ['ngFileUpload'])
             );
         }
 
-        function checkValidPassword(passObj) {
+        function checkValidPassword() {
             var pass1 = $('#password');
             var pass2 = $('#confirm-password');
 
             if (pass1.val() === pass2.val()) {
-                if (pass1.val() === pass2.val()) {
-                    UsersResource.updatePass().save(passObj).$promise.then(
-                        function(response) {
-                            $scope.accountMessage = 'Account Updated.';
-                            console.log(response);
-                            $('.account-message').fadeIn(300);
-
-                            setTimeout(function() {
-                                $('.account-message').fadeOut(700);
-                                $scope.passMessage = '';
-                            }, 1500);
-                        },
-                        function(error) {
-                            console.log(error);
-                        }
-                    );
-                } else {
-                    alert('Passwords do not match!');
-                    return false;
-                }
+                return true;
             } else {
                 alert('Passwords do not match!');
                 return false;
