@@ -31,6 +31,17 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue('payment' in user_meta and not user_meta['payment'])
 
+    def test_update_password(self):
+        response, msg = self.put_as(self.member, '/users/{0}'.format(self.member['id']), data={
+            'password': 'a_new_password'
+        }, content_type='application/json')
+
+        self.assertEquals(response.status_code, 200)
+
+        self.logout(self.member)
+
+        self.login(self.member['post_params']['email'], 'a_new_password', self.client_class())
+
     def test_payment_info(self):
         # test adds payment info
         super(TestUserAPI, self).test_payment_update()

@@ -36,7 +36,7 @@ angular.module('ua5App.sign-in')
                     //base expiration of cookies based on whether 'remember me' option was checked
                     var todayDate = new Date();
                     var expireDate = new Date();
-
+                    UsersResource.resetUser();
                     //set cookies
                     if ($scope.cookieExpireDate) {
                         expireDate.setDate(todayDate.getDate() + 365);
@@ -52,6 +52,7 @@ angular.module('ua5App.sign-in')
 
                     $http.defaults.headers.common['Authorization'] = 'Token ' + APICONSTANTS.authCookie.token; // jshint ignore:line
                     intercomFactory.ping();
+
                     $state.go('projects');
                 },
                 function(error) {

@@ -1,19 +1,15 @@
 /* global angular */
 angular.module('ua5App')
-    .factory('sceneFactory', ['$http', 'Upload', function($http, Upload) {
-        var urlBase = 'http://52.53.186.20/scene';
+    .factory('sceneFactory', ['$http', 'Upload', 'APICONSTANTS', function($http, Upload, APICONSTANTS) {
+        var urlBase = APICONSTANTS.apiHost + '/scene';
         var dataFactory = {};
 
         dataFactory.getScenes = function(projectId) {
-            return $http.get(urlBase, {
-                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
-            });
+            return $http.get(urlBase, {});
         };
 
         dataFactory.getSceneById = function(sceneId) {
-            return $http.get(urlBase + '/' + sceneId, {
-                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
-            });
+            return $http.get(urlBase + '/' + sceneId, {});
         };
 
         dataFactory.addScene = function(newScene, projectId) {
@@ -25,7 +21,7 @@ angular.module('ua5App')
                 is_panorama: false
             };
 
-            return $http.post('http://52.53.186.20/scene', data);
+            return $http.post(urlBase, data);
         };
 
         dataFactory.editScene = function(sceneId, data) {
@@ -33,9 +29,7 @@ angular.module('ua5App')
         };
 
         dataFactory.deleteScene = function(projectId, sceneId) {
-            return $http.delete(urlBase  + '/' + projectId, { // jshint ignore:line
-                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
-            });
+            return $http.delete(urlBase  + '/' + projectId, {}); // jshint ignore:line
         };
 
         return dataFactory;

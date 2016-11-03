@@ -62,9 +62,11 @@ angular.module('ua5App')
                             $scope.hideCta = false;
                         }
 
-                        $scope.month.number = $scope.user.payment.exp_month < 10 ? '0' + $scope.user.payment.exp_month.toString() : $scope.user.payment.exp_month.toString();
-                        $scope.year.number = $scope.user.payment.exp_year.toString();
-                        $scope.zip.number = $scope.user.payment.address_zip;
+                        if ($scope.user.payment) {
+                            $scope.month.number = $scope.user.payment.exp_month < 10 ? '0' + $scope.user.payment.exp_month.toString() : $scope.user.payment.exp_month.toString();
+                            $scope.year.number = $scope.user.payment.exp_year.toString();
+                            $scope.zip.number = $scope.user.payment.address_zip;
+                        }
                     }
 
                     $scope.name.name = $scope.user.name;

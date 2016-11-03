@@ -5,6 +5,19 @@
     position: relative;
 }
 
+.account-message {
+    background: $green-2;
+    border-radius: 10px;
+    color: $white;
+    display: none;
+    font-family: 'OpenSans', sans-serif;
+    left: 1%;
+    padding: 15px 35px;
+    position: absolute;
+    top: 5px;
+    width: 98%;
+}
+
 .account-account-nav {
     @extend %uppercase;
     float: left;
@@ -83,6 +96,7 @@
 
 #confirm-message {
     color: $green;
+    font-family: 'OpenSans', sans-serif;
     margin: 20px 0 0 20%;
     position: relative;
 

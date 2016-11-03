@@ -41,9 +41,11 @@ angular.module('ua5App.sign-up')
         $scope.authUser = function(user) {
             AuthResource.token().retrieve({username: user.email, password: user.password}).$promise.then(
                 function(response) {
+                    UsersResource.resetUser();
                     //set cookie token && then go to projects
                     $cookies.put(APICONSTANTS.authCookie.token, response.token);
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
+                    $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token);
 
                     $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
 

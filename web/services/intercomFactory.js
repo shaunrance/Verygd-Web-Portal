@@ -6,6 +6,7 @@ angular.module('ua5App')
 
         dataFactory.shutdown = function() {
             window.Intercom('shutdown');
+            hasStarted = false;
         };
 
         dataFactory.ping = function() {

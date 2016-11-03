@@ -14,7 +14,7 @@ angular.module('ua5App')
         $scope.zip = {};
 
         $scope.title = 'Pricing';
-        $scope.price = 25;
+        $scope.price = 29;
         $scope.buttonText = 'Charge my card ' + $scope.price + ' right now';
         $scope.input = {};
 
@@ -37,12 +37,12 @@ angular.module('ua5App')
                     $scope.isBasic = false;
                     $scope.selectedPlan = 'beta_monthly';
                     $scope.planType = 'Monthly';
-                    $scope.price = 25;
+                    $scope.price = 29;
                 } else if ($scope.currentPlan === 'beta_yearly') {
                     $scope.isBasic = false;
                     $scope.selectedPlan = 'beta_yearly';
                     $scope.planType = 'Annual';
-                    $scope.price = 240;
+                    $scope.price = 228;
                 } else {
                     $scope.monthlyChecked = true;
                     $scope.isBasic = true;
@@ -63,12 +63,12 @@ angular.module('ua5App')
 
         $scope.annualPlan = function() {
             $scope.selectedPlan = 'beta_yearly';
-            $scope.price = 240;
+            $scope.price = 228;
         };
 
         $scope.monthlyPlan = function() {
             $scope.selectedPlan = 'beta_monthly';
-            $scope.price = 25;
+            $scope.price = 29;
         };
 
         $scope.updateUser = function() {
