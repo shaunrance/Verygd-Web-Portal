@@ -32,6 +32,9 @@
             <img class="add-icon" src="assets/img/add.svg" />
             Add Scene</button>
         </nav>
+        <div class="scene-empty__mobile" ng-class="{'show': emptyScene}">
+            <button id="uploadInputMobile" ngf-select ng-model="files" ngf-multiple="true" accept="image/*" ngf-pattern="'image/*'" class="scene-empty__button">Upload Files</button>
+        </div>
         <div
             class="vg__items project__items"
             as-sortable="dragControlListeners"

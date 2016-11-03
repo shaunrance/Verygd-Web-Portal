@@ -10,6 +10,42 @@
     }
 }
 
+.projects__empty {
+    border: 2px dashed $pink;
+    color: $pink;
+    cursor: pointer;
+    display: none;
+    height: 100%;
+    left: 2.5%;
+    min-height: 500px;
+    padding: 25px;
+    position: absolute;
+    text-align: center;
+    width: 95%;
+
+    &.show {
+        display: block;
+    }
+
+    p {
+        left: 50%;
+        position: absolute;
+        top: 35%;
+        transform: translate(-50%);
+        width: 100%;
+    }
+
+    button {
+        @extend %reset-button;
+        @include align-all(absolute);
+        background-color: $btn-blue;
+        border-radius: 2px;
+        color: $white;
+        max-width: 150px;
+        padding: 10px;
+    }
+}
+
 .projects-paid-plan-cta {
     @include padding(15px 10px);
     border: 1px solid $pink;
