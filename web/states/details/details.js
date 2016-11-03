@@ -97,9 +97,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
 
         $scope.$on('toggle:switched', function($event, args) {
-            if (args === 'sceneTypeToggle') {
+            if (args === 'sceneTypeToggle.active') {
                 sceneFactory.editScene($scope.currentScene, {
-                    is_panorama: $scope.sceneTypeToggle,
+                    is_panorama: $scope.sceneTypeToggle.active,
                     title: $scope.sceneName,
                     project: $stateParams.projectId
                 }).then(function() {
