@@ -8,7 +8,7 @@ angular.module('ua5App.reset-password')
             controllerAs: 'ctrl'
         });
     }])
-    .controller('ResetPasswordCtrl', ['$scope', 'UsersResource', '$state', '$stateParams', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, UsersResource, $state, $stateParams, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
+    .controller('ResetPasswordCtrl', ['$scope', 'UsersResource', '$state', '$stateParams', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', 'ngMeta', function($scope, UsersResource, $state, $stateParams, APICONSTANTS, $cookies, ModalService, $rootScope, $http, ngMeta) {
 
         $scope.submit = function(data) {
             if (data.password !== '') {
@@ -56,5 +56,7 @@ angular.module('ua5App.reset-password')
                 return false;
             }
         }
+
+        ngMeta.setTitle('Reset Password');
     }])
 ;

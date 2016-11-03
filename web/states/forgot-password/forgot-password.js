@@ -20,7 +20,7 @@ angular.module('ua5App.forgot-password')
             }
         });
     }])
-    .controller('ForgotPasswordCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http) {
+    .controller('ForgotPasswordCtrl', ['$scope', 'user', 'AuthResource', 'UsersResource', '$state', 'APICONSTANTS', '$cookies', 'ModalService', '$rootScope', '$http', 'ngMeta', function($scope, user, AuthResource, UsersResource, $state, APICONSTANTS, $cookies, ModalService, $rootScope, $http, ngMeta) {
 
         $scope.submit = function(data) {
             if (!data && (!data.email)) {
@@ -39,5 +39,7 @@ angular.module('ua5App.forgot-password')
                 }
             );
         };
+
+        ngMeta.setTitle('Forgot Password');
     }])
 ;
