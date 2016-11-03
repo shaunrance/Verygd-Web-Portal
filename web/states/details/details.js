@@ -83,6 +83,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.$on('public:true', function() {
             $scope.projectPrivacy = false;
+
+            if ($scope.projectPrivacy === true) {
+                $scope.privateProjectsRemaining--;
+            } else {
+                $scope.privateProjectsRemaining++;
+            }
         });
 
         $scope.$on('toggle:switched', function($event, args) {
