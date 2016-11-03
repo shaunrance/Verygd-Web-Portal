@@ -33,6 +33,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', 'privateProjectsRemaining', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta, privateProjectsRemaining) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+        var isMobileChrome = window.navigator.userAgent.includes('CriOS');
+
         $rootScope.showMobileMenu = false;
         $scope.firstLoad = true;
         $scope.currentScenePanels = [];
@@ -50,7 +52,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             swatchPos: 'right'
         };
 
-        $scope.isWkWebView = BrowserFactory.isWkWebView();
+        if (BrowserFactory.isWkWebView() && !isMobileChrome) {
+            $scope.isWkWebView = true;
+        }
 
         $scope.$watch('files', function() {
             if (
@@ -83,6 +87,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.$on('public:true', function() {
             $scope.projectPrivacy = false;
+
+            if ($scope.projectPrivacy === true) {
+                $scope.privateProjectsRemaining--;
+            } else {
+                $scope.privateProjectsRemaining++;
+            }
         });
 
         $scope.$on('toggle:switched', function($event, args) {
