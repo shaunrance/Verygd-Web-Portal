@@ -8,6 +8,10 @@
     }
 }
 
+.scene-empty__mobile {
+    display: none;
+}
+
 .scene-nav {
     @extend %uppercase;
 }
@@ -428,6 +432,38 @@
 }
 
 @include media($tablet) {
+    .scene-empty__mobile {
+        border: 5px dashed $pink;
+        display: none;
+        left: 2.5%;
+        min-height: 375px;
+        position: absolute;
+        width: 95%;
+
+        &.show {
+            display: block;
+        }
+    }
+
+    .scene-empty__header {
+        color: $pink;
+        font-size: 22px;
+        left: 50%;
+        position: absolute;
+        text-align: center;
+        top: 30%;
+        transform: translate(-50%);
+    }
+
+    .scene-empty__button {
+        @include align-all(absolute);
+        background-color: $btn-blue;
+        border: none;
+        border-radius: 2px;
+        color: $white;
+        height: 40px;
+        width: 160px;
+    }
 
     .project-details {
         @include display(block);
@@ -435,6 +471,10 @@
 
     .project__items {
         @include order(1);
+    }
+
+    .scene-add {
+        display: none;
     }
 
     .scene-nav {
