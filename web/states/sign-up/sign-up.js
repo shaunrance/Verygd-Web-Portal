@@ -41,6 +41,7 @@ angular.module('ua5App.sign-up')
         $scope.authUser = function(user) {
             AuthResource.token().retrieve({username: user.email, password: user.password}).$promise.then(
                 function(response) {
+                    UsersResource.resetUser();
                     //set cookie token && then go to projects
                     $cookies.put(APICONSTANTS.authCookie.token, response.token);
                     $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);

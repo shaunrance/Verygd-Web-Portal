@@ -8,16 +8,13 @@ angular.module('ua5App')
 
         dataFactory = {
             get: function() {
-                if (!initialized) {
-                    initialized = true;
-                    $resource(APICONSTANTS.apiHost + '/users/:id', {id:'@userId'},
-                        {
-                            retrieve: {method: 'GET', isArray: true}
-                        }
-                    ).retrieve(function(user) {
-                        d.resolve(user);
-                    });
-                }
+                $resource(APICONSTANTS.apiHost + '/users/:id', {id:'@userId'},
+                    {
+                        retrieve: {method: 'GET', isArray: true}
+                    }
+                ).retrieve(function(user) {
+                    d.resolve(user);
+                });
                 return d.promise;
             },
             resetUser: function() {
