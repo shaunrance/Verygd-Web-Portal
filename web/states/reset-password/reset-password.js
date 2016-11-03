@@ -23,6 +23,7 @@ angular.module('ua5App.reset-password')
                         $scope.resetMessage = response.msg + ' Use the link below to log in.';
                         $scope.model.password = '';
                         $scope.model.confirm = '';
+                        $scope.passMessage = '';
                     }, function(err) {
                         $scope.resetMessage = err.data.msg;
                     });
