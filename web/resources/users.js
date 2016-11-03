@@ -59,6 +59,13 @@ angular.module('ua5App')
                     }
                 );
             },
+            confirmPass: function() {
+                return $resource(APICONSTANTS.apiHost + '/reset_password/confirm', {id: '@id', t: '@token'},
+                    {
+                        save: {method: 'POST', params: {id: '@id', t: '@token'}}
+                    }
+                );
+            },
             signup: function() {
                 return $resource(APICONSTANTS.apiHost + '/users/signup', {},
                     {
