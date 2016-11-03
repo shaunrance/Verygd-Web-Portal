@@ -20,10 +20,7 @@ angular.module('ua5App.reset-password')
                         new_password2: data.confirm
                     };
                     UsersResource.confirmPass().save(passObj).$promise.then(function(response) {
-                        $scope.resetMessage = response.msg + ' Use the link below to log in.';
-                        $scope.model.password = '';
-                        $scope.model.confirm = '';
-                        $scope.passMessage = '';
+                        $state.go('sign-in');
                     }, function(err) {
                         $scope.resetMessage = err.data.msg;
                     });
