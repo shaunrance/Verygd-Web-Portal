@@ -489,6 +489,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.firstLoad = true;
         $scope.hasTouch = true;
         $scope.projectId = $stateParams.projectId;
+        $scope.sceneTypeToggle = {};
 
         $scope.changeScene = function(sceneId) {
             $scope.currentScene = sceneId;
