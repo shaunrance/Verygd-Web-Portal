@@ -27,6 +27,12 @@
     @include justify-content(space-between);
 }
 
+.logo-link {
+    left: 30px;
+    position: absolute;
+    top: 40px;
+}
+
 .logo {
     width: $logo-width;
 }
@@ -44,7 +50,9 @@
 
 .header__user-container {
     display: block;
-    position: relative;
+    position: absolute;
+    right: 40px;
+    top: 35px;
 }
 
 .header__notification-container {
@@ -193,7 +201,7 @@
     @extend %h2;
     @extend %uppercase;
     display: inline-block;
-    margin-top: 50px;
+    margin-top: 90px;
 
     + .breadcrumb {
         margin-left: 5px;
@@ -299,6 +307,12 @@
         height: $header-height-tablet;
         margin-left: -($logo-width / 2);
         padding: (0 $site-gutter 0 0);
+    }
+
+    .logo-link {
+        left: 50%;
+        margin-left: calc(135 / 2 * -1px);
+        top: 30px;
     }
 
     .header__user-container {

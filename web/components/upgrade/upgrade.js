@@ -5,7 +5,8 @@ angular.module('ua5App')
             restrict: 'A',
             templateUrl: 'components/upgrade/upgrade.html',
             scope: {
-                useSimple: '@'
+                useSimple: '@',
+                show: '='
             },
             link: function($scope, element, attrs) {
                 var ctaCookie = $cookies.get(APICONSTANTS.authCookie.cta);
@@ -17,10 +18,12 @@ angular.module('ua5App')
                 $scope.cvc = {};
                 $scope.zip = {};
 
-                UsersResource.get().then(function(user) {
-                    $scope.user = user[0];
-                    getUser();
-                });
+                if ($scope.show) {
+                    UsersResource.get().then(function(user) {
+                        $scope.user = user[0];
+                        getUser();
+                    });
+                }
 
                 $scope.closeCta = function() {
                     $scope.hideCta = true;

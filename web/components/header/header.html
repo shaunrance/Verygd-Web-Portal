@@ -1,6 +1,13 @@
 <header class="header">
     <div class="header__container">
-        <div class="header__meta">
+        <a ng-if="!public" class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
+            <img class="logo" src="assets/img/vg-logo-new-header.svg">
+        </a>
+        <a ng-if="public" class="logo-link" href="/" data-ui-sref-opts="{reload: true}">
+            <img class="logo" src="assets/img/vg-logo-new-header.svg">
+        </a>
+
+        <div class="header__meta" ng-if="!public">
             <button class="menu-button" ng-hide="public" ng-click="toggleMenuMobile()">
                 <img class="menu-icon" src="assets/img/hamburger.svg" />
             </button>
@@ -44,12 +51,6 @@
                     </li>
                 </ul>
             </div>
-            <a ng-if="!public" class="logo-link" ui-sref="projects" data-ui-sref-opts="{reload: true}">
-                <img class="logo" src="assets/img/vg-logo-new-header.svg">
-            </a>
-            <a ng-if="public" class="logo-link" href="/" data-ui-sref-opts="{reload: true}">
-                <img class="logo" src="assets/img/vg-logo-new-header.svg">
-            </a>
 
             <div class="header__user-container" ng-hide="public">
                 <div class="header__notification-container" ng-click="toggleNotification()">
@@ -110,7 +111,7 @@
                 </div>
             </div>
         </div>
-        <span ng-if="!basic">
+        <span ng-if="!public">
             <span
                 class="breadcrumb">
                 <a
@@ -126,6 +127,6 @@
                 <div class="breadcrumb--share" ng-click="openShare()"></div>
             </span>
         </span>
-        <div add-menu ng-hide="public" class="add-menu--controls"></div>
+        <div add-menu ng-if="!public" class="add-menu--controls"></div>
     </div>
 </header>

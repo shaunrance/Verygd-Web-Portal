@@ -47,16 +47,18 @@ angular.module('ua5App')
                     });
                 };
 
-                UsersResource.get().then(function(response) {
-                    $scope.user = response[0];
-                    if ($scope.user.payment) {
-                        if ($scope.user.payment.plan_name === 'basic') {
-                            $scope.billingMenuName = 'Upgrade Plan';
-                        } else {
-                            $scope.billingMenuName = 'Billing';
+                if (!$scope.public) { //jshint ignore:line
+                    UsersResource.get().then(function(response) {
+                        $scope.user = response[0];
+                        if ($scope.user.payment) {
+                            if ($scope.user.payment.plan_name === 'basic') {
+                                $scope.billingMenuName = 'Upgrade Plan';
+                            } else {
+                                $scope.billingMenuName = 'Billing';
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 $scope.goLink = function() {
                     $state.go($scope.headerLink, {}, {reload: true});
@@ -64,7 +66,9 @@ angular.module('ua5App')
 
                 $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
                     $rootScope.previousState = from;
-                    getProjectName();
+                    if (!$scope.public) { //jshint ignore:line
+                        getProjectName();
+                    }
                 });
 
                 function getProjectName() {
@@ -117,7 +121,9 @@ angular.module('ua5App')
                     document.onkeydown = null;
                 }
 
-                getProjectName();
+                if (!$scope.public) { //jshint ignore:line
+                    getProjectName();
+                }
 
                 $scope.logout = function() {
                     //remove cookies
