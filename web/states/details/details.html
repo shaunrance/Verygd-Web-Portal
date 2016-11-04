@@ -118,14 +118,14 @@
                 <div class="scene-preview__privacy">
                     <div class="toggle">
                         <toggle-switch
-                            ng-model="projectPrivacy"
+                            ng-model="projectPrivacy.active"
                             color="true"
                             on-label="Public"
-                            disabled="{{privateProjectsRemaining < 1 && !projectPrivacy}}"
+                            disabled="{{privateProjectsRemaining.number < 1 && !projectPrivacy.active}}"
                             off-label="Private">
                         </toggle-switch>
 
-                        <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining < 1 && !projectPrivacy">
+                        <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining.number < 1 && !projectPrivacy.active">
                             <div
                                 upgrade
                                 use-simple="true"></div>
@@ -216,14 +216,13 @@
             <div class="project-details__mobile-private">
                 <div class="toggle">
                     <toggle-switch
-                        ng-model="projectPrivacy"
+                        ng-model="projectPrivacy.active"
                         color="true"
                         on-label="Public"
-                        disabled="{{privateProjectsRemaining < 1 && !projectPrivacy}}"
+                        disabled="{{privateProjectsRemaining.number < 1 && !projectPrivacy.active}}"
                         off-label="Private">
                     </toggle-switch>
-
-                    <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining < 1 && !projectPrivacy">
+                    <div class="scene-preview__privacy__cta" ng-if="privateProjectsRemaining.number < 1 && !projectPrivacy.active">
                         <div
                             upgrade
                             use-simple="true"></div>

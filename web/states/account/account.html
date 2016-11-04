@@ -83,7 +83,7 @@
                     ng-disabled="loginForm.$invalid">
                     Update
                 </button>
-                <div class="account-message">{{accountMessage}}</div>
+                <div class="account-message" ng-class="{'error': accountMessageError}">{{accountMessage}}</div>
             </form>
         </div>
     </div>
