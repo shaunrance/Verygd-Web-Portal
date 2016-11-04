@@ -16,6 +16,10 @@
     position: absolute;
     top: 5px;
     width: 98%;
+
+    &.error {
+        background: $red;
+    }
 }
 
 .account-account-nav {

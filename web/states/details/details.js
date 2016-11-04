@@ -45,8 +45,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.log = '';
         $scope.projectId = $stateParams.projectId;
         $scope.projectName = '';
-        $scope.privateProjectsRemaining = privateProjectsRemaining;
+        $scope.privateProjectsRemaining = {};
+        $scope.privateProjectsRemaining.number = privateProjectsRemaining;
         $scope.sceneTypeToggle = {};
+        $scope.projectPrivacy = {};
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -87,12 +89,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         });
 
         $scope.$on('public:true', function() {
-            $scope.projectPrivacy = false;
+            $scope.projectPrivacy.active = false;
 
             if ($scope.projectPrivacy === true) {
-                $scope.privateProjectsRemaining--;
+                $scope.privateProjectsRemaining.number--;
             } else {
-                $scope.privateProjectsRemaining++;
+                $scope.privateProjectsRemaining.number++;
             }
         });
 
@@ -105,13 +107,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 }).then(function() {
                     getSceneInfo($scope.currentScene);
                 });
-            } else if (args === 'projectPrivacy') {
-                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy}); //jshint ignore:line
+            } else if (args === 'projectPrivacy.active') {
+                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy.active}); //jshint ignore:line
 
-                if ($scope.projectPrivacy === true) {
-                    $scope.privateProjectsRemaining--;
+                if ($scope.projectPrivacy.active === true) {
+                    $scope.privateProjectsRemaining.number--;
                 } else {
-                    $scope.privateProjectsRemaining++;
+                    $scope.privateProjectsRemaining.number++;
                 }
             }
         });
@@ -281,7 +283,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             projectFactory.getProjectById($stateParams.projectId)
                 .then(function(response) {
                     $scope.project = response.data;
-                    $scope.projectPrivacy = !$scope.project.public; //jshint ignore:line
+                    $scope.projectPrivacy.active = !$scope.project.public; //jshint ignore:line
 
                     if (response.data.content.length > 0) {
                         $scope.scenes = response.data.content;

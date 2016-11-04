@@ -77,7 +77,6 @@ angular.module('ua5App.account', ['ngFileUpload'])
 
             if ($scope.email.email !== '' && $scope.email.email !== $scope.user.email && $scope.name.name !== '' && $scope.name.name !== $scope.user.name && $scope.password.password !== '') {
                 if (checkValidPassword()) {
-                    console.log('hey');
                     userObj = {
                         id: $scope.userId,
                         name: $scope.name.name,
@@ -123,17 +122,22 @@ angular.module('ua5App.account', ['ngFileUpload'])
             UsersResource.update().save(userObj).$promise.then(
                 function(response) {
                     $scope.accountMessage = 'Account Updated.';
+                    $scope.accountMessageError = false;
                     $scope.name.name = $scope.name.name;
                     $scope.email.email = $scope.email.email;
                     $scope.title = $scope.name.name;
                     $('.account-message').fadeIn(300);
-                    console.log(response);
                     setTimeout(function() {
                         $('.account-message').fadeOut(700);
                     }, 1500);
                 },
                 function(error) {
-                    console.log(error);
+                    $scope.accountMessageError = true;
+                    $scope.accountMessage = 'Update failed. Please check all fields and try again.';
+                    $('.account-message').fadeIn(300);
+                    setTimeout(function() {
+                        $('.account-message').fadeOut(700);
+                    }, 2000);
                 }
             );
         }
