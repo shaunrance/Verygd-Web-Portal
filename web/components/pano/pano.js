@@ -198,7 +198,7 @@ angular.module('ua5App')
                                 scene.scene().add(plane);
                             } else {
                                 if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
-                                    plane.name = 'sceneLink';
+                                    plane.name = 'sceneLinkObj';
                                     plane.sceneLink = data.related_tag;
                                 }
                                 scene.addItem(plane);
@@ -292,6 +292,10 @@ angular.module('ua5App')
                                 panoLink = cylinder;
                                 panoLink.sceneLink = data.related_tag;
                                 scene.addItem(cylinder);
+                                if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
+                                    panoLink.name = 'sceneLinkObj';
+                                    panoLink.sceneLink = data.related_tag;
+                                }
                             }
 
                         }
@@ -429,9 +433,9 @@ angular.module('ua5App')
                 }
 
                 function clickHandler(item) {
-                    var activeObject = scene.activeObject();
 
-                    if (panelCount === 1 && (typeof panoLink === 'object') && panoLink.sceneLink) {
+                    var activeObject = scene.activeObject();
+                    if ($scope.isPanorama && (typeof panoLink === 'object') && panoLink.name === 'sceneLinkObj' && panoLink.sceneLink) {
                         TweenMax.to(panoLink.material.materials[1], 0.2, {opacity: 0.2});
                         TweenMax.to(panoLink.material.materials[1], 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                             $rootScope.$broadcast('scene:change', {link: panoLink.sceneLink});
@@ -440,7 +444,7 @@ angular.module('ua5App')
                     }
 
                     if (typeof scene.activeObject() !== 'undefined') {
-                        if (scene.activeObject().name === 'sceneLink') {
+                        if (scene.activeObject().name === 'sceneLink' || scene.activeObject().name === 'sceneLinkObj') {
                             // TODO: hook this up with real data
                             // currently hardcoded to fire a 'scene:change' event
                             TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
