@@ -213,18 +213,19 @@ angular.module('ua5App')
 
                 function makePanorama(data) {
                     var cylinder;
+                    var cylinderBorder;
                     var geometry;
                     var hitAreaGeo;
                     var hitAreaMat;
                     var hitAreaMesh;
                     var material;
                     var textureLoader = new THREE.TextureLoader();
-                    var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide});
+                    var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide, transparent: true, opacity: 0});
+                    var materialBorder = new THREE.MeshBasicMaterial({color: 0x81e4ee});
                     var materialsArray = [];
-                    var border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60' + border,
+                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60',
                         function(texture) {
                             var linkMaterial;
                             var height;
@@ -269,6 +270,9 @@ angular.module('ua5App')
                             geometry.elementsNeedUpdate = true; // update faces
 
                             cylinder = new THREE.Mesh(geometry, materialGroup);
+                            cylinderBorder = new THREE.Mesh(geometry, materialBorder);
+                            cylinderBorder.scale.set(-1.1, 1.11, 1.1);
+                            cylinderBorder.position.y = -1;
                             cylinder.index = 0;
 
                             //invert the object, to fix the texture
@@ -296,6 +300,10 @@ angular.module('ua5App')
                                 panoLink = cylinder;
                                 panoLink.sceneLink = data.related_tag;
                                 scene.addItem(cylinder);
+                                if (data.related_tag) {
+                                    scene.scene().add(cylinderBorder);
+                                }
+
                                 if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
                                     panoLink.name = 'sceneLinkObj';
                                     panoLink.sceneLink = data.related_tag;
