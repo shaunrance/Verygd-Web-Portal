@@ -147,13 +147,16 @@ angular.module('ua5App')
                     var material;
                     var plane;
                     var textureLoader = new THREE.TextureLoader();
+                    var border;
 
                     if (!data) {
                         return;
                     }
 
+                    border = (!data.related_tag) ? '' : '&border=2,81e4ee';
+
                     textureLoader.load(
-                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=' + backgroundHex,
+                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=' + backgroundHex + border,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
                             var linkMaterial;
@@ -218,9 +221,10 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
                     var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide});
                     var materialsArray = [];
+                    var border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60',
+                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60' + border,
                         function(texture) {
                             var linkMaterial;
                             var height;
