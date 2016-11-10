@@ -247,8 +247,8 @@
     }
 
     .modal--payment-options-inner {
-        display: flex;
-        flex-wrap: row wrap;
+        @include display(flex);
+        @include flex-wrap(row wrap);
     }
 
     .modal-overlay-options-billing {
@@ -298,9 +298,9 @@
     }
 
     .modal--payment-pricing {
-        align-items: stretch;
-        display: flex;
-        flex-flow: row wrap;
+        @include display(flex);
+        @include align-items(stretch);
+        @include flex-flow(row wrap);
         margin: 0 auto;
         max-width: 600px;
         position: relative;
@@ -600,7 +600,7 @@
         }
 
         .modal--payment-module {
-            flex: 1 100%;
+            @include flex(1 100%);
             order: 2;
 
             &.featured {
