@@ -5,7 +5,7 @@
     <h1 class="projects-message">
         {{projectsMessage}}
     </h1>
-    <div class="project-details" ng-class="{'empty': emptyScene}">
+    <div class="project-details" ng-class="{'empty': emptyScene, 'slide-menu-open':showMobileMenu}">
         <nav class="scene-nav">
             <div ng-if="!publicView" class="scene-nav--selector"><a href="/projects">{{projectName}}</a> › {{sceneName}}</div>
             <div ng-if="publicView" class="scene-nav--selector">{{projectName}} › {{sceneName}}</div>
