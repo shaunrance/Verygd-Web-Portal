@@ -33,7 +33,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
     }])
     .controller('detailsCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', 'ngMeta', 'privateProjectsRemaining', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies, ngMeta, privateProjectsRemaining) {
         var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-        var isMobileChrome = window.navigator.userAgent.includes('CriOS');
+        var isMobileChrome = window.navigator.userAgent.indexOf('CriOS') > -1;
 
         $rootScope.showMobileMenu = false;
         $scope.firstLoad = true;
