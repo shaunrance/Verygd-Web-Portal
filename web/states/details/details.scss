@@ -1,3 +1,12 @@
+.project-details__container {
+    @include transition(all $transition-speed ease);
+    position: relative;
+
+    &.slide-menu-open {
+        transform: translateX(75%);
+    }
+}
+
 .project-details {
     @include justify-content(space-between);
     @include display(flex);
@@ -174,6 +183,7 @@
 
 .scene-nav,
 .scene-preview {
+    flex: 1;
     max-width: 240px;
     width: 100%;
 }
@@ -494,7 +504,7 @@
         @include margin(0 20px 0 0);
         color: $black;
         display: block;
-        font-family: 'OpenSans', sans-serif;
+        font-family: 'Open Sans', sans-serif;
         font-size: 20px;
         margin-bottom: 50px;
         text-decoration: none;
@@ -609,13 +619,13 @@
     }
 
     .project-details__footer {
-        @include transition(left, $transition-speed);
+        @include transition(transform $transition-speed ease);
         background-color: $grey;
         box-shadow: 4px 2px 12px rgba($black, 0.5);
         left: 0;
 
         &.slide-menu-open {
-            left: 60%;
+            transform: translateX(60%);
         }
 
         &::before {

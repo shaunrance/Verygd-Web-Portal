@@ -122,8 +122,18 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             if (!$rootScope.showMobileMenu) {
                 $rootScope.showMobileMenu = true;
                 disableScroll();
+                $('.project-details__container').css('max-width', $('.project-details__container').width());
+
+                $('.project-details__container').css('position', 'fixed');
+                //$('.upgrade-container').css('position', 'fixed');
             } else {
                 $rootScope.showMobileMenu = false;
+                setTimeout(function() {
+                    $('.project-details__container').css('position', 'relative');
+                    $('.project-details__container').css('max-width', 'auto');
+
+                    //$('.upgrade-container').css('position', 'relative');
+                }, 150);
                 enableScroll();
             }
         };
