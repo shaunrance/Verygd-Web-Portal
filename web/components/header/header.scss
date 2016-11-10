@@ -153,6 +153,7 @@
         &::after {
             border-bottom: 1px solid $grey-dark;
             content: '';
+            display: block;
             left: 3%;
             padding-top: 15px;
             position: absolute;
