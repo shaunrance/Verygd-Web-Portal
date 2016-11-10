@@ -183,7 +183,7 @@
 
 .scene-nav,
 .scene-preview {
-    flex: 1;
+    @include flex(1);
     max-width: 240px;
     width: 100%;
 }
