@@ -1,16 +1,19 @@
+.project-details__container {
+    @include transition(all $transition-speed ease);
+    position: relative;
+
+    &.slide-menu-open {
+        transform: translateX(75%);
+    }
+}
 
 .project-details {
     @include justify-content(space-between);
     @include display(flex);
     @include flex-wrap(wrap);
-    @include transition(transform $transition-speed ease);
 
     &.empty {
         @include flex-wrap(nowrap);
-    }
-
-    &.slide-menu-open {
-        transform: translateX(74%);
     }
 }
 
@@ -616,7 +619,7 @@
     }
 
     .project-details__footer {
-        @include transition(transform, $transition-speed);
+        @include transition(transform $transition-speed ease);
         background-color: $grey;
         box-shadow: 4px 2px 12px rgba($black, 0.5);
         left: 0;

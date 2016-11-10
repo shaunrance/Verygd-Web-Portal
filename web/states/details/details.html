@@ -1,11 +1,11 @@
-<main class="project-details__container" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+<main class="project-details__container" ng-class="{'slide-menu-open': showMobileMenu}" ngf-drop ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
     <div
         upgrade>
     </div>
     <h1 class="projects-message">
         {{projectsMessage}}
     </h1>
-    <div class="project-details" ng-class="{'empty': emptyScene, 'slide-menu-open':showMobileMenu}">
+    <div class="project-details" ng-class="{'empty': emptyScene}">
         <nav class="scene-nav">
             <div ng-if="!publicView" class="scene-nav--selector"><a href="/projects">{{projectName}}</a> › {{sceneName}}</div>
             <div ng-if="publicView" class="scene-nav--selector">{{projectName}} › {{sceneName}}</div>
@@ -141,46 +141,46 @@
             </div>
         </div>
     </div>
-
-    <footer class="project-details__footer" ng-class="{'slide-menu-open':showMobileMenu}">
-        <div ng-if="!publicView" class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div ng-if="!publicView">
-            <button
-                ng-hide="emptyScene"
-                ng-if="!isWkWebView"
-                ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
-                class="scene-preview__button">
-                <span class="scene-preview__button__icon"></span>
-            </button>
-            <button
-                ng-if="isWkWebView"
-                ng-click="launchSceneiOS()"
-                class="scene-preview__button">
-                <span class="scene-preview__button__icon"></span>
-            </button>
-        </div>
-        <div ng-if="publicView">
-            <button
-                ng-hide="emptyScene"
-                ng-if="!isWkWebView"
-                ui-sref="v({version: 'mobile', scene: currentScene, projectId: projectId, panels: panels})"
-                class="scene-preview__button">
-                <span class="scene-preview__button__icon"></span>
-            </button>
-            <button
-                ng-if="isWkWebView"
-                ng-click="launchSceneiOS()"
-                class="scene-preview__button">
-                <span class="scene-preview__button__icon"></span>
-            </button>
-        </div>
-        <div ng-if="!publicView" class="project-details__mobile-share-btn" ng-click="openShare()"></div>
-    </footer>
 </main>
+
+<footer class="project-details__footer" ng-class="{'slide-menu-open': showMobileMenu}">
+    <div ng-if="!publicView" class="project-details__mobile-menu-btn" ng-click="openMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div ng-if="!publicView">
+        <button
+            ng-hide="emptyScene"
+            ng-if="!isWkWebView"
+            ui-sref="viewer({version: 'mobile', scene: currentScene, projectId: projectId})"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+        <button
+            ng-if="isWkWebView"
+            ng-click="launchSceneiOS()"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+    </div>
+    <div ng-if="publicView">
+        <button
+            ng-hide="emptyScene"
+            ng-if="!isWkWebView"
+            ui-sref="v({version: 'mobile', scene: currentScene, projectId: projectId, panels: panels})"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+        <button
+            ng-if="isWkWebView"
+            ng-click="launchSceneiOS()"
+            class="scene-preview__button">
+            <span class="scene-preview__button__icon"></span>
+        </button>
+    </div>
+    <div ng-if="!publicView" class="project-details__mobile-share-btn" ng-click="openShare()"></div>
+</footer>
 
 <div ng-if="!publicView" class="project-details__slide-menu" ng-class="{'slide-menu-open':showMobileMenu}">
     <div class="project-details__slide-menu-inner">

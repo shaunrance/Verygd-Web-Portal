@@ -104,6 +104,7 @@
     @include flex-wrap(wrap);
     @include flex(1);
     counter-reset: sceneImage;
+    position: relative;
     width: 100%;
 }
 
