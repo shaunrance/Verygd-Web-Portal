@@ -431,10 +431,10 @@
 .scene-preview__button__icon {
     @include position(absolute, 50% 50%);
     @include size(22px 28px);
+    @include transform(translateX(-35%) translateY(-50%));
     background: url('/assets/img/icon-play.svg');
     background-repeat: no-repeat;
     background-size: 100% auto;
-    transform: translate(-35%, -50%);
 }
 
 .project-details__slide-menu {
