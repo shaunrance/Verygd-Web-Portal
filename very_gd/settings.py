@@ -59,6 +59,8 @@ MEDIA_PORTAL_SETTINGS = {
     'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
+SCENE_SIZE_LIMIT_BYTES = (1000 ** 2) * 10
+
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
 AWS_REGION = 'us-west-1'

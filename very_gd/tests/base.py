@@ -38,10 +38,10 @@ class TestAPIBase(Base):
     def add_panel(self, member, scene_id, title=text(alphabet=alphabet, min_size=9).example(),
                   desc=text(alphabet=alphabet, min_size=28, max_size=128).example(), name='test.png',
                   related_tag=text(alphabet=alphabet, min_size=5, max_size=10).example(),
-                  order=integers(min_value=0, max_value=10).example(),
+                  order=integers(min_value=0, max_value=10).example(), test_image=None,
                   **kwargs):
 
-        test_image = self.strategies.get_test_image(name)
+        test_image = test_image or self.strategies.get_test_image(name)
 
         data = {
             'scene': scene_id,

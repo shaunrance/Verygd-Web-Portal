@@ -17,6 +17,8 @@ class Scene(models.Model):
     is_panorama = models.BooleanField(default=False, null=False, blank=True, verbose_name='is-panorama')
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
 
+    size = models.BigIntegerField(default=0, null=False, blank=False)
+
     @property
     def owner(self):
         return self.project.owner

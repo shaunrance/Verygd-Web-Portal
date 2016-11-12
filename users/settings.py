@@ -16,7 +16,7 @@ class UserSettings(models.Model):
         class Meta:
             verbose_name_plural = 'user settings'
 
-        site = models.OneToOneField(Site, related_name='user_settings', default=1, on_delete=models.SET_NULL)
+        site = models.OneToOneField(Site, related_name='user_settings', default=1, null=True, on_delete=models.SET_NULL)
         signup_email = models.OneToOneField(UserSignUpEmail, related_name='user_settings', null=False, blank=False)
         reset_password_email = models.OneToOneField(UserPasswordResetEmail, related_name='user_settings', null=False,
                                                     blank=False)

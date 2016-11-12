@@ -1,5 +1,7 @@
 from very_gd.tests.base import TestAPIBase
 from project.tests import TestProject
+from django.conf import settings
+from django.test import override_settings
 
 
 class TestScene(TestAPIBase):
@@ -22,6 +24,40 @@ class TestScene(TestAPIBase):
 
     def test_add_scene(self):
         pass
+
+    @override_settings(SCENE_SIZE_LIMIT_BYTES=None)
+    def test_scene_limits(self):
+        test_image = self.strategies.get_test_image('test.png')
+        settings.SCENE_SIZE_LIMIT_BYTES = test_image.size * 2 - 1
+
+        response, msg = self.add_panel(self.member, self.scene_id, test_image=test_image)
+
+        self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(
+            response.status_code,
+            msg
+        ))
+
+        response, scene_meta = self.get_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 scene_meta))
+
+        self.assertEquals(scene_meta['size'], test_image.size)
+
+        test_image = self.strategies.get_test_image('test.png')
+
+        response, msg = self.add_panel(self.member, self.scene_id, test_image=test_image)
+
+        # reached scene size limit
+        self.assertEquals(response.status_code, 400, 'expected 400 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 msg))
+
+        response, scene_meta = self.get_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 scene_meta))
+
+        self.assertEquals(scene_meta['size'], test_image.size)
 
     def test_images(self):
         response, msg = self.add_panel(
