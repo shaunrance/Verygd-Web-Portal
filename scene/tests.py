@@ -59,6 +59,21 @@ class TestScene(TestAPIBase):
 
         self.assertEquals(scene_meta['size'], test_image.size)
 
+        # deleting an image should decrement scene size
+        response = self.delete_panel(self.member, scene_meta['content'][0]['id'])
+
+        self.assertEquals(response.status_code, 204, 'expected 204 got {0} instead.'.format(response.status_code))
+
+        self.assertEquals(self.get_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id))[1]['size'], 0)
+
+        # ..and allow a new image in its place
+        response, msg = self.add_panel(self.member, self.scene_id)
+
+        self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(
+            response.status_code,
+            msg
+        ))
+
     def test_images(self):
         response, msg = self.add_panel(
             self.member,

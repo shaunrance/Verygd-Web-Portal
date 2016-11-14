@@ -7,6 +7,10 @@ from django.utils.encoding import python_2_unicode_compatible
 from project.models import Project
 
 
+class SceneMaxSizeReachedException(Exception):
+    pass
+
+
 @python_2_unicode_compatible
 class Scene(models.Model):
     project = models.ForeignKey(Project, blank=False, null=False, related_name='scenes')

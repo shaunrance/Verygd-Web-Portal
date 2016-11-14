@@ -57,3 +57,8 @@ class TestAPIBase(Base):
         response, msg = self.post_as(member, '/panel', data=data)
 
         return response, msg
+
+    def delete_panel(self, member, panel_id):
+        response = self.delete_as(member, '/panel/{0}'.format(panel_id))
+
+        return response
