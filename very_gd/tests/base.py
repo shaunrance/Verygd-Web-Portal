@@ -13,6 +13,7 @@ class TestAPIBase(Base):
         self.scene_endpoint = 'scene'
         self.project_endpoint = 'project'
         self.panel_endpoint = 'panel'
+        self.user_endpoint = 'users'
 
     def add_new_project(self, member, *args, **kwargs):
         data = self.strategies.get_create_new_project_strategy().example()

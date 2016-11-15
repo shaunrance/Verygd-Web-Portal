@@ -22,6 +22,7 @@ class UserSettings(models.Model):
                                                     blank=False)
 
         updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+        file_size_quota_bytes = models.BigIntegerField(default=(1000 ** 2) * 10, blank=True, null=True)
 
         def __unicode__(self):
             return 'User e-mail settings for {0}'.format(str(self.site))

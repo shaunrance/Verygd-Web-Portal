@@ -1,9 +1,7 @@
 from media_portal.album.content.base.models import AlbumImage, AlbumVideo
 
 from django.db import models
-from django.conf import settings
-
-from scene.models import SceneMaxSizeReachedException
+from users.models import Member
 
 
 class Panel(models.Model):
@@ -18,13 +16,13 @@ class Panel(models.Model):
         return self.scene.media_group
 
     def reached_scene_size_limit(self):
-        if self.scene.size + self.content.file.size > settings.SCENE_SIZE_LIMIT_BYTES:
-            raise SceneMaxSizeReachedException('file too large.  max scene size reached ({0})'.format(
-                settings.SCENE_SIZE_LIMIT_BYTES))
+        if self.owner.total_content_bytes + self.content.file.size > self.owner.file_size_quota_bytes:
+            raise Exception('file too large.  max scene size reached ({0})'.format(
+                self.owner.file_size_quota_bytes.SCENE_SIZE_LIMIT_BYTES))
 
     def increment_scene_size(self):
-        self.scene.size += self.content.size
-        self.scene.save()
+        self.owner.total_content_bytes += self.content.size
+        self.owner.save()
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -36,16 +34,17 @@ class Panel(models.Model):
 
     def delete(self, using=None, keep_parents=False):
         content_size_bytes = self.content.size
-        scene = self.scene
+        owner = self.owner
 
         super(Panel, self).delete(using, keep_parents)
 
-        scene.size -= content_size_bytes
-        scene.save()
+        owner.total_content_bytes -= content_size_bytes
+        owner.save()
 
 
 class PanelImage(AlbumImage, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='images')
+    owner = models.ForeignKey(Member, related_name='images')
 
     @property
     def serializer(self):
@@ -55,3 +54,4 @@ class PanelImage(AlbumImage, Panel):
 
 class PanelVideo(AlbumVideo, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='videos')
+    owner = models.ForeignKey(Member, related_name='videos')

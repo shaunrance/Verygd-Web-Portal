@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
+from apps import PrepClassesAppConfigMixin
 
-class UsersAppConfig(AppConfig):
+
+class UsersAppConfig(PrepClassesAppConfigMixin, AppConfig):
     name = 'users'
-    label = 'very_gd_users'

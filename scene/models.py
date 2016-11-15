@@ -7,10 +7,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from project.models import Project
 
 
-class SceneMaxSizeReachedException(Exception):
-    pass
-
-
 @python_2_unicode_compatible
 class Scene(models.Model):
     project = models.ForeignKey(Project, blank=False, null=False, related_name='scenes')
@@ -20,8 +16,6 @@ class Scene(models.Model):
 
     is_panorama = models.BooleanField(default=False, null=False, blank=True, verbose_name='is-panorama')
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
-
-    size = models.BigIntegerField(default=0, null=False, blank=False)
 
     @property
     def owner(self):

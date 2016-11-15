@@ -1,5 +1,5 @@
 from media_portal.users.managers import MemberManager
-from media_portal.users.auth.group import MediaGroup
+from users.auth.group import MediaGroup
 
 from media_portal.invite.models import Invite
 

@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
+import media_portal.users.auth.group
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -12,9 +14,28 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('sites', '0002_alter_domain_unique'),
+        ('policy', '0001_initial'),
+        ('payment', '0001_initial'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Member',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('photo', models.ImageField(blank=True, null=True, upload_to='', verbose_name='profile photo')),
+                ('updated_at', models.DateField(auto_now=True, null=True)),
+                ('accepted_policies', models.ManyToManyField(to='policy.Policy')),
+                ('payment', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='owner', to='payment.Payment')),
+                (
+                    'user',
+                    models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
         migrations.CreateModel(
             name='UserPasswordResetEmail',
             fields=[
@@ -34,7 +55,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('reset_password_email', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_settings', to='very_gd_users.UserPasswordResetEmail')),
+                ('reset_password_email', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_settings', to='users.UserPasswordResetEmail')),
             ],
             options={
                 'verbose_name_plural': 'user settings',
@@ -57,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='usersettings',
             name='signup_email',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_settings', to='very_gd_users.UserSignUpEmail'),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='user_settings', to='users.UserSignUpEmail'),
         ),
         migrations.AddField(
             model_name='usersettings',

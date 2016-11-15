@@ -2,7 +2,6 @@ from rest_framework import serializers
 from media_portal.album.content.serializers.base import ContentSerializer
 from panel.models import PanelImage
 from PIL import Image
-from scene.models import SceneMaxSizeReachedException
 
 
 class PanelSerializer(ContentSerializer):
@@ -12,7 +11,7 @@ class PanelSerializer(ContentSerializer):
     def create(self, validated_data):
         try:
             return super(PanelSerializer, self).create(validated_data)
-        except SceneMaxSizeReachedException as e:
+        except Exception as e:
             raise serializers.ValidationError({'content': str(e)}) from e
 
 

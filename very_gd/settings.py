@@ -59,8 +59,6 @@ MEDIA_PORTAL_SETTINGS = {
     'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
-SCENE_SIZE_LIMIT_BYTES = (1000 ** 2) * 10
-
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
 AWS_REGION = 'us-west-1'
@@ -73,6 +71,9 @@ ADMINS = [('Andrew', 'andrew@useallfive.com')]
 SERVER_EMAIL = 'andrew@useallfive.com'
 
 ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
+
+if DEBUG:
+    ALLOWED_HOSTS += ['0.0.0.0']
 
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
@@ -113,7 +114,6 @@ INSTALLED_APPS += (
     'media_portal.policy',
     'media_portal.payment',
     'media_portal.invite',
-    'media_portal.users',
     'media_portal.album',
     'media_portal.aws_encoding',
 )
