@@ -718,6 +718,10 @@
     .scene__instruct--top {
         @include align-items(center);
         padding: 60px 240px;
+
+        @include media($phablet) {
+            padding: 60px;
+        }
     }
 }
 
@@ -730,6 +734,10 @@
     min-height: 300px;
     padding: 60px 140px;
     z-index: 100;
+
+    @include media($phablet) {
+        padding: 60px 70px;
+    }
 }
 
 .scene__instruct--title {
@@ -745,6 +753,14 @@
 .scene__instruct--module {
     text-align: center;
     width: 85px;
+
+    @include media($phablet) {
+        width: 45px;
+    }
+
+    img {
+        width: 100%;
+    }
 }
 
 .scene__instruct--icon-text {
@@ -756,6 +772,10 @@
 .scene__instruct--bot {
     background-color: $white;
     padding: 30px 240px;
+
+    @include media($phablet) {
+        padding: 30px 40px;
+    }
 
     .scene__instruct--module {
         width: auto;
