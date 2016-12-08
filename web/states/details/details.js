@@ -54,6 +54,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             alpha: false,
             swatchPos: 'right'
         };
+        $scope.showSceneInstructions = true;
 
         if (BrowserFactory.isWkWebView() && !isMobileChrome) {
             $scope.isWkWebView = true;
@@ -444,6 +445,62 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.emptyScene = false;
                     } else {
                         $scope.emptyScene = true;
+
+                        if ($scope.showSceneInstructions) {
+                            ModalService.showModal({
+                                templateUrl: 'modals/sceneInstructModal.html',
+                                controller: 'sceneInstructModal',
+                                inputs: {
+                                    fields: {
+                                        panels: [
+                                            {
+                                                title: 'Let\'s get started.',
+                                                modules: [
+                                                    {
+                                                        icon: '/assets/img/icon-jpeg.svg'
+                                                    },
+                                                    {
+                                                        icon: '/assets/img/icon-png.svg'
+                                                    },
+                                                    {
+                                                        icon: '/assets/img/icon-gif.svg'
+                                                    },
+                                                    {
+                                                        icon: '/assets/img/icon-mp4.svg',
+                                                        text: 'Coming Soon'
+                                                    }
+                                                ],
+                                                texts: [
+                                                    'To create VR with very.gd, just upload your images (video support coming shortly) as individual panels or wrap around panorama photos.'
+                                                ]
+                                            },
+                                            {
+                                                title: 'Take it for a spin.',
+                                                modules: [
+                                                    {
+                                                        icon: '/assets/img/icon-mobile.svg'
+                                                    },
+                                                    {
+                                                        icon: '/assets/img/cardboard-pink.svg'
+                                                    },
+                                                    {
+                                                        icon: '/assets/img/icon-vr.svg',
+                                                        text: 'Coming Soon'
+
+                                                    }
+                                                ],
+                                                texts: [
+                                                    'One you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
+                                                ]
+                                            }
+                                        ],
+                                        submitButtonText: 'Next'
+                                    }
+                                }
+                            }).then(function() {
+                                $scope.showSceneInstructions = false;
+                            });
+                        }
                     }
                 });
         }
@@ -486,7 +543,28 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         //INIT ===============================================================//
         //====================================================================//
-        getScenes();
+
+        projectFactory.getProjects()
+            .then(function(response) {
+                var scenesWithPanels = 0;
+                _.each(response.data, function(project) {
+                    if (project.content.length > 0) {
+                        _.each(project.content, function(scene) {
+                            if (scene.content.length > 0) {
+                                scenesWithPanels++;
+                            }
+                        });
+                    }
+                });
+                if (scenesWithPanels > 0) {
+                    $scope.showSceneInstructions = false;
+                } else {
+                    $scope.showSceneInstructions = true;
+                }
+                console.log($scope.showSceneInstructions);
+                getScenes();
+
+            });
 
     }])
     .controller('detailsPublicCtrl', ['$scope', '$stateParams', '$rootScope', 'projectFactory', 'sceneFactory', 'panelFactory', 'ModalService', 'BrowserFactory', 'APICONSTANTS', '$cookies', function($scope, $stateParams, $rootScope, projectFactory, sceneFactory, panelFactory, ModalService, BrowserFactory, APICONSTANTS, $cookies) {

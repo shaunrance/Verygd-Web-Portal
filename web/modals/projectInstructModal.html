@@ -1,0 +1,35 @@
+<div class="modal-overlay project__instruct">
+    <div class="modal-background" ng-click="close()"></div>
+    <div class="project__instruct--inner">
+        <button class="modal-close" type="button" ng-click="cancel()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+        <div class="project__instruct--top">
+            <div
+                ng-repeat="module in input.fields.modules track by $index"
+                class="project__instruct--module">
+                <div class="project__instruct--number">{{$index + 1}}</div>
+                <div class="project__instruct--title">{{module.title}}</div>
+                <div class="project__instruct--icons">
+                    <div
+                        ng-repeat="icon in module.icons"
+                        class="project__instruct--icon">
+                        <img class="project__instruct--icon-img" src="{{icon}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="project__instruct--bot">
+            <div
+                ng-repeat="text in input.fields.texts"
+                class="project__instruct--module">
+                <div class="project__instruct--text">
+                    {{text}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-submit modal-button" type="button" ng-click="close()">{{buttonText}}</button>
+        </div>
+    </div>
+</div>
