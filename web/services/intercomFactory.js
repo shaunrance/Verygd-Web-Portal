@@ -2,11 +2,11 @@
 angular.module('ua5App')
     .factory('intercomFactory', ['UsersResource', 'APICONSTANTS', '$cookies', function(UsersResource, APICONSTANTS, $cookies) {
         var dataFactory = {};
-        //var hasStarted = false;
+        var hasStarted = false;
 
         dataFactory.shutdown = function() {
-            //window.Intercom('shutdown');
-            //hasStarted = false;
+            window.Intercom('shutdown');
+            hasStarted = false;
         };
 
         dataFactory.ping = function() {
