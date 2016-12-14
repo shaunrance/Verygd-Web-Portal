@@ -64,7 +64,8 @@ angular.module('ua5App', [
             user_id: 'vg-member',
             visited: 'string',
             cta: 'cta',
-            intercom_token: 'intercom_token'
+            intercom_token: 'intercom_token',
+            scene_instruct: 'scene_instruct'
         }
     })
     .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {

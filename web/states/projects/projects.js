@@ -115,6 +115,41 @@ angular.module('ua5App.projects')
                 .then(function(response) {
                     if (response.data.length === 0) {
                         $scope.emptyProjects = true;
+                        ModalService.showModal({
+                            templateUrl: 'modals/projectInstructModal.html',
+                            controller: 'projectInstructModal',
+                            inputs: {
+                                fields: {
+                                    modules: [
+                                        {
+                                            title: 'Create a Project',
+                                            icons: [
+                                                '/assets/img/icon-polygon-white.svg',
+                                                '/assets/img/icon-pano-white.svg'
+                                            ]
+                                        },
+                                        {
+                                            title: 'Upload Content',
+                                            icons: [
+                                                '/assets/img/icon-upload.svg'
+                                            ]
+                                        },
+                                        {
+                                            title: 'Preview',
+                                            icons: [
+                                                '/assets/img/cardboard.svg'
+                                            ]
+                                        }
+                                    ],
+                                    texts: [
+                                        'Projects can be either panel-based (using standard photos & videos) or panoramas for panorama content (360 photos will soon be able to be used as a background).',
+                                        'Whether you’re working in .png, .jpg, .gjif, or other formats, we’ve got you covered. (video support coming shortly).',
+                                        'View your content via desktop browser, mobile, or in stereoscopic VR. Each project consists of a scene made up of one or more panels.'
+                                    ],
+                                    submitButtonText: 'Continue'
+                                }
+                            }
+                        });
                     }
                     $scope.projects = response.data;
                     _.each($scope.projects, function(project) {

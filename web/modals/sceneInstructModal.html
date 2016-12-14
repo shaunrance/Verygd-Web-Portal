@@ -1,0 +1,42 @@
+<div class="modal-overlay">
+    <div class="modal-background" ng-click="close()"></div>
+    <div class="scene__instruct--inner">
+        <button class="modal-close" type="button" ng-click="cancel()">
+            <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+        </button>
+        <div
+            ng-repeat="panel in input.fields.panels track by $index"
+            class="scene__instruct--panel panel-{{$index+1}}">
+            <div class="scene__instruct--top">
+                <h1 class="scene__instruct--title">{{panel.title}}</h1>
+                <div
+                    ng-repeat="module in panel.modules track by $index"
+                    class="scene__instruct--module">
+                    <div class="scene__instruct--icons">
+                        <div class="scene__instruct--icon">
+                            <img class="scene__instruct--icon-img" src="{{module.icon}}" />
+                            <div class="scene__instruct--icon-text">{{module.text}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scene__instruct--bot">
+                <div
+                    ng-repeat="text in panel.texts"
+                    class="scene__instruct--module">
+                    <div class="scene__instruct--text">
+                        {{text}}
+                    </div>
+                </div>
+
+                <div class="scene__instruct--toggle">
+                    <span class="scene__instruct--toggle-icon icon-1 active" ng-click="changePanel(1)"></span>
+                    <span class="scene__instruct--toggle-icon icon-2" ng-click="changePanel(2)"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-submit modal-button" type="button" ng-click="nextPanel()">{{buttonText}}</button>
+            </div>
+        </div>
+    </div>
+</div>
