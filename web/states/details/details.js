@@ -490,7 +490,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                                                     }
                                                 ],
                                                 texts: [
-                                                    'One you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
+                                                    'Once you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
                                                 ]
                                             }
                                         ],

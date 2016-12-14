@@ -755,10 +755,15 @@
     width: 85px;
 
     @include media($phablet) {
-        width: 45px;
+        width: 50px;
+
+        img {
+            max-height: 70px !important;
+        }
     }
 
     img {
+        max-height: 100px;
         width: 100%;
     }
 }
@@ -767,6 +772,9 @@
     color: $white;
     font-family: 'Open Sans', sans-serif;
     font-size: 12px;
+    font-style: italic;
+    margin-top: 20px;
+    text-transform: lowercase;
 }
 
 .scene__instruct--bot {
