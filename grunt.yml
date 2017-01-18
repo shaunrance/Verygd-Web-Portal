@@ -35,6 +35,7 @@ config:
                     - web/bower_components/angular-color-picker/dist/angularjs-color-picker.min.js
                     - web/bower_components/angular-cookies/angular-cookies.min.js
                     - web/bower_components/clipboard/dist/clipboard.min.js
+                    - web/bower_components/jquery-ui/jquery-ui.js
                 dest: web/_build/vendor.js
             app:
                 src:

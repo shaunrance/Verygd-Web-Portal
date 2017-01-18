@@ -1,6 +1,6 @@
 /* global angular, THREE, $, TweenMax, Linear, _ */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', function($rootScope, BaseThreeScene, BrowserFactory) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -156,7 +156,7 @@ angular.module('ua5App')
                     border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=' + backgroundHex + border,
+                        data.url + '?fm=jpg&q=10&h=800&w=800&fit=max&bg=' + backgroundHex + border,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
                             var linkMaterial;
@@ -178,6 +178,8 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
+
+
 
                             //TODO: validate that the linked scene exists
                             if (useVr) {
@@ -206,9 +208,34 @@ angular.module('ua5App')
                                 }
                                 scene.addItem(plane);
                             }
-
+                            makeHotspots(data.hotspots, plane, size.width, size.height)
                         }
                     );
+                }
+
+                function makeHotspots(data, container, width, height) {
+                    _.each(data, function(item) {
+                        var spotWidth = GeoFactory.map(item.width, 0, 1, 0, width);
+                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
+                        var geometry = new THREE.PlaneGeometry(spotWidth, spotHeight, 32);
+                        var material = new THREE.MeshBasicMaterial({
+                            color: 0x81e4ee,
+                            side: THREE.DoubleSide,
+                            transparent: true,
+                            opacity: 0.5
+                        });
+                        var plane = new THREE.Mesh(geometry, material);
+                        plane.position.z = 1;
+                        plane.position.x = GeoFactory.map(item.x, 0, 1, - width / 2 , width /2);
+                        plane.position.y = GeoFactory.map(item.y, 0, 1, height / 2 , - height /2);
+                        plane.position.x += spotWidth / 2;
+                        plane.position.y -= spotHeight / 2;
+                        //account for z of 1 offset:
+                        plane.scale.x = 0.95;
+                        plane.scale.y = 0.95;
+                        container.add(plane);
+                    });
+
                 }
 
                 function makePanorama(data) {
@@ -351,6 +378,7 @@ angular.module('ua5App')
                     background = $scope.background;
                     backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
                     $rootScope.renderer.setClearColor(componentToHex(background));
+                    $rootScope.renderer.autoClear = false;
 
                     trueCount = i = $scope.panoContent.length;
 

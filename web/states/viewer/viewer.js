@@ -57,6 +57,29 @@ angular.module('ua5App.viewer')
                     }
                 });
             }
+
+            _.each($scope.currentScene.content, function(item) {
+                item.hotspots = [
+                    {
+                        id: 1,
+                        x: 0.34,
+                        y: 0.45,
+                        width: 0.30,
+                        height: 0.20,
+                        linked_scene_id: 342,
+                        saved: true
+                    },
+                    {
+                        id: 2,
+                        x: 0.54,
+                        y: 0.0,
+                        width: 0.40,
+                        height: 0.25,
+                        linked_scene_id: 341,
+                        saved: true
+                    }
+                ];
+            });
         }
 
         function filterScenes() {
