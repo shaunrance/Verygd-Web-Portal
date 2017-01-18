@@ -3,4 +3,3 @@ from django.apps import AppConfig
 
 class UsersAppConfig(AppConfig):
     name = 'users'
-    label = 'very_gd_users'
