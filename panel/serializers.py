@@ -7,6 +7,7 @@ from PIL import Image
 class PanelSerializer(ContentSerializer):
     related_tag = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     order = serializers.IntegerField(required=False)
+    hotspots = serializers.JSONField(required=False)
 
     def create(self, validated_data):
         instance = super(PanelSerializer, self).create(validated_data)

@@ -123,7 +123,8 @@ INSTALLED_APPS += (
     'scene',
     'rest_framework_docs',
     'storages',
-    'users'
+    'users',
+    'group',
 )
 
 MIDDLEWARE_CLASSES = (
