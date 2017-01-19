@@ -21,7 +21,7 @@ class Panel(models.Model):
     def reached_scene_size_limit(self):
         if self.owner.total_content_bytes + self.content.file.size > self.owner.file_size_quota_bytes:
             raise Exception('file too large.  max scene size reached ({0})'.format(
-                self.owner.file_size_quota_bytes.SCENE_SIZE_LIMIT_BYTES))
+                self.owner.file_size_quota_bytes))
 
     def increment_scene_size(self):
         self.owner.total_content_bytes += self.content.size
