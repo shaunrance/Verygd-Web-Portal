@@ -22,4 +22,3 @@ class TestPanel(TestAPIBase):
 
     def test_scene_hotspots(self):
         pass
-
