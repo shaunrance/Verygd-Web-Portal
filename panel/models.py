@@ -18,6 +18,32 @@ class Panel(models.Model):
     def media_group(self):
         return self.scene.media_group
 
+    def reached_scene_size_limit(self):
+        if self.owner.total_content_bytes + self.content.file.size > self.owner.file_size_quota_bytes:
+            raise Exception('file too large.  max scene size reached ({0})'.format(
+                self.owner.file_size_quota_bytes.SCENE_SIZE_LIMIT_BYTES))
+
+    def increment_scene_size(self):
+        self.owner.total_content_bytes += self.content.size
+        self.owner.save()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.reached_scene_size_limit()
+
+        super(Panel, self).save(force_insert, force_update, using, update_fields)
+
+        self.increment_scene_size()
+
+    def delete(self, using=None, keep_parents=False):
+        content_size_bytes = self.content.size
+        owner = self.owner
+
+        super(Panel, self).delete(using, keep_parents)
+
+        owner.total_content_bytes -= content_size_bytes
+        owner.save()
+
 
 class PanelImage(AlbumImage, Panel):
     scene = models.ForeignKey('scene.Scene', related_name='images')

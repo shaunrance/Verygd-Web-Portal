@@ -13,6 +13,7 @@ class TestAPIBase(Base):
         self.scene_endpoint = 'scene'
         self.project_endpoint = 'project'
         self.panel_endpoint = 'panel'
+        self.user_endpoint = 'users'
 
     def add_new_project(self, member, *args, **kwargs):
         data = self.strategies.get_create_new_project_strategy().example()
@@ -38,10 +39,10 @@ class TestAPIBase(Base):
     def add_panel(self, member, scene_id, title=text(alphabet=alphabet, min_size=9).example(),
                   desc=text(alphabet=alphabet, min_size=28, max_size=128).example(), name='test.png',
                   related_tag=text(alphabet=alphabet, min_size=5, max_size=10).example(),
-                  order=integers(min_value=0, max_value=10).example(),
+                  order=integers(min_value=0, max_value=10).example(), test_image=None,
                   **kwargs):
 
-        test_image = self.strategies.get_test_image(name)
+        test_image = test_image or self.strategies.get_test_image(name)
 
         data = {
             'scene': scene_id,
@@ -57,3 +58,8 @@ class TestAPIBase(Base):
         response, msg = self.post_as(member, '/panel', data=data)
 
         return response, msg
+
+    def delete_panel(self, member, panel_id):
+        response = self.delete_as(member, '/panel/{0}'.format(panel_id))
+
+        return response

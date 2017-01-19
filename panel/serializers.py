@@ -9,10 +9,6 @@ class PanelSerializer(ContentSerializer):
     order = serializers.IntegerField(required=False)
     hotspots = serializers.JSONField(required=False)
 
-    def create(self, validated_data):
-        instance = super(PanelSerializer, self).create(validated_data)
-        return instance
-
 
 class PanelImageSerializer(PanelSerializer):
     class Meta:
