@@ -5,7 +5,9 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 from users.auth.views import VeryGDAuthToken
-from media_portal.users.views import MembersViewSet, MemberCreateView
+from media_portal.users.views import MemberCreateView
+
+from users.views import MembersViewSet
 
 from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls

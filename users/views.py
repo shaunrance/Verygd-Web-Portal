@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from media_portal.users.views import MembersViewSet
+from users.serializers import MemberSerializer
 
-# Create your views here.
+MembersViewSet.serializer_class = MemberSerializer

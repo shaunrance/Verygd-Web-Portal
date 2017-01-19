@@ -28,6 +28,15 @@ class TestProject(TestAPIBase):
         self.assertEquals(response.status_code, 200)
         self.assertTrue('content' in msg and len(msg['content']) == 0)
 
+    def test_num_of_private_projects(self):
+        self.project_id = self.add_new_project(self.member, public=False)
+
+        response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+        self.assertEquals(response.status_code, 200)
+
+        self.assertTrue('private_project_count' in user_meta)
+        self.assertTrue(user_meta['private_project_count'])
+
     def test_public_project(self):
         scene_ids = {}
 
