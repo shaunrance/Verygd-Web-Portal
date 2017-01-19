@@ -17,3 +17,7 @@ class Member(BaseMember):
     @property
     def file_size_quota_bytes(self):
         return UserSettings.objects.get().file_size_quota_bytes
+
+
+class FileSizeQuotaReachedException(Exception):
+    pass

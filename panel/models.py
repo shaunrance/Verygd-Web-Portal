@@ -3,6 +3,7 @@ import jsonfield
 from media_portal.album.content.base.models import AlbumImage, AlbumVideo
 from users.models import Member
 from django.db import models
+from users.models import FileSizeQuotaReachedException
 
 
 class Panel(models.Model):
@@ -20,7 +21,7 @@ class Panel(models.Model):
 
     def reached_scene_size_limit(self):
         if self.owner.total_content_bytes + self.content.file.size > self.owner.file_size_quota_bytes:
-            raise Exception('file too large.  max scene size reached ({0})'.format(
+            raise FileSizeQuotaReachedException('file too large.  max scene size reached ({0})'.format(
                 self.owner.file_size_quota_bytes))
 
     def increment_scene_size(self):
