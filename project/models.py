@@ -12,7 +12,7 @@ class Project(models.Model):
     short_uuid = models.CharField(max_length=22, unique=True, default=get_default_shortuuid, editable=False, null=False)
 
     name = models.CharField(max_length=32, blank=False, null=False)
-    owner = models.ForeignKey(Member, null=False)
+    owner = models.ForeignKey(Member, null=False, related_name='projects')
 
     created_dt = models.DateTimeField(auto_now_add=True, null=False)
     updated_dt = models.DateTimeField(auto_now=True, null=False)

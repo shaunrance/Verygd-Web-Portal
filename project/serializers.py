@@ -29,7 +29,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         # the owner param is implicit
         validated_data['owner'] = self.context['request'].user.member
 
-        project = Project.objects.create(**validated_data)
-        project.save()
+        project = validated_data['owner'].create_project(Project, **validated_data)
 
         return project

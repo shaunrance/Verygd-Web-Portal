@@ -5,7 +5,10 @@ from users.managers import VeryGDMemberManager
 from media_portal.users.member.base import BaseMember
 
 
-class Member(BaseMember):
+class VeryGDMember(BaseMember):
+    class Meta:
+        abstract = True
+
     objects = VeryGDMemberManager()
 
     @property
@@ -17,6 +20,28 @@ class Member(BaseMember):
     @property
     def file_size_quota_bytes(self):
         return UserSettings.objects.get().file_size_quota_bytes
+
+    def create_project(self, project_cls, *args, **kwargs):
+        project = project_cls.objects.create(**kwargs)
+        project.save()
+
+        return project
+
+
+class Member(VeryGDMember):
+    def create_project(self, *args, **kwargs):
+        if 'public' not in kwargs:
+            kwargs['public'] = True
+
+        return super(Member, self).create_project(*args, **kwargs)
+
+
+class PremiumMember(Member):
+    def create_project(self, *args, **kwargs):
+        if 'public' not in kwargs:
+            kwargs['public'] = False
+
+        return super(Member, self).create_project(*args, **kwargs)
 
 
 class FileSizeQuotaReachedException(Exception):

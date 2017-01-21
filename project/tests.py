@@ -20,6 +20,9 @@ class TestProject(TestAPIBase):
         self.anonymous_member = self.users.new_anonymous_user()
         self.project_id = self.add_new_project(self.member)
 
+    def test_premium_vs_basic_create_project(self):
+        pass
+
     def test_add_project(self):
         detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
 
