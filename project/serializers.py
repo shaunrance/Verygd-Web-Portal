@@ -7,6 +7,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         exclude = ('owner', )
 
+    public = serializers.NullBooleanField(required=False)
+
     def to_representation(self, instance):
         model_dict = super(ProjectSerializer, self).to_representation(instance)
         model_dict['content'] = []
@@ -27,7 +29,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # the owner param is implicit
-        validated_data['owner'] = self.context['request'].user.member
+        validated_data['owner'] = self.context['request'].member
 
         project = validated_data['owner'].create_project(Project, **validated_data)
 

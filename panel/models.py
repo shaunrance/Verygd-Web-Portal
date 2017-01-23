@@ -20,7 +20,7 @@ class Panel(models.Model):
         return self.scene.media_group
 
     def reached_scene_size_limit(self):
-        if self.owner.total_content_bytes + self.content.file.size > self.owner.file_size_quota_bytes:
+        if self.owner.total_content_bytes + self.content.size > self.owner.file_size_quota_bytes:
             raise FileSizeQuotaReachedException('file too large.  max scene size reached ({0})'.format(
                 self.owner.file_size_quota_bytes))
 

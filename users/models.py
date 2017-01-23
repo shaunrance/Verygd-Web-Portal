@@ -13,7 +13,7 @@ class VeryGDMember(BaseMember):
 
     @property
     def private_project_count(self):
-        return self.project_set.filter(public=False).count()
+        return self.projects.filter(public=False).count()
 
     total_content_bytes = models.BigIntegerField(default=0, null=False, blank=False)
 
@@ -34,6 +34,14 @@ class Member(VeryGDMember):
             kwargs['public'] = True
 
         return super(Member, self).create_project(*args, **kwargs)
+
+    def upgrade_to_premium(self):
+        try:
+            return self.premiummember
+        except PremiumMember.DoesNotExist:
+            self.premiummember = PremiumMember.objects.create(member_ptr=self, member_ptr_id=self.pk, user=self.user)
+
+            return self.premiummember
 
 
 class PremiumMember(Member):

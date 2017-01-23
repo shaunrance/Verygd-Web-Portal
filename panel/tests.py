@@ -19,7 +19,10 @@ class TestPanel(TestAPIBase):
     def setUp(self):
         super(TestPanel, self).setUp()
 
+        self.users.setup_email_settings()
+
         self.member = self.users.new_user()
+
         self.project_id = self.project.add_new_project(self.member)
         self.scene_id = self.add_scene(self.member, project=self.project_id)
         self.panel_id = self.add_panel(self.member, self.scene_id)[1]['id']

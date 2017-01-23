@@ -1,6 +1,5 @@
 from very_gd.tests.base import TestAPIBase
 from project.tests import TestProject
-from users.settings import UserSettings, UserPasswordResetEmail, UserSignUpEmail
 
 
 class TestScene(TestAPIBase):
@@ -14,31 +13,17 @@ class TestScene(TestAPIBase):
         self.member = None
         self.project_id = None
 
-    def setup_user_settings(self):
-        reset_password = UserPasswordResetEmail()
-        reset_password.save()
-
-        signup_email = UserSignUpEmail()
-        signup_email.save()
-
-        user_settings = UserSettings.objects.create(
-            reset_password_email=reset_password,
-            signup_email=signup_email
-        )
-
-        user_settings.save()
-
     def setUp(self):
         super(TestScene, self).setUp()
+
+        self.users.setup_email_settings()
 
         self.member = self.users.new_user()
         self.project_id = self.project.add_new_project(self.member)
         self.scene_id = self.add_scene(self.member, project=self.project_id)
 
-        self.setup_user_settings()
-
     def test_content_limits(self):
-        user_settings = UserSettings.objects.get()
+        user_settings = self.users.settings
 
         test_image = self.strategies.get_test_image('test.png')
 
