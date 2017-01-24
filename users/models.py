@@ -17,18 +17,22 @@ class VeryGDMember(BaseMember):
 
     total_content_bytes = models.BigIntegerField(default=0, null=False, blank=False)
 
-    @property
-    def file_size_quota_bytes(self):
-        return UserSettings.objects.get().file_size_quota_bytes
-
     def create_project(self, project_cls, *args, **kwargs):
         project = project_cls.objects.create(**kwargs)
         project.save()
 
         return project
 
+    @property
+    def quota_settings(self):
+        return UserSettings.objects.get().quotas
+
 
 class Member(VeryGDMember):
+    @property
+    def file_size_quota_bytes(self):
+        return self.quota_settings.basic_quota_bytes
+
     def create_project(self, *args, **kwargs):
         if 'public' not in kwargs:
             kwargs['public'] = True
@@ -48,6 +52,10 @@ class Member(VeryGDMember):
 
 
 class PremiumMember(Member):
+    @property
+    def file_size_quota_bytes(self):
+        return self.quota_settings.premium_quota_bytes
+
     def create_project(self, *args, **kwargs):
         if 'public' not in kwargs:
             kwargs['public'] = False

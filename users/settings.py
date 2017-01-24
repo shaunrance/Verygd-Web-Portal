@@ -12,6 +12,11 @@ class UserPasswordResetEmail(BaseResetPasswordEmail, models.Model):
     pass
 
 
+class UserFileSizeQuota(models.Model):
+    basic_quota_bytes = models.BigIntegerField(default=int(1e+8), blank=True, null=True)
+    premium_quota_bytes = models.BigIntegerField(default=int(1e+9), blank=True, null=True)
+
+
 class UserSettings(models.Model):
         class Meta:
             verbose_name_plural = 'user settings'
@@ -22,7 +27,8 @@ class UserSettings(models.Model):
                                                     blank=False)
 
         updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-        file_size_quota_bytes = models.BigIntegerField(default=(1000 ** 2) * 10, blank=True, null=True)
+
+        quotas = models.OneToOneField(UserFileSizeQuota, related_name='user_settings', null=False, blank=False)
 
         def __unicode__(self):
             return 'User e-mail settings for {0}'.format(str(self.site))
