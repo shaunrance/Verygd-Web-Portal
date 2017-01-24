@@ -7,7 +7,7 @@ import hypothesis.extra.fakefactory as ff
 from very_gd.tests.strategies import TestStrategies
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
 from media_portal.users.tests import TestLogInOutAPI
-from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings
+from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings, UserFileSizeQuota
 
 from django.contrib.auth import get_user_model
 
@@ -27,11 +27,12 @@ class TestUserAPI(TestUserAPIBase):
     def setUp(self):
         super(TestUserAPI, self).setUp()
 
-        self.settings = self.setup_email_settings()
+        self.settings = self.setup_user_settings()
 
-    def setup_email_settings(self):
+    def setup_user_settings(self):
         reset_email_settings = UserPasswordResetEmail()
         signup_email_settings = UserSignUpEmail()
+        filesize_quotas = UserFileSizeQuota()
 
         reset_email_settings.plaintext_template = reset_email_settings.html_template = """
             Hi {{ username }},
@@ -48,11 +49,11 @@ class TestUserAPI(TestUserAPIBase):
         """
 
         reset_email_settings.save()
-
         signup_email_settings.save()
+        filesize_quotas.save()
 
         user_settings = UserSettings(reset_password_email=reset_email_settings,
-                                     signup_email=signup_email_settings)
+                                     signup_email=signup_email_settings, quotas=filesize_quotas)
 
         user_settings.save()
 
