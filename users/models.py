@@ -33,6 +33,9 @@ class Member(VeryGDMember):
         if 'public' not in kwargs:
             kwargs['public'] = True
 
+        if not kwargs['public'] and self.private_project_count == 1:
+            raise PrivateProjectLimitReachedException('Basic users are limited to 1 private project.')
+
         return super(Member, self).create_project(*args, **kwargs)
 
     def upgrade_to_premium(self):
@@ -53,4 +56,8 @@ class PremiumMember(Member):
 
 
 class FileSizeQuotaReachedException(Exception):
+    pass
+
+
+class PrivateProjectLimitReachedException(Exception):
     pass

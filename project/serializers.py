@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from project.models import Project
+from users.models import PrivateProjectLimitReachedException
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -31,6 +32,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         # the owner param is implicit
         validated_data['owner'] = self.context['request'].member
 
-        project = validated_data['owner'].create_project(Project, **validated_data)
+        try:
+            project = validated_data['owner'].create_project(Project, **validated_data)
+        except PrivateProjectLimitReachedException as e:
+            raise serializers.ValidationError({'error': str(e), 'code': 'project_limit_reached'})
 
         return project

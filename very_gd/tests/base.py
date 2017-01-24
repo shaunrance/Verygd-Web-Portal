@@ -15,15 +15,18 @@ class TestAPIBase(Base):
         self.panel_endpoint = 'panel'
         self.user_endpoint = 'users'
 
-    def add_new_project(self, member, *args, **kwargs):
+    def add_new_project(self, member, *args, assert_status_code=201, **kwargs):
         data = self.strategies.get_create_new_project_strategy().example()
         data.update(kwargs)
 
         response, msg = self.post_as(member, '/{0}'.format(self.project_endpoint), data=data)
 
-        self.assertEquals(response.status_code, 201)
+        self.assertEquals(response.status_code, assert_status_code)
 
-        return msg['id']
+        if assert_status_code == 201:
+            return msg['id']
+        else:
+            return msg
 
     def add_scene(self, member, *args, **kwargs):
         data = self.strategies.get_create_scene_strategy().example()

@@ -70,6 +70,10 @@ class TestProject(TestAPIBase):
         self.assertTrue('private_project_count' in user_meta)
         self.assertTrue(user_meta['private_project_count'])
 
+        msg = self.add_new_project(self.member, public=False, assert_status_code=400)
+
+        self.assertTrue('error' in msg and 'code' in msg and msg['code'] == 'project_limit_reached')
+
     def test_public_project(self):
         scene_ids = {}
 
