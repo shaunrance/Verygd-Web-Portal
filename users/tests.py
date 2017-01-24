@@ -8,7 +8,6 @@ from very_gd.tests.strategies import TestStrategies
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
 from media_portal.users.tests import TestLogInOutAPI
 from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings
-from users.models import Member
 
 from django.contrib.auth import get_user_model
 
@@ -21,7 +20,45 @@ class TestUserAPI(TestUserAPIBase):
         self.member = None
         self.second_member = None
 
+        self.settings = None
+
         super(TestUserAPI, self).__init__(*args, **kwargs)
+
+    def setUp(self):
+        super(TestUserAPI, self).setUp()
+
+        self.settings = self.setup_email_settings()
+
+    def setup_email_settings(self):
+        reset_email_settings = UserPasswordResetEmail()
+        signup_email_settings = UserSignUpEmail()
+
+        reset_email_settings.plaintext_template = reset_email_settings.html_template = """
+            Hi {{ username }},
+
+            Forgot your very.gd password? Simply click {{ reset_password_link }} to reset it.
+
+            Best,
+            The Very Good Team
+
+            This is a transactional email related to your account at very.gd.
+            If you have questions about your account, please send them to support@very.gd.
+
+            Copyright © 2016 very.gd
+        """
+
+        reset_email_settings.save()
+
+        signup_email_settings.save()
+
+        user_settings = UserSettings(reset_password_email=reset_email_settings,
+                                     signup_email=signup_email_settings)
+
+        user_settings.save()
+
+        self.settings = user_settings
+
+        return user_settings
 
     def test_signed_up_in(self):
         self.assertTrue('logged_in' in self.member and self.member['logged_in'])
@@ -95,42 +132,6 @@ class TestUserAPI(TestUserAPIBase):
 
 
 class TestLoginAPI(TestLogInOutAPI):
-    def setUp(self):
-        self.setup_email_settings()
-
-        super(TestLoginAPI, self).setUp()
-
-        member = Member.objects.get(pk=self.member['id'])
-        member.user.email = 'andrew@useallfive.com'
-        member.save()
-
-    def setup_email_settings(self):
-        reset_email_settings = UserPasswordResetEmail()
-        signup_email_settings = UserSignUpEmail()
-
-        reset_email_settings.plaintext_template = reset_email_settings.html_template = """
-            Hi {{ username }},
-
-            Forgot your very.gd password? Simply click {{ reset_password_link }} to reset it.
-
-            Best,
-            The Very Good Team
-
-            This is a transactional email related to your account at very.gd.
-            If you have questions about your account, please send them to support@very.gd.
-
-            Copyright © 2016 very.gd
-        """
-
-        reset_email_settings.save()
-
-        signup_email_settings.save()
-
-        user_settings = UserSettings(reset_password_email=reset_email_settings,
-                                     signup_email=signup_email_settings)
-
-        user_settings.save()
-
     def test_password_reset(self, endpoint='/reset_password'):
         return super(TestLoginAPI, self).test_password_reset()
 
