@@ -70,7 +70,7 @@ AWS_VIDEO_PIPELINE_ID = '1473882498921-q1vh9h'
 ADMINS = [('Andrew', 'andrew@useallfive.com')]
 SERVER_EMAIL = 'andrew@useallfive.com'
 
-ALLOWED_HOSTS = ['0.0.0.0', '52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
+ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
 
 EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
 EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
