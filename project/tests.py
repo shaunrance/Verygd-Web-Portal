@@ -21,7 +21,7 @@ class TestProject(TestAPIBase):
         self.member = self.users.new_user()
         self.second_member = self.users.new_user()
 
-        self.users.setup_email_settings()
+        self.users.setup_user_settings()
 
         self.anonymous_member = self.users.new_anonymous_user()
         self.project_id = self.add_new_project(self.member)

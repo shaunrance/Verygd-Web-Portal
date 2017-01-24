@@ -19,7 +19,7 @@ class TestPanel(TestAPIBase):
     def setUp(self):
         super(TestPanel, self).setUp()
 
-        self.users.setup_email_settings()
+        self.users.setup_user_settings()
 
         self.member = self.users.new_user()
 

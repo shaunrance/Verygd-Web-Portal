@@ -16,7 +16,7 @@ class TestScene(TestAPIBase):
     def setUp(self):
         super(TestScene, self).setUp()
 
-        self.users.setup_email_settings()
+        self.users.setup_user_settings()
 
         self.member = self.users.new_user()
         self.project_id = self.project.add_new_project(self.member)
@@ -27,8 +27,9 @@ class TestScene(TestAPIBase):
 
         test_image = self.strategies.get_test_image('test.png')
 
-        user_settings.file_size_quota_bytes = test_image.size * 2 - 1
-        user_settings.save()
+        # update basic user quota down to the test image size
+        user_settings.quotas.basic_quota_bytes = test_image.size * 2 - 1
+        user_settings.quotas.save()
 
         response, msg = self.add_panel(self.member, self.scene_id, test_image=test_image)
 
