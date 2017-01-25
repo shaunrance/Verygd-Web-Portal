@@ -5,9 +5,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 
 from users.auth.views import VeryGDAuthToken
-from media_portal.users.views import MemberCreateView
-
-from users.views import MembersViewSet
+from users.views import MemberCreateView, MembersViewSet
 
 from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls
@@ -45,10 +43,10 @@ urlpatterns = [
 
     url(r'^auth/token/?', VeryGDAuthToken.as_view()),
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
+    url(r'^users/social/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),
-    url('^/social/?', include('social_django.urls', namespace='social'))
 
 ] + urlpatterns
 
