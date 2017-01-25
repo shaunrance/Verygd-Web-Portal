@@ -108,7 +108,7 @@ INSTALLED_APPS = (
 # Third-party applications
 INSTALLED_APPS += (
     'actstream',
-    'oauth2_provider',
+    'social_django',
     'rest_framework',
     'rest_framework.authtoken',
     'guardian',

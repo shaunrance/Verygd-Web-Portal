@@ -7,4 +7,5 @@ django-storages
 boto
 shortuuid
 sendgrid-django
-django-oauth-toolkit
+social-auth-core
+social-auth-app-django

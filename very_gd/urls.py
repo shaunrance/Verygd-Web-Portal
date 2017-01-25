@@ -48,7 +48,6 @@ urlpatterns = [
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
 ] + urlpatterns
 
