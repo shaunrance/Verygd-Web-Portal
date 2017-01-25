@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),
+    url('^/social/?', include('social_django.urls', namespace='social'))
 
 ] + urlpatterns
 

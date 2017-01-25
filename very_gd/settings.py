@@ -90,6 +90,11 @@ INTERCOM_APP_ID = os.getenv('INTERCOM_APP_ID', None)
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2'
 )
 
 # Application definition
@@ -145,10 +150,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'very_gd.urls'
 
 WSGI_APPLICATION = 'very_gd.wsgi.application'
-
-OAUTH2_PROVIDER = {
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope',}
-}
 
 TEMPLATES = [
     {
