@@ -36,6 +36,9 @@ REST_FRAMEWORK_DOCS = {
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     )
 }
 
@@ -105,6 +108,7 @@ INSTALLED_APPS = (
 # Third-party applications
 INSTALLED_APPS += (
     'actstream',
+    'oauth2_provider',
     'rest_framework',
     'rest_framework.authtoken',
     'guardian',
@@ -141,6 +145,10 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'very_gd.urls'
 
 WSGI_APPLICATION = 'very_gd.wsgi.application'
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope',}
+}
 
 TEMPLATES = [
     {
