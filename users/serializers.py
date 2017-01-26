@@ -45,6 +45,40 @@ class SocialMediaAuthSerializer(serializers.Serializer):
         return attrs
 
 
+class SocialMediaAuthSerializer(serializers.Serializer):
+    provider = serializers.ChoiceField(choices=('twitter', 'facebook', 'google', ), required=True)
+    access_token = serializers.CharField(required=True)
+
+    access_token_secret = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        request = self.context['request']
+        provider = attrs.pop('provider')
+        access_token = attrs.pop('access_token')
+
+        strategy = load_strategy(request)
+        backend = load_backend(strategy=strategy, name=provider, redirect_uri=None)
+
+        token = {}
+
+        if isinstance(backend, BaseOAuth1):
+            token = {
+                'oauth_token': access_token,
+                'oauth_token_secret': attrs['access_token_secret'],
+            }
+        elif isinstance(backend, BaseOAuth2):
+            token = access_token
+
+        try:
+            attrs['user'] = backend.do_auth(token)
+        except AuthAlreadyAssociated:
+            raise serializers.ValidationError(
+                {'error': 'This social media account is already associated with a user.'}
+            )
+
+        return attrs
+
+
 class MemberSerializer(BaseMemberSerializer):
     private_project_count = serializers.IntegerField()
     content_bytes_left = serializers.IntegerField()
