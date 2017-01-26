@@ -37,12 +37,19 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-    )
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# TODO(andrew.silvernail): store app secrets in env
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY', '26023539460')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET', 'ff88fd53b8ab93cae94c9440b7d4a846')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('', None)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('', None)
+
+SOCIAL_AUTH_TWITTER_KEY = os.getenv('', None)
+SOCIAL_AUTH_TWITTER_SECRET = os.getenv('', None)
 
 MEDIA_PORTAL_SETTINGS = {
     'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',

@@ -5,8 +5,9 @@ import json
 import hypothesis.extra.fakefactory as ff
 
 from very_gd.tests.strategies import TestStrategies
+from users.models import Member
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
-from media_portal.users.tests import TestLogInOutAPI
+from media_portal.users.tests import TestLogInOutAPI, TestSignUp
 from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings, UserFileSizeQuota
 
 from django.contrib.auth import get_user_model
@@ -150,3 +151,32 @@ class TestLoginAPI(TestLogInOutAPI):
 
     def test_intercom_token(self):
         self.assertTrue('intercom_token' in self.member['auth'] and self.member['auth']['intercom_token'])
+
+
+class TestSignUpAPI(TestSignUp):
+    def test_sign_up_with_social_auth(self, post=None):
+        # TODO(andrew.silvernail): can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
+        post = post or self.strategies.get_create_user_strategy().example()
+        client = self.get_client()
+
+        post['url'] = '/users/social/signup'
+
+        post['params']['social_media'] = {
+            'provider': 'facebook',
+            'access_token': 'EAAAABg8fswQBAICIbgmzVpQxVOIggZA62zZCOdS49Y22C4'
+                            'k9S4hrZArj8ueHmJMvDrARMeZADQcEFOzq74y5zZC98sRVZC'
+                            'xHINKiDRvnWHE7ZAsoP2gaYjBDaoBvdJ7tSAac8mnlXZCgJ0BZ'
+                            'B550KPRUWs1ytViIILnRmaWGmoShHIqBi4ZBZBke15frhGp8SVXOoIZD'
+        }
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client, content_type='application/json')
+
+        self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
+            '201', response.status_code, user_meta or ''))
+
+        oauthed_member = Member.objects.get(pk=user_meta['id'])
+
+        # do we have a user created by python-social-auth?
+        self.assertEquals(oauthed_member.user.social_auth.count(), 1)
+
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'facebook')
