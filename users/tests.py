@@ -186,7 +186,8 @@ class TestSignUpAPI(TestSignUp):
 
         post['params']['social_media'] = {
             'provider': 'google',
-            'access_token': ''
+            'access_token': 'ya29.GlvgA8fS6pqSZoAaT8-bG0HfWQLW1HkxksgGKHxBYasy3eV6U1xP7l4tzk9JjcP5K83QBamd_'
+                            'qejN2TJf2sZahpiPZHsaNez32e_BJx5WGV2FuWGNeyNwNafJe32'
         }
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
