@@ -23,6 +23,7 @@ class TestScene(TestAPIBase):
         self.scene_id = self.add_scene(self.member, project=self.project_id)
 
     def test_content_limits(self):
+        # TODO(andrew.silvernail): break out into smaller tests
         user_settings = self.users.settings
 
         test_image = self.strategies.get_test_image('test.png')
@@ -83,6 +84,31 @@ class TestScene(TestAPIBase):
             response.status_code,
             msg
         ))
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        total_content_bytes = user_meta['total_content_bytes']
+
+        self.delete_scene(self.member, self.scene_id)
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        self.assertNotEquals(user_meta['total_content_bytes'], total_content_bytes)
+
+        new_scene_id = self.add_scene(self.member, project=self.project_id)
+
+        self.add_panel(self.member, new_scene_id,
+                                       test_image=self.strategies.get_test_image('test.png'))
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        total_content_bytes = user_meta['total_content_bytes']
+
+        self.delete_project(self.member, self.project_id)
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        self.assertNotEquals(user_meta['total_content_bytes'], total_content_bytes)
 
     def test_add_scene(self):
         pass

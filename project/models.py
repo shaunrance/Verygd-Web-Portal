@@ -32,3 +32,9 @@ class Project(models.Model):
         for content_type in ['scenes']:
             for content in getattr(self, str(content_type)).all():
                 yield content
+
+    def delete(self, using=None, keep_parents=False):
+        for content in self.content:
+            content.delete()
+
+        return super(Project, self).delete(using=using, keep_parents=keep_parents)

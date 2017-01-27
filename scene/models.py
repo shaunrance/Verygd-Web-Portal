@@ -42,3 +42,9 @@ class Scene(models.Model):
     @classmethod
     def class_prepared(cls):
         actstream_registry.register(cls)
+
+    def delete(self, using=None, keep_parents=False):
+        for content in self.content:
+            content.delete()
+
+        return super(Scene, self).delete(using=using, keep_parents=keep_parents)

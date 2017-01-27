@@ -28,6 +28,11 @@ class TestAPIBase(Base):
         else:
             return msg
 
+    def delete_project(self, member, project_id):
+        response = self.delete_as(member, '/{0}/{1}'.format(self.project_endpoint, project_id))
+
+        return response
+
     def add_scene(self, member, *args, **kwargs):
         data = self.strategies.get_create_scene_strategy().example()
         data.update(kwargs)
@@ -38,6 +43,11 @@ class TestAPIBase(Base):
                                                                                                  msg))
 
         return msg['id']
+
+    def delete_scene(self, member, scene_id):
+        response = self.delete_as(member, '/{0}/{1}'.format(self.scene_endpoint, scene_id))
+
+        return response
 
     def add_panel(self, member, scene_id, title=text(alphabet=alphabet, min_size=9).example(),
                   desc=text(alphabet=alphabet, min_size=28, max_size=128).example(), name='test.png',
