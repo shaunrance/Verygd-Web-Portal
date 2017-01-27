@@ -133,13 +133,19 @@ angular.module('ua5App')
                 function getHotspotData($hotspot) {
                     var imageWidth = $('.hotspot__image').outerWidth();
                     var imageHeight = $('.hotspot__image').outerHeight();
+                    var sceneId;
+
+                    if ($scope.content.hotspots[$hotspot.index()]) {
+                        sceneId = $scope.content.hotspots[$hotspot.index()].sceneId;
+                    }
 
                     return {
                         index: $hotspot.index(),
                         x: $hotspot.position().left / imageWidth,
                         y: $hotspot.position().top / imageHeight,
                         width: $hotspot.outerWidth() / imageWidth,
-                        height: $hotspot.outerHeight() / imageHeight
+                        height: $hotspot.outerHeight() / imageHeight,
+                        sceneId: sceneId
                     };
                 }
 

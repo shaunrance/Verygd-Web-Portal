@@ -1,5 +1,4 @@
 <div class="modal-overlay modal-overlay--hotspots">
-    <div class="modal-background" ng-click="close()"></div>
     <div class="modal">
         <form>
             <div class="modal-header">
@@ -8,7 +7,7 @@
                     <img class="modal-close--icon" src="assets/img/modal-close.svg" />
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-body--hotspots">
                 <div class="hotspots">
                     <div
                         hotspot-editor
@@ -16,20 +15,13 @@
                 </div>
             </div>
         </form>
-        <div class="hotspot-settings">
-            <div>
-                Current:
-                <p>index {{current.index}}</p>
-                <p>x {{current.x}}, y {{current.y}}</p>
-                <p>w: {{current.width}}, h:{{current.height}}</p>
-            </div>
-            <select>
-                <option>Scene</option>
-                <option ng-repeat="scene in scenes">{{scene.title}}</option>
-            </select>
-            <button ng-click="save()" class="modal-submit modal-button" type="button">Save</button>
-            <button ng-click="cancel()" class="modal-button modal-cancel" type="button">Cancel</button>
-            <button ng-click="remove()" class="modal-button modal-delete" type="button">Delete</button>
+        <div
+            hotspot-settings
+            save="save"
+            cancel="cancel"
+            remove="remove"
+            current="current"
+            scenes="scenes">
         </div>
     </div>
 </div>

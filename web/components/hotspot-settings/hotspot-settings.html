@@ -1,0 +1,27 @@
+<form
+    novalidate
+    name="hotspotSettings"
+    class="hotspot-settings"
+    ng-show="current.index !== -1">
+    <select
+        ng-model="model.sceneId"
+        ng-required="!model.url">
+        <option value="">Scene Name</option>
+        <option
+            ng-repeat="scene in scenes"
+            value="{{scene.id}}">{{scene.title}}</option>
+    </select>
+
+    <input
+        type="url"
+        ng-model="model.url"
+        ng-required="!model.sceneId">
+
+    <button
+        ng-click="save(model)"
+        ng-disabled="hotspotSettings.$invalid"
+        class="modal-submit modal-button"
+        type="button">Save</button>
+    <a ng-click="cancel()" type="button">Cancel</a>
+    <a ng-click="remove()" type="button">Delete</a>
+</form>

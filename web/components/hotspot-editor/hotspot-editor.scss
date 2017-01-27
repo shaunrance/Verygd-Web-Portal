@@ -5,6 +5,14 @@
     z-index: 3;
 }
 
+.modal-body--hotspots {
+    max-height: none;
+
+    .modal-background {
+        background: $white;
+    }
+}
+
 .hotspots {
     position: relative;
     user-select: none;
@@ -46,6 +54,7 @@
 }
 
 .modal-overlay--hotspots {
+    background: $white;
 
     .modal {
         height: 100%;

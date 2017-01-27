@@ -1,8 +1,6 @@
 /* global angular */
 angular.module('ua5App')
     .controller('hotspotController', ['$scope', '$element', 'content', 'close', 'panelFactory', 'scenes', function($scope, $element, content, close, panelFactory, scenes) {
-        console.log(content.hotspots);
-        //content.hotspots = JSON.parse(content.hotspots);
         if (content.hotspots === null) {
             content.hotspots = [];
         }
@@ -35,8 +33,10 @@ angular.module('ua5App')
             $scope.current = {index: -1};
         };
 
-        $scope.save = function() {
+        $scope.save = function(model) {
+            $scope.current.sceneId = model.sceneId;
             $scope.content.hotspots[$scope.current.index] = $scope.current;
+
             panelFactory.editPanel($scope.content.id, {hotspots: $scope.content.hotspots}).then(function() {
                 $scope.cancel();
             });

@@ -187,9 +187,11 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     content: panelData,
                     scenes: $scope.scenes
                 }
+
             }).then(function(modal) {
-                $('body').removeClass('no-scroll');
+
                 modal.close.then(function(result) {
+                    $('body').removeClass('no-scroll');
                 });
             });
         };
