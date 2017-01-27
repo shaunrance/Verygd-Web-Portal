@@ -3,7 +3,21 @@
     name="hotspotSettings"
     class="hotspot-settings"
     ng-show="current.index !== -1">
+    <h2 class="hotspot-settings__title">Link to</h2>
+
+    <label><input type="radio"
+           ng-model="model.type"
+           value="scene">Scene
+    </label>
+
+    <label><input type="radio"
+           ng-model="model.type"
+           value="url">URL
+    </label>
+
     <select
+        class="hotspot-settings__select"
+        ng-if="model.type === 'scene'"
         ng-model="model.sceneId"
         ng-required="!model.url">
         <option value="">Scene Name</option>
@@ -14,7 +28,9 @@
 
     <input
         type="url"
+        ng-if="model.type === 'url'"
         ng-model="model.url"
+        placeholder="Enter URL"
         ng-required="!model.sceneId">
 
     <button
@@ -22,6 +38,6 @@
         ng-disabled="hotspotSettings.$invalid"
         class="modal-submit modal-button"
         type="button">Save</button>
-    <a ng-click="cancel()" type="button">Cancel</a>
-    <a ng-click="remove()" type="button">Delete</a>
+    <a class="cancel" ng-click="cancel()">Cancel</a>
+    <a class="delete" ng-click="remove()">Delete</a>
 </form>

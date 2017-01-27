@@ -35,6 +35,8 @@ angular.module('ua5App')
 
         $scope.save = function(model) {
             $scope.current.sceneId = model.sceneId;
+            $scope.current.url = model.url;
+            $scope.current.type = model.type;
             $scope.content.hotspots[$scope.current.index] = $scope.current;
 
             panelFactory.editPanel($scope.content.id, {hotspots: $scope.content.hotspots}).then(function() {

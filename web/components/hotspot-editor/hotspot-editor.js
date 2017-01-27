@@ -134,9 +134,13 @@ angular.module('ua5App')
                     var imageWidth = $('.hotspot__image').outerWidth();
                     var imageHeight = $('.hotspot__image').outerHeight();
                     var sceneId;
+                    var type = 'scene';
+                    var url;
 
                     if ($scope.content.hotspots[$hotspot.index()]) {
                         sceneId = $scope.content.hotspots[$hotspot.index()].sceneId;
+                        url = $scope.content.hotspots[$hotspot.index()].url;
+                        type = $scope.content.hotspots[$hotspot.index()].type;
                     }
 
                     return {
@@ -145,7 +149,9 @@ angular.module('ua5App')
                         y: $hotspot.position().top / imageHeight,
                         width: $hotspot.outerWidth() / imageWidth,
                         height: $hotspot.outerHeight() / imageHeight,
-                        sceneId: sceneId
+                        sceneId: sceneId,
+                        type: type,
+                        url: url
                     };
                 }
 
