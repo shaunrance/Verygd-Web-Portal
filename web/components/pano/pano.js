@@ -106,6 +106,7 @@ angular.module('ua5App')
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
 
                     $rootScope.renderer.setClearColor(componentToHex(background));
+                    $rootScope.renderer.sortObjects = false;
 
                     trueCount = i = $scope.panoContent.length;
 
@@ -179,8 +180,6 @@ angular.module('ua5App')
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
 
-
-
                             //TODO: validate that the linked scene exists
                             if (useVr) {
                                 linkMaterial = new THREE.MeshBasicMaterial({
@@ -208,7 +207,7 @@ angular.module('ua5App')
                                 }
                                 scene.addItem(plane);
                             }
-                            makeHotspots(data.hotspots, plane, size.width, size.height)
+                            makeHotspots(data.hotspots, plane, size.width, size.height);
                         }
                     );
                 }
@@ -226,8 +225,8 @@ angular.module('ua5App')
                         });
                         var plane = new THREE.Mesh(geometry, material);
                         plane.position.z = 1;
-                        plane.position.x = GeoFactory.map(item.x, 0, 1, - width / 2 , width /2);
-                        plane.position.y = GeoFactory.map(item.y, 0, 1, height / 2 , - height /2);
+                        plane.position.x = GeoFactory.map(item.x, 0, 1, - width / 2, width / 2);
+                        plane.position.y = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
                         plane.position.x += spotWidth / 2;
                         plane.position.y -= spotHeight / 2;
                         //account for z of 1 offset:
@@ -235,7 +234,6 @@ angular.module('ua5App')
                         plane.scale.y = 0.95;
                         container.add(plane);
                     });
-
                 }
 
                 function makePanorama(data) {
@@ -247,17 +245,13 @@ angular.module('ua5App')
                     var hitAreaMesh;
                     var material;
                     var textureLoader = new THREE.TextureLoader();
-                    var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide, transparent: true, opacity: 0});
                     var materialBorder = new THREE.MeshBasicMaterial({color: 0x81e4ee});
-                    var materialsArray = [];
 
                     textureLoader.load(
                         data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60',
                         function(texture) {
                             var linkMaterial;
                             var height;
-                            var materialGroup;
-                            var cylFaces;
 
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.FrontSide,
@@ -266,37 +260,16 @@ angular.module('ua5App')
                                 opacity: 1
                             });
 
-                            materialsArray = [
-                                materialEmpty,
-                                material,
-                                materialEmpty
-                            ];
-
                             function map(value, start1, stop1, start2, stop2) {
                                 return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
                             }
 
                             height = map(texture.image.width / texture.image.height, 7.5, 2.01, 100, 300);
-                            geometry = new THREE.CylinderGeometry(150, 150, height, 20);
+                            geometry = new THREE.CylinderGeometry(150, 150, height, 20, 1, true);
 
-                            materialGroup = new THREE.MeshFaceMaterial(materialsArray);
-                            cylFaces = geometry.faces.length;
-                            for (var i = 0; i < cylFaces; i++) {
-                                if (i <= 39) {
-                                    //give the faces around the cyl the img texture
-                                    geometry.faces[i].materialIndex = 1;
-                                } else {
-                                    //give the top/bottom faces a black texture
-                                    geometry.faces[i].materialIndex = 0;
-                                    delete geometry.faces[i];
-                                }
-                            }
-                            geometry.faces = geometry.faces.filter(function(v) {
-                                return v;
-                            });
                             geometry.elementsNeedUpdate = true; // update faces
 
-                            cylinder = new THREE.Mesh(geometry, materialGroup);
+                            cylinder = new THREE.Mesh(geometry, material);
                             cylinderBorder = new THREE.Mesh(geometry, materialBorder);
                             cylinderBorder.scale.set(-1.1, 1.11, 1.1);
                             cylinderBorder.position.y = -1;
@@ -336,9 +309,36 @@ angular.module('ua5App')
                                     panoLink.sceneLink = data.related_tag;
                                 }
                             }
-
+                            console.log(data.hotspots);
+                            makePanoramaHotspots(data.hotspots, height);
                         }
                     );
+                }
+
+                function makePanoramaHotspots(data, height) {
+                    _.each(data, function(item, index) {
+                        var hotspotGeo;
+                        var hotspotMat;
+                        var hotspotMesh;
+                        var degreesPos = item.x * 360.0;
+                        var radiansPos = degreesPos * (Math.PI / 180);
+                        var degreesWidth = item.width * 360.0;
+                        var radiansWidth = degreesWidth * (Math.PI / 180);
+                        var spotWidth = radiansWidth;
+                        var spotPos = radiansPos;
+                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
+                        var spotY = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
+
+                        spotPos = (2 * Math.PI) - spotPos - spotWidth;
+
+                        hotspotGeo = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
+                        hotspotMat = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide, opacity: 0.5, transparent: true});
+                        hotspotMesh = new THREE.Mesh(hotspotGeo, hotspotMat);
+                        hotspotMesh.scale.set(0.9, 0.9, 0.9);
+                        hotspotMesh.position.y = spotY - (spotHeight / 2);
+                        hotspotGeo.theaLength = spotWidth;
+                        scene.scene().add(hotspotMesh);
+                    });
                 }
 
                 function createExitBtn() {
@@ -379,6 +379,7 @@ angular.module('ua5App')
                     backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
                     $rootScope.renderer.setClearColor(componentToHex(background));
                     $rootScope.renderer.autoClear = false;
+                    $rootScope.renderer.sortObjects = false;
 
                     trueCount = i = $scope.panoContent.length;
 
