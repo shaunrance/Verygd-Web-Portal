@@ -1,38 +1,15 @@
 <div class="hotspot-editor">
     <div class="editor">
 
-        <!-- <div ng-show="current !== false" class="hotspot-details">
-            <label>Link to:</label>
-            <input type="radio" name="link" value="scene">Scene
-            <input type="radio" name="link" value="url">URL
-            <select>
-                <option>Scene Name</option>
-                <option>Scene Name 2</option>
-            </select>
-            <div class="modal-footer">
-                <button ng-click="save()" class="modal-submit modal-button" type="button">Save</button>
-                <button ng-click="cancel()" class="modal-button modal-cancel" type="button">Cancel</button>
-                <button ng-click="delete()" class="modal-button modal-delete" type="button">Delete</button>
-            </div>
-            <div>x: {{current.x}} y: {{current.y}}</div>
-        </div> -->
-
-
         <div class="hotspot__group">
             <div
                 ng-repeat="hotspot in content.hotspots"
                 style="left: {{hotspot.x * 100}}%; top: {{hotspot.y * 100}}%; width: {{hotspot.width * 100}}%;  height: {{hotspot.height * 100}}%; "
                 data-id="{{$index}}"
                 ng-click="edit($event)"
-                class="hotspot dropped">{{$index}}
+                class="hotspot dropped">
             </div>
         </div>
         <img class="hotspot__image" src="{{content.url}}?fm=jpg&w=1200&q=90">
-<!--         <div class="modal-footer">
-            <button ng-click="save()" class="modal-submit modal-button" type="button">Save</button>
-            <button ng-click="cancel()" class="modal-button modal-cancel" type="button">Cancel</button>
-            <button ng-click="delete()" class="modal-button modal-delete" type="button">Delete</button>
-        </div>
- -->
     </div>
 </div>
