@@ -39,7 +39,7 @@ angular.module('ua5App')
                 function stopDrag() {
                     $currentHotspot.addClass('dropped');
                     $scope.$emit('hotspot:edit', getHotspotData($(this)));
-                    update($(this));
+                    //update($(this));
                 }
 
                 $scope.$on('hotspot:reset', function(event, data) {
@@ -53,31 +53,6 @@ angular.module('ua5App')
                         });
                     }
                 });
-
-                // function positionEditorModal($hotspot) {
-                //     var xPos = $hotspot.offset().left;
-                //     var yPos = $hotspot.offset().top;
-
-                //     if ($hotspot.outerWidth() + xPos + $hotspotDetails.outerHeight() > $('.hotspot__image').outerWidth()) {
-                //         $hotspotDetails.css({
-                //             left: (xPos - $hotspotDetails.outerWidth()) + 'px'
-                //         });
-                //     } else {
-                //         $hotspotDetails.css({
-                //             left: xPos + $hotspot.outerWidth() + 'px'
-                //         });
-                //     }
-
-                //     if ($hotspot.outerHeight() + yPos < $('.hotspot__image').outerHeight() - $hotspotDetails.outerHeight()) {
-                //         $hotspotDetails.css({
-                //             top: (yPos) + 'px'
-                //         });
-                //     } else {
-                //         $hotspotDetails.css({
-                //             top: yPos - $hotspotDetails.outerHeight()
-                //         });
-                //     }
-                // }
 
                 function mousemove(event) {
                     var boxHeight = event.pageY - $dummyHotspot.offset().top;
@@ -127,7 +102,7 @@ angular.module('ua5App')
 
                     $self.addClass('dropped');
                     $scope.$emit('hotspot:edit', getHotspotData($self));
-                    update($self);
+                    //update($self);
                 };
 
                 function getHotspotData($hotspot) {
