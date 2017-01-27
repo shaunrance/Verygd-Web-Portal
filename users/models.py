@@ -17,6 +17,14 @@ class VeryGDMember(BaseMember):
 
     total_content_bytes = models.BigIntegerField(default=0, null=False, blank=False)
 
+    @property
+    def file_size_quota_bytes(self):
+        raise NotImplementedError
+
+    @property
+    def content_bytes_left(self):
+        return self.file_size_quota_bytes - self.total_content_bytes
+
     def create_project(self, project_cls, *args, **kwargs):
         project = project_cls.objects.create(**kwargs)
         project.save()

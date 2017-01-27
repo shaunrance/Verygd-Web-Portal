@@ -5,3 +5,4 @@ from media_portal.users.serializers import MemberSerializer as BaseMemberSeriali
 
 class MemberSerializer(BaseMemberSerializer):
     private_project_count = serializers.IntegerField()
+    content_bytes_left = serializers.IntegerField()

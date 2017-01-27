@@ -44,6 +44,7 @@ class TestScene(TestAPIBase):
                                                                                                  user_meta))
 
         self.assertEquals(user_meta['total_content_bytes'], test_image.size)
+        self.assertTrue('content_bytes_left' in user_meta)
 
         test_image = self.strategies.get_test_image('test.png')
 
