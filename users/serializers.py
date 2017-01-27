@@ -8,7 +8,6 @@ from social_core.exceptions import AuthAlreadyAssociated
 
 from media_portal.users.serializers import MemberSerializer as BaseMemberSerializer
 from media_portal.users.serializers import MemberCreateSerializer as BaseMemberCreateSerializer
-from media_portal.users.serializers import MemberCreateSerializer as BaseMemberCreateSerializer
 
 
 class SocialMediaAuthSerializer(serializers.Serializer):
