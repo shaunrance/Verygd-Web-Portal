@@ -44,13 +44,13 @@ angular.module('ua5App')
 
                         if (x >  $(window).width() - (width + x)) {
                             $settings.css({
-                                top: $currentSpot.offset().top,
+                                top: $currentSpot.offset().top + $('.modal-overlay--hotspots').scrollTop(),
                                 left: $currentSpot.offset().left - $settings.outerWidth() - PADDING
                             });
                             $settings.addClass('left');
                         } else {
                             $settings.css({
-                                top: $currentSpot.offset().top,
+                                top: $currentSpot.offset().top + $('.modal-overlay--hotspots').scrollTop(),
                                 left: $currentSpot.offset().left + width + PADDING
                             });
                             $settings.removeClass('left');

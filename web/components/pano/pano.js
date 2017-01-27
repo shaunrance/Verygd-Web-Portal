@@ -309,7 +309,6 @@ angular.module('ua5App')
                                     panoLink.sceneLink = data.related_tag;
                                 }
                             }
-                            console.log(data.hotspots);
                             makePanoramaHotspots(data.hotspots, height);
                         }
                     );
@@ -332,7 +331,7 @@ angular.module('ua5App')
                         spotPos = (2 * Math.PI) - spotPos - spotWidth;
 
                         hotspotGeo = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
-                        hotspotMat = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide, opacity: 0.5, transparent: true});
+                        hotspotMat = new THREE.MeshBasicMaterial({color: 0x81e4ee, side: THREE.DoubleSide, opacity: 0.3, transparent: true});
                         hotspotMesh = new THREE.Mesh(hotspotGeo, hotspotMat);
                         hotspotMesh.scale.set(0.9, 0.9, 0.9);
                         hotspotMesh.position.y = spotY - (spotHeight / 2);
