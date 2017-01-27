@@ -60,6 +60,13 @@ class TestScene(TestAPIBase):
 
         self.assertEquals(user_meta['total_content_bytes'], test_image.size)
 
+        # updating metadata on the panel shouldn't trigger quota exception
+        response, msg = self.put_as(self.member, '/{0}/{1}'.format(self.panel_endpoint, 1),
+                                    {'order': 3}, format='json')
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
+            response.status_code, 200))
+
         # deleting an image should decrement scene size
         response = self.delete_panel(self.member, 1)
 

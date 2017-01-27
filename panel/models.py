@@ -30,11 +30,15 @@ class Panel(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        self.reached_scene_size_limit()
+        created = not self.pk
+
+        if created:
+            self.reached_scene_size_limit()
 
         super(Panel, self).save(force_insert, force_update, using, update_fields)
 
-        self.increment_scene_size()
+        if created:
+            self.increment_scene_size()
 
     def delete(self, using=None, keep_parents=False):
         content_size_bytes = self.content.size

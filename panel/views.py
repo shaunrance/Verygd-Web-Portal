@@ -21,9 +21,6 @@ class PanelImageViewSet(ContentViewSet, RequestSetup):
         except FileSizeQuotaReachedException as e:
             raise serializers.ValidationError({'filesize_quota_reached': str(e)})
 
-    def update(self, request, *args, **kwargs):
-        return super(PanelImageViewSet, self).update(request, *args, **kwargs)
-
     def get_queryset(self):
         return self.model.objects.filter()
 
