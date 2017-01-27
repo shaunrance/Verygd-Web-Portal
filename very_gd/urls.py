@@ -43,7 +43,6 @@ urlpatterns = [
 
     url(r'^auth/token/?', VeryGDAuthToken.as_view()),
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
-    url(r'^users/social/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),

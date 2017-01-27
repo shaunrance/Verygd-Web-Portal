@@ -154,12 +154,10 @@ class TestLoginAPI(TestLogInOutAPI):
 
 
 class TestSignUpAPI(TestSignUp):
-    def test_sign_up_with_social_auth(self, post=None):
+    def test_sign_up_with_facebook(self, post=None):
         # TODO(andrew.silvernail): can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
         post = post or self.strategies.get_create_user_strategy().example()
         client = self.get_client()
-
-        post['url'] = '/users/social/signup'
 
         post['params']['social_media'] = {
             'provider': 'facebook',
@@ -169,7 +167,8 @@ class TestSignUpAPI(TestSignUp):
                             'B550KPRUWs1ytViIILnRmaWGmoShHIqBi4ZBZBke15frhGp8SVXOoIZD'
         }
 
-        response, user_meta = self.post(post['url'], data=post['params'], client=client, content_type='application/json')
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
 
         self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
             '201', response.status_code, user_meta or ''))
@@ -180,3 +179,25 @@ class TestSignUpAPI(TestSignUp):
         self.assertEquals(oauthed_member.user.social_auth.count(), 1)
 
         self.assertEquals(oauthed_member.user.social_auth.get().provider, 'facebook')
+
+    def test_sign_up_with_google(self, post=None):
+        post = post or self.strategies.get_create_user_strategy().example()
+        client = self.get_client()
+
+        post['params']['social_media'] = {
+            'provider': 'google',
+            'access_token': ''
+        }
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
+
+        self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
+            '201', response.status_code, user_meta or ''))
+
+        oauthed_member = Member.objects.get(pk=user_meta['id'])
+
+        # do we have a user created by python-social-auth?
+        self.assertEquals(oauthed_member.user.social_auth.count(), 1)
+
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'google')
