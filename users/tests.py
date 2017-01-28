@@ -155,7 +155,7 @@ class TestLoginAPI(TestLogInOutAPI):
 
 class TestSignUpAPI(TestSignUp):
     def test_sign_up_with_facebook(self, post=None):
-        # TODO(andrew.silvernail): can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
+        # can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
         post = post or self.strategies.get_create_user_strategy().example()
         client = self.get_client()
 
@@ -181,13 +181,14 @@ class TestSignUpAPI(TestSignUp):
         self.assertEquals(oauthed_member.user.social_auth.get().provider, 'facebook')
 
     def test_sign_up_with_google(self, post=None):
+        # can regenerate a new app token via https://developers.google.com/oauthplayground/
         post = post or self.strategies.get_create_user_strategy().example()
         client = self.get_client()
 
         post['params']['social_media'] = {
-            'provider': 'google',
-            'access_token': 'ya29.GlvgA8fS6pqSZoAaT8-bG0HfWQLW1HkxksgGKHxBYasy3eV6U1xP7l4tzk9JjcP5K83QBamd_'
-                            'qejN2TJf2sZahpiPZHsaNez32e_BJx5WGV2FuWGNeyNwNafJe32'
+            'provider': 'google-oauth2',
+            'access_token': 'ya29.GlvgA2l1KOewb4N00kPukXVdGr-5AB95BeCUw9cmw3AkeQEmtjWN5NZXLR95UIHsaX_XyZhHLYN'
+                            '-vzHAF2GcbjQG1H6_i8gOlG-eMp1xyxzXafq8KyECyGqavqA3'
         }
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
@@ -201,4 +202,27 @@ class TestSignUpAPI(TestSignUp):
         # do we have a user created by python-social-auth?
         self.assertEquals(oauthed_member.user.social_auth.count(), 1)
 
-        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'google')
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'google-oauth2')
+
+    def test_sign_up_with_twitter(self, post=None):
+        post = post or self.strategies.get_create_user_strategy().example()
+        client = self.get_client()
+
+        post['params']['social_media'] = {
+            'provider': 'twitter',
+            'access_token': '16479870-xGkd6j31bjDZN0g2OL2bwEryXe3F6kh5HWqZbyj8q',
+            'access_token_secret': '2qOTJEsFH5BYPecAXrKJGPtS4zzRHhD71hsAh9Iw7mgtm'
+        }
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
+
+        self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
+            '201', response.status_code, user_meta or ''))
+
+        oauthed_member = Member.objects.get(pk=user_meta['id'])
+
+        # do we have a user created by python-social-auth?
+        self.assertEquals(oauthed_member.user.social_auth.count(), 1)
+
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'twitter')

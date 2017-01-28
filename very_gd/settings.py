@@ -49,8 +49,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('', '1005167231647-6a3egs33r8maolelg7r
                                               'apps.googleusercontent.com')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('', 'pATSdPnLMQHYYaTwCS9mdnuE')
 
-SOCIAL_AUTH_TWITTER_KEY = os.getenv('', None)
-SOCIAL_AUTH_TWITTER_SECRET = os.getenv('', None)
+SOCIAL_AUTH_TWITTER_KEY = os.getenv('SOCIAL_AUTH_TWITTER_KEY', None)
+SOCIAL_AUTH_TWITTER_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_KEY', None)
 
 MEDIA_PORTAL_SETTINGS = {
     'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',

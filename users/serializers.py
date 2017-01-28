@@ -11,7 +11,7 @@ from media_portal.users.serializers import MemberCreateSerializer as BaseMemberC
 
 
 class SocialMediaAuthSerializer(serializers.Serializer):
-    provider = serializers.ChoiceField(choices=('twitter', 'facebook', 'google', ), required=True)
+    provider = serializers.ChoiceField(choices=('twitter', 'facebook', 'google-oauth2', ), required=True)
     access_token = serializers.CharField(required=True)
 
     access_token_secret = serializers.CharField(required=False)
