@@ -159,6 +159,8 @@ class TestSignUpAPI(TestSignUp):
         post = post or self.strategies.get_create_user_strategy().example()
         client = self.get_client()
 
+        post['url'] = '/users/social/signup'
+
         post['params']['social_media'] = {
             'provider': 'facebook',
             'access_token': 'EAAcZBhBGl030BAL4HRf6iFgdhSbsen4C3hdWxVHATmVtR47ND3ZC7VoYPbuLVu4ufdZA3rxtkU637'
@@ -185,6 +187,8 @@ class TestSignUpAPI(TestSignUp):
         # can regenerate a new app token via https://developers.google.com/oauthplayground/
         post = post or self.strategies.get_create_user_strategy().example()
         client = self.get_client()
+
+        post['url'] = '/users/social/signup'
 
         post['params']['social_media'] = {
             'provider': 'google-oauth2',

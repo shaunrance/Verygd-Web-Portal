@@ -39,6 +39,10 @@ class MemberSerializer(BaseMemberSerializer):
 
 
 class MemberCreateSerializer(BaseMemberCreateSerializer):
+    pass
+
+
+class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
     class Meta(MemberSerializer.Meta):
         model = Member
         exclude = MemberSerializer.Meta.exclude + ('invites', )
@@ -56,10 +60,10 @@ class MemberCreateSerializer(BaseMemberCreateSerializer):
             validated_data.pop('email')
             validated_data.pop('password')
 
-            member = super(MemberCreateSerializer, self).create(validated_data)
+            member = super(MemberSocialCreateSerializer, self).create(validated_data)
 
             member.update_social_photo()
 
             return member
         else:
-            return super(MemberCreateSerializer, self).create(validated_data)
+            return super(MemberSocialCreateSerializer, self).create(validated_data)
