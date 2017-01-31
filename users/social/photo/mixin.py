@@ -31,5 +31,13 @@ class SocialPhotoMixin(models.Model):
 
             self.update_photo(photo)
 
+    def update_photo_from_google(self, *args, **kwargs):
+        pass
+
     def update_social_photo(self):
-        return getattr(self, 'update_photo_from_{0}'.format(self.user.social_user.provider))(self)
+        provider = self.user.social_user.provider
+
+        if provider == 'google-oauth2':
+            provider = 'google'
+
+        return getattr(self, 'update_photo_from_{0}'.format(provider))(self)

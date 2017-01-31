@@ -9,11 +9,30 @@ from media_portal.users.serializers import MemberSerializer as BaseMemberSeriali
 from media_portal.users.serializers import MemberCreateSerializer as BaseMemberCreateSerializer
 
 
-class SocialMediaAuthSerializer(serializers.Serializer):
-    provider = serializers.ChoiceField(choices=('facebook', 'google-oauth2', ), required=True)
-    access_token = serializers.CharField(required=True)
+class MemberSerializer(BaseMemberSerializer):
+    private_project_count = serializers.IntegerField()
+    content_bytes_left = serializers.IntegerField()
 
-    access_token_secret = serializers.CharField(required=False)
+
+class MemberCreateSerializer(BaseMemberCreateSerializer):
+    pass
+
+
+class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
+    class Meta(MemberSerializer.Meta):
+        model = Member
+        exclude = MemberSerializer.Meta.exclude + ('invites', 'name', 'email', 'password', )
+
+    provider = serializers.ChoiceField(choices=('facebook', 'google',), write_only=True, required=True)
+    access_token = serializers.CharField(required=True, write_only=True)
+
+    access_token_secret = serializers.CharField(required=False, write_only=True)
+
+    def validate_provider(self, value):
+        if value == 'google':
+            return 'google-oauth2'
+
+        return value
 
     def validate(self, attrs):
         request = self.context['request']
@@ -32,38 +51,9 @@ class SocialMediaAuthSerializer(serializers.Serializer):
 
         return attrs
 
-
-class MemberSerializer(BaseMemberSerializer):
-    private_project_count = serializers.IntegerField()
-    content_bytes_left = serializers.IntegerField()
-
-
-class MemberCreateSerializer(BaseMemberCreateSerializer):
-    pass
-
-
-class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
-    class Meta(MemberSerializer.Meta):
-        model = Member
-        exclude = MemberSerializer.Meta.exclude + ('invites', )
-
-    social_media = SocialMediaAuthSerializer(required=False)
-
     def create(self, validated_data):
-        if 'social_media' in validated_data and 'user' in validated_data['social_media']:
-            social_media_auth = validated_data.pop('social_media')
+        member = super(MemberSocialCreateSerializer, self).create(validated_data)
 
-            validated_data['user'] = social_media_auth['user']
+        member.update_social_photo()
 
-            # dont need a name, email or password, since these are taken from the social auth
-            validated_data.pop('name')
-            validated_data.pop('email')
-            validated_data.pop('password')
-
-            member = super(MemberSocialCreateSerializer, self).create(validated_data)
-
-            member.update_social_photo()
-
-            return member
-        else:
-            return super(MemberSocialCreateSerializer, self).create(validated_data)
+        return member

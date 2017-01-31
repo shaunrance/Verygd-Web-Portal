@@ -161,11 +161,11 @@ class TestSignUpAPI(TestSignUp):
 
         post['url'] = '/users/social/signup'
 
-        post['params']['social_media'] = {
+        post['params'].update({
             'provider': 'facebook',
             'access_token': 'EAAcZBhBGl030BAL4HRf6iFgdhSbsen4C3hdWxVHATmVtR47ND3ZC7VoYPbuLVu4ufdZA3rxtkU637'
                             'XwQavcngDGv0BN0SHRP9Ba3w0Ov1ZB04UZC2fMeddfewSoAGkV450tMnPVrOjoZCBSZB9BEgWFvgnaKvcY4tUZD'
-        }
+        })
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
                                         content_type='application/json')
@@ -190,11 +190,11 @@ class TestSignUpAPI(TestSignUp):
 
         post['url'] = '/users/social/signup'
 
-        post['params']['social_media'] = {
-            'provider': 'google-oauth2',
-            'access_token': 'ya29.GlvgA2l1KOewb4N00kPukXVdGr-5AB95BeCUw9cmw3AkeQEmtjWN5NZXLR95UIHsaX_XyZhHLYN'
-                            '-vzHAF2GcbjQG1H6_i8gOlG-eMp1xyxzXafq8KyECyGqavqA3'
-        }
+        post['params'].update({
+            'provider': 'google',
+            'access_token': 'ya29.GlvkAwl0Hwbt_smWkeFgNbmwKhk27Sow0-Vs6kbCrrZfVutgZ4HjIVKR1SA'
+                            'Htl14KR7Q7DP957iscSx2crZ_UjenjRfSJXA8v5J6SnRifvcIZ8KbOSLl6gw9AjJU'
+        })
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
                                         content_type='application/json')
@@ -208,3 +208,6 @@ class TestSignUpAPI(TestSignUp):
         self.assertEquals(oauthed_member.user.social_auth.count(), 1)
 
         self.assertEquals(oauthed_member.user.social_auth.get().provider, 'google-oauth2')
+
+        # user has a photo defined by the social auth
+        self.assertTrue('photo' in user_meta and user_meta['photo'])
