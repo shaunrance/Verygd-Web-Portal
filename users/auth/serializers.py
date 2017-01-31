@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from social_core.exceptions import AuthAlreadyAssociated
 from social_django.utils import load_backend, load_strategy
 
 
