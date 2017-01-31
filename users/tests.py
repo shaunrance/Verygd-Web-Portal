@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import json
+import unittest
+import os
 import hypothesis.extra.fakefactory as ff
 
 from very_gd.tests.strategies import TestStrategies
@@ -166,6 +168,7 @@ class TestSignUpAPI(TestSignUp):
 
         return login_meta
 
+    @unittest.skipIf(not os.getenv('FACEBOOK_ACCESS_TOKEN', None), 'requires a temp social auth access token')
     def test_login_via_social_auth(self):
         user_id, post_params = self.test_sign_up_with_facebook()
 
@@ -173,6 +176,7 @@ class TestSignUpAPI(TestSignUp):
 
         self.assertTrue(login_meta and 'token' in login_meta and login_meta['token'])
 
+    @unittest.skipIf(not os.getenv('FACEBOOK_ACCESS_TOKEN', None), 'requires a temp social auth access token')
     def test_sign_up_with_facebook(self, post=None):
         # can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
         post = post or {'params': {}}
@@ -182,8 +186,7 @@ class TestSignUpAPI(TestSignUp):
 
         post['params'].update({
             'provider': 'facebook',
-            'access_token': 'EAAcZBhBGl030BAL4HRf6iFgdhSbsen4C3hdWxVHATmVtR47ND3ZC7VoYPbuLVu4ufdZA3rxtkU637'
-                            'XwQavcngDGv0BN0SHRP9Ba3w0Ov1ZB04UZC2fMeddfewSoAGkV450tMnPVrOjoZCBSZB9BEgWFvgnaKvcY4tUZD'
+            'access_token': os.getenv('FACEBOOK_ACCESS_TOKEN', None)
         })
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
@@ -204,6 +207,7 @@ class TestSignUpAPI(TestSignUp):
 
         return user_meta['id'], post['params']
 
+    @unittest.skipIf(not os.getenv('GOOGLE_ACCESS_TOKEN', None), 'requires a temp social auth access token')
     def test_sign_up_with_google(self, post=None):
         # can regenerate a new app token via https://developers.google.com/oauthplayground/
         post = post or {'params': {}}
@@ -213,8 +217,7 @@ class TestSignUpAPI(TestSignUp):
 
         post['params'].update({
             'provider': 'google',
-            'access_token': 'ya29.GlvkAwl0Hwbt_smWkeFgNbmwKhk27Sow0-Vs6kbCrrZfVutgZ4HjIVKR1SA'
-                            'Htl14KR7Q7DP957iscSx2crZ_UjenjRfSJXA8v5J6SnRifvcIZ8KbOSLl6gw9AjJU'
+            'access_token': os.getenv('GOOGLE_ACCESS_TOKEN', None)
         })
 
         response, user_meta = self.post(post['url'], data=post['params'], client=client,
