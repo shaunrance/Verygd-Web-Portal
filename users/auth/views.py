@@ -7,11 +7,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import Response
+from users.auth.serializers import SocialToSiteTokenSerializer
 
 
 class VeryGDAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data['user']
@@ -39,3 +40,7 @@ class VeryGDAuthToken(ObtainAuthToken):
             Token.objects.filter(pk=auth_user[1].pk).delete()
 
             return Response({'status': 'success', 'msg': 'Logged out.'}, status=204)
+
+
+class VeryGDSocialToSiteToken(VeryGDAuthToken):
+    serializer_class = SocialToSiteTokenSerializer

@@ -26,8 +26,6 @@ class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
     provider = serializers.ChoiceField(choices=('facebook', 'google',), write_only=True, required=True)
     access_token = serializers.CharField(required=True, write_only=True)
 
-    access_token_secret = serializers.CharField(required=False, write_only=True)
-
     def validate_provider(self, value):
         if value == 'google':
             return 'google-oauth2'

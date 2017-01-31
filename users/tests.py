@@ -154,9 +154,28 @@ class TestLoginAPI(TestLogInOutAPI):
 
 
 class TestSignUpAPI(TestSignUp):
+    def login_via_social_auth(self, user_id, post_params):
+        client = self.get_client()
+
+        response, login_meta = self.post('/auth/social/token', data={
+            'provider': post_params['provider'], 'access_token': post_params['access_token'],
+        }, client=client)
+
+        self.assertTrue(response.status_code == 200, 'expected {0} got {1} instead ({2})'.format(
+            '200', response.status_code, login_meta or ''))
+
+        return login_meta
+
+    def test_login_via_social_auth(self):
+        user_id, post_params = self.test_sign_up_with_facebook()
+
+        login_meta = self.login_via_social_auth(user_id, post_params)
+
+        self.assertTrue(login_meta and 'token' in login_meta and login_meta['token'])
+
     def test_sign_up_with_facebook(self, post=None):
         # can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
-        post = post or self.strategies.get_create_user_strategy().example()
+        post = post or {'params': {}}
         client = self.get_client()
 
         post['url'] = '/users/social/signup'
@@ -183,9 +202,11 @@ class TestSignUpAPI(TestSignUp):
         # user has a photo defined by the social auth
         self.assertTrue('photo' in user_meta and user_meta['photo'])
 
+        return user_meta['id'], post['params']
+
     def test_sign_up_with_google(self, post=None):
         # can regenerate a new app token via https://developers.google.com/oauthplayground/
-        post = post or self.strategies.get_create_user_strategy().example()
+        post = post or {'params': {}}
         client = self.get_client()
 
         post['url'] = '/users/social/signup'
@@ -211,3 +232,5 @@ class TestSignUpAPI(TestSignUp):
 
         # user has a photo defined by the social auth
         self.assertTrue('photo' in user_meta and user_meta['photo'])
+
+        return user_meta['id'], post['params']
