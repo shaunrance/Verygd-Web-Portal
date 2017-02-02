@@ -14,6 +14,7 @@ class Panel(models.Model):
     order = models.IntegerField(blank=True, null=True)
 
     hotspots = jsonfield.JSONField(null=True)
+    sequence = jsonfield.JSONField(null=True)
 
     @property
     def media_group(self):

@@ -4,10 +4,18 @@ from panel.models import PanelImage
 from PIL import Image
 
 
+class SequenceSerializer(serializers.Serializer):
+    files = serializers.ListSerializer(required=True)
+    speed = serializers.IntegerField(required=True)
+    loop = serializers.NullBooleanField(required=True)
+
+
 class PanelSerializer(ContentSerializer):
     related_tag = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     order = serializers.IntegerField(required=False)
+
     hotspots = serializers.JSONField(required=False)
+    sequence = SequenceSerializer(required=False)
 
 
 class PanelImageSerializer(PanelSerializer):
