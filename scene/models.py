@@ -16,6 +16,8 @@ class Scene(models.Model):
 
     is_panorama = models.BooleanField(default=False, null=False, blank=True, verbose_name='is-panorama')
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
+    gap_distance = models.FloatField(blank=True, null=True)
+    pan_start_point = models.FloatField(blank=True, null=True)
 
     @property
     def owner(self):
