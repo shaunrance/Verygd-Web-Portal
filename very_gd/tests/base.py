@@ -37,12 +37,14 @@ class TestAPIBase(Base):
         data = self.strategies.get_create_scene_strategy().example()
         data.update(kwargs)
 
-        response, msg = self.post_as(member, '/{0}'.format(self.scene_endpoint), data=data)
+        response, scene_meta = self.post_as(member, '/{0}'.format(self.scene_endpoint), data=data)
 
         self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(response.status_code,
-                                                                                                 msg))
+                                                                                                 scene_meta))
 
-        return msg['id']
+        self.assertTrue('gap_distance' in scene_meta and 'pan_start_point' in scene_meta)
+
+        return scene_meta['id']
 
     def delete_scene(self, member, scene_id):
         response = self.delete_as(member, '/{0}/{1}'.format(self.scene_endpoint, scene_id))
