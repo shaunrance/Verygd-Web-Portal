@@ -75,7 +75,6 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                         activeElement = false;
                     }
                 }
-
                 return hits;
             }
 
@@ -131,10 +130,11 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                         if (obj.dispose) {
                             obj.dispose();
                         }
-                        obj = undefined;                        
+                        obj = undefined;
                     }
                 }
                 itemsMouseCanHit = [];
+                camera.position.set(0, 10, 0);
             }
 
             function stopRendering() {
@@ -150,6 +150,10 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             function setCursorPosition(x, y) {
                 mouse.x = (x / $$el.width()) * 2 - 1;
                 mouse.y = - (y / $$el.height()) * 2 + 1;
+            }
+
+            function getCursorPosition(x, y) {
+                return [mouse.x, mouse.y];
             }
 
             function updateDimensions() {
@@ -176,11 +180,25 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             function getActiveObject() {
                 return scene.getObjectById(activeElement, true);
             }
+            function getActiveObjects() {
+                var objs = [];
+                _.each(activeElements, function(activeEl) {
+                    objs.push(scene.getObjectById(activeEl, true));
+                });
+                return objs;
+            }
 
-            function addItem(item) {
-                itemsMouseCanHit.push(item);
-                item.isVisible = true;
+            function addItem(item, isStatic) {
+                if (typeof isStatic === 'undefined') {
+                    isStatic = false;
+                }
+                if (!isStatic) {
+                    itemsMouseCanHit.push(item);
+                    item.isVisible = true;
+                }
                 scene.add(item);
+                scene.remove(camera);
+                scene.add(camera);
             }
 
             function pushItem(item) {
@@ -191,8 +209,8 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             function setupBaseScene() {
                 var ASPECT = $$el.width() / $$el.height();
                 var FAR = 700;
-                var FOV = 70;
-                var NEAR = 0.001;
+                var FOV = 90;
+                var NEAR = 0.01;
 
                 if (debug) {
                     stats = new Stats();
@@ -204,11 +222,12 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.shadowMap.enabled = false;
                 renderer.setSize($$el.width(), $$el.height());
+                renderer.sortObjects = true;
                 $$el.append(renderer.domElement);
                 if (debug) {
                     $$el.append(stats.dom);
                 }
-
+                window.camera = camera;
                 //camera.position.set(-90, 15, 0);
                 camera.position.set(0, 10, 0);
 
@@ -256,6 +275,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
 
             return {
                 activeObject: getActiveObject,
+                activeObjects: getActiveObjects,
                 addItem: addItem,
                 camera: getCamera,
                 destroy: destroy,
@@ -265,6 +285,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 pushItem: pushItem,
                 scene: getScene,
                 setCursorPosition: setCursorPosition,
+                getCursorPosition: getCursorPosition,
                 startRendering: startRendering,
                 stopRendering: stopRendering,
                 resize: updateDimensions

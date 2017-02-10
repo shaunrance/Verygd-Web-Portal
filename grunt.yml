@@ -30,6 +30,7 @@ config:
                     - web/bower_components/three.js/examples/js/libs/stats.min.js
                     - web/bower_components/suite/suite.js
                     - web/bower_components/suite/factories/browser.js
+                    - web/bower_components/suite/factories/geo.js
                     - web/bower_components/ng-file-upload/ng-file-upload.min.js
                     - web/bower_components/tinycolor/dist/tinycolor-min.js
                     - web/bower_components/angular-color-picker/dist/angularjs-color-picker.min.js
