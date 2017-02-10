@@ -1,0 +1,15 @@
+<div class="hotspot-editor">
+    <div class="editor">
+
+        <div class="hotspot__group">
+            <div
+                ng-repeat="hotspot in content.hotspots"
+                style="left: {{hotspot.x * 100}}%; top: {{hotspot.y * 100}}%; width: {{hotspot.width * 100}}%;  height: {{hotspot.height * 100}}%; "
+                data-id="{{$index}}"
+                ng-click="edit($event)"
+                class="hotspot dropped">
+            </div>
+        </div>
+        <img class="hotspot__image" src="{{content.url}}?fm=jpg&w=1200&q=90">
+    </div>
+</div>

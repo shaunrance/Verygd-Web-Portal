@@ -15,6 +15,7 @@ angular.module('ua5App.notifications', []);
 angular.module('ua5App.terms-of-service', []);
 angular.module('ua5App.privacy-policy', []);
 angular.module('ua5App.reset-password', []);
+angular.module('ua5App.hotspots', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -33,6 +34,7 @@ angular.module('ua5App', [
     'suite',
     'color.picker',
     // start add states as app dependency
+    'ua5App.hotspots',
     'ua5App.notifications',
     'ua5App.billing',
     'ua5App.account',

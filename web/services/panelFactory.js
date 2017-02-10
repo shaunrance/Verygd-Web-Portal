@@ -10,6 +10,10 @@ angular.module('ua5App')
             return $http.get(urlBase + '/' + projectId);
         };
 
+        dataFactory.getPanel = function(panelId) {
+            return $http.get(urlBase + '/' + panelId);
+        };
+
         dataFactory.insertPanel = function(file, sceneId, order) {
             var fileName = file.name;
             return Upload.upload({

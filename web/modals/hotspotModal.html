@@ -1,0 +1,27 @@
+<div class="modal-overlay modal-overlay--hotspots">
+    <div class="modal">
+        <form>
+            <div class="modal-header">
+                <h3>Edit Hotspots</h3>
+                <button class="modal-close" type="button" ng-click="close()">
+                    <img class="modal-close--icon" src="assets/img/modal-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body modal-body--hotspots">
+                <div class="hotspots">
+                    <div
+                        hotspot-editor
+                        content="content"></div>
+                </div>
+            </div>
+        </form>
+        <div
+            hotspot-settings
+            save="save"
+            cancel="cancel"
+            remove="remove"
+            current="current"
+            scenes="scenes">
+        </div>
+    </div>
+</div>

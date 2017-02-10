@@ -178,6 +178,24 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
+        $scope.editHotspots = function(panelData) {
+            $('body').addClass('no-scroll');
+            ModalService.showModal({
+                templateUrl: 'modals/hotspotModal.html',
+                controller: 'hotspotController',
+                inputs: {
+                    content: panelData,
+                    scenes: $scope.scenes
+                }
+
+            }).then(function(modal) {
+
+                modal.close.then(function(result) {
+                    $('body').removeClass('no-scroll');
+                });
+            });
+        };
+
         $scope.changeScene = function(sceneId) {
             $scope.currentScene = sceneId;
             //getSceneInfo(sceneId);

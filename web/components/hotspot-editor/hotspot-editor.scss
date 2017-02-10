@@ -1,0 +1,64 @@
+.hotspot-details {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 3;
+}
+
+.modal-body--hotspots {
+    max-height: none;
+
+    .modal-background {
+        background: $white;
+    }
+}
+
+.hotspots {
+    position: relative;
+    user-select: none;
+
+    .editor {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .hotspot__group {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+    }
+
+    .hotspot {
+        @include transition(border 0.25s ease-out, background 0.25s ease-out);
+        background: rgba(86, 224, 234, 0.25);
+        border: 2px solid rgba(86, 224, 234, 0.50);
+        cursor: move;
+        position: absolute;
+        z-index: 2;
+
+        &.dropped {
+            background: rgba(86, 224, 234, 0.50);
+            border: 2px solid #56E0EA;
+            min-height: 50px;
+            min-width: 50px;
+        }
+    }
+
+    .hotspot__image {
+        cursor: crosshair;
+        position: relative;
+        user-select: none;
+        width: 100%;
+        z-index: 1;
+    }
+}
+
+.modal-overlay--hotspots {
+    background: $white;
+
+    .modal {
+        height: 100%;
+        max-width: none;
+        width: 100%;
+    }
+}

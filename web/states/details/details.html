@@ -57,12 +57,13 @@
                         <div
                             ng-hide="public"
                             class="link-icon---container"
-                            ng-click="linkContent(panel)">
+                            ng-click="editHotspots(panel)">
                             <img class="link-icon" src="assets/img/link.svg" />
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
                         <div class="vg__image--caption-name">{{panel.title}}</div>
+
                         <div class="vg__image--caption-tag" ng-if="panel.related_tag !== null">
                             {{panel.relatedSceneName}}
                         </div>
