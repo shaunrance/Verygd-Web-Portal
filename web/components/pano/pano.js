@@ -8,7 +8,8 @@ angular.module('ua5App')
                 useVr: '=',
                 panoContent: '=',
                 background: '=',
-                isPanorama: '='
+                isPanorama: '=',
+                hotspotType: '@'
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
@@ -24,6 +25,10 @@ angular.module('ua5App')
                 var panoramaMesh;
                 var background = $scope.background;
                 var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+
+                if (typeof $scope.hotspotType === 'undefined') {
+                    $scope.hotspotType = 'hidden';
+                }
 
                 $scope.$watch(function() {
                     return $scope.useVr;
@@ -178,33 +183,6 @@ angular.module('ua5App')
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
 
-                            //TODO: validate that the linked scene exists
-                            // if (useVr) {
-                            //     linkMaterial = new THREE.MeshBasicMaterial({
-                            //         side: THREE.MeshBasicMaterial,
-                            //         map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
-                            //         transparent: true
-                            //     });
-                            //     if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
-                            //         hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                            //         hitAreaMat = linkMaterial;
-                            //         hitAreaMat.depthWrite = false;
-                            //         hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                            //         hitAreaMesh.name = 'sceneLink';
-                            //         hitAreaMesh.sceneLink = data.related_tag;
-                            //         hitAreaMesh.position.y = -size.height / 2 - 4;
-                            //         hitAreaMesh.position.z = 3;
-                            //         plane.add(hitAreaMesh);
-                            //         scene.pushItem(hitAreaMesh);
-                            //     }
-                            //     scene.addItem(plane, true);
-                            // } else {
-                            //     if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
-                            //         plane.name = 'sceneLinkObj';
-                            //         plane.sceneLink = data.related_tag;
-                            //     }
-
-                            // }
                             scene.addItem(plane);
                             makeHotspots(data.hotspots, plane, size.width, size.height);
                         }
@@ -249,6 +227,10 @@ angular.module('ua5App')
                         plane.isVisible = false;
                         container.add(plane);
                         container.hotspots.push(plane);
+
+                        if ($scope.hotspotType === 'visible') {
+                            plane.show();
+                        }
                     });
                 }
 
@@ -330,6 +312,10 @@ angular.module('ua5App')
                         hotspotMesh.isVisible = false;
                         scene.addItem(hotspotMesh, true);
                         parent.hotspots.push(hotspotMesh);
+
+                        if ($scope.hotspotType === 'visible') {
+                            hotspotMesh.show();
+                        }
                     });
                 }
 
@@ -474,7 +460,7 @@ angular.module('ua5App')
                             }
                         });
 
-                        if (!clickedHotspot) {
+                        if (!clickedHotspot && $scope.hotspotType !== 'visible') {
                             _.each(activeObjects, function(obj) {
                                 if (obj.name === 'panel' || obj.name === 'panorama') {
                                     _.each(obj.hotspots, function(child) {

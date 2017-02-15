@@ -188,6 +188,10 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 return objs;
             }
 
+            function getItemsMouseCanHit() {
+                return itemsMouseCanHit;
+            }
+
             function addItem(item, isStatic) {
                 if (typeof isStatic === 'undefined') {
                     isStatic = false;
@@ -276,6 +280,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             return {
                 activeObject: getActiveObject,
                 activeObjects: getActiveObjects,
+                itemsMouseCanHit: getItemsMouseCanHit,
                 addItem: addItem,
                 camera: getCamera,
                 destroy: destroy,
