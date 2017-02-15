@@ -8,6 +8,13 @@ angular.module('ua5App')
                         retrieve: {method:'POST'}
                     }
                 );
+            },
+            socialToken: function() {
+                return $resource(APICONSTANTS.apiHost + '/auth/social/token', {},
+                    {
+                        retrieve: {method:'POST'}
+                    }
+                );
             }
         };
     }])
