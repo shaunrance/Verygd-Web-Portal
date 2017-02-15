@@ -47,7 +47,7 @@ class TestPanel(TestAPIBase):
         ]
 
         self.put_as(self.member, '/{0}/{1}'.format(self.panel_endpoint, self.panel_id),
-                    {'hotspots': hotspots}, format='json')
+                    {'hotspots': hotspots, 'hotspot_type': 'vanilla'}, format='json')
 
         response, msg = self.get_as(self.member, '/{0}/{1}'.format(self.panel_endpoint, self.panel_id))
 
@@ -57,3 +57,5 @@ class TestPanel(TestAPIBase):
         self.assertTrue('hotspots' in msg)
 
         self.assertEquals(msg['hotspots'], hotspots)
+
+        self.assertEquals(msg['hotspot_type'], 'vanilla')
