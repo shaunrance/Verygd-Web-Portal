@@ -100,7 +100,7 @@ angular.module('ua5App')
                             Math.abs(pos.x - cam.rotation.x) === 0 &&
                             Math.abs(pos.y - cam.rotation.y) === 0
                         ) {
-                            clickHandler();
+                            setTimeout(clickHandler, 100);
                         }
                     });
 
@@ -466,21 +466,29 @@ angular.module('ua5App')
 
                 function toggleHotspots(activeObjects) {
                     if (typeof activeObjects === 'object' && activeObjects.length > 0) {
+                        var clickedHotspot = false;
                         _.each(activeObjects, function(obj) {
                             if (obj.name === 'hotspot') {
                                 launchHotpsot(obj.hotspot);
-                            } else if (obj.name === 'panel' || obj.name === 'panorama') {
-                                _.each(obj.hotspots, function(child) {
-                                    if (child.name === 'hotspot') {
-                                        if (child.showing) {
-                                            child.hide();
-                                        } else {
-                                            child.show();
-                                        }
-                                    }
-                                });
+                                clickedHotspot = true;
                             }
                         });
+
+                        if (!clickedHotspot) {
+                            _.each(activeObjects, function(obj) {
+                                if (obj.name === 'panel' || obj.name === 'panorama') {
+                                    _.each(obj.hotspots, function(child) {
+                                        if (child.name === 'hotspot') {
+                                            if (child.showing) {
+                                                child.hide();
+                                            } else {
+                                                child.show();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
 
