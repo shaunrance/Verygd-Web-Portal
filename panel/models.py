@@ -14,6 +14,7 @@ class Panel(models.Model):
     order = models.IntegerField(blank=True, null=True)
 
     hotspots = jsonfield.JSONField(null=True)
+    hotspot_type = models.CharField(max_length=128, blank=True, null=True)
 
     @property
     def media_group(self):
