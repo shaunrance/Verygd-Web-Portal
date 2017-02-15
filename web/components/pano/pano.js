@@ -559,6 +559,7 @@ angular.module('ua5App')
                 });
 
                 init();
+                scene.resize();
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {
