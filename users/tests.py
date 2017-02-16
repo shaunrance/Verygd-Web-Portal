@@ -2,11 +2,14 @@
 from __future__ import unicode_literals
 
 import json
+import unittest
+import os
 import hypothesis.extra.fakefactory as ff
 
 from very_gd.tests.strategies import TestStrategies
+from users.models import Member
 from media_portal.users.tests import TestUserAPI as TestUserAPIBase
-from media_portal.users.tests import TestLogInOutAPI
+from media_portal.users.tests import TestLogInOutAPI, TestSignUp
 from users.settings import UserPasswordResetEmail, UserSignUpEmail, UserSettings, UserFileSizeQuota
 
 from django.contrib.auth import get_user_model
@@ -150,3 +153,87 @@ class TestLoginAPI(TestLogInOutAPI):
 
     def test_intercom_token(self):
         self.assertTrue('intercom_token' in self.member['auth'] and self.member['auth']['intercom_token'])
+
+
+class TestSignUpAPI(TestSignUp):
+    def login_via_social_auth(self, user_id, post_params):
+        client = self.get_client()
+
+        response, login_meta = self.post('/auth/social/token', data={
+            'provider': post_params['provider'], 'access_token': post_params['access_token'],
+        }, client=client)
+
+        self.assertTrue(response.status_code == 200, 'expected {0} got {1} instead ({2})'.format(
+            '200', response.status_code, login_meta or ''))
+
+        return login_meta
+
+    @unittest.skipIf(not os.getenv('FACEBOOK_ACCESS_TOKEN', None), 'requires a temp social auth access token')
+    def test_login_via_social_auth(self):
+        user_id, post_params = self.test_sign_up_with_facebook()
+
+        login_meta = self.login_via_social_auth(user_id, post_params)
+
+        self.assertTrue(login_meta and 'token' in login_meta and login_meta['token'])
+
+    @unittest.skipIf(not os.getenv('FACEBOOK_ACCESS_TOKEN', None), 'requires a temp social auth access token')
+    def test_sign_up_with_facebook(self, post=None):
+        # can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
+        post = post or {'params': {}}
+        client = self.get_client()
+
+        post['url'] = '/users/social/signup'
+
+        post['params'].update({
+            'provider': 'facebook',
+            'access_token': os.getenv('FACEBOOK_ACCESS_TOKEN', None)
+        })
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
+
+        self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
+            '201', response.status_code, user_meta or ''))
+
+        oauthed_member = Member.objects.get(pk=user_meta['id'])
+
+        # do we have a user created by python-social-auth?
+        self.assertEquals(oauthed_member.user.social_auth.count(), 1)
+
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'facebook')
+
+        # user has a photo defined by the social auth
+        self.assertTrue('photo' in user_meta and user_meta['photo'])
+
+        return user_meta['id'], post['params']
+
+    @unittest.skipIf(not os.getenv('GOOGLE_ACCESS_TOKEN', None), 'requires a temp social auth access token')
+    def test_sign_up_with_google(self, post=None):
+        # can regenerate a new app token via https://developers.google.com/oauthplayground/
+        post = post or {'params': {}}
+        client = self.get_client()
+
+        post['url'] = '/users/social/signup'
+
+        post['params'].update({
+            'provider': 'google',
+            'access_token': os.getenv('GOOGLE_ACCESS_TOKEN', None)
+        })
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
+
+        self.assertTrue(response.status_code == 201, 'expected {0} got {1} instead ({2})'.format(
+            '201', response.status_code, user_meta or ''))
+
+        oauthed_member = Member.objects.get(pk=user_meta['id'])
+
+        # do we have a user created by python-social-auth?
+        self.assertEquals(oauthed_member.user.social_auth.count(), 1)
+
+        self.assertEquals(oauthed_member.user.social_auth.get().provider, 'google-oauth2')
+
+        # user has a photo defined by the social auth
+        self.assertTrue('photo' in user_meta and user_meta['photo'])
+
+        return user_meta['id'], post['params']

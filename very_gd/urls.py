@@ -4,10 +4,8 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from rest_framework import routers
 
-from users.auth.views import VeryGDAuthToken
-from media_portal.users.views import MemberCreateView
-
-from users.views import MembersViewSet
+from users.auth.views import VeryGDAuthToken, VeryGDSocialToSiteToken
+from users.views import MemberCreateView, MemberSocialCreateView, MembersViewSet
 
 from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls
@@ -43,8 +41,14 @@ urlpatterns = [
     url(r'^reset_password/confirm/?', confirm_password, name='password_reset_confirm'),
     url(r'^reset_password/?$', reset_password, name='reset_password'),
 
+    # auth endpoints
     url(r'^auth/token/?', VeryGDAuthToken.as_view()),
+    url(r'^auth/social/token/?', VeryGDSocialToSiteToken.as_view()),
+
+    # signup endpoints
     url(r'^users/signup/?$', MemberCreateView.as_view({'post': 'create'}), name='member-create'),
+    url(r'^users/social/signup/?$', MemberSocialCreateView.as_view({'post': 'create'}), name='member-create'),
+
     url(r'^admin/?', admin_site.urls, name='admin'),
     url(r'^policy/?', include(policy_urls)),
     url(r'^docs/?', include('rest_framework_docs.urls')),

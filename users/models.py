@@ -2,10 +2,11 @@ from django.db import models
 from users.settings import UserSettings
 
 from users.managers import VeryGDMemberManager
+from users.social.photo.mixin import SocialPhotoMixin
 from media_portal.users.member.base import BaseMember
 
 
-class VeryGDMember(BaseMember):
+class VeryGDMember(BaseMember, SocialPhotoMixin):
     class Meta:
         abstract = True
 
