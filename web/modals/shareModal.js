@@ -15,6 +15,7 @@ angular.module('ua5App')
         $scope.showFileUpload = fields.showFileUpload;
         $scope.urlShowing = true;
         $scope.projectId = fields.project;
+        $scope.sceneId = fields.scene;
 
         $scope.close = function() {
             close({
@@ -25,7 +26,7 @@ angular.module('ua5App')
         $scope.switchPanel = function(panel) {
             if (panel === 'url') {
                 $scope.urlShowing = true;
-            } else if (panel === 'email') {
+            } else if (panel === 'embed') {
                 $scope.urlShowing = false;
             }
         };
@@ -59,8 +60,14 @@ angular.module('ua5App')
 
         function init() {
             projectFactory.getProjectById($scope.projectId).then(function(response) {
+                var scene = '';
                 $scope.project = response.data;
-                $scope.url = 'http://' + window.location.host + '/p/' + $scope.project.short_uuid;
+
+                if ($scope.project.content.length > 0) {
+                    scene = '/' + $scope.project.content[0].id;
+                }
+
+                $scope.url = 'http://' + window.location.host + '/p/' + $scope.project.short_uuid + scene;
                 if ($scope.project.public) { //jshint ignore:line
                     $scope.publicProject = true;
                 } else {

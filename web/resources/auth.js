@@ -5,7 +5,7 @@ angular.module('ua5App')
             token: function() {
                 return $resource(APICONSTANTS.apiHost + '/auth/token', {},
                     {
-                        retrieve: {method:'POST'}
+                        retrieve: {method:'POST', isPublic: true}
                     }
                 );
             }

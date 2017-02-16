@@ -55,21 +55,21 @@ angular.module('ua5App')
             forgotPass: function() {
                 return $resource(APICONSTANTS.apiHost + '/reset_password', {email: '@email'},
                     {
-                        send: {method: 'POST', params: {email: '@email'}}
+                        send: {method: 'POST', params: {email: '@email'}, isPublic: true}
                     }
                 );
             },
             confirmPass: function() {
                 return $resource(APICONSTANTS.apiHost + '/reset_password/confirm', {id: '@id', t: '@token'},
                     {
-                        save: {method: 'POST', params: {id: '@id', t: '@token'}}
+                        save: {method: 'POST', params: {id: '@id', t: '@token'}, isPublic: true}
                     }
                 );
             },
             signup: function() {
                 return $resource(APICONSTANTS.apiHost + '/users/signup', {},
                     {
-                        create: {method:'POST'}
+                        create: {method:'POST', isPublic: true}
                     }
                 );
             },

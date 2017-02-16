@@ -121,6 +121,13 @@
         margin: 20px 0 30px;
     }
 
+    .modal-input--multiline {
+        @extend %small;
+        border: 1px solid #9797a1;
+        margin: 0;
+        padding: 10px;
+    }
+
     #share-link {
         color: $btn-blue;
         cursor: text;

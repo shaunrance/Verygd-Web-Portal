@@ -15,7 +15,7 @@ angular.module('ua5App')
         };
 
         dataFactory.getProjectByPubId = function(projectId) {
-            return $http.get(pubUrlBase + '/' + projectId, {});
+            return $http.get(pubUrlBase + '/' + projectId, {isPublic: true});
         };
 
         dataFactory.addProject = function(newProject) {
