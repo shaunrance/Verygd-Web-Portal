@@ -213,7 +213,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             function setupBaseScene() {
                 var ASPECT = $$el.width() / $$el.height();
                 var FAR = 700;
-                var FOV = 70;
+                var FOV = 50;
                 var NEAR = 0.001;
 
                 if (debug) {
