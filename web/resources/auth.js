@@ -5,21 +5,21 @@ angular.module('ua5App')
             token: function() {
                 return $resource(APICONSTANTS.apiHost + '/auth/token', {},
                     {
-                        retrieve: {method:'POST'}
+                        retrieve: {method:'POST', isPublic: true}
                     }
                 );
             },
             socialToken: function() {
                 return $resource(APICONSTANTS.apiHost + '/auth/social/token', {},
                     {
-                        retrieve: {method:'POST'}
+                        retrieve: {method:'POST', isPublic: true}
                     }
                 );
             },
             socialSignUp: function() {
                 return $resource(APICONSTANTS.apiHost + '/users/social/signup', {},
                     {
-                        retrieve: {method:'POST'}
+                        retrieve: {method:'POST', isPublic: true}
                     }
                 );
             }

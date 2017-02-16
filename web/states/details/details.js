@@ -145,7 +145,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         formLabels:[{title: 'URL'}],
                         showFileUpload: false,
                         submitButtonText: 'Share',
-                        project: $stateParams.projectId
+                        project: $stateParams.projectId,
+                        scene: $scope.currentScene
                     }
                 }
             }).then(function(modal) {

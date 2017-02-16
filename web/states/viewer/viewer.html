@@ -9,7 +9,7 @@
     <div class="viewer__nav">
         <a
             class="viewer__exit"
-            ng-if="!useVr"
+            ng-if="!useVr && !isPublic"
             ng-click="exit()">Exit</a>
         <a
             ng-click="toggleCardboard()"

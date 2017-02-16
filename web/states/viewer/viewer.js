@@ -15,7 +15,7 @@ angular.module('ua5App.viewer')
                     }]
                 }
             })
-            .state('v', {
+            .state('publicViewer', {
                 url: '/p/:projectId/:scene',
                 templateUrl: 'states/viewer/viewer.html',
                 controller: 'viewerCtrl',
@@ -29,13 +29,15 @@ angular.module('ua5App.viewer')
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta, $state) {
         var lastScene = 1;
         $scope.scenes = content;
         $scope.touch = BrowserFactory.hasTouch();
         $scope.useVr = false;
 
         ngMeta.setTitle('Viewer');
+
+        $scope.isPublic = ($state.current.name === 'v');
 
         function applyContent() {
             $scope.background = $scope.currentScene.background;
