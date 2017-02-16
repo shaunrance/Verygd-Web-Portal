@@ -6,6 +6,8 @@ from django.forms import ModelForm
 
 from media_portal.admin import admin_site, AdminHTMLEditor
 from users.settings import UserSettings, UserSignUpEmail, UserPasswordResetEmail, UserFileSizeQuota
+from users.models import Member
+from django.utils.safestring import mark_safe
 
 
 class BaseUserAdmin(AdminHTMLEditor, admin.ModelAdmin):
@@ -25,6 +27,37 @@ class UserSignUpSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
 @admin.register(UserPasswordResetEmail, site=admin_site)
 class UserResetPasswordSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
     pass
+
+
+@admin.register(Member, site=admin_site)
+class MemberAdmin(admin.ModelAdmin):
+    actions = ('delete_members', )
+    readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', )
+
+    def get_actions(self, request):
+        actions = super(MemberAdmin, self).get_actions(request)
+
+        # remove default delete_selected
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+
+        return actions
+
+    def delete_members(self, request, queryset):
+        for member in queryset.all():
+            member_user = member.user
+            member_group = member.media_group
+
+            member.delete()
+            member_user.delete()
+
+            if member_group.user_set.count() <= 1:
+                member_group.delete()
+
+    def group(self, instance):
+        return mark_safe('<span>{group}</span>'.format(group=instance.media_group))
+
+    delete_members.short_description = 'Delete the selected members.'
 
 
 class QuotaForm(ModelForm):
