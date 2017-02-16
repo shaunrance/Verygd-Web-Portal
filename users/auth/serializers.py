@@ -22,4 +22,8 @@ class SocialToSiteTokenSerializer(serializers.Serializer):
 
         attrs['user'] = backend.do_auth(access_token)
 
+        # we've authenticated but haven't created a member yet
+        if not hasattr(attrs['user'], 'member'):
+            raise serializers.ValidationError({'error': 'No user associated with this social auth.'})
+
         return attrs
