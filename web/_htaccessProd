@@ -4,5 +4,3 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule ^(.*) /index.html [NC,L]
-RewriteCond %{SERVER_PORT} 80
-RewriteRule ^(.*)$ https://projects.very.gd/$1 [R,L]
