@@ -52,6 +52,9 @@ class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
                 {'error': 'Something went wrong authenticating your request.'}
             )
 
+        if 'user' not in attrs or 'user' in attrs and not attrs['user']:
+            raise serializers.ValidationError({'error': 'Something went wrong authenticating your request.'})
+
         return attrs
 
     def create(self, validated_data):
