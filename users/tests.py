@@ -168,6 +168,24 @@ class TestSignUpAPI(TestSignUp):
 
         return login_meta
 
+    def test_bad_access_token_fb(self, post=None):
+        # can regenerate a new app token via https://developers.facebook.com/tools/accesstoken/
+        post = post or {'params': {}}
+        client = self.get_client()
+
+        post['url'] = '/users/social/signup'
+
+        post['params'].update({
+            'provider': 'facebook',
+            'access_token': 'bad_token'
+        })
+
+        response, user_meta = self.post(post['url'], data=post['params'], client=client,
+                                        content_type='application/json')
+
+        self.assertTrue(response.status_code == 400, 'expected {0} got {1} instead ({2})'.format(
+            '400', response.status_code, user_meta or ''))
+
     @unittest.skipIf(not os.getenv('FACEBOOK_ACCESS_TOKEN', None), 'requires a temp social auth access token')
     def test_login_via_social_auth(self):
         user_id, post_params = self.test_sign_up_with_facebook()

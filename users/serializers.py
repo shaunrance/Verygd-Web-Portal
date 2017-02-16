@@ -1,3 +1,4 @@
+from requests.exceptions import HTTPError
 from rest_framework import serializers
 
 from users.models import Member
@@ -45,6 +46,10 @@ class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
         except AuthAlreadyAssociated:
             raise serializers.ValidationError(
                 {'error': 'This social media account is already associated with a user.'}
+            )
+        except HTTPError:
+            raise serializers.ValidationError(
+                {'error': 'Something went wrong authenticating your request.'}
             )
 
         return attrs
