@@ -34,16 +34,29 @@ angular.module('ua5App.sign-in')
             $scope.facebookReady = true;
         });
 
-        $scope.loginFB = function() {
+        $scope.signUpFB = function() {
             // From now on you can use the Facebook service just as Facebook api says
             Facebook.login(function(response) {
-                console.log(response);
                 AuthResource.socialSignUp().retrieve({
                     provider: 'facebook',
                     access_token: response.authResponse.accessToken
                 }).$promise.then(
                     function(response) {
-                        console.log(response);
+                        handleLogin(response);
+                    }
+                );
+            });
+        };
+
+        $scope.loginFB = function() {
+            // From now on you can use the Facebook service just as Facebook api says
+            Facebook.login(function(response) {
+                AuthResource.socialToken().retrieve({
+                    provider: 'facebook',
+                    access_token: response.authResponse.accessToken
+                }).$promise.then(
+                    function(response) {
+                        handleLogin(response);
                     }
                 );
             });
@@ -81,33 +94,37 @@ angular.module('ua5App.sign-in')
 
             AuthResource.token().retrieve({username: data.email, password: data.password}).$promise.then(
                 function(response) {
-                    //base expiration of cookies based on whether 'remember me' option was checked
-                    var todayDate = new Date();
-                    var expireDate = new Date();
-                    UsersResource.resetUser();
-                    //set cookies
-                    if ($scope.cookieExpireDate) {
-                        expireDate.setDate(todayDate.getDate() + 365);
-                        $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
-                        $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
-                        $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
-                    } else {
-                        expireDate.setDate(todayDate.getDate() + 1);
-                        $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
-                        $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
-                        $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
-                    }
-
-                    $http.defaults.headers.common['Authorization'] = 'Token ' + APICONSTANTS.authCookie.token; // jshint ignore:line
-                    intercomFactory.ping();
-
-                    $state.go('projects');
+                    handleLogin(response);
                 },
                 function(error) {
                     $scope.loginError = true;
                 }
             );
         };
+
+        function handleLogin(response) {
+            //base expiration of cookies based on whether 'remember me' option was checked
+            var todayDate = new Date();
+            var expireDate = new Date();
+            UsersResource.resetUser();
+            //set cookies
+            if ($scope.cookieExpireDate) {
+                expireDate.setDate(todayDate.getDate() + 365);
+                $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
+                $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
+                $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
+            } else {
+                expireDate.setDate(todayDate.getDate() + 1);
+                $cookies.put(APICONSTANTS.authCookie.token, response.token, {expires: expireDate});
+                $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id, {expires: expireDate});
+                $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token, {expires: expireDate});
+            }
+
+            $http.defaults.headers.common['Authorization'] = 'Token ' + APICONSTANTS.authCookie.token; // jshint ignore:line
+            intercomFactory.ping();
+
+            $state.go('projects');
+        }
 
         $scope.showModal = function() {
             ModalService.showModal({
