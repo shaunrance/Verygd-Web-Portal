@@ -15,6 +15,13 @@ angular.module('ua5App')
                         retrieve: {method:'POST'}
                     }
                 );
+            },
+            socialSignUp: function() {
+                return $resource(APICONSTANTS.apiHost + '/users/social/signup', {},
+                    {
+                        retrieve: {method:'POST'}
+                    }
+                );
             }
         };
     }])

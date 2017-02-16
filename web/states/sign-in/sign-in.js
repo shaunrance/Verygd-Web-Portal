@@ -38,7 +38,14 @@ angular.module('ua5App.sign-in')
             // From now on you can use the Facebook service just as Facebook api says
             Facebook.login(function(response) {
                 console.log(response);
-                // Do something with response.
+                AuthResource.socialSignUp().retrieve({
+                    provider: 'facebook',
+                    access_token: response.authResponse.accessToken
+                }).$promise.then(
+                    function(response) {
+                        console.log(response);
+                    }
+                );
             });
         };
 
