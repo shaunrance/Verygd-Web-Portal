@@ -32,7 +32,8 @@ class UserResetPasswordSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
 @admin.register(Member, site=admin_site)
 class MemberAdmin(admin.ModelAdmin):
     actions = ('delete_members', )
-    readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', )
+    list_display = ('name', 'signed_up_via_social_auth', )
+    readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', 'signed_up_via_social_auth', )
 
     def get_actions(self, request):
         actions = super(MemberAdmin, self).get_actions(request)
@@ -42,6 +43,9 @@ class MemberAdmin(admin.ModelAdmin):
             del actions['delete_selected']
 
         return actions
+
+    def signed_up_via_social_auth(self, instance):
+        return 'Yes' if hasattr(instance.user, 'social_user') and instance.user.social_user else ''
 
     def delete_members(self, request, queryset):
         for member in queryset.all():
