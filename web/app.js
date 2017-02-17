@@ -92,7 +92,7 @@ angular.module('ua5App', [
         $rootScope.deferredUser = $q.defer();
         $rootScope.deferredTerms = $q.defer();
     }])
-    .directive('app', ['$rootScope', 'intercomFactory', function($rootScope, intercomFactory) {
+    .directive('app', ['$rootScope', 'intercomFactory', '$location', '$window', function($rootScope, intercomFactory, $location, $window) {
         return {
             link: function($scope, $element, $attrs) {
                 var $$window;
@@ -137,6 +137,13 @@ angular.module('ua5App', [
                 $rootScope.renderer = new THREE.WebGLRenderer({
                     antialias: true
                 });
+
+                function forceSSL() {
+                    if ($location.protocol() !== 'https' && $location.host() === 'projects.very.gd') {
+                        $window.location.href = $location.absUrl().replace('http', 'https');
+                    }
+                }
+                forceSSL();
             }
         };
     }])
