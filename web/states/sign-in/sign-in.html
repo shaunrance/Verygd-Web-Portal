@@ -12,7 +12,8 @@
                 <form ng-submit="login(model)">
                     <div class="modal-header">
                         <h3>Login</h3>
-                        <a ng-click="loginFB()">Facebook</a>
+                        <a ng-click="signUpFB()">Facebook - Sign Up</a>
+                        <a ng-click="loginFB()">Facebook - Sign In</a>
                         <a ng-click="logout()">logout</a>
                     </div>
                     <div class="modal-body">
@@ -53,7 +54,7 @@
                         ng-if="loginError"
                         class="sign-in-modal-error"
                         login-error-message>
-                        The email and password you entered don't match. Please try again.
+                        {{errorMessage}}
                     </div>
                 </form>
             </div>

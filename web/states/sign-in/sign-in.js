@@ -26,6 +26,8 @@ angular.module('ua5App.sign-in')
             $('body').removeClass('no-scroll');
         }
 
+        $scope.errorMessage = 'The email and password you entered don’t match. Please try again.';
+
         $scope.$watch(function() {
             // This is for convenience, to notify if Facebook is loaded and ready to go.
             return Facebook.isReady();
@@ -37,14 +39,25 @@ angular.module('ua5App.sign-in')
         $scope.signUpFB = function() {
             // From now on you can use the Facebook service just as Facebook api says
             Facebook.login(function(response) {
-                AuthResource.socialSignUp().retrieve({
-                    provider: 'facebook',
-                    access_token: response.authResponse.accessToken
-                }).$promise.then(
-                    function(response) {
-                        handleLogin(response);
-                    }
-                );
+                console.log(response);
+                if (response.status === 'connected') {
+                    AuthResource.socialSignUp().retrieve({
+                        provider: 'facebook',
+                        access_token: response.authResponse.accessToken
+                    }).$promise.then(
+                        function(response) {
+                            $scope.loginFB();
+                        },
+                        function(error) {
+                            if (error.data.error[0] === 'This social media account is already associated with a user.') {
+                                $scope.loginFB();
+                            } else {
+                                $scope.loginError = true;
+                                $scope.errorMessage = error.data.error[0];
+                            }
+                        }
+                    );
+                }
             });
         };
 
@@ -57,6 +70,14 @@ angular.module('ua5App.sign-in')
                 }).$promise.then(
                     function(response) {
                         handleLogin(response);
+                    },
+                    function(error) {
+                        if (error.data.error[0] === 'No user associated with this social auth.') {
+                            $scope.signUpFB();
+                        } else {
+                            $scope.loginError = true;
+                            $scope.errorMessage = error.data.error[0];
+                        }
                     }
                 );
             });
@@ -80,6 +101,8 @@ angular.module('ua5App.sign-in')
                 }
             });
         };
+
+        $scope.getLoginStatus();
 
         $scope.me = function() {
             Facebook.api('/me', function(response) {
