@@ -225,6 +225,11 @@
     display: inline-block;
     margin-left: 10px;
     position: relative;
+	cursor:pointer;
+	
+	&:hover {
+	    opacity:0.7;	
+	}
 }
 
 .menu-container {
