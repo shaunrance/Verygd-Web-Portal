@@ -38,13 +38,12 @@
         }
     }
 	
-	/* material design floating placeholder */
 	input.modal-input::-webkit-input-placeholder {
 	 -webkit-transition: all 0.3s ease-in-out;
 	 transition: all 0.3s ease-in-out;
 	}
 
-	input.modal-input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
+	input.modal-input:focus::-webkit-input-placeholder, input.modal-input:valid::-webkit-input-placeholder {
 	 font-size: 11px;
 	 -webkit-transform: translateY(-20px);
 	 transform: translateY(-20px);
