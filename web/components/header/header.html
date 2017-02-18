@@ -52,10 +52,10 @@
             </a>
 
             <div class="header__user-container" ng-hide="public">
-                <div class="header__notification-container" ng-click="toggleNotification()">
+<!-- 
+               <div class="header__notification-container" ng-click="toggleNotification()">
                     <div class="header__notification-icon" ng-class="{'pending': notifications.length > 0}"></div>
                 </div>
-
                 <div class="header__notification-menu" ng-class="{'show': notificationToggle}">
                     <div ng-if="notifications.length > 0">
                         <ul>
@@ -69,7 +69,7 @@
                         No new notifications.
                     </div>
                 </div>
-
+-->
                 <div class="header__user-name" ng-click="toggleMenu()">
 <!--                     <div class="header__avatar"></div> -->
                     <span>{{user.name}}</span>
