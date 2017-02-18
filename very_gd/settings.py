@@ -77,8 +77,9 @@ SERVER_EMAIL = 'andrew@useallfive.com'
 
 ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
 
-EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
-EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
+if DEBUG:
+    ALLOWED_HOSTS += ['0.0.0.0']
+
 EMAIL_BACKEND = 'sgbackend.SendGridBackend'
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', None)

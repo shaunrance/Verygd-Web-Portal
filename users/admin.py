@@ -10,6 +10,10 @@ from users.models import Member
 from django.utils.safestring import mark_safe
 
 
+# disable default delete action, site-wide
+admin_site.disable_action('delete_selected')
+
+
 class BaseUserAdmin(AdminHTMLEditor, admin.ModelAdmin):
     pass
 
@@ -31,17 +35,21 @@ class UserResetPasswordSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
 
 @admin.register(Member, site=admin_site)
 class MemberAdmin(admin.ModelAdmin):
-    actions = ('delete_members', )
-    readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', )
+    actions = ('delete_members', 'upgrade_to_premium', )
+    list_display = ('name', 'signed_up_via_social_auth', 'premium_user', )
+    readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', 'signed_up_via_social_auth', 'premium_user', )
 
-    def get_actions(self, request):
-        actions = super(MemberAdmin, self).get_actions(request)
+    def premium_user(self, instance):
+        return 'Yes' if hasattr(instance, 'premiummember') and instance.premiummember else ''
 
-        # remove default delete_selected
-        if 'delete_selected' in actions:
-            del actions['delete_selected']
+    def signed_up_via_social_auth(self, instance):
+        return 'Yes' if hasattr(instance.user, 'social_user') and instance.user.social_user else ''
 
-        return actions
+    def upgrade_to_premium(self, request, queryset):
+        for member in queryset.all():
+            member.upgrade_to_premium()
+
+    upgrade_to_premium.short_description = 'Upgrade the selected members to premium.'
 
     def delete_members(self, request, queryset):
         for member in queryset.all():

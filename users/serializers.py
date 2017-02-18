@@ -52,7 +52,7 @@ class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
                 {'error': 'Something went wrong authenticating your request.'}
             )
 
-        if attrs['user'].pk:
+        if hasattr(attrs['user'], 'member') and attrs['user'].member:
             raise serializers.ValidationError(
                 {'error': 'This social media account is already associated with a user.'}
             )
