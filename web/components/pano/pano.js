@@ -255,7 +255,7 @@ angular.module('ua5App')
                                 return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
                             }
 
-                            height = map(texture.image.width / texture.image.height, 7.5, 2.01, 100, 300);
+                            height = map(texture.image.width / texture.image.height, 7.5, 2.01, 40, 300);
 
                             geometry = new THREE.CylinderGeometry(150, 150, height, 20, 1, true);
 
@@ -266,6 +266,7 @@ angular.module('ua5App')
                             panoramaMesh.name = 'panorama';
 
                             panoramaMesh.rotation.y = 4.723;
+                            panoramaMesh.position.y = 8;
 
                             //invert the object, to fix the texture
                             panoramaMesh.scale.set(- 1, 1, 1);
