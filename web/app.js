@@ -78,9 +78,9 @@ angular.module('ua5App', [
         $httpProvider.interceptors.push('authInterceptor');
         ngMetaProvider.useTitleSuffix(true);
         ngMetaProvider.setDefaultTitleSuffix(' | very.gd');
-        ngMetaProvider.setDefaultTitle('Page');
-        ngMetaProvider.setDefaultTag('url', 'URL');
-        ngMetaProvider.setDefaultTag('description', 'Site description');
+        ngMetaProvider.setDefaultTitle('very.gd');
+        ngMetaProvider.setDefaultTag('url', 'https://app.very.gd');
+        ngMetaProvider.setDefaultTag('description', 'very.gd is the fastest, easiest way to create for virtual reality and 360° video');
         ngMetaProvider.setDefaultTag('image', 'URL');
     }])
     .run(['ngMeta', '$q', '$rootScope', function(ngMeta, $q, $rootScope) {
@@ -137,8 +137,11 @@ angular.module('ua5App', [
                 });
 
                 function forceSSL() {
-                    if ($location.protocol() !== 'https' && $location.host() === 'projects.very.gd') {
+                    if ($location.protocol() !== 'https' && $location.host() === 'app.very.gd') {
                         $window.location.href = $location.absUrl().replace('http', 'https');
+                    }
+                    if ($location.host() === 'projects.very.gd') {
+                        $window.location.href = $location.absUrl().replace('projects.very.gd', 'app.very.gd');
                     }
                 }
                 forceSSL();
