@@ -13,7 +13,7 @@
         input.ng-empty ~ label {
             @include position(absolute, 30px 0 0 25px);
             pointer-events: none;
-            @include prefixer(transition, all 0.3s ease-in-out, webkit moz spec);
+            @include transition(all 0.3s ease-in-out);
             @include user-select(none);
         }
         
@@ -21,7 +21,7 @@
         input:valid ~ label, 
         input.ng-not-empty ~ label {
             font-size: 11px;
-            @include prefixer(transform, translateY(-20px), webkit moz spec);            
+            @include transform(translateY(-20px));            
         }
     }
 
