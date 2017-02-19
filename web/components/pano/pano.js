@@ -153,6 +153,8 @@ angular.module('ua5App')
                     var textureLoader = new THREE.TextureLoader();
                     var border;
 
+                    textureLoader.crossOrigin = '';
+
                     if (!data) {
                         return;
                     }
@@ -239,6 +241,7 @@ angular.module('ua5App')
                     var material;
                     var textureLoader = new THREE.TextureLoader();
 
+                    textureLoader.crossOrigin = '';
                     textureLoader.load(
                         data.url + '?fm=jpg',
                         function(texture) {
