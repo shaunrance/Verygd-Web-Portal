@@ -218,18 +218,24 @@
 }
 
 .breadcrumb--share {
-    @include size(18px 20px);
+    @include size(38px 38px);
     background-image: url('/assets/img/icon-share-teal.svg');
     background-repeat: no-repeat;
-    background-size: 100% auto;
+    background-size: 20px auto;
+    background-position: 7px 7px;
     display: inline-block;
     margin-left: 10px;
     position: relative;
-	cursor:pointer;
-	
-	&:hover {
-	    opacity:0.7;	
-	}
+    cursor: pointer;
+    float: right;
+    border-radius: 18px;
+    padding: 5px;
+    background-color:transparent;
+    
+    &:hover {
+        background-color:#13152a;
+        @include transition(all 250ms linear);
+    }
 }
 
 .menu-container {
