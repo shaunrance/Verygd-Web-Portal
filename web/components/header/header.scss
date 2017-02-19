@@ -218,17 +218,17 @@
 }
 
 .breadcrumb--share {
-    @include size(38px 38px);
+    @include size(40px 40px);
     background-image: url('/assets/img/icon-share-teal.svg');
     background-repeat: no-repeat;
     background-size: 20px auto;
-    background-position: 7px 7px;
+    background-position: 8px 8px;
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
     position: relative;
     cursor: pointer;
     float: right;
-    border-radius: 18px;
+    border-radius: 20px;
     padding: 5px;
     background-color:transparent;
     
