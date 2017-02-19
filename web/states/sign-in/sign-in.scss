@@ -13,10 +13,12 @@
             position:absolute;
             top:30px;
             left:25px;
+            pointer-events: none;
             @include prefixer(transition, all 0.3s ease-in-out, webkit moz spec);
+            @include user-select(none);
         }
         
-        input:focus ~ label, input:valid ~ label, input.ng-not-empty ~ label {
+        input:focus ~ label, input:valid ~ label, input.ng-not-empty ~ label, label:active {
             font-size: 11px;
             @include prefixer(transform, translateY(-20px), webkit moz spec);            
         }
