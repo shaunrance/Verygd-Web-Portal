@@ -36,51 +36,16 @@ angular.module('ua5App.sign-in')
             $scope.facebookReady = true;
         });
 
-        $scope.signUpFB = function() {
-            // From now on you can use the Facebook service just as Facebook api says
-            Facebook.login(function(response) {
-                console.log(response);
-                if (response.status === 'connected') {
-                    AuthResource.socialSignUp().retrieve({
-                        provider: 'facebook',
-                        access_token: response.authResponse.accessToken
-                    }).$promise.then(
-                        function(response) {
-                            $scope.loginFB();
-                        },
-                        function(error) {
-                            if (error.data.error[0] === 'This social media account is already associated with a user.') {
-                                $scope.loginFB();
-                            } else {
-                                $scope.loginError = true;
-                                $scope.errorMessage = error.data.error[0];
-                            }
-                        }
-                    );
-                }
-            });
-        };
-
         $scope.loginFB = function() {
-            // From now on you can use the Facebook service just as Facebook api says
-            Facebook.login(function(response) {
-                AuthResource.socialToken().retrieve({
-                    provider: 'facebook',
-                    access_token: response.authResponse.accessToken
-                }).$promise.then(
-                    function(response) {
-                        handleLogin(response);
-                    },
-                    function(error) {
-                        if (error.data.error[0] === 'No user associated with this social auth.') {
-                            $scope.signUpFB();
-                        } else {
-                            $scope.loginError = true;
-                            $scope.errorMessage = error.data.error[0];
-                        }
-                    }
-                );
-            });
+            AuthResource.facebookConnect().then(
+                function(response) {
+                    handleLogin(response);
+                },
+                function(error) {
+                    $scope.loginError = true;
+                    $scope.errorMessage = error.data.error[0];
+                }
+            );
         };
 
         $scope.logout = function() {
@@ -96,6 +61,7 @@ angular.module('ua5App.sign-in')
             Facebook.getLoginStatus(function(response) {
                 if (response.status === 'connected') {
                     $scope.loggedIn = true;
+                    //$scope.loginFB();
                 } else {
                     $scope.loggedIn = false;
                 }
@@ -103,12 +69,6 @@ angular.module('ua5App.sign-in')
         };
 
         $scope.getLoginStatus();
-
-        $scope.me = function() {
-            Facebook.api('/me', function(response) {
-                $scope.user = response;
-            });
-        };
 
         $scope.login = function(data) {
             if (!data && (!data.email || !data.password)) {

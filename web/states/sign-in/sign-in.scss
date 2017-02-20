@@ -5,23 +5,23 @@
     .form-group {
         border-bottom: 1px solid $grey-dark;
     }
-    
+
     .form-group-floated {
-        position:relative;
-        
-        label, 
+        position: relative;
+
+        label,
         input.ng-empty ~ label {
             @include position(absolute, 30px 0 0 25px);
-            pointer-events: none;
             @include transition(all 0.3s ease-in-out);
             @include user-select(none);
+            pointer-events: none;
         }
-        
-        input:focus ~ label, 
-        input:valid ~ label, 
+
+        input:focus ~ label,
+        input:valid ~ label,
         input.ng-not-empty ~ label {
+            @include transform(translateY(-20px));
             font-size: 11px;
-            @include transform(translateY(-20px));            
         }
     }
 
@@ -51,9 +51,9 @@
         border: none;
         display: inline-block;
         font-family: 'Open Sans', sans-serif;
-        
+
         @include placeholder {
-            visibility:hidden;
+            visibility: hidden;
         }
     }
 

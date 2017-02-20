@@ -12,11 +12,18 @@
                 <form ng-submit="login(model)">
                     <div class="modal-header">
                         <h3>Login</h3>
-                        <a ng-click="signUpFB()">Facebook - Sign Up</a>
-                        <a ng-click="loginFB()">Facebook - Sign In</a>
-                        <a ng-click="logout()">logout</a>
                     </div>
                     <div class="modal-body">
+                        <a class="social-login" ng-click="loginFB()">
+                            <div
+                                class="social-login__icon"
+                                ng-include="'assets/img/fb-icon.svg'">
+                            </div>
+                            <span class="social-login__text">Log in with Facebook</span>
+                        </a>
+
+                        <div class="modal-divider"><span>or</span></div>
+
                         <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"

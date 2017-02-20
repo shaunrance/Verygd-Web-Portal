@@ -31,6 +31,11 @@ button {
     font-size: 12px;
 }
 
+%small-shout {
+    @extend %small;
+    text-transform: uppercase;
+}
+
 %h1 {
     font-size: 20px;
     font-weight: bold;
@@ -64,6 +69,7 @@ button {
     font-size: 10px;
     font-weight: 300;
 }
+
 
 @include media($tablet) {
 

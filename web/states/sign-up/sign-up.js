@@ -38,21 +38,36 @@ angular.module('ua5App.sign-up')
             });
         };
 
+        function handleSignUp(response) {
+            UsersResource.resetUser();
+            //set cookie token && then go to projects
+            $cookies.put(APICONSTANTS.authCookie.token, response.token);
+            $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
+            $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token);
+
+            $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
+
+            $state.go('projects');
+            intercomFactory.ping();
+            $('body').removeClass('no-scroll');
+        }
+
+        $scope.signUpFB = function() {
+            AuthResource.facebookConnect().then(
+                function(response) {
+                    handleSignUp(response);
+                },
+                function(error) {
+                    $scope.loginError = true;
+                    $scope.errorMessage = error.data.error[0];
+                }
+            );
+        };
+
         $scope.authUser = function(user) {
             AuthResource.token().retrieve({username: user.email, password: user.password}).$promise.then(
                 function(response) {
-                    UsersResource.resetUser();
-                    //set cookie token && then go to projects
-                    $cookies.put(APICONSTANTS.authCookie.token, response.token);
-                    $cookies.put(APICONSTANTS.authCookie.user_id, response.member_id);
-                    $cookies.put(APICONSTANTS.authCookie.intercom_token, response.intercom_token);
-
-                    $http.defaults.headers.common['Authorization'] = 'Token ' + response.token; //jshint ignore:line
-
-                    $state.go('projects');
-                    intercomFactory.ping();
-                    $('body').removeClass('no-scroll');
-
+                    handleSignUp(response);
                 },
                 function(error) {
                     $state.go('sign-up');
@@ -76,6 +91,7 @@ angular.module('ua5App.sign-up')
                 },
                 function(error) {
                     $scope.disableButton = false;
+                    $scope.loginError = true;
 
                     if (error && error.data) {
                         var errors = [];

@@ -14,6 +14,7 @@ config:
                     - web/bower_components/angular-touch/angular-touch.min.js
                     - web/bower_components/angular-ui-router/release/angular-ui-router.min.js
                     - web/bower_components/angular-loading-bar/build/loading-bar.min.js
+                    - web/bower_components/angular-facebook/lib/angular-facebook.js
                     - web/bower_components/ng-sortable/dist/ng-sortable.js
                     - web/bower_components/gsap/src/minified/TweenMax.min.js
                     - web/bower_components/imagesloaded/imagesloaded.pkgd.min.js
