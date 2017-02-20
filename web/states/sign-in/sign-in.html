@@ -17,7 +17,7 @@
                         <a ng-click="logout()">logout</a>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"
                                 src="assets/img/icon-email.png">
@@ -28,8 +28,9 @@
                                 type="email"
                                 ng-model="model.email"
                                 required />
+                            <label>Email address</label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"
                                 src="assets/img/icon-password.png">
@@ -40,6 +41,7 @@
                                 type="password"
                                 ng-model="model.password"
                                 required />
+                            <label>Password</label>
                         </div>
                     </div>
                     <div class="modal-footer">

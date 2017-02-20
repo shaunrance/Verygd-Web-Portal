@@ -8,9 +8,9 @@ angular.module('ua5App.viewer')
                 controller: 'viewerCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    content: ['projectFactory', '$stateParams', function(projectFactory, $stateParams) {
+                    project: ['projectFactory', '$stateParams', function(projectFactory, $stateParams) {
                         return projectFactory.getProjectById($stateParams.projectId).then(function(response) {
-                            return response.data.content;
+                            return response.data;
                         });
                     }]
                 }
@@ -21,17 +21,17 @@ angular.module('ua5App.viewer')
                 controller: 'viewerCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    content: ['projectFactory', '$stateParams', '$q', function(projectFactory, $stateParams, $q) {
+                    project: ['projectFactory', '$stateParams', '$q', function(projectFactory, $stateParams, $q) {
                         return projectFactory.getProjectByPubId($stateParams.projectId).then(function(response) {
-                            return response.data.content;
+                            return response.data;
                         });
                     }]
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'content', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', function($scope, $stateParams, content, sceneFactory, BrowserFactory, ngMeta, $state) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state) {
         var lastScene = 1;
-        $scope.scenes = content;
+        $scope.scenes = project.content;
         $scope.touch = BrowserFactory.hasTouch();
         $scope.useVr = false;
 
@@ -103,7 +103,8 @@ angular.module('ua5App.viewer')
         $('body').off('click');
 
         filterScenes();
-
-        ngMeta.setTitle('Viewer');
+        ngMeta.setTitle(project.name);
+        ngMeta.setTag('url', 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id);
+        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy');
     }])
 ;
