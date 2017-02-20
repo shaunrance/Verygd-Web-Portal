@@ -8,9 +8,9 @@ angular.module('ua5App.viewer')
                 controller: 'viewerCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    content: ['projectFactory', '$stateParams', function(projectFactory, $stateParams) {
+                    project: ['projectFactory', '$stateParams', function(projectFactory, $stateParams) {
                         return projectFactory.getProjectById($stateParams.projectId).then(function(response) {
-                            return response.data.content;
+                            return response.data;
                         });
                     }]
                 }
