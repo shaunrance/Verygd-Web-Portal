@@ -465,61 +465,61 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.emptyScene = true;
 
-                        if ($scope.showSceneInstructions) {
-                            ModalService.showModal({
-                                templateUrl: 'modals/sceneInstructModal.html',
-                                controller: 'sceneInstructModal',
-                                inputs: {
-                                    fields: {
-                                        panels: [
-                                            {
-                                                title: 'Let\'s get started.',
-                                                modules: [
-                                                    {
-                                                        icon: '/assets/img/icon-jpeg.svg'
-                                                    },
-                                                    {
-                                                        icon: '/assets/img/icon-png.svg'
-                                                    },
-                                                    {
-                                                        icon: '/assets/img/icon-gif.svg'
-                                                    },
-                                                    {
-                                                        icon: '/assets/img/icon-mp4.svg',
-                                                        text: 'Coming Soon'
-                                                    }
-                                                ],
-                                                texts: [
-                                                    'To create VR with very.gd, just upload your images (video support coming shortly) as individual panels or wrap around panorama photos.'
-                                                ]
-                                            },
-                                            {
-                                                title: 'Take it for a spin.',
-                                                modules: [
-                                                    {
-                                                        icon: '/assets/img/icon-mobile.svg'
-                                                    },
-                                                    {
-                                                        icon: '/assets/img/cardboard-pink.svg'
-                                                    },
-                                                    {
-                                                        icon: '/assets/img/icon-vr.svg',
-                                                        text: 'Coming Soon'
+                        // if ($scope.showSceneInstructions) {
+                        //     ModalService.showModal({
+                        //         templateUrl: 'modals/sceneInstructModal.html',
+                        //         controller: 'sceneInstructModal',
+                        //         inputs: {
+                        //             fields: {
+                        //                 panels: [
+                        //                     {
+                        //                         title: 'Let\'s get started.',
+                        //                         modules: [
+                        //                             {
+                        //                                 icon: '/assets/img/icon-jpeg.svg'
+                        //                             },
+                        //                             {
+                        //                                 icon: '/assets/img/icon-png.svg'
+                        //                             },
+                        //                             {
+                        //                                 icon: '/assets/img/icon-gif.svg'
+                        //                             },
+                        //                             {
+                        //                                 icon: '/assets/img/icon-mp4.svg',
+                        //                                 text: 'Coming Soon'
+                        //                             }
+                        //                         ],
+                        //                         texts: [
+                        //                             'To create VR with very.gd, just upload your images (video support coming shortly) as individual panels or wrap around panorama photos.'
+                        //                         ]
+                        //                     },
+                        //                     {
+                        //                         title: 'Take it for a spin.',
+                        //                         modules: [
+                        //                             {
+                        //                                 icon: '/assets/img/icon-mobile.svg'
+                        //                             },
+                        //                             {
+                        //                                 icon: '/assets/img/cardboard-pink.svg'
+                        //                             },
+                        //                             {
+                        //                                 icon: '/assets/img/icon-vr.svg',
+                        //                                 text: 'Coming Soon'
 
-                                                    }
-                                                ],
-                                                texts: [
-                                                    'Once you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
-                                                ]
-                                            }
-                                        ],
-                                        submitButtonText: 'Next'
-                                    }
-                                }
-                            }).then(function() {
-                                $scope.showSceneInstructions = false;
-                            });
-                        }
+                        //                             }
+                        //                         ],
+                        //                         texts: [
+                        //                             'Once you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
+                        //                         ]
+                        //                     }
+                        //                 ],
+                        //                 submitButtonText: 'Next'
+                        //             }
+                        //         }
+                        //     }).then(function() {
+                        //         $scope.showSceneInstructions = false;
+                        //     });
+                        // }
                     }
                 });
         }
