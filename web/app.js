@@ -48,7 +48,8 @@ angular.module('ua5App', [
     'ua5App.terms-of-service',
     'ua5App.privacy-policy',
     'ua5App.reset-password',
-    'ngAnimate'
+    'ngAnimate',
+    'facebook'
     // end add states as app dependency
 ])
     .constant('BREAKPOINTS', {
@@ -70,7 +71,7 @@ angular.module('ua5App', [
             scene_instruct: 'scene_instruct'
         }
     })
-    .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {
+    .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', 'FacebookProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider, FacebookProvider) {
         $locationProvider.html5Mode(true);
         // Prevents bounce rate of 0.01
         $analyticsProvider.firstPageview(false);
@@ -82,6 +83,7 @@ angular.module('ua5App', [
         ngMetaProvider.setDefaultTag('url', 'https://app.very.gd');
         ngMetaProvider.setDefaultTag('description', 'very.gd is the fastest, easiest way to create for virtual reality and 360° video');
         ngMetaProvider.setDefaultTag('image', 'URL');
+        FacebookProvider.init('2039061789660029');
     }])
     .run(['ngMeta', '$q', '$rootScope', function(ngMeta, $q, $rootScope) {
         ngMeta.init();

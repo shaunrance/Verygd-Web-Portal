@@ -47,7 +47,7 @@
     }
 
     .modal-footer {
-        margin-top: 40px;
+        margin-top: 20px;
     }
 
     .sign-up-modal-terms {
@@ -57,7 +57,7 @@
         display: block;
         font-family: 'Open Sans', sans-serif;
         font-size: 14px;
-        margin-top: 80px;
+        margin-top: 20px;
         text-align: center;
         text-decoration: none;
     }
@@ -181,4 +181,56 @@
         }
     }
 
+}
+
+.social-login {
+    @include clearfix();
+    background-color: #3B5998;
+    display: block;
+    padding: 8px;
+}
+
+.social-login__text {
+    color: $white;
+    float: left;
+    margin-left: 30px;
+    margin-top: 3px;
+}
+
+.social-login__icon {
+    float: left;
+    height: 24px;
+    width: 24px;
+}
+
+.modal-divider {
+    line-height: 0.5;
+    margin: 20px 0 10px;
+    text-align: center;
+
+    span {
+        @extend %small-shout;
+        display: inline-block;
+        position: relative;
+
+        &::before,
+        &::after {
+            background-color: $neon-blue;
+            content: '';
+            height: 1px;
+            position: absolute;
+            top: 2px;
+            width: 600px;
+        }
+
+        &::before {
+            margin-right: 15px;
+            right: 100%;
+        }
+
+        &::after {
+            left: 100%;
+            margin-left: 15px;
+        }
+    }
 }
