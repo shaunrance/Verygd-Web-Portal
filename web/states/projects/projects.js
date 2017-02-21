@@ -116,37 +116,53 @@ angular.module('ua5App.projects')
                     if (response.data.length === 0) {
                         $scope.emptyProjects = true;
                         ModalService.showModal({
-                            templateUrl: 'modals/projectInstructModal.html',
-                            controller: 'projectInstructModal',
+                            templateUrl: 'modals/sceneInstructModal.html',
+                            controller: 'sceneInstructModal',
                             inputs: {
                                 fields: {
-                                    modules: [
+                                    panels: [
                                         {
-                                            title: 'Create a Project',
-                                            icons: [
-                                                '/assets/img/icon-polygon-white.svg',
-                                                '/assets/img/icon-pano-white.svg'
+                                            title: 'Let’s get started.',
+                                            modules: [
+                                                {
+                                                    icon: '/assets/img/icon-jpeg.svg'
+                                                },
+                                                {
+                                                    icon: '/assets/img/icon-png.svg'
+                                                },
+                                                {
+                                                    icon: '/assets/img/icon-gif.svg'
+                                                },
+                                                {
+                                                    icon: '/assets/img/icon-mp4.svg',
+                                                    text: 'Coming Soon'
+                                                }
+                                            ],
+                                            texts: [
+                                                'To create VR with very.gd, just upload your images (video support coming shortly) as individual panels or wrap around panorama photos.'
                                             ]
                                         },
                                         {
-                                            title: 'Upload Content',
-                                            icons: [
-                                                '/assets/img/icon-upload.svg'
-                                            ]
-                                        },
-                                        {
-                                            title: 'Preview',
-                                            icons: [
-                                                '/assets/img/cardboard.svg'
+                                            title: 'Take it for a spin.',
+                                            modules: [
+                                                {
+                                                    icon: '/assets/img/icon-mobile.svg'
+                                                },
+                                                {
+                                                    icon: '/assets/img/cardboard-pink.svg'
+                                                },
+                                                {
+                                                    icon: '/assets/img/icon-vr.svg',
+                                                    text: 'Coming Soon'
+
+                                                }
+                                            ],
+                                            texts: [
+                                                'Once you’ve created a project, uploaded content, and added hotspots you can view your content via desktop browser, mobile, or in stereoscopic VR.'
                                             ]
                                         }
                                     ],
-                                    texts: [
-                                        'Projects can be either panel-based (using standard photos & videos) or panoramas for panorama content (360 photos will soon be able to be used as a background).',
-                                        'Whether you’re working in .png, .jpg, .gjif, or other formats, we’ve got you covered. (video support coming shortly).',
-                                        'View your content via desktop browser, mobile, or in stereoscopic VR. Each project consists of a scene made up of one or more panels.'
-                                    ],
-                                    submitButtonText: 'Continue'
+                                    submitButtonText: 'Next'
                                 }
                             }
                         });
