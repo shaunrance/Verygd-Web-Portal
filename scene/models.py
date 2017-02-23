@@ -14,6 +14,8 @@ class Scene(models.Model):
     title = models.CharField(max_length=128, blank=False, null=False)
     description = models.CharField(max_length=128, blank=True, null=True)
 
+    order = models.IntegerField(blank=True, null=True)
+
     is_panorama = models.BooleanField(default=False, null=False, blank=True, verbose_name='is-panorama')
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
     gap_distance = models.FloatField(blank=True, null=True)

@@ -9,20 +9,25 @@
         <nav class="scene-nav">
             <div ng-if="!publicView" class="scene-nav--selector"><a href="/projects">{{projectName}}</a> › {{sceneName}}</div>
             <div ng-if="publicView" class="scene-nav--selector">{{projectName}} › {{sceneName}}</div>
-            <ul class="scene-list" ng-class="{'active':showSceneList}">
+            <ul 
+                class="scene-list" 
+                as-sortable="dragSceneControlListeners" 
+                is-disabled="hasTouch"
+                ng-model="scenes" 
+                ng-class="{'active':showSceneList}">
                 <li
                     class="scene-list--item"
-
-                    ng-repeat="i in scenes track by $index">
+                    as-sortable-item
+                    ng-repeat="scene in scenes | orderBy:'order'"">
                     <a
-                        ng-click="changeScene(i.id)"
-                        ng-class="{'active' : (currentScene === (i.id))}"
+                        ng-click="changeScene(scene.id)"
+                        ng-class="{'active' : (currentScene === (scene.id))}"
                         class="scene-list--link">
-                        <div class="scene-list--title">{{i.title}}</div>
+                        <div as-sortable-item-handle class="scene-list--title">{{scene.order}} {{scene.title}}</div>
                     </a>
-                    <a ng-hide="publicView" ng-click="editScene(i.id, i.title)"
+                    <a ng-hide="publicView" ng-click="editScene(scene.id, scene.title)"
                         class="scene-list--icon scene-list--edit"></a>
-                    <a ng-hide="publicView" ng-click="deleteScene($index, i.id)"
+                    <a ng-hide="publicView" ng-click="deleteScene($index, scene.id)"
                         class="scene-list--icon scene-list--delete"></a>
                 </li>
             </ul>

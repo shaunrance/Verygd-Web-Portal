@@ -265,6 +265,20 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         };
 
+        $scope.dragSceneControlListeners = {
+            orderChanged: function(event) {
+                _.each($scope.scenes, function(scene, key) {
+                    sceneFactory.editScene(scene.id, {
+                        order: (key + 1),
+                        project: $stateParams.projectId,
+                        title: scene.title
+                    });
+
+                    scene.order = key + 1;
+                });
+            }
+        };
+
         $scope.toggleSceneList = function() {
             $scope.showSceneList = !$scope.showSceneList;
         };
@@ -295,7 +309,11 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         }
 
         function createScene(scene) {
-            sceneFactory.addScene(scene, $scope.projectId)
+            var lastItemOrder = 0;
+            if ($scope.scenes.length > 0) {
+                lastItemOrder = _.last($scope.scenes).order + 1;
+            }
+            sceneFactory.addScene(scene, $scope.projectId, lastItemOrder + 1)
 
                 .then(function(response) {
                     getScenes();

@@ -12,11 +12,12 @@ angular.module('ua5App')
             return $http.get(urlBase + '/' + sceneId, {});
         };
 
-        dataFactory.addScene = function(newScene, projectId) {
+        dataFactory.addScene = function(newScene, projectId, order) {
             var data = {
                 project: projectId,
                 title: newScene.name,
                 description: newScene.description,
+                order: order,
                 background: '#000000',
                 is_panorama: false
             };
