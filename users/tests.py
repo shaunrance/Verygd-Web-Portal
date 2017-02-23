@@ -92,6 +92,23 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue('next_billing_date' in msg['payment'] and msg['payment']['next_billing_date'])
 
+    def test_user_meta_premium_vs_basic(self):
+        response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+
+        self.assertEquals(response.status_code, 200)
+
+        self.assertTrue('payment' in user_meta and 'plan_name' in user_meta['payment'])
+        self.assertEquals(user_meta['payment']['plan_name'], 'basic')
+
+        Member.objects.get(pk=self.member['id']).upgrade_to_premium()
+
+        response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+
+        self.assertEquals(response.status_code, 200)
+
+        self.assertTrue('payment' in user_meta and 'plan_name' in user_meta['payment'])
+        self.assertEquals(user_meta['payment']['plan_name'], 'premium')
+
     def test_update_member(self):
         response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
 

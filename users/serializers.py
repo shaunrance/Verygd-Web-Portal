@@ -14,6 +14,9 @@ class MemberSerializer(BaseMemberSerializer):
     private_project_count = serializers.IntegerField()
     content_bytes_left = serializers.IntegerField()
 
+    def get_payment(self, instance):
+        return {'plan_name': 'premium' if hasattr(instance, 'premiummember') else 'basic'}
+
 
 class MemberCreateSerializer(BaseMemberCreateSerializer):
     pass
