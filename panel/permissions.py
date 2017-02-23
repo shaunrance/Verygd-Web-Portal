@@ -1,12 +1,6 @@
-import rules
-
 from media_portal.permissions import BasePermission, is_group_admin
 from media_portal.users.permissions import allow_any
-
-
-@rules.predicate
-def is_content_owner(request, obj):
-    return True if obj.owner == request.member else False
+from very_gd.permissions import is_content_owner
 
 
 class PanelPermissions(BasePermission):

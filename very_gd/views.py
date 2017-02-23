@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 
-from users.models import PremiumMember
-
 
 class RequestSetup(APIView):
     def initialize_request(self, request, *args, **kwargs):
