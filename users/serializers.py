@@ -15,7 +15,18 @@ class MemberSerializer(BaseMemberSerializer):
     content_bytes_left = serializers.IntegerField()
 
     def get_payment(self, instance):
-        return {'plan_name': 'premium' if hasattr(instance, 'premiummember') else 'basic'}
+        base_info = {'plan_name': 'premium' if hasattr(instance, 'premiummember') else 'basic'}
+
+        optional_payment_info = super(MemberSerializer, self).get_payment(instance)
+
+        if optional_payment_info:
+            # if a stripe plan_name exists, overwrite with plan_name above
+            optional_payment_info.update(base_info)
+
+            return optional_payment_info
+
+        # otherwise return basic plan info
+        return base_info
 
 
 class MemberCreateSerializer(BaseMemberCreateSerializer):
