@@ -18,7 +18,7 @@
                 <li
                     class="scene-list--item"
                     as-sortable-item
-                    ng-repeat="scene in scenes | orderBy:'order'"">
+                    ng-repeat="scene in scenes | orderBy:'order'">
                     <a
                         ng-click="changeScene(scene.id)"
                         ng-class="{'active' : (currentScene === (scene.id))}"
