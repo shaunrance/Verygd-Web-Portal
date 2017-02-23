@@ -20,7 +20,7 @@
         input:focus ~ label,
         input:valid ~ label,
         input.ng-not-empty ~ label {
-            @include transform(translateY(-20px));
+            @include transform(translateY(-25px));
             font-size: 11px;
         }
     }
@@ -53,7 +53,7 @@
         font-family: 'Open Sans', sans-serif;
 
         @include placeholder {
-            visibility: hidden;
+            color: transparent;
         }
     }
 

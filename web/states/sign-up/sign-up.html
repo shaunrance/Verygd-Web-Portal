@@ -1,5 +1,5 @@
 <div class="sign-up">
-	<div class="sign-up-inner">
+    <div class="sign-up-inner">
         <div
             class="sign-up-logo-link"
             href="#">
@@ -23,7 +23,7 @@
                             <span class="social-login__text">Sign up with Facebook</span>
                         </a>
                         <div class="modal-divider"><span>or</span></div>
-                        <div class="form-group">
+                        <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"
                                 src="assets/img/icon-email.png">
@@ -34,8 +34,9 @@
                                 type="name"
                                 ng-model="model.name"
                                 required />
+                            <label>Full Name</label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"
                                 src="assets/img/icon-email.png">
@@ -51,8 +52,9 @@
                                     ng-if="emailDuplicate">
                                     This email address is already in use.
                                 </span>
+                            <label>Email address</label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-floated">
                             <img
                                 class="input-icon"
                                 src="assets/img/icon-password.png">
@@ -63,6 +65,7 @@
                                 type="password"
                                 ng-model="model.password"
                                 required />
+                            <label>Create password</label>
                         </div>
                     </div>
                     <div class="modal-footer">
