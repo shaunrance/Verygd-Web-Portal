@@ -18,13 +18,7 @@ class RequestSetup(APIView):
         except AuthenticationFailed:
             pass
 
-        # convenience attribute for specific user type in the request
         if is_authed and hasattr(request.user, str('member')):
             request.member = request.user.member
-
-            try:
-                request.member = request.member.premiummember
-            except PremiumMember.DoesNotExist:
-                pass
 
         return request
