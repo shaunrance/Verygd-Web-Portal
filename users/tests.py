@@ -98,24 +98,39 @@ class TestUserAPI(TestUserAPIBase):
         self.assertTrue(response.status_code == 200, 'expected 200 got {0} ({1})'.format(response.status_code, msg))
 
         self.assertTrue('next_billing_date' in msg['payment'] and msg['payment']['next_billing_date'])
-        self.assertEquals(msg['payment']['plan_name'], 'premium')
+        self.assertEquals(msg['payment']['plan_name'], new_payment_info['plan_name'])
 
     def test_user_meta_premium_vs_basic(self):
+        # 1st case - user is a basic member, with no payment details - subscription_type: None, payment: None
         response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
-
         self.assertEquals(response.status_code, 200)
 
-        self.assertTrue('payment' in user_meta and 'plan_name' in user_meta['payment'])
-        self.assertEquals(user_meta['payment']['plan_name'], 'basic')
+        self.assertTrue(not user_meta['payment'])
+        self.assertEquals(user_meta['subscription_type'], None)
 
+        # 2nd case, user is upgraded to premium, without payment details - subscription_type: granted, payment: None
         Member.objects.get(pk=self.member['id']).upgrade_to_premium()
 
         response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
-
         self.assertEquals(response.status_code, 200)
 
-        self.assertTrue('payment' in user_meta and 'plan_name' in user_meta['payment'])
-        self.assertEquals(user_meta['payment']['plan_name'], 'premium')
+        self.assertTrue(not user_meta['payment'])
+        self.assertEquals(user_meta['subscription_type'], 'granted')
+
+        # 3rd case, existing premium user adds payment details - subscription_type: paid, payment: defined
+        new_payment_info = self.strategies.get_payment_info_example_params()
+
+        response, msg = self.put_as(self.member, '/users/{0}'.format(self.member['id']), data={
+            'payment': new_payment_info,
+        }, content_type='application/json')
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 msg))
+
+        response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+
+        self.assertTrue('payment' in user_meta)
+        self.assertEquals(user_meta['subscription_type'], 'paid')
 
     def test_update_member(self):
         response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))

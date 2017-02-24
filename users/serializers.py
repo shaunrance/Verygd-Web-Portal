@@ -13,20 +13,15 @@ from media_portal.users.serializers import MemberCreateSerializer as BaseMemberC
 class MemberSerializer(BaseMemberSerializer):
     private_project_count = serializers.IntegerField()
     content_bytes_left = serializers.IntegerField()
+    subscription_type = serializers.SerializerMethodField()
 
-    def get_payment(self, instance):
-        base_info = {'plan_name': 'premium' if hasattr(instance, 'premiummember') else 'basic'}
-
-        optional_payment_info = super(MemberSerializer, self).get_payment(instance)
-
-        if optional_payment_info:
-            # if a stripe plan_name exists, overwrite with plan_name above
-            optional_payment_info.update(base_info)
-
-            return optional_payment_info
-
-        # otherwise return basic plan info
-        return base_info
+    def get_subscription_type(self, instance):
+        if instance.payment:
+            return 'paid'
+        elif hasattr(instance, 'premiummember'):
+            return 'granted'
+        else:
+            return None
 
 
 class MemberCreateSerializer(BaseMemberCreateSerializer):
