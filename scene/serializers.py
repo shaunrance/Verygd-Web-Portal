@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 
 class SceneSerializer(serializers.ModelSerializer):
+    order = serializers.IntegerField(required=False)
+
     class Meta:
         model = Scene
         fields = '__all__'

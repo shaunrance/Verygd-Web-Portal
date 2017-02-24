@@ -14,6 +14,11 @@ class Scene(models.Model):
     title = models.CharField(max_length=128, blank=False, null=False)
     description = models.CharField(max_length=128, blank=True, null=True)
 
+    order = models.IntegerField(null=False)
+
+    created_dt = models.DateTimeField(auto_now_add=True, null=False)
+    updated_dt = models.DateTimeField(auto_now=True, null=False)
+
     is_panorama = models.BooleanField(default=False, null=False, blank=True, verbose_name='is-panorama')
     background = models.CharField(max_length=32, null=True, blank=True, verbose_name='background')
     gap_distance = models.FloatField(blank=True, null=True)
@@ -44,6 +49,17 @@ class Scene(models.Model):
     @classmethod
     def class_prepared(cls):
         actstream_registry.register(cls)
+
+    def save(self, *args, **kwargs):
+        if not self.order:
+            last_scene_in_project = self.project.scenes.order_by('-created_dt').first()
+
+            if last_scene_in_project:
+                self.order = last_scene_in_project.order + 1
+            else:
+                self.order = 1
+
+        super(Scene, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
         for content in self.content:
