@@ -84,6 +84,11 @@ class TestUserAPI(TestUserAPIBase):
         self.login(self.member['post_params']['email'], 'a_new_password', self.client_class())
 
     def test_payment_info(self):
+        response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+        self.assertTrue(response.status_code == 200, 'expected 200 got {0} ({1})'.format(response.status_code, msg))
+
+        self.assertTrue(msg['payment'] and msg['payment']['plan_name'] == 'basic')
+
         # test adds payment info
         new_payment_info = self.strategies.get_payment_info_example_params()
 
