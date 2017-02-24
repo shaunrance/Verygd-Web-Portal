@@ -107,6 +107,7 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue(not user_meta['payment'])
         self.assertEquals(user_meta['subscription_type'], None)
+        self.assertEquals(user_meta['member_type'], 'basic')
 
         # 2nd case, user is upgraded to premium, without payment details - subscription_type: granted, payment: None
         Member.objects.get(pk=self.member['id']).upgrade_to_premium()
@@ -116,6 +117,7 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue(not user_meta['payment'])
         self.assertEquals(user_meta['subscription_type'], 'granted')
+        self.assertEquals(user_meta['member_type'], 'premium')
 
         # 3rd case, existing premium user adds payment details - subscription_type: paid, payment: defined
         new_payment_info = self.strategies.get_payment_info_example_params()
@@ -131,6 +133,7 @@ class TestUserAPI(TestUserAPIBase):
 
         self.assertTrue('payment' in user_meta)
         self.assertEquals(user_meta['subscription_type'], 'paid')
+        self.assertEquals(user_meta['member_type'], 'premium')
 
     def test_update_member(self):
         response, msg = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
