@@ -51,6 +51,12 @@ class Member(VeryGDMember):
 
         return super(Member, self).create_project(*args, **kwargs)
 
+    def update(self, *args, **kwargs):
+        super(Member, self).update(*args, **kwargs)
+
+        if self.payment:
+            self.upgrade_to_premium()
+
     def upgrade_to_premium(self):
         try:
             return self.premiummember
