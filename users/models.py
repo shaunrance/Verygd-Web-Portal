@@ -57,6 +57,23 @@ class Member(VeryGDMember):
         if self.payment:
             self.upgrade_to_premium()
 
+    @property
+    def has_premium_account(self):
+        return True if hasattr(self, 'premiummember') else False
+
+    @property
+    def member_type(self):
+        return 'premium' if self.has_premium_account else 'basic'
+
+    @property
+    def subscription_type(self):
+        if self.payment:
+            return 'paid'
+        elif self.has_premium_account:
+            return 'granted'
+        else:
+            return None
+
     def upgrade_to_premium(self):
         try:
             return self.premiummember
