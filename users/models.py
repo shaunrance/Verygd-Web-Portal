@@ -67,7 +67,8 @@ class Member(VeryGDMember):
 
     @property
     def subscription_type(self):
-        if self.payment and self.payment.plan_name in ('beta_yearly', 'beta_monthly'):
+        if self.payment and hasattr(self.payment, 'plan_name') and self.payment.plan_name in ('beta_yearly',
+                                                                                              'beta_monthly'):
             return 'paid'
         elif self.has_premium_account:
             return 'granted'
