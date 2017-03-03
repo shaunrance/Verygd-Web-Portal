@@ -720,6 +720,34 @@
     }
 }
 
+.scene-type {
+    @include display(flex);
+    @include justify-content(space-between);
+}
+
+.scene-type-btn {
+    @include flex-grow(1);
+    border-bottom: 2px solid transparent;
+
+    .scene-preview-icon {
+        @include size(20px);
+
+        svg {
+            @include size(20px);
+            fill: $grey;
+        }
+    }
+
+    &.selected {
+        border-bottom: 2px solid $neon-blue;
+
+        .scene-preview-icon svg {
+            fill: $neon-blue;
+        }
+    }
+}
+
+
 @include media($phablet) {
 
 }

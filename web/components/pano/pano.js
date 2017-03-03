@@ -9,6 +9,7 @@ angular.module('ua5App')
                 panoContent: '=',
                 background: '=',
                 isPanorama: '=',
+                sceneType: '=',
                 hotspotType: '@'
             },
             link: function($scope, element, attrs) {
@@ -128,14 +129,24 @@ angular.module('ua5App')
                     panelCount = panels.length;
 
                     if (!$scope.isPanorama) {
-                        while (i--) {
-                            if ($scope.panoContent[i]) {
-                                makePanel($scope.panoContent[i], panels[i]);
-                            }
-                        }
                         createExitBtn();
                     } else {
                         makePanorama($scope.panoContent[0]);
+                    }
+                    switch ($scope.sceneType) {
+                        case 'panorama':
+                            makePanorama($scope.panoContent[0]);
+                            break;
+                        case 'sphere':
+                            makeSphere($scope.panoContent[0]);
+                            break;
+                        default:
+                            while (i--) {
+                                if ($scope.panoContent[i]) {
+                                    makePanel($scope.panoContent[i], panels[i]);
+                                }
+                            }
+                            break;
                     }
 
                     if (useVr) {
@@ -325,6 +336,29 @@ angular.module('ua5App')
                             hotspotMesh.show();
                         }
                     });
+                }
+
+                function makeSphere(item) {
+                    var sphere;
+                    var textureLoader = new THREE.TextureLoader();
+
+                    textureLoader.crossOrigin = '';
+                    textureLoader.load(
+                        item.url,
+                        function(texture) {
+                            var geometry = new THREE.SphereGeometry(500, 32, 32);
+                            var material = new THREE.MeshBasicMaterial({
+                                transparent: true,
+                                map: texture,
+                                opacity: 1,
+                                side: THREE.DoubleSide
+                            });
+                            sphere = new THREE.Mesh(geometry, material);
+
+                            sphere.scale.set(-0.9, 0.9, 0.9);
+                            scene.addItem(sphere);
+                        }
+                    );
                 }
 
                 function createExitBtn() {
