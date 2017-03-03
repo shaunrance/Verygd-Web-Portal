@@ -1,6 +1,6 @@
 /* global angular, THREE, $, TweenMax, _ */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'SpaceFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, SpaceFactory) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -14,12 +14,12 @@ angular.module('ua5App')
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
                 var crosshair;
-                var scene = new BaseThreeScene();
+                var scene = SpaceFactory;
                 var useVr = $scope.useVr;
                 var panelCount = 0;
                 var exitBtn;
                 var roomRadius;
-                var worldDirectionVector = new THREE.Vector3();
+                //var worldDirectionVector = new THREE.Vector3();
                 var cam;
                 var panoLink;
                 var panoramaMesh;
@@ -39,7 +39,7 @@ angular.module('ua5App')
                         useVr = newValue;
                         scene = new BaseThreeScene();
                         init();
-                        scene.resize();
+                        //scene.resize();
                     }
                 });
 
@@ -100,16 +100,18 @@ angular.module('ua5App')
                         pos = {x: cam.rotation.x, y: cam.rotation.y};
                     });
 
-                    $$el.mouseup(function() {
-                        if (
-                            Math.abs(pos.x - cam.rotation.x) === 0 &&
-                            Math.abs(pos.y - cam.rotation.y) === 0
-                        ) {
-                            setTimeout(clickHandler, 100);
-                        }
-                    });
-
-                    scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                    // $$el.mouseup(function() {
+                    //     if (
+                    //         Math.abs(pos.x - cam.rotation.x) === 0 &&
+                    //         Math.abs(pos.y - cam.rotation.y) === 0
+                    //     ) {
+                    //         setTimeout(clickHandler, 100);
+                    //     }
+                    // });
+                    scene.init($$el[0], true);
+                    scene.setOnClick(clickHandler);
+                    window.scene = scene;
+                    //scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
 
                     $rootScope.renderer.setClearColor(componentToHex(background));
                     $rootScope.renderer.sortObjects = false;
@@ -142,8 +144,8 @@ angular.module('ua5App')
                         crosshair = makeCrosshair();
                     }
 
-                    cam = scene.camera();
-                    scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                    cam = scene.getCamera();
+                    //scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                 }
 
                 function makePanel(data, panel) {
@@ -225,7 +227,7 @@ angular.module('ua5App')
                             plane.isVisible = false;
                             TweenMax.to(material, 0.25, {opacity: 0});
                         };
-                        scene.pushItem(plane);
+                        scene.registerItem(plane);
                         plane.isVisible = false;
                         container.add(plane);
                         container.hotspots.push(plane);
@@ -316,7 +318,7 @@ angular.module('ua5App')
                             hotspotMesh.isVisible = false;
                             TweenMax.to(hotspotMat, 0.25, {opacity: 0});
                         };
-                        scene.pushItem(hotspotMesh);
+                        scene.registerItem(hotspotMesh);
                         hotspotMesh.isVisible = false;
                         scene.addItem(hotspotMesh, true);
                         parent.hotspots.push(hotspotMesh);
@@ -400,7 +402,7 @@ angular.module('ua5App')
                     var frontGeo;
                     var frontMat;
                     var frontMesh;
-                    var cam = scene.camera();
+                    var cam = scene.getCamera();
 
                     backGeo = new THREE.SphereGeometry(0.1, 25, 25);
                     backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
@@ -448,15 +450,15 @@ angular.module('ua5App')
                     return dimensions;
                 }
 
-                function onRender() {
-                    if (typeof exitBtn === 'object' && useVr) {
-                        cam.getWorldDirection(worldDirectionVector);
-                        exitBtn.position.z = worldDirectionVector.z * 200;
-                        exitBtn.position.x = worldDirectionVector.x * 200;
-                        exitBtn.position.y = -200;
-                        exitBtn.lookAt(cam.position);
-                    }
-                }
+                // function onRender() {
+                //     if (typeof exitBtn === 'object' && useVr) {
+                //         cam.getWorldDirection(worldDirectionVector);
+                //         exitBtn.position.z = worldDirectionVector.z * 200;
+                //         exitBtn.position.x = worldDirectionVector.x * 200;
+                //         exitBtn.position.y = -200;
+                //         exitBtn.lookAt(cam.position);
+                //     }
+                // }
 
                 function toggleHotspots(activeObjects) {
                     if (typeof activeObjects === 'object' && activeObjects.length > 0) {
@@ -487,7 +489,7 @@ angular.module('ua5App')
                 }
 
                 function clickHandler(item) {
-                    var activeObjects = scene.activeObjects();
+                    var activeObjects = [item];
 
                     // Clicking the entire scene fires the panorama click
                     // there's no click listener on the actual cyl. geometry
@@ -497,14 +499,14 @@ angular.module('ua5App')
 
                     toggleHotspots(activeObjects);
 
-                    if (typeof scene.activeObject() !== 'undefined') {
-                        if (scene.activeObject().name === 'exit') {
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
-                                window.history.back();
-                            }});
-                        }
-                    }
+                    // if (typeof scene.activeObject() !== 'undefined') {
+                    //     if (scene.activeObject().name === 'exit') {
+                    //         TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
+                    //         TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
+                    //             window.history.back();
+                    //         }});
+                    //     }
+                    // }
                 }
 
                 function launchHotpsot(data) {
@@ -519,49 +521,49 @@ angular.module('ua5App')
                     }
                 }
 
-                function mouseOverHandler(item) {
-                    //console.log('Mouse Hovering: ', item);
-                    // if (!gazeStarted && useVr) {
-                    //     // Animate crosshair for long gaze
-                    //     gazeStarted = true;
-                    //     TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
-                    //     TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
-                    //     clearTimeout(gazeTimeout);
-                    //     gazeTimeout = setTimeout(clickHandler, 1700);
-                    // }
-                }
+                // function mouseOverHandler(item) {
+                //     //console.log('Mouse Hovering: ', item);
+                //     // if (!gazeStarted && useVr) {
+                //     //     // Animate crosshair for long gaze
+                //     //     gazeStarted = true;
+                //     //     TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
+                //     //     TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
+                //     //     clearTimeout(gazeTimeout);
+                //     //     gazeTimeout = setTimeout(clickHandler, 1700);
+                //     // }
+                // }
 
-                function mouseOutHandler(item) {
-                    // if (useVr) {
-                    //     // Reset crosshair for long gaze
-                    //     gazeStarted = false;
-                    //     clearTimeout(gazeTimeout);
-                    //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
-                    //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
-                    // }
-                }
+                // function mouseOutHandler(item) {
+                //     // if (useVr) {
+                //     //     // Reset crosshair for long gaze
+                //     //     gazeStarted = false;
+                //     //     clearTimeout(gazeTimeout);
+                //     //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
+                //     //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
+                //     // }
+                // }
 
                 $rootScope.$on('app:resized', function() {
                     $$el.width($(window).width());
                     $$el.height($(window).height());
-                    scene.resize();
+                    //scene.resize();
                 });
 
                 $scope.$on('$destroy', function() {
                     scene.destroy();
                 });
 
-                $$el.mousemove(function(event) {
-                    if (!useVr) {
-                        scene.setCursorPosition(
-                            event.clientX - $$el.offset().left + $(window).scrollLeft(),
-                            event.clientY - $$el.offset().top + $(window).scrollTop()
-                        );
-                    }
-                });
+                // $$el.mousemove(function(event) {
+                //     if (!useVr) {
+                //         scene.setCursorPosition(
+                //             event.clientX - $$el.offset().left + $(window).scrollLeft(),
+                //             event.clientY - $$el.offset().top + $(window).scrollTop()
+                //         );
+                //     }
+                // });
 
-                init();
-                scene.resize();
+                setTimeout(init, 100);
+                //scene.resize();
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {

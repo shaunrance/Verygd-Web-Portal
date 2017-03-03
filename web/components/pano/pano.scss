@@ -1,5 +1,50 @@
-.my-canvas {
-    height: 100vh;
-    overflow: hidden;
-    width: 100vw;
+
+
+.space {
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.space-container {
+    left: 0;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+.button-ui {
+    left: 0;
+    position: absolute;
+    top: 100px;
+    z-index: 2;
+}
+
+.exit-btn {
+    z-index: 3;
+}
+
+.webvr-ui-svg-error,
+.webvr-ui-svg {
+    fill: #ABABAB;
+}
+
+.webvr-ui-button {
+    background: transparent;
+    border: none;
+
+    .webvr-ui-svg-error {
+        display: none;
+    }
+
+    &.webvr-ui--exit {
+
+        .webvr-ui-svg-error {
+            display: block;
+        }
+
+        .webvr-ui-svg {
+            display: none;
+        }
+    }
 }

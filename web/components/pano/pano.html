@@ -1,3 +1,17 @@
 <div class="pano-scene">
-    <div class="my-canvas"></div>
+    <div class="space-container my-canvas"></div>
+    <div class="space">
+        <div class="button-ui">
+            <div class="webvr-button"></div>
+            <!-- <a ng-include="'assets/images/icon-vr.svg'"></a> -->
+
+            <div id="help">
+                <a href="#" onclick="enterVR.requestEnterFullscreen()">Try it without a headset</a>
+                <span id="learn-more">
+                    or <a href="https://webvr.info" target="_blank">get set up in VR.</a>
+                </span>
+            </div>
+        </div>
+        <a href="#" class="exit-btn" onclick="enterVR.requestExit()">✕</a>
+    </div>
 </div>
