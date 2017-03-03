@@ -134,8 +134,15 @@
                             ng-model="sceneImage"
                             name="sceneImage"
                             ngf-pattern="'image/*'"
-                            ngf-accept="'image/*'">
-                            browse
+                            ngf-accept="'image/*'"
+                            event-api="eventApi">
+                            <div
+                                ng-bind="sceneImage.name || 'select image'"
+                                class="scene-preview__image-picker-name">
+                            </div><!--
+                         --><span class="scene-preview__image-picker-select">
+                                browse
+                            </span>
                         </div>
                     </div>
                 </div>
