@@ -103,17 +103,40 @@
                 </div>
                 <div class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
-                    <!-- <div class="scene-preview__color-style-wrap">
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-color"></span>
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-gradient"></span>
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-image"></span>
-                    </div> -->
-                    <div class="scene-preview__color-picker-wrap">
+                    <div class="scene-preview__color-style-wrap">
+                        <span
+                            class="scene-preview__color-style-button"
+                            ng-class="{'scene-preview__active': sceneColorActive === 'color'}"
+                            ng-click="sceneBackgroundChange('color')"
+                            id="scene-preview__color-style-color">
+                        </span>
+                        <!-- <span class="scene-preview__color-style-button" id="scene-preview__color-style-gradient"></span> -->
+                        <span
+                            class="scene-preview__color-style-button"
+                            ng-class="{'scene-preview__active': sceneColorActive === 'image'}"
+                            ng-include="'assets/img/icon-image.svg'"
+                            id="scene-preview__color-style-image"
+                            ng-click="sceneBackgroundChange('image')">
+                        </span>
+                    </div>
+                    <div
+                        class="scene-preview__color-picker-wrap">
                         <color-picker
+                            ng-if="sceneColorActive === 'color'"
                             ng-model="sceneColor"
                             options="colorOptions"
                             event-api="eventApi">
                         </color-picker>
+                        <div
+                            ng-if="sceneColorActive === 'image'"
+                            class="scene-preview__image-picker"
+                            ngf-select
+                            ng-model="sceneImage"
+                            name="sceneImage"
+                            ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'">
+                            browse
+                        </div>
                     </div>
                 </div>
                 <div class="scene-preview__privacy">

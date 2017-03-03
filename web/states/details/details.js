@@ -56,6 +56,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         };
         $scope.showSceneInstructions = true;
 
+        //TODO determine which background type is active (color, gradient, or image)
+        $scope.sceneColorActive = 'color';
+
+        $scope.sceneBackgroundChange = function(type) {
+            $scope.sceneColorActive = type;
+        };
+
         if (BrowserFactory.isWkWebView() && !isMobileChrome) {
             $scope.isWkWebView = true;
         }
@@ -232,6 +239,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
+        $scope.editBackground = function(type) {
+            $scope.sceneColorActive = type;
+        };
+
         $scope.deleteScene = function($index, sceneId) {
             if ($scope.scenes.length > 1) {
                 ModalService.showModal({
@@ -289,6 +300,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle.active = false;
                     }
+
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
                 });
@@ -580,9 +592,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 } else {
                     $scope.showSceneInstructions = true;
                 }
-                console.log($scope.showSceneInstructions);
-                getScenes();
 
+                getScenes();
             });
 
     }])
