@@ -24,6 +24,10 @@ class Scene(models.Model):
     gap_distance = models.FloatField(blank=True, null=True)
     pan_start_point = models.FloatField(blank=True, null=True)
 
+    scene_type = models.CharField(max_length=32, null=True, blank=True)
+
+    equirectangular_background_image = models.FileField(upload_to='images', null=True, blank=True)
+
     @property
     def owner(self):
         return self.project.owner
