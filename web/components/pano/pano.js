@@ -9,6 +9,7 @@ angular.module('ua5App')
                 panoContent: '=',
                 background: '=',
                 isPanorama: '=',
+                sceneType: '=',
                 hotspotType: '@'
             },
             link: function($scope, element, attrs) {
@@ -21,7 +22,7 @@ angular.module('ua5App')
                 var roomRadius;
                 var worldDirectionVector = new THREE.Vector3();
                 var cam;
-                var panoLink;
+                //var panoLink;
                 var panoramaMesh;
                 var background = $scope.background;
                 var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
@@ -127,15 +128,29 @@ angular.module('ua5App')
                     panels = getPanels(i);
                     panelCount = panels.length;
 
-                    if (!$scope.isPanorama) {
-                        while (i--) {
-                            if ($scope.panoContent[i]) {
-                                makePanel($scope.panoContent[i], panels[i]);
-                            }
+                    //legacy isPanorama support:
+                    if (!$scope.sceneType) {
+                        if ($scope.isPanorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
                         }
-                        createExitBtn();
-                    } else {
-                        makePanorama($scope.panoContent[0]);
+                    }
+
+                    switch ($scope.sceneType) {
+                        case 'cylinder':
+                            makePanorama($scope.panoContent[0]);
+                            break;
+                        case 'sphere':
+                            makeSphere($scope.panoContent[0]);
+                            break;
+                        default:
+                            while (i--) {
+                                if ($scope.panoContent[i]) {
+                                    makePanel($scope.panoContent[i], panels[i]);
+                                }
+                            }
+                            break;
                     }
 
                     if (useVr) {
@@ -327,30 +342,53 @@ angular.module('ua5App')
                     });
                 }
 
-                function createExitBtn() {
-                    var geometry = new THREE.PlaneGeometry(40, 20, 1);
-                    var material;
+                function makeSphere(item) {
+                    var sphere;
                     var textureLoader = new THREE.TextureLoader();
+
+                    textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        '/assets/img/exit.png',
+                        item.url,
                         function(texture) {
-                            material = new THREE.MeshBasicMaterial({
-                                side: THREE.MeshBasicMaterial,
+                            var geometry = new THREE.SphereGeometry(500, 32, 32);
+                            var material = new THREE.MeshBasicMaterial({
                                 transparent: true,
                                 map: texture,
-                                opacity: 0.8
+                                opacity: 1,
+                                side: THREE.DoubleSide
                             });
-                            exitBtn = new THREE.Mesh(geometry, material);
-                            exitBtn.name = 'exit';
-                            if (useVr) {
-                                scene.addItem(exitBtn);
-                            }
-                            if (typeof panoLink === 'object') {
-                                exitBtn.add(panoLink);
-                            }
+                            sphere = new THREE.Mesh(geometry, material);
+
+                            sphere.scale.set(-0.9, 0.9, 0.9);
+                            scene.addItem(sphere);
                         }
                     );
                 }
+
+                // function createExitBtn() {
+                //     var geometry = new THREE.PlaneGeometry(40, 20, 1);
+                //     var material;
+                //     var textureLoader = new THREE.TextureLoader();
+                //     textureLoader.load(
+                //         '/assets/img/exit.png',
+                //         function(texture) {
+                //             material = new THREE.MeshBasicMaterial({
+                //                 side: THREE.MeshBasicMaterial,
+                //                 transparent: true,
+                //                 map: texture,
+                //                 opacity: 0.8
+                //             });
+                //             exitBtn = new THREE.Mesh(geometry, material);
+                //             exitBtn.name = 'exit';
+                //             if (useVr) {
+                //                 scene.addItem(exitBtn);
+                //             }
+                //             if (typeof panoLink === 'object') {
+                //                 exitBtn.add(panoLink);
+                //             }
+                //         }
+                //     );
+                // }
 
                 function reload() {
                     var i;
@@ -379,13 +417,30 @@ angular.module('ua5App')
                     panels = getPanels(i);
                     panelCount = panels.length;
 
-                    if (!$scope.isPanorama) {
-                        while (i--) {
-                            makePanel($scope.panoContent[i], panels[i]);
+                    if (!$scope.sceneType) {
+                        if ($scope.isPanorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
                         }
-                    } else {
-                        makePanorama($scope.panoContent[0]);
                     }
+
+                    switch ($scope.sceneType) {
+                        case 'cylinder':
+                            makePanorama($scope.panoContent[0]);
+                            break;
+                        case 'sphere':
+                            makeSphere($scope.panoContent[0]);
+                            break;
+                        default:
+                            while (i--) {
+                                if ($scope.panoContent[i]) {
+                                    makePanel($scope.panoContent[i], panels[i]);
+                                }
+                            }
+                            break;
+                    }
+
                 }
 
                 function makeCrosshair() {
@@ -491,7 +546,7 @@ angular.module('ua5App')
 
                     // Clicking the entire scene fires the panorama click
                     // there's no click listener on the actual cyl. geometry
-                    if (activeObjects.length === 0 && $scope.isPanorama && typeof panoramaMesh === 'object') {
+                    if (activeObjects.length === 0 && $scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
                         activeObjects = [panoramaMesh];
                     }
 

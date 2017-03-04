@@ -49,6 +49,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.privateProjectsRemaining.number = privateProjectsRemaining;
         $scope.sceneTypeToggle = {};
         $scope.projectPrivacy = {};
+        $scope.sceneType = 'panel';
+
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
@@ -447,6 +449,17 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
 
+                    //legacy isPanorama support:
+                    if (!response.data.scene_type) {
+                        if (response.data.is_panorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
+                        }
+                    } else {
+                        $scope.sceneType = response.data.scene_type;
+                    }
+
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;
                         $scope.panels = _.sortBy($scope.panels, 'order');
@@ -547,6 +560,15 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 }
             }
         }
+
+        $scope.setType = function(type) {
+            $scope.sceneType = type;
+            sceneFactory.editScene($scope.currentScene, {
+                title: $scope.sceneName,
+                project: $scope.projectId,
+                scene_type: type
+            });
+        };
 
         //WINDOW methods =====================================================//
         //====================================================================//
