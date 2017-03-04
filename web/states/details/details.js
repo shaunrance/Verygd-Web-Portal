@@ -448,7 +448,17 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                     $scope.sceneColor = response.data.background;
                     $scope.sceneName = response.data.title;
-                    $scope.sceneType = response.data.scene_type;
+
+                    //legacy isPanorama support:
+                    if (!response.data.scene_type) {
+                        if (response.data.is_panorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
+                        }
+                    } else {
+                        $scope.sceneType = response.data.scene_type;
+                    }
 
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;
