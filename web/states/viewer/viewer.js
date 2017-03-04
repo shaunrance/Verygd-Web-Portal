@@ -41,6 +41,7 @@ angular.module('ua5App.viewer')
 
         function applyContent() {
             $scope.background = $scope.currentScene.background;
+            $scope.backgroundImage = $scope.currentScene.equirectangular_background_image;
 
             if ($scope.currentScene.content.length > 1) {
                 // first check to see if more than one panel exists, then check if its panorama

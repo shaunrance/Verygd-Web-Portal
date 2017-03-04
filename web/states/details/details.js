@@ -282,14 +282,34 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.eventApi = {
             onChange: function(api, color, $event) {
-                $scope.sceneColor = color;
-                sceneFactory.editScene($scope.currentScene, {
-                    background: $scope.sceneColor,
-                    project: $stateParams.projectId,
-                    title: $scope.sceneName
-                });
+                var data = {};
+
+                $scope.sceneColor = $scope.sceneColorActive === 'color' ? color : null;
+                $scope.sceneImage = $scope.sceneColorActive === 'image' ? $scope.sceneImage : null;
+
+                if ($scope.sceneColorActive === 'color') {
+                    data = {
+                        background: color,
+                        project: $stateParams.projectId,
+                        title: $scope.sceneName
+                    };
+                } else if ($scope.sceneColorActive === 'image') {
+                    data = {
+                        background: null,
+                        equirectangular_background_image: $scope.sceneImage,
+                        project: $stateParams.projectId,
+                        title: $scope.sceneName
+                    };
+                }
+
+                sceneFactory.editScene($scope.currentScene, data);
                 getSceneInfo($scope.currentScene);
             }
+        };
+
+        $scope.imageChange = function(file) {
+            $scope.sceneImage = file;
+            $scope.eventApi.onChange(null, null, null);
         };
 
         function getSceneInfo(sceneId) {
@@ -301,8 +321,15 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.sceneTypeToggle.active = false;
                     }
 
-                    $scope.sceneColor = response.data.background;
+                    $scope.sceneColor = response.data.background && response.data.background !== 'null' ? response.data.background : null;
+                    $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
+
+                    if ($scope.sceneColor) {
+                        $scope.sceneColorActive = 'color';
+                    } else {
+                        $scope.sceneColorActive = 'image';
+                    }
                 });
         }
 
@@ -456,8 +483,19 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle.active = false;
                     }
-                    $scope.sceneColor = response.data.background;
+                    $scope.sceneColor = response.data.background && response.data.background !== 'null' ? response.data.background : null;
+                    $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
+
+                    if ($scope.sceneColor) {
+                        $scope.sceneColorActive = 'color';
+                    } else {
+                        $scope.sceneColorActive = 'image';
+                        $scope.sceneImage = {
+                            url: $scope.sceneImage,
+                            name: $scope.sceneImage.replace('https://verygd.imgix.net/', '')
+                        };
+                    }
 
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;

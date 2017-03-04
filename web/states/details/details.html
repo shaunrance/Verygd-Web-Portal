@@ -135,7 +135,7 @@
                             name="sceneImage"
                             ngf-pattern="'image/*'"
                             ngf-accept="'image/*'"
-                            event-api="eventApi">
+                            ngf-change="imageChange(sceneImage)">
                             <div
                                 ng-bind="sceneImage.name || 'select image'"
                                 class="scene-preview__image-picker-name">

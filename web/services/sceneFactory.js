@@ -25,7 +25,11 @@ angular.module('ua5App')
         };
 
         dataFactory.editScene = function(sceneId, data) {
-            return $http.put(urlBase + '/' + sceneId, data);
+            return Upload.upload({
+                url: urlBase + '/' + sceneId,
+                method: 'PUT',
+                data: data
+            });
         };
 
         dataFactory.deleteScene = function(projectId, sceneId) {
