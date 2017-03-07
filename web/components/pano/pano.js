@@ -360,6 +360,11 @@ angular.module('ua5App')
                             sphere = new THREE.Mesh(geometry, material);
 
                             sphere.scale.set(-0.9, 0.9, 0.9);
+                            if (!BrowserFactory.isMobile()) {
+                                sphere.rotation.y = Math.PI;
+                            } else {
+                                sphere.rotation.y = Math.PI / -2;
+                            }
                             scene.addItem(sphere);
                         }
                     );
