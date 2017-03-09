@@ -314,6 +314,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             $scope.eventApi.onChange(null, null, null);
         };
 
+        $scope.sceneDeleteImage = function() {
+            //If user deletes the scene image, set the scene background to black
+            $scope.sceneImage = null;
+            $scope.sceneColorActive = 'color';
+            $scope.eventApi.onChange(null, '#000000', null);
+        };
+
         function getSceneInfo(sceneId) {
             sceneFactory.getSceneById(sceneId)
                 .then(function(response) {
