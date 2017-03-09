@@ -502,7 +502,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.sceneColorActive = 'image';
                         $scope.sceneImage = {
                             url: $scope.sceneImage,
-                            name: $scope.sceneImage.replace('https://verygd.imgix.net/', '')
+                            name: $scope.sceneImage.replace('https://verygd.imgix.net/images/', '')
                         };
                     }
 

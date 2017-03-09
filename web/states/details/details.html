@@ -165,11 +165,15 @@
                                 ng-bind="sceneImage.name || 'select image'"
                                 class="scene-preview__image-picker-name">
                             </div><!--
-                         --><span
+                         --><img
+                                class="scene-preview__image-delete_icon"
+                                src="assets/img/delete.svg"
+                                ng-click="sceneDeleteImage()">
+                         <!-- <span
                                 class="scene-preview__image-picker-select"
                                 ng-click="sceneDeleteImage()">
                                 remove
-                            </span>
+                            </span> -->
                         </div>
                     </div>
                 </div>
