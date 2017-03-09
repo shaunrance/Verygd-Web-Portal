@@ -37,6 +37,7 @@ class SceneSerializer(serializers.ModelSerializer):
 
             model_dict['equirectangular_background_image'] = '/'.join([
                 settings.MEDIA_PORTAL_SETTINGS['IMGIX_URL'],
+                'images',
                 background_image_name
             ])
 
