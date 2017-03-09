@@ -199,6 +199,10 @@
     position: relative;
 }
 
+.scene-preview__section {
+    padding: 10px 30px;
+}
+
 .scene-preview__section-title {
     text-align: left;
 }
@@ -760,10 +764,8 @@
     }
 
     .project-details__mobile-pano {
-        left: 50%;
-        margin: 0 0 25px -61px;
-        position: relative;
-        width: 122px;
+        margin: 20px;
+        text-align: center;
     }
 
     .project-details__mobile-private {
@@ -773,6 +775,37 @@
         width: 160px;
     }
 }
+
+.scene-type {
+    @include display(flex);
+    @include justify-content(space-between);
+}
+
+.scene-type-btn {
+    @include flex-grow(1);
+    border-bottom: 2px solid transparent;
+    padding: 10px 0 4px;
+
+    .scene-preview-icon {
+        @include size(20px);
+        display: inline-block;
+        text-align: center;
+
+        svg * {
+            @include size(20px);
+            fill: $grey-2;
+        }
+    }
+
+    &.selected {
+        border-bottom: 2px solid $btn-blue;
+
+        .scene-preview-icon * {
+            fill: $btn-blue;
+        }
+    }
+}
+
 
 @include media($phablet) {
 
