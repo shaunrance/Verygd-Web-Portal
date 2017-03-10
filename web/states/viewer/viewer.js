@@ -73,6 +73,7 @@ angular.module('ua5App.viewer')
             _.each($scope.scenes, function(scene) {
                 if (scene.id === parseInt($stateParams.scene, 10)) {
                     $scope.currentScene = scene;
+
                     applyContent();
                 }
             });

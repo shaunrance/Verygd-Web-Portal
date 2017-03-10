@@ -58,9 +58,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         };
         $scope.showSceneInstructions = true;
 
-        //TODO determine which background type is active (color, gradient, or image)
+        //Determine which background type is active (color, gradient, or image
+        //when we grab the scene from the api
         $scope.sceneColorActive = 'color';
-
         $scope.sceneBackgroundChange = function(type) {
             $scope.sceneColorActive = type;
         };
@@ -289,27 +289,19 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 $scope.sceneColor = $scope.sceneColorActive === 'color' ? color : null;
                 $scope.sceneImage = $scope.sceneColorActive === 'image' ? $scope.sceneImage : null;
 
-                if ($scope.sceneColorActive === 'color') {
-                    data = {
-                        background: color,
-                        project: $stateParams.projectId,
-                        title: $scope.sceneName
-                    };
-                } else if ($scope.sceneColorActive === 'image') {
-                    data = {
-                        background: null,
-                        equirectangular_background_image: $scope.sceneImage,
-                        project: $stateParams.projectId,
-                        title: $scope.sceneName
-                    };
-                }
+                data = {
+                    background: color,
+                    equirectangular_background_image: $scope.sceneImage,
+                    project: $stateParams.projectId,
+                    title: $scope.sceneName
+                };
 
                 sceneFactory.editScene($scope.currentScene, data);
-                getSceneInfo($scope.currentScene);
             }
         };
 
         $scope.imageChange = function(file) {
+            $scope.sceneColorActive = 'image';
             $scope.sceneImage = file;
             $scope.eventApi.onChange(null, null, null);
         };
@@ -492,7 +484,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle.active = false;
                     }
-                    $scope.sceneColor = response.data.background && response.data.background !== 'null' ? response.data.background : null;
+                    $scope.sceneColor = response.data && response.data.background !== 'null' ? response.data.background : null;
                     $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
 
@@ -502,7 +494,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.sceneColorActive = 'image';
                         $scope.sceneImage = {
                             url: $scope.sceneImage,
-                            name: $scope.sceneImage.replace('https://verygd.imgix.net/images/', '')
+                            name: $scope.sceneImage ? $scope.sceneImage.replace('https://verygd.imgix.net/images/', '') : null
                         };
                     }
 
