@@ -121,6 +121,15 @@ angular.module('ua5App')
                         }
                     });
 
+                    if ($scope.sceneType === 'sphere') {
+                        backgroundHex = 0x000000;
+                        $scope.background = '#000000';
+                    } else {
+                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                        if ($scope.equirectangularBackgroundImage) {
+                            makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                        }
+                    }
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
 
                     $rootScope.renderer.setClearColor(componentToHex($scope.background));
@@ -188,7 +197,7 @@ angular.module('ua5App')
                     border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&bg=' + backgroundHex + border,
+                        data.url,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
 
@@ -269,7 +278,7 @@ angular.module('ua5App')
 
                     textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        data.url + '?fm=jpg',
+                        data.url,
                         function(texture) {
                             var height;
 
@@ -376,7 +385,7 @@ angular.module('ua5App')
                             } else {
                                 sphere.rotation.y = Math.PI / -2;
                             }
-                            scene.addItem(sphere);
+                            scene.scene().add(sphere);
                         }
                     );
                 }
