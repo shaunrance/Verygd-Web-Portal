@@ -46,7 +46,7 @@
                 ng-repeat="panel in panels"
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper"
-                ng-class="{'vg__item--wrapper-fade' : (sceneTypeToggle.active)}">
+                ng-class="{'vg__item--wrapper-fade' : sceneType !== 'panel'}">
 
                 <a
                     class="vg__item--link scene--link"
@@ -77,43 +77,99 @@
         </div>
         <div class="scene-preview" ng-show="!emptyScene" ng-hide="publicView">
             <div class="scene-preview--widget">
-                <div class="scene-preview__header">
-                    <div class="toggle">
-                        <div class="toggle-switch__icon poly"></div>
-                        <toggle-switch
-                            ng-model="sceneTypeToggle.active">
-                        </toggle-switch>
-                        <div class="toggle-switch__icon pano"></div>
-                    </div>
+                <div class="scene-preview__section">
+                    <h5 class="scene-preview__section-title">Scene Type</h5>
+                </div>
+                <div class="scene-type">
+                    <a
+                        ng-class="{'selected': sceneType === 'panel'}"
+                        class="scene-type-btn scene-type-btn--panel"
+                        ng-click="setType('panel');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--panel"
+                            ng-include="'/assets/img/icon-polygon.svg'">
+                        </div>
+                    </a>
+                    <a
+                        ng-class="{'selected': sceneType === 'sphere'}"
+                        class="scene-type-btn scene-type-btn--sphere"
+                        ng-click="setType('sphere');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--sphere"
+                            ng-include="'/assets/img/icon-sphere.svg'">
+                        </div>
+                    </a>
+                    <a
+                        ng-class="{'selected': sceneType === 'cylinder'}"
+                        class="scene-type-btn scene-type-btn--cylinder"
+                        ng-click="setType('cylinder');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--cylinder"
+                            ng-include="'/assets/img/icon-pano.svg'">
+                        </div>
+                    </a>
                 </div>
                 <div class="scene-preview__display">
-                    <div ng-if="sceneTypeToggle.active">
+                    <div ng-if="sceneType === 'sphere' || sceneType === 'cylinder'">
                         <img class="preview-icon" ng-src="assets/img/1.png">
                     </div>
-                    <div ng-if="(panels.length > 2 && panels.length < 7 && !sceneTypeToggle.active)">
+                    <div ng-if="(panels.length > 2 && panels.length < 7 && sceneType === 'panel')">
                         <img class="preview-icon" ng-src="assets/img/{{panels.length}}.png">
                     </div>
-                    <div class="scene-preview__message" ng-if="panels.length > 6 && !sceneTypeToggle.active">
+                    <div class="scene-preview__message" ng-if="panels.length > 6 && sceneType === 'panel'">
                         <p>We recommend you keep your scene under 7 panels</p>
                     </div>
-                    <div class="scene-preview__message" ng-if="panels.length < 3 && !sceneTypeToggle.active">
+                    <div class="scene-preview__message" ng-if="panels.length < 3 && sceneType === 'panel'">
                         <p>We recommend you add at&nbsp;least 3 panels</p>
                     </div>
-                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && !sceneTypeToggle.active || panels.length > 6 && !sceneTypeToggle.active}">Preview</h5>
+                    <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && sceneType === 'panel' || panels.length > 6 && sceneType === 'panel'}">Preview</h5>
                 </div>
-                <div class="scene-preview__color-picker">
+                <div
+                    ng-if="sceneType !== 'sphere'"
+                    class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
-                    <!-- <div class="scene-preview__color-style-wrap">
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-color"></span>
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-gradient"></span>
-                        <span class="scene-preview__color-style-button" id="scene-preview__color-style-image"></span>
-                    </div> -->
-                    <div class="scene-preview__color-picker-wrap">
+                    <div class="scene-preview__color-style-wrap">
+                        <span
+                            class="scene-preview__color-style-button"
+                            ng-class="{'scene-preview__active': sceneColorActive === 'color'}"
+                            ng-click="sceneBackgroundChange('color')"
+                            id="scene-preview__color-style-color">
+                        </span>
+                        <!-- <span class="scene-preview__color-style-button" id="scene-preview__color-style-gradient"></span> -->
+                        <span
+                            class="scene-preview__color-style-button"
+                            ng-class="{'scene-preview__active': sceneColorActive === 'image'}"
+                            ng-include="'assets/img/icon-image.svg'"
+                            id="scene-preview__color-style-image"
+                            ng-click="sceneBackgroundChange('image')">
+                        </span>
+                    </div>
+                    <div
+                        class="scene-preview__color-picker-wrap">
                         <color-picker
+                            ng-if="sceneColorActive === 'color'"
                             ng-model="sceneColor"
                             options="colorOptions"
                             event-api="eventApi">
                         </color-picker>
+                        <div
+                            ng-if="sceneColorActive === 'image'"
+                            class="scene-preview__image-picker"
+                            ngf-select
+                            ng-model="sceneImage"
+                            name="sceneImage"
+                            ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'"
+                            ngf-change="imageChange(sceneImage)">
+                            <div
+                                ng-bind="sceneImage.name || 'select image'"
+                                class="scene-preview__image-picker-name">
+                            </div><!--
+                         --><img
+                                class="scene-preview__image-delete_icon"
+                                src="assets/img/delete.svg"
+                                ng-click="sceneDeleteImage()">
+                        </div>
                     </div>
                 </div>
                 <div class="scene-preview__privacy">
@@ -191,12 +247,35 @@
 
         <div class="project-details__mobile-toggles">
             <div class="project-details__mobile-pano">
-                <div class="toggle">
-                    <div class="toggle-switch__icon poly"></div>
-                    <toggle-switch
-                        ng-model="sceneTypeToggle.active">
-                    </toggle-switch>
-                    <div class="toggle-switch__icon pano"></div>
+                <h5 class="scene-preview__section-title">Scene Type</h5>
+                <div class="scene-type">
+                    <a
+                        ng-class="{'selected': sceneType === 'panel'}"
+                        class="scene-type-btn scene-type-btn--panel"
+                        ng-click="setType('panel');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--panel"
+                            ng-include="'/assets/img/icon-polygon.svg'">
+                        </div>
+                    </a>
+                    <a
+                        ng-class="{'selected': sceneType === 'sphere'}"
+                        class="scene-type-btn scene-type-btn--sphere"
+                        ng-click="setType('sphere');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--sphere"
+                            ng-include="'/assets/img/icon-sphere.svg'">
+                        </div>
+                    </a>
+                    <a
+                        ng-class="{'selected': sceneType === 'cylinder'}"
+                        class="scene-type-btn scene-type-btn--cylinder"
+                        ng-click="setType('cylinder');">
+                        <div
+                            class="scene-preview-icon scene-preview-icon--cylinder"
+                            ng-include="'/assets/img/icon-pano.svg'">
+                        </div>
+                    </a>
                 </div>
             </div>
 

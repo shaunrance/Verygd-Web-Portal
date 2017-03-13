@@ -8,11 +8,20 @@
             <div class="account-billing-inner">
                 <p class="modal-message" ng-class="{'error': errorMessage}">{{message}}</p>
 
+
                 <div class="account-billing-title">
                     Current Plan
                 </div>
                 <div class="account-billing-plan">
-                    <span class="account-info-billing">
+                    <span
+                        ng-if="user.subscription_type === 'granted'"
+                        class="account-info-billing">
+                        Premium (Granted)
+                    </span>
+
+                    <span
+                        ng-if="user.subscription_type !== 'granted'"
+                        class="account-info-billing">
                         {{type}}
                     </span>
                 </div>

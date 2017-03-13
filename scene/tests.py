@@ -22,6 +22,54 @@ class TestScene(TestAPIBase):
         self.project_id = self.project.add_new_project(self.member)
         self.scene_id = self.add_scene(self.member, project=self.project_id)
 
+    def test_add_background_image(self):
+        test_image = self.strategies.get_test_image('test.png')
+
+        response, msg = self.patch_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id), {
+            'equirectangular_background_image': test_image})
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
+            response.status_code, msg))
+
+        response, scene_meta = self.get_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 scene_meta))
+
+        self.assertTrue('equirectangular_background_image' in scene_meta)
+        self.assertTrue(scene_meta['equirectangular_background_image'])
+        self.assertTrue('imgix' in scene_meta['equirectangular_background_image'])
+
+        # equirectangular_background_image can be set to null
+        response, msg = self.patch_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id), {
+            'background': '#000080',
+            'equirectangular_background_image': None}, format='json')
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
+            response.status_code, msg))
+
+        response, scene_meta = self.get_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 scene_meta))
+
+        self.assertTrue('equirectangular_background_image' in scene_meta)
+        self.assertFalse(scene_meta['equirectangular_background_image'])
+
+        response, msg = self.patch_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id), {
+            'equirectangular_background_image': self.strategies.get_test_image('test.png')})
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
+            response.status_code, msg))
+
+        # equirectangular_background_image can be set to null when using multipart/form-data and the string 'null'
+        response, msg = self.patch_as(self.member, '/{0}/{1}'.format(self.scene_endpoint, self.scene_id), {
+            'background': '#000080',
+            'equirectangular_background_image': 'null'})
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
+            response.status_code, msg))
+
     def test_content_limits(self):
         # TODO(andrew.silvernail): break out into smaller tests
         user_settings = self.users.settings

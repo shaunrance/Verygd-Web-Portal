@@ -49,12 +49,21 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
         $scope.privateProjectsRemaining.number = privateProjectsRemaining;
         $scope.sceneTypeToggle = {};
         $scope.projectPrivacy = {};
+        $scope.sceneType = 'panel';
+
         $scope.colorOptions = {
             format: 'hex',
             alpha: false,
             swatchPos: 'right'
         };
         $scope.showSceneInstructions = true;
+
+        //Determine which background type is active (color, gradient, or image
+        //when we grab the scene from the api
+        $scope.sceneColorActive = 'color';
+        $scope.sceneBackgroundChange = function(type) {
+            $scope.sceneColorActive = type;
+        };
 
         if (BrowserFactory.isWkWebView() && !isMobileChrome) {
             $scope.isWkWebView = true;
@@ -232,6 +241,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             });
         };
 
+        $scope.editBackground = function(type) {
+            $scope.sceneColorActive = type;
+        };
+
         $scope.deleteScene = function($index, sceneId) {
             if ($scope.scenes.length > 1) {
                 ModalService.showModal({
@@ -271,14 +284,33 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
         $scope.eventApi = {
             onChange: function(api, color, $event) {
-                $scope.sceneColor = color;
-                sceneFactory.editScene($scope.currentScene, {
-                    background: $scope.sceneColor,
+                var data = {};
+
+                $scope.sceneColor = $scope.sceneColorActive === 'color' ? color : null;
+                $scope.sceneImage = $scope.sceneColorActive === 'image' ? $scope.sceneImage : null;
+
+                data = {
+                    background: color,
+                    equirectangular_background_image: $scope.sceneImage,
                     project: $stateParams.projectId,
                     title: $scope.sceneName
-                });
-                getSceneInfo($scope.currentScene);
+                };
+
+                sceneFactory.editScene($scope.currentScene, data);
             }
+        };
+
+        $scope.imageChange = function(file) {
+            $scope.sceneColorActive = 'image';
+            $scope.sceneImage = file;
+            $scope.eventApi.onChange(null, null, null);
+        };
+
+        $scope.sceneDeleteImage = function() {
+            //If user deletes the scene image, set the scene background to black
+            $scope.sceneImage = null;
+            $scope.sceneColorActive = 'color';
+            $scope.eventApi.onChange(null, '#000000', null);
         };
 
         function getSceneInfo(sceneId) {
@@ -289,8 +321,16 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle.active = false;
                     }
-                    $scope.sceneColor = response.data.background;
+
+                    $scope.sceneColor = response.data.background && response.data.background !== 'null' ? response.data.background : null;
+                    $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
+
+                    if ($scope.sceneColor) {
+                        $scope.sceneColorActive = 'color';
+                    } else {
+                        $scope.sceneColorActive = 'image';
+                    }
                 });
         }
 
@@ -444,8 +484,30 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     } else {
                         $scope.sceneTypeToggle.active = false;
                     }
-                    $scope.sceneColor = response.data.background;
+                    $scope.sceneColor = response.data && response.data.background !== 'null' ? response.data.background : null;
+                    $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
+
+                    if ($scope.sceneColor) {
+                        $scope.sceneColorActive = 'color';
+                    } else {
+                        $scope.sceneColorActive = 'image';
+                        $scope.sceneImage = {
+                            url: $scope.sceneImage,
+                            name: $scope.sceneImage ? $scope.sceneImage.replace('https://verygd.imgix.net/images/', '') : null
+                        };
+                    }
+
+                    //legacy isPanorama support:
+                    if (!response.data.scene_type) {
+                        if (response.data.is_panorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
+                        }
+                    } else {
+                        $scope.sceneType = response.data.scene_type;
+                    }
 
                     if (response.data.content.length > 0) {
                         $scope.panels = response.data.content;
@@ -548,6 +610,15 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             }
         }
 
+        $scope.setType = function(type) {
+            $scope.sceneType = type;
+            sceneFactory.editScene($scope.currentScene, {
+                title: $scope.sceneName,
+                project: $scope.projectId,
+                scene_type: type
+            });
+        };
+
         //WINDOW methods =====================================================//
         //====================================================================//
         window.addEventListener('dragover', function(e) {
@@ -580,9 +651,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                 } else {
                     $scope.showSceneInstructions = true;
                 }
-                console.log($scope.showSceneInstructions);
-                getScenes();
 
+                getScenes();
             });
 
     }])

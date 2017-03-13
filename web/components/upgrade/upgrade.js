@@ -58,7 +58,9 @@ angular.module('ua5App')
 
                 function getUser() {
                     if (ctaCookie !== 'closeCta') {
-                        if (!$scope.user.payment || $scope.user.payment.plan_name === 'basic') {
+                        if (
+                            $scope.user.member_type !== 'premium'
+                        ) {
                             $scope.hideCta = false;
                         }
 

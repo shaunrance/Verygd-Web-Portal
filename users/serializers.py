@@ -13,15 +13,9 @@ from media_portal.users.serializers import MemberCreateSerializer as BaseMemberC
 class MemberSerializer(BaseMemberSerializer):
     private_project_count = serializers.IntegerField()
     content_bytes_left = serializers.IntegerField()
-    subscription_type = serializers.SerializerMethodField()
 
-    def get_subscription_type(self, instance):
-        if instance.payment:
-            return 'paid'
-        elif hasattr(instance, 'premiummember'):
-            return 'granted'
-        else:
-            return None
+    subscription_type = serializers.CharField()
+    member_type = serializers.CharField()
 
 
 class MemberCreateSerializer(BaseMemberCreateSerializer):

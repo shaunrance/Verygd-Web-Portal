@@ -168,6 +168,17 @@ angular.module('ua5App')
                 })
             ;
 
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(
+              camera.position.x + 0.15,
+              camera.position.y,
+              camera.position.z
+            );
+            // controls.minPolarAngle = Math.PI / 2 - 0.6;
+            // controls.maxPolarAngle = Math.PI / 2 + 0.6;
+            controls.noPan = true;
+            controls.noZoom = true;
+
             $(renderer.domElement).on('click', clickhandler);
             $(renderer.domElement).on('mousemove', function(event) {
                 if (!$rootScope.inVR) {
@@ -434,13 +445,15 @@ angular.module('ua5App')
 
         // }
 
-        function addItem(item, parent, isInteractive) {
+        function addItem(item, isInteractive, parent) {
             parent = (typeof parent === 'undefined') ? scene : parent;
             isInteractive = (typeof isInteractive === 'undefined') ? true : isInteractive;
             if (isInteractive) {
                 registerItem(item);
             }
+            console.log(item);
             parent.add(item);
+
             //refresh camera for pointer:
             scene.remove(camera);
             scene.add(camera);
