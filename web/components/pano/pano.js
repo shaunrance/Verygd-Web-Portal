@@ -10,6 +10,7 @@ angular.module('ua5App')
                 background: '=',
                 isPanorama: '=',
                 sceneType: '=',
+                equirectangularBackgroundImage: '=',
                 hotspotType: '@'
             },
             link: function($scope, element, attrs) {
@@ -25,7 +26,17 @@ angular.module('ua5App')
                 //var panoLink;
                 var panoramaMesh;
                 var background = $scope.background;
-                var backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                var backgroundHex;
+
+                if ($scope.sceneType === 'sphere') {
+                    backgroundHex = 0x000000;
+                    $scope.background = '#000000';
+                } else {
+                    backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                    if ($scope.equirectangularBackgroundImage) {
+                        makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                    }
+                }
 
                 if (typeof $scope.hotspotType === 'undefined') {
                     $scope.hotspotType = 'hidden';
@@ -110,9 +121,18 @@ angular.module('ua5App')
                         }
                     });
 
+                    if ($scope.sceneType === 'sphere') {
+                        backgroundHex = 0x000000;
+                        $scope.background = '#000000';
+                    } else {
+                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                        if ($scope.equirectangularBackgroundImage) {
+                            makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                        }
+                    }
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
 
-                    $rootScope.renderer.setClearColor(componentToHex(background));
+                    $rootScope.renderer.setClearColor(componentToHex($scope.background));
                     $rootScope.renderer.sortObjects = false;
 
                     trueCount = i = $scope.panoContent.length;
@@ -142,7 +162,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0]);
+                            makeSphere($scope.panoContent[0].url); //jshint ignore:line
                             break;
                         default:
                             while (i--) {
@@ -177,7 +197,7 @@ angular.module('ua5App')
                     border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&bg=' + backgroundHex + border,
+                        data.url,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
 
@@ -258,7 +278,7 @@ angular.module('ua5App')
 
                     textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        data.url + '?fm=jpg',
+                        data.url,
                         function(texture) {
                             var height;
 
@@ -342,13 +362,13 @@ angular.module('ua5App')
                     });
                 }
 
-                function makeSphere(item) {
+                function makeSphere(url) { //jshint ignore:line
                     var sphere;
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        item.url,
+                        url,
                         function(texture) {
                             var geometry = new THREE.SphereGeometry(500, 32, 32);
                             var material = new THREE.MeshBasicMaterial({
@@ -365,7 +385,7 @@ angular.module('ua5App')
                             } else {
                                 sphere.rotation.y = Math.PI / -2;
                             }
-                            scene.addItem(sphere);
+                            scene.scene().add(sphere);
                         }
                     );
                 }
@@ -405,7 +425,15 @@ angular.module('ua5App')
                     panels = getPanels(i);
                     panelCount = panels.length;
                     background = $scope.background;
-                    backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                    if ($scope.sceneType === 'sphere') {
+                        backgroundHex = 0x000000;
+                        $scope.background = '#000000';
+                    } else {
+                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                        if ($scope.equirectangularBackgroundImage) {
+                            makeSphere($scope.equirectangularBackgroundImage);
+                        }
+                    }
                     $rootScope.renderer.setClearColor(componentToHex(background));
                     $rootScope.renderer.autoClear = false;
                     $rootScope.renderer.sortObjects = false;
@@ -435,7 +463,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0]);
+                            makeSphere($scope.panoContent[0].url);
                             break;
                         default:
                             while (i--) {

@@ -56,10 +56,13 @@
 }
 
 .color-picker-input {
-    border: 1px solid $grey-2;
+    @extend %p;
+    background-color: $grey;
+    border: none;
     float: left;
     font-family: 'Open Sans', sans-serif;
     margin-bottom: 0;
+    padding: 5px;
     position: relative;
     width: 96%;
     z-index: 2;
