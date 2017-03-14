@@ -25,6 +25,7 @@ angular.module('ua5App')
                 $scope.$broadcast('hotspot:reset', $scope.current);
             }
             $scope.current = data;
+            $scope.$applyAsync();
         });
 
         $scope.cancel = function() {
