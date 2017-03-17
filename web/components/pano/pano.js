@@ -39,7 +39,7 @@ angular.module('ua5App')
                 }
 
                 if (typeof $scope.hotspotType === 'undefined') {
-                    $scope.hotspotType = 'hidden';
+                    $scope.hotspotType = 'Minimal';
                 }
 
                 $scope.$watch(function() {
@@ -265,6 +265,7 @@ angular.module('ua5App')
                         container.add(plane);
                         container.hotspots.push(plane);
 
+                        //todo
                         if ($scope.hotspotType === 'visible') {
                             plane.show();
                         }
@@ -356,6 +357,7 @@ angular.module('ua5App')
                         scene.addItem(hotspotMesh, true);
                         parent.hotspots.push(hotspotMesh);
 
+                        //todo
                         if ($scope.hotspotType === 'visible') {
                             hotspotMesh.show();
                         }
@@ -556,6 +558,7 @@ angular.module('ua5App')
                             }
                         });
 
+                        //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
                             _.each(activeObjects, function(obj) {
                                 if (obj.name === 'panel' || obj.name === 'panorama') {
