@@ -20,7 +20,7 @@ class TestScene(TestAPIBase):
 
         self.member = self.users.new_user()
         self.project_id = self.project.add_new_project(self.member)
-        self.scene_id = self.add_scene(self.member, project=self.project_id)
+        self.scene_id = self.add_scene(self.member, hotspot_type='test', project=self.project_id)
 
     def test_add_background_image(self):
         test_image = self.strategies.get_test_image('test.png')

@@ -42,7 +42,7 @@ class TestAPIBase(Base):
         self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(response.status_code,
                                                                                                  scene_meta))
 
-        self.assertTrue('gap_distance' in scene_meta and 'pan_start_point' in scene_meta)
+        self.assertTrue('gap_distance' in scene_meta and 'pan_start_point' and 'hotspot_type' in scene_meta)
 
         return scene_meta['id']
 
