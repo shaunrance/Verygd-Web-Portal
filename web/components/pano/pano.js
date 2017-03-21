@@ -205,7 +205,8 @@ angular.module('ua5App')
                                 side: THREE.MeshBasicMaterial,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
@@ -286,7 +287,8 @@ angular.module('ua5App')
                                 side: THREE.FrontSide,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
 
                             function map(value, start1, stop1, start2, stop2) {
