@@ -12,7 +12,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ('featured', )
     list_editable = ('featured', 'featured_order', )
 
-    ordering = ('-created_dt', 'featured_order', )
+    ordering = ('-featured', 'featured_order', '-created_dt', )
 
     def get_queryset(self, request):
         queryset = super(ProjectAdmin, self).get_queryset(request)
