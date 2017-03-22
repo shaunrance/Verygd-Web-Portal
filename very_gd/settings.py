@@ -60,7 +60,7 @@ MEDIA_PORTAL_SETTINGS = {
     'ALBUM_VIDEO': 'panel.models.PanelVideo',
 
     'MEDIA_MEMBER': 'users.models.Member',
-
+    'SITE_NAME': 'very.gd',
     'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
