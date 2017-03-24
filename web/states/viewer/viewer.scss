@@ -19,6 +19,18 @@
     padding: 2px 12px;
 }
 
+.viewer__cta {
+    @include transition(fill 0.3s ease-in-out);
+    fill: rgba($white, 0.7);
+    margin-right: 20px;
+    margin-top: 10px;
+    padding: 6px 12px;
+
+    &:hover {
+        fill: rgba($white, 1);
+    }
+}
+
 .cardboard-icon {
     width: 30px;
 }
