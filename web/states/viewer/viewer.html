@@ -12,14 +12,14 @@
     <div class="viewer__nav">
         <a
             class="viewer__exit"
-            ng-if="!useVr && isPublic"
+            ng-if="!useVr && !isPublicViewer"
             ng-click="exit()">Exit</a>
         <a
             class="viewer__cta"
-            ng-if="!useVr && !isPublic"
+            ng-if="!useVr && isPublicViewer"
             target="_blank"
-            href="http://very.gd">
-            <img src="assets/img/logo-very_gd.svg" />
+            href="http://very.gd"
+            ng-include="'assets/img/logo-very_gd.svg'">
         </a>
         <a
             ng-click="toggleCardboard()"

@@ -37,7 +37,7 @@ angular.module('ua5App.viewer')
 
         ngMeta.setTitle('Viewer');
 
-        $scope.isPublic = ($state.current.name === 'v');
+        $scope.isPublicViewer = ($state.current.name === 'publicViewer');
 
         function applyContent() {
             $scope.background = $scope.currentScene.background;
