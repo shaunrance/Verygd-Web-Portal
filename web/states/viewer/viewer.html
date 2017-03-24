@@ -7,7 +7,20 @@
         pano-content="currentScenePanels"
         scene-type="currentScene.scene_type"
         equirectangular-background-image="currentScene.equirectangular_background_image"
-        is-panorama="currentScene.is_panorama">
+        is-panorama="currentScene.is_panorama"
+        ng-if="!(iFrame && mobile)">
+    </div>
+    <div
+        class="viewer__iframe__image-container"
+        ng-if="iFrame && mobile">
+        <a
+            href="{{url}}"
+            target="_blank"
+            class="viewer__iframe__link">
+            <img
+                class="viewer__iframe__image"
+                src="{{firstImage}}">
+        </a>
     </div>
     <div class="viewer__nav">
         <a

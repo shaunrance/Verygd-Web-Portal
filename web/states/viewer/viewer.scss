@@ -39,6 +39,15 @@
     opacity: 0.3;
 }
 
+.viewer__iframe__link {
+    display: inline-block;
+    width: 100%;
+}
+
+.viewer__iframe__image {
+    width: 100%;
+}
+
 @include media($phablet) {
     .viewer__exit {
         font-size: 11px;
