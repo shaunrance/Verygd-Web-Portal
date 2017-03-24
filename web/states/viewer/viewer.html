@@ -12,8 +12,15 @@
     <div class="viewer__nav">
         <a
             class="viewer__exit"
-            ng-if="!useVr && !isPublic"
+            ng-if="!useVr && isPublic"
             ng-click="exit()">Exit</a>
+        <a
+            class="viewer__cta"
+            ng-if="!useVr && !isPublic"
+            target="_blank"
+            href="http://very.gd">
+            <img src="assets/img/logo-very_gd.svg" />
+        </a>
         <a
             ng-click="toggleCardboard()"
             ng-if="touch"
