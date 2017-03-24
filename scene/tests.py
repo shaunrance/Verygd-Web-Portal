@@ -1,6 +1,8 @@
 from very_gd.tests.base import TestAPIBase
 from project.tests import TestProject
 
+from users.models import Member
+
 
 class TestScene(TestAPIBase):
     def __init__(self, *args, **kwargs):
@@ -69,6 +71,49 @@ class TestScene(TestAPIBase):
 
         self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(
             response.status_code, msg))
+
+    def test_content_limits_premium(self):
+        """
+        Set premium quota bytes to 0 in order to demonstrate unlimited quota for premium users.
+        """
+        user_settings = self.users.settings
+
+        user_settings.quotas.premium_quota_bytes = 0
+        user_settings.quotas.save()
+
+        member = Member.objects.get(pk=self.member['id'])
+
+        # upgrade to premium
+        member.upgrade_to_premium()
+
+        test_image = self.strategies.get_test_image('test.png')
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 user_meta))
+
+        self.assertTrue('content_bytes_left' in user_meta)
+
+        content_bytes_before_adding_image = user_meta['content_bytes_left']
+
+        response, msg = self.add_panel(self.member, self.scene_id, test_image=test_image)
+
+        self.assertEquals(response.status_code, 201, 'expected 201 got {0} instead ({1})'.format(
+            response.status_code,
+            msg
+        ))
+
+        response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
+
+        self.assertEquals(response.status_code, 200, 'expected 200 got {0} instead ({1})'.format(response.status_code,
+                                                                                                 user_meta))
+
+        self.assertTrue('content_bytes_left' in user_meta)
+
+        content_bytes_after_adding_image = user_meta['content_bytes_left']
+
+        self.assertEquals(content_bytes_before_adding_image, content_bytes_after_adding_image)
 
     def test_content_limits(self):
         # TODO(andrew.silvernail): break out into smaller tests
@@ -145,8 +190,7 @@ class TestScene(TestAPIBase):
 
         new_scene_id = self.add_scene(self.member, project=self.project_id)
 
-        self.add_panel(self.member, new_scene_id,
-                                       test_image=self.strategies.get_test_image('test.png'))
+        self.add_panel(self.member, new_scene_id, test_image=self.strategies.get_test_image('test.png'))
 
         response, user_meta = self.get_as(self.member, '/{0}/{1}'.format(self.user_endpoint, self.member['id']))
 
