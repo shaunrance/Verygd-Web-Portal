@@ -40,7 +40,6 @@ angular.module('ua5App.viewer')
 
         $timeout(function() {
             $scope.url = 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id;
-            console.log($scope.iFrame, $scope.mobile);
         }, 10);
 
         ngMeta.setTitle('Viewer');
