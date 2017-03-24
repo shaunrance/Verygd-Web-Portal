@@ -29,11 +29,19 @@ angular.module('ua5App.viewer')
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', '$timeout', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state, $timeout) {
         var lastScene = 1;
         $scope.scenes = project.content;
         $scope.touch = BrowserFactory.hasTouch();
+        $scope.iFrame = BrowserFactory.isIframe();
+        $scope.mobile = BrowserFactory.isMobile();
+        $scope.firstImage = $scope.scenes[0].content !== 'undefined' ? $scope.scenes[0].content[0].url : 'assets/img/black-background.png';
         $scope.useVr = false;
+
+        $timeout(function() {
+            $scope.url = 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id;
+            console.log($scope.iFrame, $scope.mobile);
+        }, 10);
 
         ngMeta.setTitle('Viewer');
 
