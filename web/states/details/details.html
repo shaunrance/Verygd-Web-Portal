@@ -174,12 +174,12 @@
                     <div>
                         <h5>Hotspots</h5>
                         <select
-                            ng-model="hotspotType"
+                            ng-model="hotspotType.type"
                             ng-change="hotspotTypeChange()">
                             <option
                                 ng-repeat="hsType in hotspotTypes">{{hsType}}</option>
                         </select>
-                        {{hotspotType}}
+                        {{hotspotType.type}}
                     </div>
                 </div>
                 <div class="scene-preview__privacy">

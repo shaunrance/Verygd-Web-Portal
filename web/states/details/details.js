@@ -65,7 +65,8 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
             'Disabled'
         ];
 
-        $scope.hotspotType = 'Minimal';
+        $scope.hotspotType = {};
+        $scope.hotspotType.type = 'Minimal'
 
         //Determine which background type is active (color, gradient, or image
         //when we grab the scene from the api
@@ -297,13 +298,13 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
 
                 $scope.sceneColor = $scope.sceneColorActive === 'color' ? color : null;
                 $scope.sceneImage = $scope.sceneColorActive === 'image' ? $scope.sceneImage : null;
-
+                console.log($scope.hotspotType.type)
                 data = {
                     background: color,
                     equirectangular_background_image: $scope.sceneImage,
                     project: $stateParams.projectId,
                     title: $scope.sceneName,
-                    hotspot_type: $scope.hotspotType
+                    hotspot_type: $scope.hotspotType.type
                 };
 
                 sceneFactory.editScene($scope.currentScene, data);
@@ -336,7 +337,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                         $scope.sceneTypeToggle.active = false;
                     }
 
-                    $scope.hotspotType = (response.data.hotspot_type) ? response.data.hotspot_type : 'Minimal';
+                    $scope.hotspotType.type = (response.data.hotspot_type) ? response.data.hotspot_type : 'Minimal';
                     $scope.sceneColor = response.data.background && response.data.background !== 'null' ? response.data.background : null;
                     $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
@@ -502,7 +503,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     $scope.sceneColor = response.data && response.data.background !== 'null' ? response.data.background : null;
                     $scope.sceneImage = response.data.equirectangular_background_image;
                     $scope.sceneName = response.data.title;
-                    $scope.hotspotType = (response.data.hotspot_type) ? response.data.hotspot_type : 'Minimal';
+                    $scope.hotspotType.type = (response.data.hotspot_type) ? response.data.hotspot_type : 'Minimal';
 
                     if ($scope.sceneColor) {
                         $scope.sceneColorActive = 'color';

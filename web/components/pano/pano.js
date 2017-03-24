@@ -1,6 +1,6 @@
 /* global angular, THREE, $, TweenMax, _ */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'Hotspot', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, Hotspot) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -11,7 +11,7 @@ angular.module('ua5App')
                 isPanorama: '=',
                 sceneType: '=',
                 equirectangularBackgroundImage: '=',
-                hotspotType: '@'
+                hotspotType: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
@@ -228,47 +228,24 @@ angular.module('ua5App')
 
                 function makeHotspots(data, container, width, height) {
                     container.hotspots = [];
+                    if ($scope.hotspotType === 'Disabled') {
+                        return;
+                    }
                     _.each(data, function(item) {
-                        var spotWidth = GeoFactory.map(item.width, 0, 1, 0, width);
-                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
-                        var geometry = new THREE.PlaneGeometry(spotWidth, spotHeight, 32);
-                        var material = new THREE.MeshBasicMaterial({
-                            color: 0x81e4ee,
-                            side: THREE.DoubleSide,
-                            transparent: true,
-                            opacity: 0.0
+                        var hotspot = new Hotspot({
+                            data: item,
+                            scene: scene,
+                            hotspotType: $scope.hotspotType,
+                            stereoscopic: $scope.useVr,
+                            container: container,
+                            planeWidth: width,
+                            planeHeight: height,
+                            sceneType: $scope.sceneType
                         });
-                        var plane = new THREE.Mesh(geometry, material);
-                        plane.position.z = 1;
-                        plane.position.x = GeoFactory.map(item.x, 0, 1, - width / 2, width / 2);
-                        plane.position.y = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
-                        plane.position.x += spotWidth / 2;
-                        plane.position.y -= spotHeight / 2;
-                        //account for z of 1 offset:
-                        plane.scale.x = 0.95;
-                        plane.scale.y = 0.95;
-                        plane.name = 'hotspot';
-                        plane.hotspot = item;
-                        plane.showing = false;
-                        plane.show = function() {
-                            plane.showing = true;
-                            plane.isVisible = true;
-                            TweenMax.to(material, 0.25, {opacity: 0.3});
-                        };
-                        plane.hide = function() {
-                            plane.showing = false;
-                            plane.isVisible = false;
-                            TweenMax.to(material, 0.25, {opacity: 0});
-                        };
-                        scene.pushItem(plane);
-                        plane.isVisible = false;
-                        container.add(plane);
-                        container.hotspots.push(plane);
-
-                        //todo
-                        if ($scope.hotspotType === 'visible') {
-                            plane.show();
-                        }
+                        container.add(hotspot);
+                        console.log(hotspot);
+                        container.hotspots.push(hotspot);
+                        scene.pushItem(hotspot);
                     });
                 }
 
@@ -287,7 +264,7 @@ angular.module('ua5App')
                                 side: THREE.FrontSide,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 0.1
                             });
 
                             function map(value, start1, stop1, start2, stop2) {
@@ -310,7 +287,8 @@ angular.module('ua5App')
                             //invert the object, to fix the texture
                             panoramaMesh.scale.set(- 1, 1, 1);
                             scene.addItem(panoramaMesh, true);
-                            makePanoramaHotspots(data.hotspots, height, panoramaMesh);
+                            makeHotspots(data.hotspots, panoramaMesh, 0, height);
+                            //makePanoramaHotspots(data.hotspots, height, panoramaMesh);
                         }
                     );
                 }
@@ -548,45 +526,38 @@ angular.module('ua5App')
                     }
                 }
 
-                function toggleHotspots(activeObjects) {
-                    if (typeof activeObjects === 'object' && activeObjects.length > 0) {
+                function toggleHotspots(activeObject) {
+                    if (typeof activeObject === 'object') {
                         var clickedHotspot = false;
-                        _.each(activeObjects, function(obj) {
-                            if (obj.name === 'hotspot') {
-                                launchHotpsot(obj.hotspot);
-                                clickedHotspot = true;
-                            }
-                        });
+
+                        if (activeObject.name === 'hotspot') {
+                            launchHotpsot(activeObject.hotspot);
+                            clickedHotspot = true;
+                        }
 
                         //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
-                            _.each(activeObjects, function(obj) {
-                                if (obj.name === 'panel' || obj.name === 'panorama') {
-                                    _.each(obj.hotspots, function(child) {
-                                        if (child.name === 'hotspot') {
-                                            if (child.showing) {
-                                                child.hide();
-                                            } else {
-                                                child.show();
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                            if (activeObject.name === 'panel' || activeObject.name === 'panorama') {
+                                _.each(activeObject.hotspots, function(child) {
+                                    if (child.name === 'hotspot') {
+                                        child.flash();
+                                    }
+                                });
+                            }
                         }
                     }
                 }
 
                 function clickHandler(item) {
-                    var activeObjects = scene.activeObjects();
+                    var activeObject = scene.activeObject();
 
                     // Clicking the entire scene fires the panorama click
                     // there's no click listener on the actual cyl. geometry
-                    if (activeObjects.length === 0 && $scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
-                        activeObjects = [panoramaMesh];
+                    if (activeObject.length === 0 && $scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
+                        activeObject = panoramaMesh;
                     }
 
-                    toggleHotspots(activeObjects);
+                    toggleHotspots(activeObject);
 
                     if (typeof scene.activeObject() !== 'undefined') {
                         if (scene.activeObject().name === 'exit') {
@@ -599,6 +570,7 @@ angular.module('ua5App')
                 }
 
                 function launchHotpsot(data) {
+                    $body.removeClass('body--hotspot-hovered');
                     if (data.type === 'scene') {
                         $rootScope.$broadcast('scene:change', {link: data.sceneId});
                     } else if (data.type === 'url') {
@@ -610,6 +582,7 @@ angular.module('ua5App')
                     }
                 }
 
+                var $body = $('body');
                 function mouseOverHandler(item) {
                     //console.log('Mouse Hovering: ', item);
                     // if (!gazeStarted && useVr) {
@@ -620,6 +593,9 @@ angular.module('ua5App')
                     //     clearTimeout(gazeTimeout);
                     //     gazeTimeout = setTimeout(clickHandler, 1700);
                     // }
+                    if (item && item.name === 'hotspot') {
+                        $body.addClass('body--hotspot-hovered');
+                    }
                 }
 
                 function mouseOutHandler(item) {
@@ -630,6 +606,7 @@ angular.module('ua5App')
                     //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
                     //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
                     // }
+                    $body.removeClass('body--hotspot-hovered');
                 }
 
                 $rootScope.$on('app:resized', function() {
