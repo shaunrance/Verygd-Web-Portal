@@ -114,6 +114,6 @@ angular.module('ua5App.viewer')
         filterScenes();
         ngMeta.setTitle(project.name);
         ngMeta.setTag('url', 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id);
-        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark64=aHR0cHM6Ly9hcHAudmVyeS5nZC9hc3NldHMvaW1nL3ZlcnktZ2QtbG9nby13aGl0ZS5wbmc&markscale=30&markpad=40');
+        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark=https://app.very.gd/assets/img/logo-very_gd.png&markscale=5&markpad=20');
     }])
 ;
