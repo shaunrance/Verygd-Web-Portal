@@ -17,7 +17,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 color: 0x81e4ee,
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: 0.0
+                opacity: 0
             });
 
             var show = function () {
@@ -41,6 +41,28 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 TweenMax.delayedCall(0.5, hide);
             }
 
+            function getCentroid(mesh) {
+                mesh.geometry.computeBoundingBox();
+                boundingBox = mesh.geometry.boundingBox;
+
+                var x0 = boundingBox.min.x;
+                var x1 = boundingBox.max.x;
+                var y0 = boundingBox.min.y;
+                var y1 = boundingBox.max.y;
+                var z0 = boundingBox.min.z;
+                var z1 = boundingBox.max.z;
+
+                var bWidth = ( x0 > x1 ) ? x0 - x1 : x1 - x0;
+                var bHeight = ( y0 > y1 ) ? y0 - y1 : y1 - y0;
+                var bDepth = ( z0 > z1 ) ? z0 - z1 : z1 - z0;
+
+                var centroidX = x0 + ( bWidth / 2 ) + mesh.position.x;
+                var centroidY = y0 + ( bHeight / 2 )+ mesh.position.y;
+                var centroidZ = z0 + ( bDepth / 2 ) + mesh.position.z;
+
+                return mesh.geometry.centroid = { x : centroidX, y : centroidY, z : centroidZ };
+            }
+
             function makePoint() {
                 var pointGeometry;
                 var pointMaterial;
@@ -51,9 +73,10 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 textureLoader.load(
                     '/assets/img/point.png',
                     function(texture) {
+                        var coords = getCentroid(mesh);
                         pointGeometry = new THREE.CircleGeometry(1, 32);
                         pointMaterial = new THREE.MeshBasicMaterial({
-                            side: THREE.FrontSide,
+                            side: THREE.DoubleSide,
                             transparent: true,
                             map: texture,
                             opacity: 1
@@ -61,6 +84,12 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
 
                         circle = new THREE.Mesh(pointGeometry, pointMaterial);
                         circle.position.z = 1;
+
+                        if (config.sceneType === 'cylinder' || config.sceneType === 'sphere') {
+                            circle.position.set(coords.x, circle.position.y, coords.z);
+                            circle.scale.x = 2.95;
+                            circle.scale.y = 1.95;
+                        }
                         mesh.add(circle);
                     }
                 );
@@ -70,7 +99,6 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 var spotWidth = GeoFactory.map(config.data.width, 0, 1, 0, config.planeWidth);
                 var spotHeight = GeoFactory.map(config.data.height, 0, 1, 0, config.planeHeight);
                 var geometry = new THREE.PlaneGeometry(spotWidth, spotHeight, 32);
-
                 mesh = new THREE.Mesh(geometry, material);
                 mesh.position.z = 1;
                 mesh.position.x = GeoFactory.map(config.data.x, 0, 1, - config.planeWidth / 2, config.planeWidth / 2);
@@ -83,6 +111,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
             }
 
             function makeCylinderHotspot() {
+                var CYL_OFFSET_Y = 8;
                 var degreesPos = config.data.x * 360.0;
                 var radiansPos = degreesPos * (Math.PI / 180);
                 var degreesWidth = config.data.width * 360.0;
@@ -97,9 +126,9 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 geometry = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
                 mesh = new THREE.Mesh(geometry, material);
                 mesh.scale.set(-0.9, 0.9, 0.9);
-                mesh.position.y = spotY - (spotHeight / 2);
+                mesh.position.y = CYL_OFFSET_Y + spotY - (spotHeight / 2);
                 geometry.theaLength = spotWidth;
-                mesh.rotation.y = 4.723;
+                //mesh.rotation.y = 4.723;
             }
 
             function makeSphereHotspot() {

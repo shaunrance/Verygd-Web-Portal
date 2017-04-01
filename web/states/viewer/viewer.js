@@ -29,15 +29,22 @@ angular.module('ua5App.viewer')
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', '$timeout', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state, $timeout) {
         var lastScene = 1;
         $scope.scenes = project.content;
         $scope.touch = BrowserFactory.hasTouch();
+        $scope.iFrame = BrowserFactory.isIframe();
+        $scope.mobile = BrowserFactory.isMobile();
+        $scope.firstImage = $scope.scenes[0].content !== 'undefined' ? $scope.scenes[0].content[0].url : 'assets/img/black-background.png';
         $scope.useVr = false;
+
+        $timeout(function() {
+            $scope.url = 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id;
+        }, 10);
 
         ngMeta.setTitle('Viewer');
 
-        $scope.isPublic = ($state.current.name === 'v');
+        $scope.isPublicViewer = ($state.current.name === 'publicViewer');
 
         function applyContent() {
             $scope.background = $scope.currentScene.background;
@@ -107,6 +114,6 @@ angular.module('ua5App.viewer')
         filterScenes();
         ngMeta.setTitle(project.name);
         ngMeta.setTag('url', 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id);
-        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark64=aHR0cHM6Ly9hcHAudmVyeS5nZC9hc3NldHMvaW1nL3ZlcnktZ2QtbG9nby13aGl0ZS5wbmc&markscale=30&markpad=40');
+        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark=https://app.very.gd/assets/img/logo-very_gd.png&markscale=5&markpad=20');
     }])
 ;

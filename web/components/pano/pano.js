@@ -117,7 +117,9 @@ angular.module('ua5App')
                             Math.abs(pos.x - cam.rotation.x) === 0 &&
                             Math.abs(pos.y - cam.rotation.y) === 0
                         ) {
-                            setTimeout(clickHandler, 100);
+                            setTimeout(function() {
+                                clickHandler(scene.activeObject());
+                            }, 100);
                         }
                     });
 
@@ -205,7 +207,8 @@ angular.module('ua5App')
                                 side: THREE.MeshBasicMaterial,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
@@ -243,7 +246,6 @@ angular.module('ua5App')
                             sceneType: $scope.sceneType
                         });
                         container.add(hotspot);
-                        console.log(hotspot);
                         container.hotspots.push(hotspot);
                         scene.pushItem(hotspot);
                     });
@@ -264,7 +266,8 @@ angular.module('ua5App')
                                 side: THREE.FrontSide,
                                 transparent: true,
                                 map: texture,
-                                opacity: 0.1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
 
                             function map(value, start1, stop1, start2, stop2) {
@@ -533,7 +536,11 @@ angular.module('ua5App')
                         if (activeObject.name === 'hotspot') {
                             launchHotpsot(activeObject.hotspot);
                             clickedHotspot = true;
+                        } else if ($scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
+                            activeObject = panoramaMesh;
+                            console.log('here')
                         }
+
 
                         //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
@@ -549,20 +556,12 @@ angular.module('ua5App')
                 }
 
                 function clickHandler(item) {
-                    var activeObject = scene.activeObject();
+                    toggleHotspots(item);
 
-                    // Clicking the entire scene fires the panorama click
-                    // there's no click listener on the actual cyl. geometry
-                    if (activeObject.length === 0 && $scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
-                        activeObject = panoramaMesh;
-                    }
-
-                    toggleHotspots(activeObject);
-
-                    if (typeof scene.activeObject() !== 'undefined') {
-                        if (scene.activeObject().name === 'exit') {
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
+                    if (typeof item !== 'undefined') {
+                        if (item.name === 'exit') {
+                            TweenMax.to(item.material, 0.2, {opacity: 0.2});
+                            TweenMax.to(item.material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                                 window.history.back();
                             }});
                         }

@@ -1,3 +1,62 @@
+from __future__ import unicode_literals
+
 from django.contrib import admin
 
-# Register your models here.
+from project.models import Project
+from media_portal.admin import admin_site
+
+
+@admin.register(Project, site=admin_site)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('name', 'featured', 'featured_order', 'owner', 'public_url', 'creation_date', 'first_image', )
+    list_filter = ('featured', )
+    list_editable = ('featured', 'featured_order', )
+
+    ordering = ('-created_dt', 'featured_order', )
+
+    def get_queryset(self, request):
+        queryset = super(ProjectAdmin, self).get_queryset(request)
+
+        queryset = queryset.exclude(public=False)
+
+        return queryset
+
+    def creation_date(self, instance):
+        return instance.created_dt
+
+    creation_date.short_description = 'Created'
+
+    def order(self, instance):
+        return instance.featured_order
+
+    order.short_descripton = 'Order'
+
+    def public_url(self, instance):
+        try:
+            first_scene = next(instance.content)
+
+            return '<a href="https://{site_url}/p/{short_uuid}/{scene_id}">Go</a>'.format(
+                site_url='app.very.gd',
+                short_uuid=instance.short_uuid,
+                scene_id=first_scene.pk
+            )
+        except StopIteration:
+            return '<a href="https://{site_url}/p/{short_uuid}" target="_blank">Go</a>'.format(
+                site_url='app.very.gd',
+                short_uuid=instance.short_uuid)
+
+    public_url.allow_tags = True
+
+    def first_image(self, instance):
+        try:
+            first_scene = next(instance.content)
+            first_image = next(first_scene.content)
+
+            return '<img src="{first_image_url}?w=256&h=128&fit=crop">'.format(
+                first_image_url=first_image.content_url
+            )
+        except StopIteration:
+            return ''
+
+    first_image.allow_tags = True
+    first_image.short_description = 'First image of first scene'

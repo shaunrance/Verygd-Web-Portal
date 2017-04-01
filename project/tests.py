@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from very_gd.tests.base import TestAPIBase
 from users.models import Member
+from project.models import Project
 
 
 class TestProject(TestAPIBase):
@@ -73,6 +74,45 @@ class TestProject(TestAPIBase):
         msg = self.add_new_project(self.member, public=False, assert_status_code=400)
 
         self.assertTrue('error' in msg and 'code' in msg and msg['code'] == 'project_limit_reached')
+
+    def test_public_project_featured_endpoint(self):
+        second_project_id = self.add_new_project(self.member)
+
+        first_project = Project.objects.get(pk=self.project_id)
+        second_project = Project.objects.get(pk=second_project_id)
+
+        second_project.featured = True
+        second_project.featured_order = 1
+
+        first_project.featured = True
+        first_project.featured_order = 2
+
+        first_project.save()
+        second_project.save()
+
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(msg[0]['id'], second_project.pk)
+        self.assertEquals(msg[1]['id'], first_project.pk)
+
+        # swapping order, changes endpoint result order
+        first_project.featured_order, second_project.featured_order = second_project.featured_order, \
+                                                                      first_project.featured_order
+        first_project.save()
+        second_project.save()
+
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(msg[0]['id'], first_project.pk)
+        self.assertEquals(msg[1]['id'], second_project.pk)
+
+        # test limit
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1&limit=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(len(msg), 1)
 
     def test_public_project(self):
         scene_ids = {}
