@@ -15,6 +15,7 @@ angular.module('ua5App')
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
+                var $body = $('body');
                 var crosshair;
                 var scene = new BaseThreeScene();
                 var useVr = $scope.useVr;
@@ -296,55 +297,6 @@ angular.module('ua5App')
                     );
                 }
 
-                function makePanoramaHotspots(data, height, parent) {
-                    parent.hotspots = [];
-                    _.each(data, function(item, index) {
-                        var hotspotGeo;
-                        var hotspotMat;
-                        var hotspotMesh;
-                        var degreesPos = item.x * 360.0;
-                        var radiansPos = degreesPos * (Math.PI / 180);
-                        var degreesWidth = item.width * 360.0;
-                        var radiansWidth = degreesWidth * (Math.PI / 180);
-                        var spotWidth = radiansWidth;
-                        var spotPos = radiansPos;
-                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
-                        var spotY = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
-
-                        spotPos = (2 * Math.PI) - spotPos - spotWidth;
-
-                        hotspotGeo = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
-                        hotspotMat = new THREE.MeshBasicMaterial({color: 0x81e4ee, side: THREE.DoubleSide, opacity: 0, transparent: true});
-                        hotspotMesh = new THREE.Mesh(hotspotGeo, hotspotMat);
-                        hotspotMesh.scale.set(0.9, 0.9, 0.9);
-                        hotspotMesh.position.y = spotY - (spotHeight / 2);
-                        hotspotGeo.theaLength = spotWidth;
-                        hotspotMesh.name = 'hotspot';
-                        hotspotMesh.hotspot = item;
-                        hotspotMesh.showing = false;
-                        hotspotMesh.rotation.y = 4.723;
-                        hotspotMesh.show = function() {
-                            hotspotMesh.showing = true;
-                            hotspotMesh.isVisible = true;
-                            TweenMax.to(hotspotMat, 0.25, {opacity: 0.3});
-                        };
-                        hotspotMesh.hide = function() {
-                            hotspotMesh.showing = false;
-                            hotspotMesh.isVisible = false;
-                            TweenMax.to(hotspotMat, 0.25, {opacity: 0});
-                        };
-                        scene.pushItem(hotspotMesh);
-                        hotspotMesh.isVisible = false;
-                        scene.addItem(hotspotMesh, true);
-                        parent.hotspots.push(hotspotMesh);
-
-                        //todo
-                        if ($scope.hotspotType === 'visible') {
-                            hotspotMesh.show();
-                        }
-                    });
-                }
-
                 function makeSphere(url) { //jshint ignore:line
                     var sphere;
                     var textureLoader = new THREE.TextureLoader();
@@ -530,17 +482,23 @@ angular.module('ua5App')
                 }
 
                 function toggleHotspots(activeObject) {
+                    //if we're on a cylinder scene
+                    if (
+                        $scope.sceneType === 'cylinder' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = panoramaMesh;
+                    }
+
                     if (typeof activeObject === 'object') {
                         var clickedHotspot = false;
 
                         if (activeObject.name === 'hotspot') {
                             launchHotpsot(activeObject.hotspot);
                             clickedHotspot = true;
-                        } else if ($scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
-                            activeObject = panoramaMesh;
-                            console.log('here')
                         }
-
 
                         //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
@@ -581,7 +539,6 @@ angular.module('ua5App')
                     }
                 }
 
-                var $body = $('body');
                 function mouseOverHandler(item) {
                     //console.log('Mouse Hovering: ', item);
                     // if (!gazeStarted && useVr) {

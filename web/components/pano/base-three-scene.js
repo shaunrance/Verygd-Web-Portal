@@ -28,10 +28,6 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 var intersects;
                 var closestIntersect;
                 var currentIntersectId;
-                var xPos;
-                var matrix;
-                var direction;
-                var globalControllerPos;
                 var prevObject;
 
                 mouseRaycaster.setFromCamera(mouse, camera);
@@ -53,8 +49,11 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     if (previousIntersectId !== currentIntersectId) {
 
                         if (previousIntersectId) {
-                            onMouseOut(scene.getObjectById(previousIntersectId, true));
-                            scene.getObjectById(previousIntersectId, true).hovered = false;
+                            prevObject = scene.getObjectById(previousIntersectId, true);
+                            if (typeof prevObject === 'object') {
+                                onMouseOut(prevObject);
+                                scene.getObjectById(previousIntersectId, true).hovered = false;
+                            }
                         }
                     }
 
@@ -67,7 +66,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 } else {
                     //-- get the items that have been removed
                     if (previousIntersectId) {
-                        var prevObject = scene.getObjectById(previousIntersectId, true);
+                        prevObject = scene.getObjectById(previousIntersectId, true);
                         if (typeof prevObject === 'object') {
                             onMouseOut(prevObject);
                             prevObject.hovered = false;
