@@ -482,9 +482,13 @@ angular.module('ua5App')
                 }
 
                 function toggleHotspots(activeObject) {
-                    //if we're on a cylinder scene
+
+                    //if we're on a cylinder or sphere scene
                     if (
-                        $scope.sceneType === 'cylinder' &&
+                        (
+                            $scope.sceneType === 'cylinder' ||
+                            $scope.sceneType === 'sphere'
+                        ) &&
                         // and we click nothing
                         typeof activeObject !== 'object'
                     ) {
