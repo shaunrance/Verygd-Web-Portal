@@ -1,4 +1,4 @@
-/* global angular, THREE, window, _, $, Stats */
+/* global angular, THREE, _, TweenMax */
 angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'GeoFactory',
     function($rootScope, BrowserFactory, GeoFactory) {
         return function(config) {
@@ -20,7 +20,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 opacity: 0
             });
 
-            var show = function () {
+            var show = function() {
                 mesh.showing = true;
                 TweenMax.to(material, 0.25, {opacity: 0.3});
             };
@@ -39,9 +39,10 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
 
                 show();
                 TweenMax.delayedCall(0.5, hide);
-            }
+            };
 
             function getCentroid(mesh) {
+                var boundingBox;
                 mesh.geometry.computeBoundingBox();
                 boundingBox = mesh.geometry.boundingBox;
 
@@ -120,6 +121,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 var spotPos = radiansPos;
                 var spotHeight = GeoFactory.map(config.data.height, 0, 1, 0, config.planeHeight);
                 var spotY = GeoFactory.map(config.data.y, 0, 1, config.planeHeight / 2, - config.planeHeight / 2);
+                var geometry;
 
                 spotPos = (2 * Math.PI) - spotPos - spotWidth;
 
@@ -127,12 +129,40 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 mesh = new THREE.Mesh(geometry, material);
                 mesh.scale.set(-0.9, 0.9, 0.9);
                 mesh.position.y = CYL_OFFSET_Y + spotY - (spotHeight / 2);
-                geometry.theaLength = spotWidth;
                 //mesh.rotation.y = 4.723;
             }
 
             function makeSphereHotspot() {
+                var radius = config.radius;
+                var spotWidth = config.data.width * Math.PI * 2;
+                var rotationYPos = (config.data.x * Math.PI * 2) - (Math.PI / 2);
+                var spotHeight = GeoFactory.map(config.data.height, 0, 1, 0, (radius * 2));
+                var spotY = GeoFactory.map(config.data.y, 0, 1, radius / 1.25, radius / -1.25) - (spotHeight / 2);
+                var xAndZLength = Math.sqrt((Math.pow(radius, 2) - Math.pow(spotY, 2)) / 2);
+                var xAndZRotation = Math.atan(spotY / xAndZLength);
 
+                rotationYPos = (2 * Math.PI) - rotationYPos - spotWidth;
+                geometry = new THREE.CylinderGeometry((radius * 0.7), (radius * 0.7), spotHeight, 20, 1, true, rotationYPos, spotWidth);
+                mesh = new THREE.Mesh(geometry, material);
+                mesh.scale.set(-0.9, 0.9, 0.9);
+                mesh.position.y = spotY;
+                if (rotationYPos >= 0 && rotationYPos < (Math.PI / 2)) {
+                    mesh.rotation.x = xAndZRotation;
+                    mesh.rotation.z = xAndZRotation;
+                } else if (rotationYPos >= (Math.PI / 2) && rotationYPos < Math.PI) {
+                    mesh.rotation.x = xAndZRotation;
+                    mesh.rotation.z = -xAndZRotation;
+                } else if (rotationYPos >= Math.PI && rotationYPos < (Math.PI * (3 / 2))) {
+                    mesh.rotation.x = -xAndZRotation;
+                    mesh.rotation.z = -xAndZRotation;
+                } else if (rotationYPos >= (Math.PI * (3 / 2)) && rotationYPos < (Math.PI * 2)) {
+                    mesh.rotation.x = -xAndZRotation;
+                    mesh.rotation.z = xAndZRotation;
+                }
+                if (spotY < 0) {
+                    mesh.rotation.x *= -1;
+                    mesh.rotation.z *= -1;
+                }
             }
 
             (function init() {

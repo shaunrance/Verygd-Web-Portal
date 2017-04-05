@@ -165,7 +165,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0].url); //jshint ignore:line
+                            makeSphere($scope.panoContent[0]); //jshint ignore:line
                             break;
                         default:
                             while (i--) {
@@ -230,7 +230,7 @@ angular.module('ua5App')
                     );
                 }
 
-                function makeHotspots(data, container, width, height) {
+                function makeHotspots(data, container, width, height, radius) {
                     container.hotspots = [];
                     if ($scope.hotspotType === 'Disabled') {
                         return;
@@ -244,6 +244,7 @@ angular.module('ua5App')
                             container: container,
                             planeWidth: width,
                             planeHeight: height,
+                            radius: radius || null,
                             sceneType: $scope.sceneType
                         });
                         container.add(hotspot);
@@ -297,7 +298,9 @@ angular.module('ua5App')
                     );
                 }
 
-                function makeSphere(url) { //jshint ignore:line
+                function makeSphere(data) { //jshint ignore:line
+                    var url = (typeof data === 'string') ? data : data.url;
+                    var radius = 500;
                     var sphere;
                     var textureLoader = new THREE.TextureLoader();
 
@@ -305,7 +308,12 @@ angular.module('ua5App')
                     textureLoader.load(
                         url,
                         function(texture) {
-                            var geometry = new THREE.SphereGeometry(500, 32, 32);
+                            var threeWidth;
+                            if (typeof data === 'object') {
+                                threeWidth = Math.pow(2, Math.round(Math.log(texture.image.width) / Math.log(2)));
+                                radius = threeWidth / 2 / Math.PI;
+                            }
+                            var geometry = new THREE.SphereGeometry(radius, 32, 32);
                             var material = new THREE.MeshBasicMaterial({
                                 transparent: true,
                                 map: texture,
@@ -321,6 +329,9 @@ angular.module('ua5App')
                                 sphere.rotation.y = Math.PI / -2;
                             }
                             scene.scene().add(sphere);
+                            if (typeof data === 'object') {
+                                makeHotspots(data.hotspots, sphere, texture.image.width, texture.image.height, radius);
+                            }
                         }
                     );
                 }
@@ -398,7 +409,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0].url);
+                            makeSphere($scope.panoContent[0]);
                             break;
                         default:
                             while (i--) {
