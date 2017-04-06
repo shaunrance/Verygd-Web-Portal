@@ -1,4 +1,4 @@
-/* global angular, THREE, $, TweenMax, _ */
+/* global angular, THREE, $, TweenMax, _, Linear, Quint */
 angular.module('ua5App')
     .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'Hotspot', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, Hotspot) {
         return {
@@ -178,7 +178,7 @@ angular.module('ua5App')
                     }
 
                     if (useVr) {
-                        crosshair = makeCrosshair();
+                        window.crosshair = crosshair = makeCrosshair();
                     }
 
                     cam = scene.camera();
@@ -303,6 +303,8 @@ angular.module('ua5App')
                     var url = (typeof data === 'string') ? data : data.url;
                     var radius = 500;
                     var textureLoader = new THREE.TextureLoader();
+                    var geometry;
+                    var material;
 
                     textureLoader.crossOrigin = '';
                     textureLoader.load(
@@ -313,8 +315,8 @@ angular.module('ua5App')
                                 threeWidth = Math.pow(2, Math.round(Math.log(texture.image.width) / Math.log(2)));
                                 radius = threeWidth / 2 / Math.PI;
                             }
-                            var geometry = new THREE.SphereGeometry(radius, 32, 32);
-                            var material = new THREE.MeshBasicMaterial({
+                            geometry = new THREE.SphereGeometry(radius, 32, 32);
+                            material = new THREE.MeshBasicMaterial({
                                 transparent: true,
                                 map: texture,
                                 opacity: 1,
@@ -444,7 +446,7 @@ angular.module('ua5App')
                     backMesh.position.set(0, 0, -5);
 
                     midGeo = new THREE.SphereGeometry(0.06, 25, 25);
-                    midMat = new THREE.MeshBasicMaterial({color: 0x333333, opacity: 0.4, transparent: true});
+                    midMat = new THREE.MeshBasicMaterial({color: 0xdddddd, opacity: 0.4, transparent: true});
                     midMesh = new THREE.Mesh(midGeo, midMat);
                     midMat.depthWrite = false;
                     midMesh.position.set(0, 0, -5);
@@ -461,7 +463,7 @@ angular.module('ua5App')
                     cam.add(frontMesh);
 
                     // return the mid crosshair, so we can animate it
-                    return midMesh;
+                    return {mid: midMesh, front: frontMesh};
                 }
 
                 // returns a width & height object
@@ -524,7 +526,7 @@ angular.module('ua5App')
 
                         //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
-                            if (activeObject.name === 'panel' || activeObject.name === 'panorama') {
+                            if (activeObject.name === 'panel' || activeObject.name === 'sphere' || activeObject.name === 'panorama') {
                                 _.each(activeObject.hotspots, function(child) {
                                     if (child.name === 'hotspot') {
                                         child.flash();
@@ -573,6 +575,23 @@ angular.module('ua5App')
                     // }
                     if (item && item.name === 'hotspot') {
                         $body.addClass('body--hotspot-hovered');
+                        if (useVr) {
+                            TweenMax.to(crosshair.mid.material, 0.7, {opacity: 0.3, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.mid.scale, 0.7, {x: 1.7, y: 1.7, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.front.scale, 1.5, {x: 2, y: 2, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.5, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.6, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.7, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.8, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.9, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 2,
+                                ease: Linear.easeNone, onComplete: function() {
+                                    TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.mid.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    clickHandler(scene.activeObject());
+                                }});
+                        }
                     }
                 }
 
@@ -584,6 +603,11 @@ angular.module('ua5App')
                     //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
                     //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
                     // }
+                    if (useVr) {
+                        TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                        TweenMax.to(crosshair.mid.scale, 0.2, {x: 0.1, y: 0.1, overwrite: 'all', ease:Linear.easeNone});
+                        TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                    }
                     $body.removeClass('body--hotspot-hovered');
                 }
 
