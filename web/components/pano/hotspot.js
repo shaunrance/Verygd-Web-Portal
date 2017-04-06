@@ -68,32 +68,31 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 var pointGeometry;
                 var pointMaterial;
                 var circle;
-                var textureLoader = new THREE.TextureLoader();
 
-                textureLoader.crossOrigin = '';
-                textureLoader.load(
-                    '/assets/img/point.png',
-                    function(texture) {
-                        var coords = getCentroid(mesh);
-                        pointGeometry = new THREE.CircleGeometry(1, 32);
-                        pointMaterial = new THREE.MeshBasicMaterial({
-                            side: THREE.DoubleSide,
-                            transparent: true,
-                            map: texture,
-                            opacity: 1
-                        });
+                var coords = getCentroid(mesh);
+                pointGeometry = new THREE.SphereGeometry(15, 32, 32);
+                pointMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x81e4ee,
+                    transparent: true,
+                    opacity: 0.4
+                });
 
-                        circle = new THREE.Mesh(pointGeometry, pointMaterial);
-                        circle.position.z = 1;
+                circle = new THREE.Mesh(pointGeometry, pointMaterial);
+                circle.position.z = 1;
 
-                        if (config.sceneType === 'cylinder' || config.sceneType === 'sphere') {
-                            circle.position.set(coords.x, circle.position.y, coords.z);
-                            circle.scale.x = 2.95;
-                            circle.scale.y = 1.95;
-                        }
-                        mesh.add(circle);
-                    }
-                );
+                if (config.sceneType === 'sphere') {
+                    circle.position.set(coords.x, coords.y, coords.z);
+                } else if (config.sceneType === 'cylinder') {
+                    circle.position.set(coords.x, circle.position.y, coords.z);
+                    circle.scale.x = 0.4;
+                    circle.scale.z = 0.4;
+                    circle.scale.y = 0.4;
+                } else if (config.sceneType === 'panel') {
+                    circle.scale.x = 0.1;
+                    circle.scale.z = 0.1;
+                    circle.scale.y = 0.1;
+                }
+                mesh.add(circle);
             }
 
             function makePanelHotspot() {
@@ -134,35 +133,24 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
 
             function makeSphereHotspot() {
                 var radius = config.radius;
-                var spotWidth = config.data.width * Math.PI * 2;
-                var rotationYPos = (config.data.x * Math.PI * 2) - (Math.PI / 2);
-                var spotHeight = GeoFactory.map(config.data.height, 0, 1, 0, (radius * 2));
-                var spotY = GeoFactory.map(config.data.y, 0, 1, radius / 1.25, radius / -1.25) - (spotHeight / 2);
-                var xAndZLength = Math.sqrt((Math.pow(radius, 2) - Math.pow(spotY, 2)) / 2);
-                var xAndZRotation = Math.atan(spotY / xAndZLength);
 
-                rotationYPos = (2 * Math.PI) - rotationYPos - spotWidth;
-                geometry = new THREE.CylinderGeometry((radius * 0.7), (radius * 0.7), spotHeight, 20, 1, true, rotationYPos, spotWidth);
+                //x coord (2 x PI === max width)
+                var phiStart = config.data.x * Math.PI * 2;
+
+                //width of the sphere:
+                var phiLength = config.data.width * Math.PI * 2;
+
+                //y coord (1 x PI === max height)
+                var thetaStart = config.data.y * Math.PI;
+
+                //height of the sphere:
+                var thetaLength = config.data.height * Math.PI;
+
+                geometry = new THREE.SphereGeometry(config.radius, 32, 32, phiStart, phiLength, thetaStart, thetaLength);
                 mesh = new THREE.Mesh(geometry, material);
-                mesh.scale.set(-0.9, 0.9, 0.9);
-                mesh.position.y = spotY;
-                if (rotationYPos >= 0 && rotationYPos < (Math.PI / 2)) {
-                    mesh.rotation.x = xAndZRotation;
-                    mesh.rotation.z = xAndZRotation;
-                } else if (rotationYPos >= (Math.PI / 2) && rotationYPos < Math.PI) {
-                    mesh.rotation.x = xAndZRotation;
-                    mesh.rotation.z = -xAndZRotation;
-                } else if (rotationYPos >= Math.PI && rotationYPos < (Math.PI * (3 / 2))) {
-                    mesh.rotation.x = -xAndZRotation;
-                    mesh.rotation.z = -xAndZRotation;
-                } else if (rotationYPos >= (Math.PI * (3 / 2)) && rotationYPos < (Math.PI * 2)) {
-                    mesh.rotation.x = -xAndZRotation;
-                    mesh.rotation.z = xAndZRotation;
-                }
-                if (spotY < 0) {
-                    mesh.rotation.x *= -1;
-                    mesh.rotation.z *= -1;
-                }
+
+                //scale our hotspot sphere to prevent artifacts
+                mesh.scale.set(0.97, 0.97, 0.97);
             }
 
             (function init() {

@@ -26,6 +26,7 @@ angular.module('ua5App')
                 var cam;
                 //var panoLink;
                 var panoramaMesh;
+                var sphereMesh;
                 var background = $scope.background;
                 var backgroundHex;
 
@@ -301,7 +302,6 @@ angular.module('ua5App')
                 function makeSphere(data) { //jshint ignore:line
                     var url = (typeof data === 'string') ? data : data.url;
                     var radius = 500;
-                    var sphere;
                     var textureLoader = new THREE.TextureLoader();
 
                     textureLoader.crossOrigin = '';
@@ -320,17 +320,18 @@ angular.module('ua5App')
                                 opacity: 1,
                                 side: THREE.DoubleSide
                             });
-                            sphere = new THREE.Mesh(geometry, material);
+                            sphereMesh = new THREE.Mesh(geometry, material);
+                            sphereMesh.name = 'sphere';
 
-                            sphere.scale.set(-0.9, 0.9, 0.9);
+                            sphereMesh.scale.set(-0.9, 0.9, 0.9);
                             if (!BrowserFactory.isMobile()) {
-                                sphere.rotation.y = Math.PI;
+                                sphereMesh.rotation.y = Math.PI;
                             } else {
-                                sphere.rotation.y = Math.PI / -2;
+                                sphereMesh.rotation.y = Math.PI / -2;
                             }
-                            scene.scene().add(sphere);
+                            scene.scene().add(sphereMesh);
                             if (typeof data === 'object') {
-                                makeHotspots(data.hotspots, sphere, texture.image.width, texture.image.height, radius);
+                                makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
                             }
                         }
                     );
@@ -496,15 +497,21 @@ angular.module('ua5App')
 
                     //if we're on a cylinder or sphere scene
                     if (
-                        (
-                            $scope.sceneType === 'cylinder' ||
-                            $scope.sceneType === 'sphere'
-                        ) &&
+                        $scope.sceneType === 'cylinder' &&
                         // and we click nothing
                         typeof activeObject !== 'object'
                     ) {
                         //set it to the panorama mesh, so we can flash the hotspots
                         activeObject = panoramaMesh;
+                    }
+
+                    if (
+                        $scope.sceneType === 'sphere' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = sphereMesh;
                     }
 
                     if (typeof activeObject === 'object') {
