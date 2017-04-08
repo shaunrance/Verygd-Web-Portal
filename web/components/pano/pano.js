@@ -29,6 +29,7 @@ angular.module('ua5App')
                 var sphereMesh;
                 var background = $scope.background;
                 var backgroundHex;
+                var allHotspots = [];
 
                 if ($scope.sceneType === 'sphere') {
                     backgroundHex = 0x000000;
@@ -248,6 +249,7 @@ angular.module('ua5App')
                             radius: radius || null,
                             sceneType: $scope.sceneType
                         });
+                        allHotspots.push(hotspot);
                         container.add(hotspot);
                         container.hotspots.push(hotspot);
                         scene.pushItem(hotspot);
@@ -325,13 +327,13 @@ angular.module('ua5App')
                             sphereMesh = new THREE.Mesh(geometry, material);
                             sphereMesh.name = 'sphere';
 
-                            sphereMesh.scale.set(-0.9, 0.9, 0.9);
+                            sphereMesh.scale.set(-1.1, 1.1, 1.1);
                             if (!BrowserFactory.isMobile()) {
                                 sphereMesh.rotation.y = Math.PI;
                             } else {
                                 sphereMesh.rotation.y = Math.PI / -2;
                             }
-                            scene.scene().add(sphereMesh);
+                            scene.addItem(sphereMesh, true);
                             if (typeof data === 'object') {
                                 makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
                             }
@@ -493,6 +495,7 @@ angular.module('ua5App')
                         exitBtn.position.y = -200;
                         exitBtn.lookAt(cam.position);
                     }
+
                 }
 
                 function toggleHotspots(activeObject) {
