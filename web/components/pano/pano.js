@@ -29,7 +29,6 @@ angular.module('ua5App')
                 var sphereMesh;
                 var background = $scope.background;
                 var backgroundHex;
-                var allHotspots = [];
 
                 if ($scope.sceneType === 'sphere') {
                     backgroundHex = 0x000000;
@@ -249,7 +248,6 @@ angular.module('ua5App')
                             radius: radius || null,
                             sceneType: $scope.sceneType
                         });
-                        allHotspots.push(hotspot);
                         container.add(hotspot);
                         container.hotspots.push(hotspot);
                         scene.pushItem(hotspot);
