@@ -179,6 +179,9 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
                     }
                 }
             }).then(function(modal) {
+                setTimeout(function() {
+                    $('.modal-input').focus();
+                }, 300);
                 $('body').removeClass('no-scroll');
                 modal.close.then(function(result) {
                     if (result.input.name !== '') {
