@@ -56,6 +56,14 @@ angular.module('ua5App')
                             $scope.billingMenuName = 'Billing';
                         }
                     }
+                    $scope.storageMaxMB = Math.floor(($scope.user.total_content_bytes + $scope.user.content_bytes_left) / 10e5);
+                    $scope.storageCurrentMB = Math.floor($scope.user.total_content_bytes / 10e5);
+                    $scope.storagePercent = Math.floor(($scope.storageCurrentMB / $scope.storageMaxMB) * 100);
+                    if ($scope.storagePercent > 75) {
+                        $scope.storageBarFillColor = '#FF0000';
+                    } else {
+                        $scope.storageBarFillColor = '#53a0fd;';
+                    }
                 });
 
                 $scope.goLink = function() {

@@ -190,6 +190,29 @@
     }
 }
 
+.header__storage-container {
+    @include size(120px 20px);
+    display: inline-block;
+    margin-right: 44px;
+    vertical-align: bottom;
+}
+
+.header__storage-caption {
+    color: #dfdfe1;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.header__storage-bar {
+    @include size(120px 4px);
+    background-color: #95959f;
+}
+
+.header__storage-bar-fill {
+    @include size(10% 4px);
+    background-color: #53a0fd;
+}
+
 .breadcrumb {
     @extend %h2;
     @extend %uppercase;
@@ -219,22 +242,22 @@
 
 .breadcrumb--share {
     @include size(40px 40px);
+    background-color: transparent;
     background-image: url('/assets/img/icon-share-teal.svg');
+    background-position: 8px 8px;
     background-repeat: no-repeat;
     background-size: 20px auto;
-    background-position: 8px 8px;
-    display: inline-block;
-    margin-left: 5px;
-    position: relative;
-    cursor: pointer;
-    float: right;
     border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    margin-left: 5px;
     padding: 5px;
-    background-color:transparent;
-    
+    position: relative;
+
     &:hover {
-        background-color:#13152a;
         @include transition(all 250ms linear);
+        background-color: #13152a;
     }
 }
 
