@@ -39,5 +39,27 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
 
     lookup_field = 'short_uuid'
 
+    def filter_queryset(self, queryset):
+        params = {}
+        order_by = ('-created_dt', )
+        limit = self.request.query_params.get('limit', None)
+
+        if self.request.query_params.get('featured', False):
+            params['featured'] = True
+            order_by = ('featured_order', ) + order_by
+
+        queryset = queryset.filter(**params).order_by(*order_by)
+
+        if limit:
+            try:
+                limit = int(limit)
+
+                if limit > 0:
+                    return queryset[0:limit]
+            except ValueError:
+                pass
+
+        return queryset
+
     def get_queryset(self):
         return self.model.objects.filter(public=True).prefetch_related('scenes')

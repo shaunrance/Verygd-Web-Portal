@@ -25,6 +25,7 @@ class Scene(models.Model):
     pan_start_point = models.FloatField(blank=True, null=True)
 
     scene_type = models.CharField(max_length=32, null=True, blank=True)
+    hotspot_type = models.CharField(max_length=128, blank=True, null=True)
 
     equirectangular_background_image = models.FileField(upload_to='images', null=True, blank=True)
 

@@ -1,6 +1,7 @@
 import shortuuid
 
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from users.models import Member
 
 
@@ -8,6 +9,7 @@ def get_default_shortuuid():
     return shortuuid.uuid()
 
 
+@python_2_unicode_compatible
 class Project(models.Model):
     short_uuid = models.CharField(max_length=22, unique=True, default=get_default_shortuuid, editable=False, null=False)
 
@@ -18,6 +20,9 @@ class Project(models.Model):
     updated_dt = models.DateTimeField(auto_now=True, null=False)
 
     public = models.BooleanField(default=False, blank=True, null=False)
+
+    featured = models.BooleanField(default=False, blank=True, null=False)
+    featured_order = models.IntegerField(blank=True, null=True)
 
     @property
     def media_group(self):
@@ -38,3 +43,6 @@ class Project(models.Model):
             content.delete()
 
         return super(Project, self).delete(using=using, keep_parents=keep_parents)
+
+    def __str__(self):
+        return '{name} - {owner}'.format(name=self.name, owner=self.owner)
