@@ -15,6 +15,7 @@ angular.module('ua5App')
         var vivePointer;
         var gamePadsCreated = false;
         var renderItems = [];
+        var activeElement;
 
         var onClick = function() {};
 
@@ -311,6 +312,7 @@ angular.module('ua5App')
             var matrix;
             var direction;
             var globalControllerPos;
+            var prevObject;
 
             if (daydreamPad) {
                 daydreamPad.update();
@@ -382,27 +384,27 @@ angular.module('ua5App')
                 if (previousIntersectId !== currentIntersectId) {
 
                     if (previousIntersectId) {
-                        onMouseOut(scene.getObjectById(previousIntersectId, true));
-                        if (scene.getObjectById(previousIntersectId, true)) {
+                        prevObject = scene.getObjectById(previousIntersectId, true);
+                        if (typeof prevObject === 'object') {
+                            onMouseOut(prevObject);
                             scene.getObjectById(previousIntersectId, true).hovered = false;
                         }
                     }
                 }
 
                 if (currentIntersectId && !closestIntersect.hovered) {
-                    if (scene.getObjectById(currentIntersectId, true)) {
-                        onMouseOver(scene.getObjectById(currentIntersectId, true));
-                        closestIntersect.hovered = true;
-                    }
+                    onMouseOver(scene.getObjectById(currentIntersectId, true));
+                    closestIntersect.hovered = true;
                 }
 
                 previousIntersectId = currentIntersectId;
             } else {
                 //-- get the items that have been removed
                 if (previousIntersectId) {
-                    onMouseOut(scene.getObjectById(previousIntersectId, true));
-                    if (scene.getObjectById(previousIntersectId, true)) {
-                        scene.getObjectById(previousIntersectId, true).hovered = false;
+                    prevObject = scene.getObjectById(previousIntersectId, true);
+                    if (typeof prevObject === 'object') {
+                        onMouseOut(prevObject);
+                        prevObject.hovered = false;
                     }
                     previousIntersectId = false;
                 }
@@ -433,7 +435,7 @@ angular.module('ua5App')
                 }
             });
 
-            getHoveredElements();
+            activeElement = getHoveredElements();
             animationDisplay.requestAnimationFrame(animate);
         }
 
@@ -464,6 +466,19 @@ angular.module('ua5App')
             itemsMouseCanHit.push(item);
         }
 
+        function getActiveObject() {
+            return scene.getObjectById(activeElement, true);
+        }
+
+        function updateDimensions() {
+            // var width = $$el.width();
+            // var height = $$el.height();
+
+            // camera.aspect = width / height;
+            // camera.updateProjectionMatrix();
+            // renderer.setSize(width, height);
+        }
+
         function destroyAllSceneObjects(skipTypes) {
             var i;
             skipTypes = (typeof skipTypes !== 'object') ? [] : skipTypes;
@@ -492,12 +507,13 @@ angular.module('ua5App')
                 }
             }
             itemsMouseCanHit = [];
-            camera.position.set(0, 10, 0);
+            //camera.position.set(0, 10, 0);
         }
 
         return {
             init: init,
             addItem: addItem,
+            activeObject: getActiveObject,
             registerItem: registerItem,
             getRenderer: function() {
                 return renderer;
@@ -508,6 +524,7 @@ angular.module('ua5App')
             getCamera: function() {
                 return camera;
             },
+            setCursorPosition: setCursorPosition,
             destroyAllSceneObjects: destroyAllSceneObjects,
             setOnClick: function(clickEventHandler) {
                 onClick = clickEventHandler;
@@ -518,9 +535,14 @@ angular.module('ua5App')
             setOnMouseOut: function(mouseOutEventHandler) {
                 onMouseOut = mouseOutEventHandler;
             },
+            pushItem: function(item) {
+                itemsMouseCanHit.push(item);
+                item.isVisible = true;
+            },
             addRenderItem: function(items) {
                 renderItems.push(items);
-            }
+            },
+            resize: updateDimensions
         };
     }])
 ;
