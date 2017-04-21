@@ -168,16 +168,16 @@ angular.module('ua5App')
                 })
             ;
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.target.set(
-              camera.position.x + 0.15,
-              camera.position.y,
-              camera.position.z
-            );
-            // controls.minPolarAngle = Math.PI / 2 - 0.6;
-            // controls.maxPolarAngle = Math.PI / 2 + 0.6;
-            controls.noPan = true;
-            controls.noZoom = true;
+            // controls = new THREE.OrbitControls(camera, renderer.domElement);
+            // controls.target.set(
+            //   camera.position.x + 0.15,
+            //   camera.position.y,
+            //   camera.position.z
+            // );
+            // // controls.minPolarAngle = Math.PI / 2 - 0.6;
+            // // controls.maxPolarAngle = Math.PI / 2 + 0.6;
+            // controls.noPan = true;
+            // controls.noZoom = true;
 
             $(renderer.domElement).on('click', clickhandler);
             $(renderer.domElement).on('mousemove', function(event) {

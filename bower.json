@@ -34,14 +34,14 @@
     "jquery-ui": "1.12.1",
     "angular-facebook": "0.2.3",
     "three.js": "threejs#dev",
-    "underscore": "1.8.3",
-    "webvr-boilerplate": "*",
-    "webvr-polyfill": "git@github.com:googlevr/webvr-polyfill.git#93253c78bcffc22ae263cb9aba361c3c172d16e6",
-    "webvr-ui": "googlevr/webvr-ui#0.9.4"
+    "webvr-boilerplate": "^0.4.8",
+    "webvr-polyfill": "^1.0.0",
+    "webvr-ui": "googlevr/webvr-ui#^0.9.4"
   },
   "resolutions": {
     "angular": "1.6.2",
-    "angular-color-picker": "1.0.10"
+    "angular-color-picker": "1.0.10",
+    "webvr-polyfill": "^1.0.0"
   },
   "devDependencies": {
     "angular-animate": "1.6.2",
