@@ -122,7 +122,7 @@
             <span
                 class="breadcrumb"
                 ng-if="projectTitle != ''">
-                {{projectTitle}}
+                <a href="#" editable-text="projectTitle" onaftersave="updateProject(projectId,$data)">{{projectTitle}}</a>
                 <div class="breadcrumb--share" ng-click="openShare()"></div>
             </span>
         </span>
