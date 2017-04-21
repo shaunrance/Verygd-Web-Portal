@@ -29,6 +29,7 @@ angular.module('ua5App')
                 var sphereMesh;
                 var background = $scope.background;
                 var backgroundHex;
+                var planes;
 
                 if ($scope.sceneType === 'sphere') {
                     backgroundHex = 0x000000;
@@ -170,9 +171,12 @@ angular.module('ua5App')
                             break;
                         default:
                             while (i--) {
+                                planes = new THREE.Object3D();
                                 if ($scope.panoContent[i]) {
+                                    scene.addItem(planes, false);
                                     makePanel($scope.panoContent[i], panels[i]);
                                 }
+                                planes.rotation.y = Math.PI / 2;
                             }
                             break;
                     }
@@ -226,7 +230,8 @@ angular.module('ua5App')
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
 
-                            scene.addItem(plane);
+                            scene.registerItem(plane);
+                            planes.add(plane);
                             makeHotspots(data.hotspots, plane, size.width, size.height);
                         }
                     );
@@ -287,8 +292,6 @@ angular.module('ua5App')
                             panoramaMesh = new THREE.Mesh(geometry, material);
                             panoramaMesh.index = 0;
                             panoramaMesh.name = 'panorama';
-
-                            panoramaMesh.rotation.y = 4.723;
                             panoramaMesh.position.y = 8;
 
                             //invert the object, to fix the texture
@@ -327,11 +330,8 @@ angular.module('ua5App')
                             sphereMesh.name = 'sphere';
 
                             sphereMesh.scale.set(-1.1, 1.1, 1.1);
-                            if (!BrowserFactory.isMobile()) {
-                                sphereMesh.rotation.y = Math.PI;
-                            } else {
-                                sphereMesh.rotation.y = Math.PI / -2;
-                            }
+
+                            sphereMesh.rotation.y = Math.PI / -2;
                             scene.addItem(sphereMesh, true);
                             if (typeof data === 'object') {
                                 makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
@@ -417,9 +417,12 @@ angular.module('ua5App')
                             break;
                         default:
                             while (i--) {
+                                planes = new THREE.Object3D();
                                 if ($scope.panoContent[i]) {
+                                    scene.addItem(planes, false);
                                     makePanel($scope.panoContent[i], panels[i]);
                                 }
+                                planes.rotation.y = Math.PI / 2;
                             }
                             break;
                     }
