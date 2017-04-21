@@ -125,7 +125,6 @@
                     <h5 class="scene-preview__copy" ng-class="{'hide': (panels.length < 3) && sceneType === 'panel' || panels.length > 6 && sceneType === 'panel'}">Preview</h5>
                 </div>
                 <div
-                    ng-if="sceneType !== 'sphere'"
                     class="scene-preview__color-picker">
                     <h5 class="scene-preview__section-title">Scene Background</h5>
                     <div class="scene-preview__color-style-wrap">
@@ -170,6 +169,15 @@
                                 src="assets/img/delete.svg"
                                 ng-click="sceneDeleteImage()">
                         </div>
+                    </div>
+                    <div class="scene-preview__hotspots">
+                        <h5>Hotspot Appearance</h5>
+                        <select
+                            ng-model="hotspotType.type"
+                            ng-change="hotspotTypeChange()">
+                            <option
+                                ng-repeat="hsType in hotspotTypes">{{hsType}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="scene-preview__privacy">

@@ -210,6 +210,7 @@ module.exports = function(grunt) {
                     username: secret.staging.username,
                     password: secret.staging.password,
                     debug: true,
+                    readyTimeout: 100000,
                     releases_to_keep: '3',
                     after_deploy: 'cd ' + secret.staging.path + '/current/ && mv _htaccess .htaccess && mv _htpasswd .htpasswd'
                 }
