@@ -16,6 +16,7 @@ angular.module('ua5App')
         var gamePadsCreated = false;
         var renderItems = [];
         var activeElement;
+        var vrControls;
 
         var onClick = function() {};
 
@@ -107,6 +108,11 @@ angular.module('ua5App')
                     $rootScope.inVR = false;
                     $rootScope.$apply();
                     $('.webvr-ui-button').removeClass('webvr-ui--exit');
+                    // controls.minPolarAngle = Math.PI / 2 - 0.6;
+                    // controls.maxPolarAngle = Math.PI / 2 + 0.6;
+                    //controls.noPan = true;
+                    //controls.noZoom = true;
+
                 })
                 .on('error', function(error) {
                     //document.getElementById('learn-more').style.display = 'inline';
@@ -141,10 +147,16 @@ angular.module('ua5App')
             // Create a three.js scene.
             scene = new THREE.Scene();
 
-            // Create a three.js camera.
-            controls = new THREE.VRControls(camera);
-            controls.standing = true;
-            camera.position.y = controls.userHeight;
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(
+              camera.position.x + 0.15,
+              camera.position.y,
+              camera.position.z
+            );
+            // controls.minPolarAngle = Math.PI / 2 - 0.6;
+            // controls.maxPolarAngle = Math.PI / 2 + 0.6;
+            controls.noPan = true;
+            controls.noZoom = true;
 
             // Create VR Effect rendering in stereoscopic mode
             effect = new THREE.VREffect(renderer);
@@ -160,6 +172,10 @@ angular.module('ua5App')
             window.enterVR.getVRDisplay()
                 .then(function(display) {
                     animationDisplay = display;
+                    vrControls = new THREE.VRControls(camera);
+                    vrControls.standing = true;
+                    camera.position.y = vrControls.userHeight;
+
                     display.requestAnimationFrame(animate);
                 })
                 .catch(function() { // jshint ignore:line
@@ -168,17 +184,6 @@ angular.module('ua5App')
                     window.requestAnimationFrame(animate);
                 })
             ;
-
-            // controls = new THREE.OrbitControls(camera, renderer.domElement);
-            // controls.target.set(
-            //   camera.position.x + 0.15,
-            //   camera.position.y,
-            //   camera.position.z
-            // );
-            // // controls.minPolarAngle = Math.PI / 2 - 0.6;
-            // // controls.maxPolarAngle = Math.PI / 2 + 0.6;
-            // controls.noPan = true;
-            // controls.noZoom = true;
 
             $(renderer.domElement).on('click', clickhandler);
             $(renderer.domElement).on('mousemove', function(event) {
@@ -243,7 +248,7 @@ angular.module('ua5App')
             daydreamPad.name = 'controller';
 
             vivePad = new THREE.ViveController(0);
-            vivePad.standingMatrix = controls.getStandingMatrix();
+            vivePad.standingMatrix = vrControls.getStandingMatrix();
             vivePad.addEventListener('thumbpadup', clickhandler);
             vivePad.addEventListener('triggerup', clickhandler);
             vivePad.name = 'controller';
@@ -422,7 +427,9 @@ angular.module('ua5App')
             lastRender = timestamp;
 
             if (window.enterVR.isPresenting()) {
-                controls.update();
+                if (vrControls) {
+                    vrControls.update();
+                }
                 renderer.render(scene, camera);
                 effect.render(scene, camera);
             } else {
@@ -453,7 +460,6 @@ angular.module('ua5App')
             if (isInteractive) {
                 registerItem(item);
             }
-            console.log(item);
             parent.add(item);
 
             //refresh camera for pointer:
