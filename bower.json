@@ -36,7 +36,8 @@
     "three.js": "threejs#dev",
     "webvr-boilerplate": "^0.4.8",
     "webvr-polyfill": "^1.0.0",
-    "webvr-ui": "googlevr/webvr-ui#^0.9.4"
+    "webvr-ui": "googlevr/webvr-ui#^0.9.4",
+    "angular-xeditable": "0.7.0"
   },
   "resolutions": {
     "angular": "1.6.2",

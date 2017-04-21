@@ -1,6 +1,6 @@
-/* global angular, THREE, $, TweenMax, _ */
+/* global angular, THREE, $, TweenMax, _, Linear, Quint */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'SpaceFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, SpaceFactory) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'Hotspot', 'SpaceFactory', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, Hotspot, SpaceFactory) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
@@ -11,20 +11,22 @@ angular.module('ua5App')
                 isPanorama: '=',
                 sceneType: '=',
                 equirectangularBackgroundImage: '=',
-                hotspotType: '@'
+                hotspotType: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
+                var $body = $('body');
                 var crosshair;
                 var scene = SpaceFactory;
                 var useVr = $scope.useVr;
                 var panelCount = 0;
-                //var exitBtn;
+                var exitBtn;
                 var roomRadius;
-                //var worldDirectionVector = new THREE.Vector3();
+                var worldDirectionVector = new THREE.Vector3();
                 var cam;
                 //var panoLink;
                 var panoramaMesh;
+                var sphereMesh;
                 var background = $scope.background;
                 var backgroundHex;
 
@@ -39,7 +41,7 @@ angular.module('ua5App')
                 }
 
                 if (typeof $scope.hotspotType === 'undefined') {
-                    $scope.hotspotType = 'hidden';
+                    $scope.hotspotType = 'Minimal';
                 }
 
                 $scope.$watch(function() {
@@ -49,9 +51,9 @@ angular.module('ua5App')
                         scene.destroy();
                         $$el.off();
                         useVr = newValue;
-                        scene = new BaseThreeScene();
+                        scene = SpaceFactory;
                         init();
-                        //scene.resize();
+                        scene.resize();
                     }
                 });
 
@@ -112,27 +114,16 @@ angular.module('ua5App')
                         pos = {x: cam.rotation.x, y: cam.rotation.y};
                     });
 
-                    // $$el.mouseup(function() {
-                    //     if (
-                    //         Math.abs(pos.x - cam.rotation.x) === 0 &&
-                    //         Math.abs(pos.y - cam.rotation.y) === 0
-                    //     ) {
-                    //         setTimeout(clickHandler, 100);
-                    //     }
-                    // });
-                    scene.init($$el[0], true);
-                    scene.setOnClick(clickHandler);
-                    window.scene = scene;
-                    //scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
-
-                    // $$el.mouseup(function() {
-                    //     if (
-                    //         Math.abs(pos.x - cam.rotation.x) === 0 &&
-                    //         Math.abs(pos.y - cam.rotation.y) === 0
-                    //     ) {
-                    //         setTimeout(clickHandler, 100);
-                    //     }
-                    // });
+                    $$el.mouseup(function() {
+                        if (
+                            Math.abs(pos.x - cam.rotation.x) === 0 &&
+                            Math.abs(pos.y - cam.rotation.y) === 0
+                        ) {
+                            setTimeout(function() {
+                                clickHandler(scene.activeObject());
+                            }, 100);
+                        }
+                    });
 
                     if ($scope.sceneType === 'sphere') {
                         backgroundHex = 0x000000;
@@ -143,7 +134,7 @@ angular.module('ua5App')
                             makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
                         }
                     }
-                    //scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                    scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
 
                     $rootScope.renderer.setClearColor(componentToHex($scope.background));
                     $rootScope.renderer.sortObjects = false;
@@ -175,7 +166,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0].url); //jshint ignore:line
+                            makeSphere($scope.panoContent[0]); //jshint ignore:line
                             break;
                         default:
                             while (i--) {
@@ -187,11 +178,12 @@ angular.module('ua5App')
                     }
 
                     if (useVr) {
-                        crosshair = makeCrosshair();
+                        window.crosshair = crosshair = makeCrosshair();
                     }
 
                     cam = scene.getCamera();
-                    //scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                    scene.setOnClick(clickHandler);
+                    scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                 }
 
                 function makePanel(data, panel) {
@@ -240,48 +232,26 @@ angular.module('ua5App')
                     );
                 }
 
-                function makeHotspots(data, container, width, height) {
+                function makeHotspots(data, container, width, height, radius) {
                     container.hotspots = [];
+                    if ($scope.hotspotType === 'Disabled') {
+                        return;
+                    }
                     _.each(data, function(item) {
-                        var spotWidth = GeoFactory.map(item.width, 0, 1, 0, width);
-                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
-                        var geometry = new THREE.PlaneGeometry(spotWidth, spotHeight, 32);
-                        var material = new THREE.MeshBasicMaterial({
-                            color: 0x81e4ee,
-                            side: THREE.DoubleSide,
-                            transparent: true,
-                            opacity: 0.0
+                        var hotspot = new Hotspot({
+                            data: item,
+                            scene: scene,
+                            hotspotType: $scope.hotspotType,
+                            stereoscopic: $scope.useVr,
+                            container: container,
+                            planeWidth: width,
+                            planeHeight: height,
+                            radius: radius || null,
+                            sceneType: $scope.sceneType
                         });
-                        var plane = new THREE.Mesh(geometry, material);
-                        plane.position.z = 1;
-                        plane.position.x = GeoFactory.map(item.x, 0, 1, - width / 2, width / 2);
-                        plane.position.y = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
-                        plane.position.x += spotWidth / 2;
-                        plane.position.y -= spotHeight / 2;
-                        //account for z of 1 offset:
-                        plane.scale.x = 0.95;
-                        plane.scale.y = 0.95;
-                        plane.name = 'hotspot';
-                        plane.hotspot = item;
-                        plane.showing = false;
-                        plane.show = function() {
-                            plane.showing = true;
-                            plane.isVisible = true;
-                            TweenMax.to(material, 0.25, {opacity: 0.3});
-                        };
-                        plane.hide = function() {
-                            plane.showing = false;
-                            plane.isVisible = false;
-                            TweenMax.to(material, 0.25, {opacity: 0});
-                        };
-                        scene.registerItem(plane);
-                        plane.isVisible = false;
-                        container.add(plane);
-                        container.hotspots.push(plane);
-
-                        if ($scope.hotspotType === 'visible') {
-                            plane.show();
-                        }
+                        container.add(hotspot);
+                        container.hotspots.push(hotspot);
+                        scene.pushItem(hotspot);
                     });
                 }
 
@@ -324,83 +294,48 @@ angular.module('ua5App')
                             //invert the object, to fix the texture
                             panoramaMesh.scale.set(- 1, 1, 1);
                             scene.addItem(panoramaMesh, true);
-                            makePanoramaHotspots(data.hotspots, height, panoramaMesh);
+                            makeHotspots(data.hotspots, panoramaMesh, 0, height);
+                            //makePanoramaHotspots(data.hotspots, height, panoramaMesh);
                         }
                     );
                 }
 
-                function makePanoramaHotspots(data, height, parent) {
-                    parent.hotspots = [];
-                    _.each(data, function(item, index) {
-                        var hotspotGeo;
-                        var hotspotMat;
-                        var hotspotMesh;
-                        var degreesPos = item.x * 360.0;
-                        var radiansPos = degreesPos * (Math.PI / 180);
-                        var degreesWidth = item.width * 360.0;
-                        var radiansWidth = degreesWidth * (Math.PI / 180);
-                        var spotWidth = radiansWidth;
-                        var spotPos = radiansPos;
-                        var spotHeight = GeoFactory.map(item.height, 0, 1, 0, height);
-                        var spotY = GeoFactory.map(item.y, 0, 1, height / 2, - height / 2);
-
-                        spotPos = (2 * Math.PI) - spotPos - spotWidth;
-
-                        hotspotGeo = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
-                        hotspotMat = new THREE.MeshBasicMaterial({color: 0x81e4ee, side: THREE.DoubleSide, opacity: 0, transparent: true});
-                        hotspotMesh = new THREE.Mesh(hotspotGeo, hotspotMat);
-                        hotspotMesh.scale.set(0.9, 0.9, 0.9);
-                        hotspotMesh.position.y = spotY - (spotHeight / 2);
-                        hotspotGeo.theaLength = spotWidth;
-                        hotspotMesh.name = 'hotspot';
-                        hotspotMesh.hotspot = item;
-                        hotspotMesh.showing = false;
-                        hotspotMesh.rotation.y = 4.723;
-                        hotspotMesh.show = function() {
-                            hotspotMesh.showing = true;
-                            hotspotMesh.isVisible = true;
-                            TweenMax.to(hotspotMat, 0.25, {opacity: 0.3});
-                        };
-                        hotspotMesh.hide = function() {
-                            hotspotMesh.showing = false;
-                            hotspotMesh.isVisible = false;
-                            TweenMax.to(hotspotMat, 0.25, {opacity: 0});
-                        };
-                        scene.registerItem(hotspotMesh);
-                        hotspotMesh.isVisible = false;
-                        scene.addItem(hotspotMesh, true);
-                        parent.hotspots.push(hotspotMesh);
-
-                        if ($scope.hotspotType === 'visible') {
-                            hotspotMesh.show();
-                        }
-                    });
-                }
-
-                function makeSphere(url) { //jshint ignore:line
-                    var sphere;
+                function makeSphere(data) { //jshint ignore:line
+                    var url = (typeof data === 'string') ? data : data.url;
+                    var radius = 500;
                     var textureLoader = new THREE.TextureLoader();
+                    var geometry;
+                    var material;
 
                     textureLoader.crossOrigin = '';
                     textureLoader.load(
                         url,
                         function(texture) {
-                            var geometry = new THREE.SphereGeometry(500, 32, 32);
-                            var material = new THREE.MeshBasicMaterial({
+                            var threeWidth;
+                            if (typeof data === 'object') {
+                                threeWidth = Math.pow(2, Math.round(Math.log(texture.image.width) / Math.log(2)));
+                                radius = threeWidth / 2 / Math.PI;
+                            }
+                            geometry = new THREE.SphereGeometry(radius, 32, 32);
+                            material = new THREE.MeshBasicMaterial({
                                 transparent: true,
                                 map: texture,
                                 opacity: 1,
                                 side: THREE.DoubleSide
                             });
-                            sphere = new THREE.Mesh(geometry, material);
+                            sphereMesh = new THREE.Mesh(geometry, material);
+                            sphereMesh.name = 'sphere';
 
-                            sphere.scale.set(-0.9, 0.9, 0.9);
+                            sphereMesh.scale.set(-1.1, 1.1, 1.1);
                             if (!BrowserFactory.isMobile()) {
-                                sphere.rotation.y = Math.PI;
+                                sphereMesh.rotation.y = Math.PI;
                             } else {
-                                sphere.rotation.y = Math.PI / -2;
+                                sphereMesh.rotation.y = Math.PI / -2;
                             }
-                            scene.getScene().add(sphere);
+                            scene.addItem(sphereMesh, true);
+                            if (typeof data === 'object') {
+                                makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
+                            }
                         }
                     );
                 }
@@ -478,7 +413,7 @@ angular.module('ua5App')
                             makePanorama($scope.panoContent[0]);
                             break;
                         case 'sphere':
-                            makeSphere($scope.panoContent[0].url);
+                            makeSphere($scope.panoContent[0]);
                             break;
                         default:
                             while (i--) {
@@ -503,7 +438,7 @@ angular.module('ua5App')
                     var frontGeo;
                     var frontMat;
                     var frontMesh;
-                    var cam = scene.getCamera();
+                    var cam = scene.camera();
 
                     backGeo = new THREE.SphereGeometry(0.1, 25, 25);
                     backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
@@ -512,7 +447,7 @@ angular.module('ua5App')
                     backMesh.position.set(0, 0, -5);
 
                     midGeo = new THREE.SphereGeometry(0.06, 25, 25);
-                    midMat = new THREE.MeshBasicMaterial({color: 0x333333, opacity: 0.4, transparent: true});
+                    midMat = new THREE.MeshBasicMaterial({color: 0xdddddd, opacity: 0.4, transparent: true});
                     midMesh = new THREE.Mesh(midGeo, midMat);
                     midMat.depthWrite = false;
                     midMesh.position.set(0, 0, -5);
@@ -529,7 +464,7 @@ angular.module('ua5App')
                     cam.add(frontMesh);
 
                     // return the mid crosshair, so we can animate it
-                    return midMesh;
+                    return {mid: midMesh, front: frontMesh};
                 }
 
                 // returns a width & height object
@@ -551,66 +486,74 @@ angular.module('ua5App')
                     return dimensions;
                 }
 
-                // function onRender() {
-                //     if (typeof exitBtn === 'object' && useVr) {
-                //         cam.getWorldDirection(worldDirectionVector);
-                //         exitBtn.position.z = worldDirectionVector.z * 200;
-                //         exitBtn.position.x = worldDirectionVector.x * 200;
-                //         exitBtn.position.y = -200;
-                //         exitBtn.lookAt(cam.position);
-                //     }
-                // }
+                function onRender() {
+                    if (typeof exitBtn === 'object' && useVr) {
+                        cam.getWorldDirection(worldDirectionVector);
+                        exitBtn.position.z = worldDirectionVector.z * 200;
+                        exitBtn.position.x = worldDirectionVector.x * 200;
+                        exitBtn.position.y = -200;
+                        exitBtn.lookAt(cam.position);
+                    }
 
-                function toggleHotspots(activeObjects) {
-                    if (typeof activeObjects === 'object' && activeObjects.length > 0) {
+                }
+
+                function toggleHotspots(activeObject) {
+
+                    //if we're on a cylinder or sphere scene
+                    if (
+                        $scope.sceneType === 'cylinder' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = panoramaMesh;
+                    }
+
+                    if (
+                        $scope.sceneType === 'sphere' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = sphereMesh;
+                    }
+
+                    if (typeof activeObject === 'object') {
                         var clickedHotspot = false;
-                        _.each(activeObjects, function(obj) {
-                            if (obj.name === 'hotspot') {
-                                launchHotpsot(obj.hotspot);
-                                clickedHotspot = true;
-                            }
-                        });
 
+                        if (activeObject.name === 'hotspot') {
+                            launchHotpsot(activeObject.hotspot);
+                            clickedHotspot = true;
+                        }
+
+                        //todo
                         if (!clickedHotspot && $scope.hotspotType !== 'visible') {
-                            _.each(activeObjects, function(obj) {
-                                if (obj.name === 'panel' || obj.name === 'panorama') {
-                                    _.each(obj.hotspots, function(child) {
-                                        if (child.name === 'hotspot') {
-                                            if (child.showing) {
-                                                child.hide();
-                                            } else {
-                                                child.show();
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                            if (activeObject.name === 'panel' || activeObject.name === 'sphere' || activeObject.name === 'panorama') {
+                                _.each(activeObject.hotspots, function(child) {
+                                    if (child.name === 'hotspot') {
+                                        child.flash();
+                                    }
+                                });
+                            }
                         }
                     }
                 }
 
                 function clickHandler(item) {
-                    var activeObjects = [item];
+                    toggleHotspots(item);
 
-                    // Clicking the entire scene fires the panorama click
-                    // there's no click listener on the actual cyl. geometry
-                    if (activeObjects.length === 0 && $scope.sceneType === 'cylinder' && typeof panoramaMesh === 'object') {
-                        activeObjects = [panoramaMesh];
+                    if (typeof item !== 'undefined') {
+                        if (item.name === 'exit') {
+                            TweenMax.to(item.material, 0.2, {opacity: 0.2});
+                            TweenMax.to(item.material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
+                                window.history.back();
+                            }});
+                        }
                     }
-
-                    toggleHotspots(activeObjects);
-
-                    // if (typeof scene.activeObject() !== 'undefined') {
-                    //     if (scene.activeObject().name === 'exit') {
-                    //         TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                    //         TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
-                    //             window.history.back();
-                    //         }});
-                    //     }
-                    // }
                 }
 
                 function launchHotpsot(data) {
+                    $body.removeClass('body--hotspot-hovered');
                     if (data.type === 'scene') {
                         $rootScope.$broadcast('scene:change', {link: data.sceneId});
                     } else if (data.type === 'url') {
@@ -622,49 +565,75 @@ angular.module('ua5App')
                     }
                 }
 
-                // function mouseOverHandler(item) {
-                //     //console.log('Mouse Hovering: ', item);
-                //     // if (!gazeStarted && useVr) {
-                //     //     // Animate crosshair for long gaze
-                //     //     gazeStarted = true;
-                //     //     TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
-                //     //     TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
-                //     //     clearTimeout(gazeTimeout);
-                //     //     gazeTimeout = setTimeout(clickHandler, 1700);
-                //     // }
-                // }
+                function mouseOverHandler(item) {
+                    //console.log('Mouse Hovering: ', item);
+                    // if (!gazeStarted && useVr) {
+                    //     // Animate crosshair for long gaze
+                    //     gazeStarted = true;
+                    //     TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
+                    //     TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
+                    //     clearTimeout(gazeTimeout);
+                    //     gazeTimeout = setTimeout(clickHandler, 1700);
+                    // }
+                    if (item && item.name === 'hotspot') {
+                        $body.addClass('body--hotspot-hovered');
+                        if (useVr) {
+                            TweenMax.to(crosshair.mid.material, 0.7, {opacity: 0.3, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.mid.scale, 0.7, {x: 1.7, y: 1.7, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.front.scale, 1.5, {x: 2, y: 2, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.5, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.6, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.7, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.8, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.9, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 2,
+                                ease: Linear.easeNone, onComplete: function() {
+                                    TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.mid.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    clickHandler(scene.activeObject());
+                                }});
+                        }
+                    }
+                }
 
-                // function mouseOutHandler(item) {
-                //     // if (useVr) {
-                //     //     // Reset crosshair for long gaze
-                //     //     gazeStarted = false;
-                //     //     clearTimeout(gazeTimeout);
-                //     //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
-                //     //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
-                //     // }
-                // }
+                function mouseOutHandler(item) {
+                    // if (useVr) {
+                    //     // Reset crosshair for long gaze
+                    //     gazeStarted = false;
+                    //     clearTimeout(gazeTimeout);
+                    //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
+                    //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
+                    // }
+                    if (useVr) {
+                        TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                        TweenMax.to(crosshair.mid.scale, 0.2, {x: 0.1, y: 0.1, overwrite: 'all', ease:Linear.easeNone});
+                        TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                    }
+                    $body.removeClass('body--hotspot-hovered');
+                }
 
                 $rootScope.$on('app:resized', function() {
                     $$el.width($(window).width());
                     $$el.height($(window).height());
-                    //scene.resize();
+                    scene.resize();
                 });
 
                 $scope.$on('$destroy', function() {
                     scene.destroy();
                 });
 
-                // $$el.mousemove(function(event) {
-                //     if (!useVr) {
-                //         scene.setCursorPosition(
-                //             event.clientX - $$el.offset().left + $(window).scrollLeft(),
-                //             event.clientY - $$el.offset().top + $(window).scrollTop()
-                //         );
-                //     }
-                // });
+                $$el.mousemove(function(event) {
+                    if (!useVr) {
+                        scene.setCursorPosition(
+                            event.clientX - $$el.offset().left + $(window).scrollLeft(),
+                            event.clientY - $$el.offset().top + $(window).scrollTop()
+                        );
+                    }
+                });
 
-                setTimeout(init, 100);
-                //scene.resize();
+                init();
+                scene.resize();
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {
