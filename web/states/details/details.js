@@ -1,5 +1,5 @@
 /* global angular, _, Modernizr, $ */
-angular.module('ua5App.details', ['ngFileUpload', 'color.picker'])
+angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('projects.details', {
