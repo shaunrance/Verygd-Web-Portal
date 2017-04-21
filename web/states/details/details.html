@@ -47,12 +47,10 @@
                 as-sortable-item
                 class="vg__item--wrapper scene--wrapper"
                 ng-class="{'vg__item--wrapper-fade' : sceneType !== 'panel'}">
-
-                <a
+                <span
                     class="vg__item--link scene--link"
-                    ng-class="{'public':publicView}"
-                    as-sortable-item-handle>
-                    <div class="vg__image--wrapper">
+                    ng-class="{'public':publicView}">
+                    <div class="vg__image--wrapper" as-sortable-item-handle>
                         <div class="vg__image" ng-style="{'background-image':'url({{panel.url + '?fm=jpg&w=240&h=180&fit=crop&q=90'}})'}"></div>
                         <div
                             ng-hide="public"
@@ -62,17 +60,18 @@
                         </div>
                     </div>
                     <figcaption class="vg__image--caption">
-                        <div class="vg__image--caption-name">{{panel.title}}</div>
-
+                        <div
+                            class="vg__image--caption-name"
+                            editable-text="panel.title"
+                            onaftersave="updatePanel(panel.id,$data)">{{panel.title}}</div>
                         <div class="vg__image--caption-tag" ng-if="panel.related_tag !== null">
                             {{panel.relatedSceneName}}
                         </div>
-
                         <button class="scene__item--delete" ng-click="deletePanel(panel.id)">
                             <img class="scene-delete_icon" src="assets/img/delete.svg" />
                         </button>
                     </figcaption>
-                </a>
+                </span>
             </figure>
         </div>
         <div class="scene-preview" ng-show="!emptyScene" ng-hide="publicView">
@@ -164,8 +163,8 @@
                             <div
                                 ng-bind="sceneImage.name || 'select image'"
                                 class="scene-preview__image-picker-name">
-                            </div><!--
-                         --><img
+                            </div>
+                            <img
                                 class="scene-preview__image-delete_icon"
                                 src="assets/img/delete.svg"
                                 ng-click="sceneDeleteImage()">

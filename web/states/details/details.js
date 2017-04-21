@@ -465,6 +465,10 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
             });
         };
 
+        $scope.updatePanel = function(panelId, data) {
+            panelFactory.editPanel(panelId, {title:data});
+        };
+
         $scope.dragControlListeners = {
             orderChanged: function(event) {
                 _.each($scope.panels, function(panel, key) {
@@ -630,6 +634,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
             e = e || event;
             e.preventDefault();
         }, false);
+
+        $('body').on('focus', '.editable-input', function() {
+            setTimeout(function() {
+                $('input.editable-input').get(0).select();
+            }, 50);
+        });
 
         //INIT ===============================================================//
         //====================================================================//
