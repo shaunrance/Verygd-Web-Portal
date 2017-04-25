@@ -67,7 +67,7 @@ angular.module('ua5App')
                     scene = '/' + $scope.project.content[0].id;
                 }
 
-                $scope.url = 'https://' + window.location.host + '/p/' + $scope.project.short_uuid + scene;
+                $scope.url = window.location.protocol + '//' + window.location.host + '/p/' + $scope.project.short_uuid + scene;
                 if ($scope.project.public) { //jshint ignore:line
                     $scope.publicProject = true;
                 } else {
