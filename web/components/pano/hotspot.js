@@ -75,7 +75,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 pointMaterial = new THREE.MeshBasicMaterial({
                     color: 0x81e4ee,
                     transparent: true,
-                    opacity: 0.4
+                    opacity: 1
                 });
 
                 circle = new THREE.Mesh(pointGeometry, pointMaterial);
@@ -86,6 +86,16 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                     circle.scale.x = 1;
                     circle.scale.z = 1;
                     circle.scale.y = 1;
+                    if (circle.position.x > 0) {
+                        circle.position.x -= 10;
+                    } else {
+                        circle.position.x += 10;
+                    }
+                    if (circle.position.z > 0) {
+                        circle.position.z -= 10;
+                    } else {
+                        circle.position.z += 10;
+                    }
                 } else if (config.sceneType === 'cylinder') {
                     circle.position.set(coords.x, coords.y, coords.z);
                     circle.scale.x = 0.4;
