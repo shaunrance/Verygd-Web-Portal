@@ -40,7 +40,10 @@ class VeryGDMember(BaseMember, SocialPhotoMixin):
 class Member(VeryGDMember):
     @property
     def file_size_quota_bytes(self):
-        return self.quota_settings.basic_quota_bytes
+        if self.has_premium_account:
+            return self.premiummember.file_size_quota_bytes
+        else:
+            return self.quota_settings.basic_quota_bytes
 
     def create_project(self, *args, **kwargs):
         if 'public' not in kwargs:
