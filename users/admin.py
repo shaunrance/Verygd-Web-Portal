@@ -55,8 +55,8 @@ class MemberAdmin(admin.ModelAdmin):
     def total_content_bytes_left(self, instance):
         return instance.content_bytes_left
 
-    total_allowed_in_bytes.short_description = 'Total Allowed (Bytes)'
     total_content_in_bytes.short_description = 'Total Content (Bytes)'
+    total_allowed_in_bytes.short_description = 'Total Allowed (Bytes)'
     total_content_bytes_left.short_description = 'Total Space Left (Bytes)'
 
     def upgrade_to_premium(self, request, queryset):
