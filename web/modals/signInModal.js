@@ -10,11 +10,5 @@ angular.module('ua5App')
                 description: ''
             }
         };
-        $scope.showFileUpload = fields.showFileUpload;
-        $scope.cancel = function() {
-            close({
-                input: $scope.input.fields
-            });
-        };
     }])
 ;

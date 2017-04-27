@@ -1,12 +1,15 @@
 from fabric.api import env
 from fabric.context_managers import cd
-from fabric.operations import run
+from fabric.operations import run, sudo
 
-working_dir = '/var/local/very.gd'
-remove_venv = '/'.join([working_dir, '../verygd_venv'])
+from server_setup import initial_install as init
+
+env_dir = env.roles[0]
+working_dir = '/var/local/very.gd/{0}'.format(env_dir)
+remote_venv = '/var/local/very.gd/venvs/{0}'.format(env_dir)
 
 env.roledefs = {
-    'staging': ['216.70.115.196']
+    'staging': ['ec2-52-53-186-20.us-west-1.compute.amazonaws.com']
 }
 
 
@@ -15,15 +18,20 @@ def update_files():
 
 
 def install_upgrade_reqs():
-    run('source {venv_dir}/bin/activate && pip install -r requirements.txt --upgrade'.format(venv_dir=remove_venv))
+    run('source {venv_dir}/bin/activate && pip install -r requirements.txt --upgrade'.format(venv_dir=remote_venv))
 
 
 def restart_uwsgi():
-    run('uwsgi --reload /tmp/uwsgi.pid')
+    sudo('uwsgi --reload /tmp/uwsgi.pid')
 
 
 def run_migrations():
-    run('source {venv_dir}/bin/activate && ./manage.py migrate'.format(venv_dir=remove_venv))
+    export_secret_env = 'for i in `cat /etc/uwsgi/very.gd.staging.env`; do export $i; done'
+
+    run('{export_env} && source {venv_dir}/bin/activate && ./manage.py migrate'.format(
+        venv_dir=remote_venv,
+        export_env=export_secret_env
+    ))
 
 
 def setup():
@@ -31,6 +39,10 @@ def setup():
     install_upgrade_reqs()
     run_migrations()
     restart_uwsgi()
+
+
+def initial_install():
+    return init(venv_dir=remote_venv, working_dir=working_dir)
 
 
 def deploy():

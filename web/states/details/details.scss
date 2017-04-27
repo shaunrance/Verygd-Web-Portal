@@ -1,3 +1,12 @@
+.project-details__container {
+    @include transition(all $transition-speed ease);
+    position: relative;
+
+    &.slide-menu-open {
+        transform: translateX(75%);
+    }
+}
+
 .project-details {
     @include justify-content(space-between);
     @include display(flex);
@@ -8,8 +17,32 @@
     }
 }
 
+.scene-empty__mobile {
+    display: none;
+}
+
 .scene-nav {
     @extend %uppercase;
+}
+
+.scene-list {
+    @include size(240px auto);
+    position: relative;
+}
+
+.scene-list--item {
+    @include position(relative);
+
+    &:hover {
+        .scene-list--link {
+            background-color: $grey-dark;
+            border-radius: 2px;
+        }
+
+        .scene-list--icon {
+            opacity: 1;
+        }
+    }
 }
 
 .scene-list--link {
@@ -19,15 +52,38 @@
     display: block;
     text-decoration: none;
 
-    &:hover {
-        background-color: $grey-dark;
-        border-radius: 2px;
-    }
-
     &.active {
         background-color: $grey-dark;
-        border-radius: 2px;
     }
+}
+
+.scene-list--title {
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+    width: 170px;
+}
+
+.scene-list--icon {
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    opacity: 0;
+    position: absolute;
+    top: 12px;
+}
+
+.scene-list--delete {
+    @include size(10px 16px);
+    background-image: url('/assets/img/delete.svg');
+    right: 30px;
+}
+
+.scene-list--edit {
+    @include size(14px 14px);
+    background-image: url('/assets/img/icon-edit.svg');
+    right: 50px;
 }
 
 .scene-nav--selector {
@@ -44,8 +100,9 @@
 }
 
 .scene--wrapper {
-    margin-right: $item-wrapper-margin-desk;
-    width: 240px;
+    margin-right: 3.333%;
+    min-width: 100px;
+    width: 30%;
 
     &::before {
         @include display(flex);
@@ -65,6 +122,10 @@
         width: 20px;
         z-index: $z-alpha;
     }
+}
+
+.as-sortable-dragging .scene--wrapper {
+    width: 100%;
 }
 
 .link-icon {
@@ -106,8 +167,23 @@
     }
 }
 
+.public:hover {
+    .link-icon---container {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .link-icon {
+        opacity: 0;
+    }
+
+    .scene__item--delete {
+        opacity: 0;
+    }
+}
+
 .scene-nav,
 .scene-preview {
+    @include flex(1);
     max-width: 240px;
     width: 100%;
 }
@@ -117,9 +193,60 @@
 }
 
 .scene-preview--widget {
-    @include padding(20px 20px 40px);
-    background-color: $grey-dark;
+    background-color: $white;
+    box-shadow: 0 2px 4px rgba($black, 0.2);
     margin-bottom: 40px;
+    position: relative;
+}
+
+.scene-preview__section {
+    padding: 10px 30px;
+}
+
+.scene-preview__section-title {
+    text-align: left;
+}
+
+.scene-preview__header {
+    @include position(relative);
+    @include size(100% 60px);
+    @include padding(23px 0);
+}
+
+.scene-preview__copy {
+    @include position(absolute);
+    bottom: 25px;
+    left: 0;
+    width: 100%;
+
+    &.hide {
+        display: none;
+    }
+}
+
+.scene-preview__hotspots {
+    margin-top: 20px;
+    text-align: left;
+
+    select {
+        @extend %small;
+        border-radius: 0;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+}
+
+.scene-preview__message {
+    @include align-all(absolute);
+    width: 80%;
+}
+
+.scene-preview__display {
+    @include padding(20px 20px 40px);
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(244, 244, 244, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#f4f4f4', GradientType=1);
+    min-height: 290px;
+    position: relative;
 }
 
 .scene-preview__icon {
@@ -130,20 +257,107 @@
     width: 100%;
 }
 
-.scene-preview__button {
-    @extend %reset-button;
-    @include display(flex);
-    @include align-items(center);
-    background-color: $pink;
-    border-radius: 4px;
-    color: $white;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
+.scene-preview__color-picker {
+    @include padding(10px 30px 30px);
+    border-bottom: 1px solid $grey;
+}
 
-    + .scene-preview__button {
-        margin-top: 20px;
+.scene-preview__color-style-wrap {
+    margin-top: 15px;
+    position: relative;
+    width: 93px;
+}
+
+.scene-preview__color-style-button {
+    @include transition(all $transition-speed ease);
+    @include size(18px 18px);
+    //background-color: $btn-blue;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    vertical-align: top;
+}
+
+#scene-preview__color-style-color {
+    background-color: transparent;
+    border: 2px solid $grey-2;
+
+    &.scene-preview__active,
+    &:hover {
+        background-color: $btn-blue;
+        border-color: $btn-blue;
     }
+}
+
+#scene-preview__color-style-gradient {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(149, 149, 159, 1) 100%);
+    border: 2px solid $grey-2;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#95959f', GradientType=0);
+}
+
+#scene-preview__color-style-image {
+    border: 2px solid $grey-2;
+
+    .st0 {
+        fill: none;
+        stroke: #95959F;
+        stroke-width: 1.5;
+    }
+
+    &.scene-preview__active,
+    &:hover {
+        border-color: $btn-blue;
+
+        .st0 {
+            stroke: $btn-blue;
+        }
+    }
+}
+
+.scene-preview__color-picker-wrap {
+    margin-top: 15px;
+}
+
+.scene-preview__image-picker {
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+
+    .scene-preview__image-picker-name {
+        @extend %p;
+        background-color: $grey;
+        border: none;
+        display: inline-block;
+        float: left;
+        height: auto;
+        overflow: hidden;
+        padding: 5px;
+        text-align: left;
+        vertical-align: middle;
+        width: 85%;
+    }
+
+    .scene-preview__image-delete_icon {
+        display: inline-block;
+        float: right;
+        height: 20px;
+        margin-top: 4px;
+        padding-left: 10px;
+    }
+}
+
+.scene-preview__privacy {
+    @include padding(23px 0);
+    @include position(relative);
+    width: 100%;
+}
+
+.scene-preview__privacy__cta {
+    margin: 20px 0 0;
+    padding: 0 20px;
 }
 
 .add-icon {
@@ -160,7 +374,7 @@
 }
 
 .preview-icon {
-    margin-top: 50px;
+    @include margin(25px 0);
     max-width: 100%;
 }
 
@@ -181,16 +395,18 @@
     @include display(flex);
     @include align-items(center);
     @include justify-content(center);
-    @include flex(100%);
+    @include flex(1);
     @include margin(50px null null 240px);
     border: 2px dashed $pink;
     color: $pink;
     cursor: pointer;
+    display: none;
     height: 300px;
     padding: 25px;
     text-align: center;
 
     &.empty {
+        display: block;
         margin: 0;
     }
 }
@@ -209,69 +425,136 @@
     width: 160px;
 }
 
-.modal-body {
-    @include outer-container;
-    @include padding(50px $site-gutter 50px);
-    position: relative;
+.drop-box__button--hidden {
+    visibility: hidden;
 }
 
-.modal-body__items {
-    @include display(flex);
-    @include flex-direction(row);
-    @include flex-wrap(wrap);
-    @include justify-content(left);
-    counter-reset: sceneImage;
-    width: 100%;
-}
+.dragover > .project-details {
 
-.modal-body__item--wrapper {
-    @include size(125px 100px);
-    background-color: rgba(#edbbf4, 0.5);
-    margin: 0 13px 30px 0;
-    position: relative;
+    &::before {
+        @extend %headline;
+        @include align-items(center);
+        @include display(flex);
+        @include justify-content(center);
+        background-color: $deep-navy;
+        color: $pink;
+        content: 'Drop Images Here';
+        font-size: 50px;
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: $z-epsilon;
+    }
 
-    &:nth-child(4n) {
-        margin-right: 0;
+    &::after {
+        border: 2px dashed $pink;
+        content: '';
+        height: calc(100vh - 100px);
+        left: 0;
+        margin: 50px;
+        position: fixed;
+        top: 0;
+        width: calc(100vw - 100px);
+        z-index: $z-epsilon;
     }
 }
 
-.modal-body__image {
+.scene-preview--mobile,
+.drop-box__button--mobile {
+    display: none;
+}
+
+.project-details__footer {
+    @include position(fixed);
+    @include size(100% 50px);
     background-color: $navy;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 2px solid $white;
-    box-sizing: border-box;
-    cursor: pointer;
-    height: 100%;
-    padding-top: 14px;
-    position: absolute;
-    text-align: center;
-    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: $z-epsilon + 10;
 
-    &.selected {
-        border: 2px solid $btn-blue;
+    &::before {
+        @extend %gradient;
+        content: '';
+        display: block;
+        height: 3px;
+        position: relative;
+        width: 100%;
     }
 }
 
-.modal-body__item--label {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    margin-top: 80%;
-    position: relative;
-    text-align: center;
-    top: 3px;
+.scene-preview__button {
+    @extend %reset-button;
+    @include size(60px 60px);
+    @include align-horizontally(absolute);
+    background-color: $pink;
+    border-radius: 60px;
+    box-shadow: 0px 2px 4px rgba($black, 0.5);
+    margin-top: -30px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
+.scene-preview__button__icon {
+    @include position(absolute, 50% 50%);
+    @include size(22px 28px);
+    @include transform(translateX(-35%) translateY(-50%));
+    background: url('/assets/img/icon-play.svg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.project-details__slide-menu {
+    display: none;
+}
 
 @include media($tablet) {
+    .scene-empty__mobile {
+        border: 2px dashed $pink;
+        display: none;
+        left: 2.5%;
+        min-height: 375px;
+        position: absolute;
+        width: 95%;
+
+        &.show {
+            display: block;
+        }
+    }
+
+    .scene-empty__header {
+        color: $pink;
+        font-size: 22px;
+        left: 50%;
+        position: absolute;
+        text-align: center;
+        top: 30%;
+        transform: translate(-50%);
+    }
+
+    .scene-empty__button {
+        @include align-all(absolute);
+        background-color: $btn-blue;
+        border: none;
+        border-radius: 2px;
+        color: $white;
+        height: 40px;
+        width: 160px;
+    }
 
     .project-details {
-        @include flex-direction(column);
+        @include display(block);
     }
 
     .project__items {
         @include order(1);
+    }
+
+    .scene-add {
+        display: none;
     }
 
     .scene-nav {
@@ -289,27 +572,51 @@
 
     .scene-nav--selector {
         @include margin(0 20px 0 0);
-        @include padding(10px 15px);
-        background-color: $grey-dark;
-        border-radius: 2px;
         color: $black;
         display: block;
-        margin-bottom: 4px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 20px;
+        margin-bottom: 50px;
         text-decoration: none;
         width: 100%;
+
+        a {
+            color: $btn-blue;
+            font-size: 20px;
+            text-decoration: none;
+        }
     }
 
     .scene-list--link {
         @include padding(10px 15px);
-        background-color: $grey-dark;
-        border-radius: 2px;
-        margin-bottom: 4px;
-
+        border-bottom: 1px solid $input-grey;
+        width: 100%;
 
         &.active {
             background-color: $btn-blue;
             color: $white;
         }
+    }
+
+    .scene-list--title {
+        width: 73%;
+    }
+
+    .scene-list--icon {
+        opacity: 1;
+        top: 7px;
+    }
+
+    .scene-list--delete {
+        height: 28px;
+        right: 18px;
+        width: 17px;
+    }
+
+    .scene-list--edit {
+        height: 30px;
+        right: 52px;
+        width: 19px;
     }
 
     .scene-add {
@@ -329,8 +636,13 @@
         display: none;
     }
 
-    .scene-preview__button {
+    .scene-preview--mobile {
         display: block;
+        margin-bottom: 20px;
+    }
+
+    .mobile-btn-container {
+        width: 100%;
     }
 
     .scene-preview__icon {
@@ -346,13 +658,9 @@
         height: 60px;
     }
 
-    .drop-box--container {
-        @include order(2);
-        @include margin(0 0 20px);
-        border: none;
-        display: block;
-        height: auto;
-        padding: 0;
+    .drop-box--container,
+    .drop-box--container.empty {
+        display: none;
     }
 
     .drop-box__header {
@@ -360,41 +668,161 @@
     }
 
     .drop-box__button {
+        display: none;
+    }
+
+    .drop-box__button--mobile {
+        display: block;
         height: 60px;
-        margin: 0;
+        margin: 0 0 50px;
         width: 100%;
+    }
+
+    .dragover > .project-details {
+        &::before {
+            content: none;
+        }
+
+        &::after {
+            content: none;
+        }
+    }
+
+    .project-details__footer {
+        @include transition(transform $transition-speed ease);
+        background-color: $grey;
+        box-shadow: 4px 2px 12px rgba($black, 0.5);
+        left: 0;
+
+        &.slide-menu-open {
+            transform: translateX(60%);
+        }
+
+        &::before {
+            display: none;
+        }
+    }
+
+    .project-details__mobile-menu-btn {
+        @include position(absolute, 15px 20px);
+        @include size(25px 20px);
+
+        span {
+            @include position(absolute, 0 10px);
+            @include size(4px 4px);
+            background-color: $btn-blue;
+            border-radius: 4px;
+
+            &:nth-child(1) {
+                top: 0;
+            }
+
+            &:nth-child(2) {
+                top: 7px;
+            }
+
+            &:nth-child(3) {
+                top: 14px;
+            }
+        }
+    }
+
+    .project-details__mobile-share-btn {
+        @include size(18px 20px);
+        background-image: url('/assets/img/icon-share.svg');
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        bottom: 18px;
+        position: absolute;
+        right: 20px;
+    }
+
+    .project-details__slide-menu {
+        @include position(fixed, 0 -100%);
+        @include size(100% 100%);
+        @include transition(left, $transition-speed);
+        display: block;
+        z-index: $z-epsilon;
+
+        &.slide-menu-open {
+            left: 0;
+        }
+    }
+
+    .project-details__slide-menu-inner {
+        @include size(60% 100%);
+        @include position(absolute, 0px 0px);
+        background-color: $grey;
+        box-shadow: inset -10px 0px 25px -10px rgba($black, 0.5);
+    }
+
+    .project-details__slide-menu-right {
+        @include size(40% 100%);
+        @include position(absolute, 0px 60%);
+    }
+
+    .project-details__mobile-menu-list {
+        margin-top: 100px;
+    }
+
+    .project-details__mobile-menu-header {
+        @include margin(0 0 20px 17px);
+    }
+
+    .project-details__mobile-toggles {
+        margin-top: 40px;
+        position: relative;
+        width: 100%;
+    }
+
+    .project-details__mobile-pano {
+        margin: 20px;
+        text-align: center;
+    }
+
+    .project-details__mobile-private {
+        left: 50%;
+        margin-left: -80px;
+        position: relative;
+        width: 160px;
     }
 }
 
-@include media($phablet) {
-    .modal-body__item--wrapper {
-        @include size(100px);
-        margin: 0 20px 30px 0;
+.scene-type {
+    @include display(flex);
+    @include justify-content(space-between);
+}
 
-        &:nth-child(3n) {
-            margin-right: 0;
-        }
+.scene-type-btn {
+    @include flex-grow(1);
+    border-bottom: 2px solid transparent;
+    padding: 10px 0 4px;
 
-        &:nth-child(4n) {
-            margin-right: 20px;
+    .scene-preview-icon {
+        @include size(20px);
+        display: inline-block;
+        text-align: center;
+
+        svg * {
+            @include size(20px);
+            fill: $grey-2;
         }
     }
+
+    &.selected {
+        border-bottom: 2px solid $btn-blue;
+
+        .scene-preview-icon * {
+            fill: $btn-blue;
+        }
+    }
+}
+
+
+@include media($phablet) {
+
 }
 
 @include media($mobile) {
-    .modal-body__item--wrapper {
-        height: 0;
-        margin: 0 0 30px;
-        padding-bottom: 50%;
-        width: 50%;
 
-        &:nth-child(4n) {
-            margin-right: 0;
-        }
-    }
-
-    .modal-body__item--label {
-        margin-top: 100%;
-        top: 0;
-    }
 }

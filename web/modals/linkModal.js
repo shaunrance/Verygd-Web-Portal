@@ -1,7 +1,6 @@
 /* global angular, _ */
 angular.module('ua5App')
-    .controller('linkModalController', ['$scope', '$element', 'fields', 'close', 'screenFactory', function($scope, $element, fields, close, screenFactory) {
-        var i;
+    .controller('linkModalController', ['$scope', '$element', 'fields', 'close', 'panelFactory', function($scope, $element, fields, close, panelFactory) {
         $scope.title = fields.title;
         $scope.formLabels = fields.formLabels;
         $scope.buttonTextLink = fields.submitButtonTextLink;
@@ -13,18 +12,31 @@ angular.module('ua5App')
             }
         };
 
-        $scope.selectedScene = parseInt(fields.content.related_tag, 10);
+        $scope.panel = fields.content;
         $scope.showFileUpload = fields.showFileUpload;
         $scope.scenes = fields.scenes;
-        i = $scope.scenes;
-        $scope.thumbs = [];
 
-        while (i--) {
-            $scope.thumbs[i] = _.find(fields.allScreens, {tag: (i + 1).toString()});
-        }
+        _.each($scope.scenes, function(scene) {
+            var sceneImage = scene.content.length > 0 ? scene.content[0].url : '/assets/img/image-placeholder.jpg';
+
+            if (scene.id === parseInt($scope.panel.related_tag, 10)) {
+                $scope.selectedScene = scene.id;
+            }
+
+            scene.thumb = sceneImage + '?fm=jpg&q=60&h=200&w=200&fit=max&bg=000000';
+        });
+
         $scope.save = function() {
             fields.content.related_tag = $scope.selectedScene;
-            screenFactory.editScreen(fields.content.id, {related_tag: $scope.selectedScene});
+            panelFactory.editPanel(fields.content.id, {related_tag: $scope.selectedScene})
+                .then(function() {
+                    close({
+                        input: $scope.input.fields
+                    });
+                });
+        };
+
+        $scope.close = function() {
             close({
                 input: $scope.input.fields
             });
@@ -36,15 +48,11 @@ angular.module('ua5App')
             });
         };
 
-        $scope.getScene = function(num) {
-            return new Array(num);
-        };
-
-        $scope.selectScreen = function(screen) {
-            if (screen === $scope.selectedScene) {
+        $scope.selectScene = function(scene) {
+            if (scene === $scope.selectedScene) {
                 $scope.selectedScene = null;
             } else {
-                $scope.selectedScene = screen;    
+                $scope.selectedScene = scene;
             }
         };
     }])

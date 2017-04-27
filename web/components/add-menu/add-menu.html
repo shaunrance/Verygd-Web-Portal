@@ -1,12 +1,13 @@
 <div class="add-menu--container">
-	<div class="add-menu-button--wrapper">
-		<button class="add-menu--button" ng-class="menuToggle ? 'open' : ''" ng-click="menuToggle = !menuToggle"><img class="plus-icon" src="assets/img/plus.svg" /></button>
-	</div>
+    <div class="add-menu-button--wrapper">
+        <button class="add-menu--button" ng-class="menuToggle ? 'open' : ''" ng-click="toggleAddMenu()"><div class="plus-icon"></div></button>
+    </div>
 </div>
-<div class="modal-launch--container ng-hide" ng-click="close()" ng-show="menuToggle">
-	<div class="modal-launch--buttons">
-		<button class="add-item--button" ng-repeat="item in menuItems" class="scene-add" ng-click="showModal(item)">
-		    {{item}}<img class="add-item--icon" src="assets/img/modal-add.svg">
-		</button>
-	</div>
+<div class="modal-launch--container ng-hide" ng-click="toggleAddMenu()" ng-show="menuToggle">
+    <div class="modal-launch--buttons">
+        <div class="add-item--button" ng-repeat="item in menuItems" class="scene-add" ng-click="showModal(item)">
+            <div class="add-item--button-text">{{item}}</div>
+            <div class="add-item--button-icon"><img src="assets/img/modal-add.svg" /></div>
+        </div>
+    </div>
 </div>

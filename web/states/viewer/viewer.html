@@ -2,13 +2,39 @@
     <div
         pano
         use-vr="useVr"
-        pano-content="currentSceneScreens">
+        background="background"
+        backgroundImage="backgroundImage"
+        pano-content="currentScenePanels"
+        scene-type="currentScene.scene_type"
+        hotspot-type="currentScene.hotspot_type"
+        equirectangular-background-image="currentScene.equirectangular_background_image"
+        is-panorama="currentScene.is_panorama"
+        ng-if="!(iFrame && mobile)">
+    </div>
+    <div
+        class="viewer__iframe__image-container"
+        ng-if="iFrame && mobile">
+        <a
+            href="{{url}}"
+            target="_blank"
+            class="viewer__iframe__link">
+            <img
+                class="viewer__iframe__image"
+                src="{{firstImage}}">
+        </a>
     </div>
     <div class="viewer__nav">
         <a
             class="viewer__exit"
-            ng-if="!useVr"
+            ng-if="!useVr && !isPublicViewer"
             ng-click="exit()">Exit</a>
+        <a
+            class="viewer__cta"
+            ng-if="!useVr && isPublicViewer"
+            target="_blank"
+            href="http://very.gd"
+            ng-include="'assets/img/logo-very_gd.svg'">
+        </a>
         <a
             ng-click="toggleCardboard()"
             ng-if="touch"

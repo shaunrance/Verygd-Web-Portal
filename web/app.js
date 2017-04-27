@@ -2,11 +2,20 @@
 // Create templates module for ngTemplates to attach to
 angular.module('ua5Templates', []);
 // start module declaration
-angular.module('ua5App.home', []);
+angular.module('ua5App.sign-in', []);
 angular.module('ua5App.projects', []);
 angular.module('ua5App.viewer', []);
 angular.module('ua5App.details', []);
 angular.module('ua5App.scene', []);
+angular.module('ua5App.sign-up', []);
+angular.module('ua5App.forgot-password', []);
+angular.module('ua5App.account', []);
+angular.module('ua5App.billing', []);
+angular.module('ua5App.notifications', []);
+angular.module('ua5App.terms-of-service', []);
+angular.module('ua5App.privacy-policy', []);
+angular.module('ua5App.reset-password', []);
+angular.module('ua5App.hotspots', []);
 // end module declaration
 // Create parent module for application
 angular.module('ua5App', [
@@ -23,13 +32,24 @@ angular.module('ua5App', [
     'angularModalService',
     'ngMeta',
     'suite',
+    'color.picker',
     // start add states as app dependency
+    'ua5App.hotspots',
+    'ua5App.notifications',
+    'ua5App.billing',
+    'ua5App.account',
+    'ua5App.sign-up',
     'ua5App.scene',
     'ua5App.details',
     'ua5App.projects',
     'ua5App.viewer',
-    'ua5App.home',
-    'ngAnimate'
+    'ua5App.sign-in',
+    'ua5App.forgot-password',
+    'ua5App.terms-of-service',
+    'ua5App.privacy-policy',
+    'ua5App.reset-password',
+    'ngAnimate',
+    'facebook'
     // end add states as app dependency
 ])
     .constant('BREAKPOINTS', {
@@ -41,24 +61,29 @@ angular.module('ua5App', [
     })
     .constant('APICONSTANTS', {
         //TODO add option for production server
-        apiHost: 'http://216.70.115.196:7777',
+        apiHost: 'https://api.very.gd',
         authCookie: {
             token: 'vg-user',
-            user_id: 'vg-member'
+            user_id: 'vg-member',
+            visited: 'string',
+            cta: 'cta',
+            intercom_token: 'intercom_token',
+            scene_instruct: 'scene_instruct'
         }
     })
-    .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider) {
+    .config(['$analyticsProvider', '$locationProvider', '$httpProvider', 'ngMetaProvider', 'FacebookProvider', function($analyticsProvider, $locationProvider, $httpProvider, ngMetaProvider, FacebookProvider) {
         $locationProvider.html5Mode(true);
         // Prevents bounce rate of 0.01
         $analyticsProvider.firstPageview(false);
         //intercept $resolves to add token authorization to header
         $httpProvider.interceptors.push('authInterceptor');
         ngMetaProvider.useTitleSuffix(true);
-        ngMetaProvider.setDefaultTitleSuffix(' | Site Name');
-        ngMetaProvider.setDefaultTitle('Page');
-        ngMetaProvider.setDefaultTag('url', 'URL');
-        ngMetaProvider.setDefaultTag('description', 'Site description');
+        ngMetaProvider.setDefaultTitleSuffix(' | very.gd');
+        ngMetaProvider.setDefaultTitle('very.gd');
+        ngMetaProvider.setDefaultTag('url', 'https://app.very.gd');
+        ngMetaProvider.setDefaultTag('description', 'very.gd is the fastest, easiest way to create for virtual reality and 360° video');
         ngMetaProvider.setDefaultTag('image', 'URL');
+        FacebookProvider.init('2039061789660029');
     }])
     .run(['ngMeta', '$q', '$rootScope', function(ngMeta, $q, $rootScope) {
         ngMeta.init();
@@ -67,7 +92,7 @@ angular.module('ua5App', [
         $rootScope.deferredUser = $q.defer();
         $rootScope.deferredTerms = $q.defer();
     }])
-    .directive('app', ['$rootScope', function($rootScope) {
+    .directive('app', ['$rootScope', 'intercomFactory', '$location', '$window', function($rootScope, intercomFactory, $location, $window) {
         return {
             link: function($scope, $element, $attrs) {
                 var $$window;
@@ -104,11 +129,24 @@ angular.module('ua5App', [
                     if (toStateParent !== fromStateParent) {
                         $$window.scrollTop(0);
                     }
+
+                    intercomFactory.ping();
+
                 });
 
                 $rootScope.renderer = new THREE.WebGLRenderer({
                     antialias: true
                 });
+
+                function forceSSL() {
+                    if ($location.protocol() !== 'https' && $location.host() === 'app.very.gd') {
+                        $window.location.href = $location.absUrl().replace('http', 'https');
+                    }
+                    if ($location.host() === 'projects.very.gd') {
+                        $window.location.href = $location.absUrl().replace('projects.very.gd', 'app.very.gd');
+                    }
+                }
+                forceSSL();
             }
         };
     }])

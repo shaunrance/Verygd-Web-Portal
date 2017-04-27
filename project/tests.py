@@ -1,86 +1,137 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from very_gd.tests.strategies import VeryGDTestStrategies
-from users.tests import TestVeryGDUsers
-from media_portal.album.tests.tests import TestImageAPI
+from very_gd.tests.base import TestAPIBase
+from users.models import Member
+from project.models import Project
 
 
-class TestProject(TestImageAPI):
+class TestProject(TestAPIBase):
     def __init__(self, *args, **kwargs):
         super(TestProject, self).__init__(*args, **kwargs)
 
-        self.strategies = VeryGDTestStrategies()
-        self.users = TestVeryGDUsers()
+        self.endpoint = 'project'
 
-    def test_images(self):
-        response, msg = self.add_image(
-            self.member,
-            self.album_id,
-            tag='tag',
-            related_tag='related_tag',
-            order=5,
-            is_panorama=True
-        )
+        self.project_id = None
+        self.member = self.second_member = None
+        self.anonymous_member = None
 
-        self.assertEquals(response.status_code, 201, 'got {0} expected 201'.format(response.status_code))
+    def setUp(self):
+        super(TestProject, self).setUp()
 
-        response, image_meta = self.get_as(self.member, '/images/{0}'.format(msg['id']))
+        self.member = self.users.new_user()
+        self.second_member = self.users.new_user()
 
-        self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
+        self.users.setup_user_settings()
 
-        self.assertTrue('tag' in image_meta and image_meta['tag'] == 'tag')
-        self.assertTrue('related_tag' in image_meta and image_meta['related_tag'] == 'related_tag')
+        self.anonymous_member = self.users.new_anonymous_user()
+        self.project_id = self.add_new_project(self.member)
 
-        self.assertTrue('order' in image_meta and image_meta['order'] == 5)
+    def test_premium_create_project(self):
+        Member.objects.get(pk=self.second_member['id']).upgrade_to_premium()
 
-        self.assertTrue('is_panorama' in image_meta and image_meta['is_panorama'])
+        project_id = self.add_new_project(self.second_member)
 
-        response, msg = self.put_as(self.member, '/images/{0}'.format(image_meta['id']), data={'related_tag': 'cool'})
+        response, msg = self.get_as(self.second_member, '/{0}/{1}'.format(self.endpoint, project_id))
+
+        # projects created by premium users should default to private
+        self.assertEquals(msg['public'], False)
+
+        # ..or can explicitly set to True
+        project_id = self.add_new_project(self.second_member, public=True)
+
+        response, msg = self.get_as(self.second_member, '/{0}/{1}'.format(self.endpoint, project_id))
+
+        self.assertEquals(msg['public'], True)
+
+    def test_add_project(self):
+        detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
+
+        response, msg = self.get_as(self.member, detail_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('content' in msg and len(msg['content']) == 0)
+
+        # projects created by basic users should default to public
+        self.assertEquals(msg['public'], True)
+
+        # ..or can explicitly set to False
+        project_id = self.add_new_project(self.second_member, public=False)
+
+        response, msg = self.get_as(self.second_member, '/{0}/{1}'.format(self.endpoint, project_id))
+
+        self.assertEquals(msg['public'], False)
+
+    def test_num_of_private_projects(self):
+        self.project_id = self.add_new_project(self.member, public=False)
+
+        response, user_meta = self.get_as(self.member, '/users/{0}'.format(self.member['id']))
+        self.assertEquals(response.status_code, 200)
+
+        self.assertTrue('private_project_count' in user_meta)
+        self.assertTrue(user_meta['private_project_count'])
+
+        msg = self.add_new_project(self.member, public=False, assert_status_code=400)
+
+        self.assertTrue('error' in msg and 'code' in msg and msg['code'] == 'project_limit_reached')
+
+    def test_public_project_featured_endpoint(self):
+        second_project_id = self.add_new_project(self.member)
+
+        first_project = Project.objects.get(pk=self.project_id)
+        second_project = Project.objects.get(pk=second_project_id)
+
+        second_project.featured = True
+        second_project.featured_order = 1
+
+        first_project.featured = True
+        first_project.featured_order = 2
+
+        first_project.save()
+        second_project.save()
+
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(msg[0]['id'], second_project.pk)
+        self.assertEquals(msg[1]['id'], first_project.pk)
+
+        # swapping order, changes endpoint result order
+        first_project.featured_order, second_project.featured_order = second_project.featured_order, \
+                                                                      first_project.featured_order
+        first_project.save()
+        second_project.save()
+
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(msg[0]['id'], first_project.pk)
+        self.assertEquals(msg[1]['id'], second_project.pk)
+
+        # test limit
+        response, msg = self.get_as(self.anonymous_member, '/public/project?featured=1&limit=1')
+        self.assertEquals(response.status_code, 200)
+
+        self.assertEquals(len(msg), 1)
+
+    def test_public_project(self):
+        scene_ids = {}
+
+        # add some scenes
+        for i in range(0, 2):
+            scene_ids[self.add_scene(self.member, project=self.project_id)] = 1
+
+        # add some panels
+        for scene_id in scene_ids:
+            response, msg = self.add_panel(self.member, scene_id)
+            self.assertEquals(response.status_code, 201)
+
+        detail_url = '/{0}/{1}'.format(self.endpoint, self.project_id)
+
+        response, msg = self.patch_as(self.member, detail_url, data={'public': True})
 
         self.assertEquals(response.status_code, 200)
 
-        response, image_meta = self.get_as(self.member, '/images/{0}'.format(msg['id']))
-
-        self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
-
-        self.assertTrue('related_tag' in image_meta and image_meta['related_tag'] == 'cool')
-
-    def test_can_make_related_tag_blank(self):
-        response, image_meta = self.add_image(
-            self.member,
-            self.album_id,
-            tag='tag',
-            related_tag='related_tag',
-            order=5,
-            is_panorama=True
-        )
-
-        self.assertEquals(response.status_code, 201, 'got {0} expected 201'.format(response.status_code))
-
-        response, msg = self.put_as(self.member,
-                                    '/images/{0}'.format(image_meta['id']),
-                                    data={'related_tag': None},
-                                    content_type='application/json')
+        response, msg = self.get_as(self.anonymous_member, '/'.join(['/public/project', msg['short_uuid']]))
 
         self.assertEquals(response.status_code, 200)
-
-        response, image_meta = self.get_as(self.member, '/images/{0}'.format(msg['id']))
-
-        self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
-
-        self.assertTrue('related_tag' in image_meta and image_meta['related_tag'] is None)
-
-    def test_update_project(self):
-        response, msg = self.put_as(self.member, '/album/{0}'.format(self.album_id), data={
-            'title': 'new title', 'background_color': 'salmon'
-        })
-
-        self.assertEquals(response.status_code, 200)
-
-        response, album_meta = self.get_as(self.member, '/album/{0}'.format(self.album_id))
-
-        self.assertEquals(response.status_code, 200, 'got {0} expected 201'.format(response.status_code))
-
-        self.assertTrue('title' in album_meta and album_meta['title'] == 'new title')
-        self.assertTrue('background_color' in album_meta and album_meta['background_color'] == 'salmon')

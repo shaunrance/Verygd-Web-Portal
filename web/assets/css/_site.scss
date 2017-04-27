@@ -13,13 +13,21 @@ body {
 body {
     background-color: $grey;
 
-    @include media($tablet) {
-        background-color: $deep-navy;
+    &.no-scroll {
+        overflow-y: hidden;
     }
 }
 
 html {
     color: $black;
+
+    &.no-touch {
+        overflow-y: scroll;
+    }
+}
+
+.app {
+    overflow: hidden;
 }
 
 ul {
@@ -37,9 +45,18 @@ button {
     cursor: pointer;
 }
 
-@include media($tablet) {
+[ng\:cloak],
+[ng-cloak],
+.ng-cloak {
+    display: none !important;
+}
 
-    body {
-        background-color: $deep-navy;
+.touch,
+.body--page-publicViewer,
+.body--page-viewer {
+
+    #intercom-container,
+    #intercom-frame {
+        display: none;
     }
 }

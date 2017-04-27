@@ -1,29 +1,64 @@
-/* global angular */
+/* global angular, $ */
 angular.module('ua5App')
     .directive('addMenu', [function() {
         return {
             restrict: 'A',
             templateUrl: 'components/add-menu/add-menu.html',
             link: function($scope, element, attrs) {},
-            controller:['$scope', '$state', '$stateParams', 'ModalService', function($scope, $state, $stateParams, ModalService) {
+            controller:['$scope', '$state', '$stateParams', 'ModalService', '$rootScope', 'projectFactory', function($scope, $state, $stateParams, ModalService, $rootScope, projectFactory) {
                 var menu = {
                     project:'Add Project',
                     //team: 'Add Team Member',
                     scene:'Add Scene',
-                    screen: 'Add Screen',
+                    screen: 'Add Panel',
                     share: 'Share Project'
                 };
-
+                var keys = {37: 1, 38: 1, 39: 1, 40: 1};
                 var getOptions = function() {
                     if ($state.current.name !== 'projects.details') {
                         $scope.menuItems = {
-                            project:'Add Project',
-                            team: 'Add Team Member'
+                            project:'Add Project'
+                            // team: 'Add Team Member'
                         };
                     } else {
                         $scope.menuItems = menu;
                     }
                 };
+
+                function preventDefault(e) {
+                    e = e || window.event;
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
+                    e.returnValue = false;
+                }
+
+                function preventDefaultForScrollKeys(e) {
+                    if (keys[e.keyCode]) {
+                        preventDefault(e);
+                        return false;
+                    }
+                }
+
+                function disableScroll() {
+                    if (window.addEventListener) {
+                        window.addEventListener('DOMMouseScroll', preventDefault, false);
+                    }
+                    window.onwheel = preventDefault; // modern standard
+                    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+                    window.ontouchmove  = preventDefault; // mobile
+                    document.onkeydown  = preventDefaultForScrollKeys;
+                }
+
+                function enableScroll() {
+                    if (window.removeEventListener) {
+                        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+                    }
+                    window.onmousewheel = document.onmousewheel = null;
+                    window.onwheel = null;
+                    window.ontouchmove = null;
+                    document.onkeydown = null;
+                }
 
                 $scope.menuToggle = false;
 
@@ -35,9 +70,22 @@ angular.module('ua5App')
                     $scope.menuToggle = false;
                 };
 
+                $scope.toggleAddMenu = function() {
+                    if (!$scope.menuToggle) {
+                        $scope.menuToggle = true;
+                        disableScroll();
+                    } else {
+                        $scope.menuToggle = false;
+                        if (!$rootScope.showMobileMenu) {
+                            enableScroll();
+                        }
+                    }
+                };
+
                 $scope.showModal = function(type) {
                     switch (type){
                         case menu.project:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/addModal.html',
                                 controller: 'addModalController',
@@ -51,10 +99,13 @@ angular.module('ua5App')
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-                                    if (result.input) {
+                                    // check to see if name input is empty before calling 'addProject'
+
+                                    if (result.input.name !== '') {
                                         $scope.$emit('addProject', result.input);
                                         $scope.menuToggle = false;
                                     }
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;
@@ -92,13 +143,13 @@ angular.module('ua5App')
                             //     modal.close.then(function(result) {
                             //     });
                             // });
-                            $scope.$broadcast('nav:add-scene');
-                            $scope.menuToggle = false;
+                            $rootScope.$broadcast('nav:add-scene');
                             break;
                         case menu.screen:
-                            $scope.$broadcast('nav:add-screen');
+                            $rootScope.$broadcast('nav:add-panel');
                             break;
                         case menu.share:
+                            $('body').addClass('no-scroll');
                             ModalService.showModal({
                                 templateUrl: 'modals/shareModal.html',
                                 controller: 'shareModalController',
@@ -107,18 +158,18 @@ angular.module('ua5App')
                                         title: menu.share,
                                         formLabels:[{title: 'URL'}],
                                         showFileUpload: false,
-                                        submitButtonText: 'Share'
+                                        submitButtonText: 'Share',
+                                        project: $stateParams.projectId
                                     }
                                 }
                             }).then(function(modal) {
                                 modal.close.then(function(result) {
-
+                                    $('body').removeClass('no-scroll');
                                 });
                             });
                             break;
                     }
                 };
-
             }]
         };
     }])

@@ -1,35 +1,36 @@
 /* global angular */
 angular.module('ua5App')
-    .factory('projectFactory', ['$http', 'Upload', function($http, Upload) {
-        var urlBase = 'http://216.70.115.196:7777/album';
+    .factory('projectFactory', ['$http', 'Upload', '$q', 'APICONSTANTS', function($http, Upload, $q, APICONSTANTS) {
+        var urlBase = APICONSTANTS.apiHost + '/project';
+        var pubUrlBase = APICONSTANTS.apiHost + '/public/project';
         var dataFactory = {};
 
         dataFactory.getProjects = function() {
             return $http.get(urlBase, {
-                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
             });
         };
 
         dataFactory.getProjectById = function(projectId) {
-            return $http.get(urlBase + '/' + projectId, {
-                headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
-            });
+            return $http.get(urlBase + '/' + projectId, {});
+        };
+
+        dataFactory.getProjectByPubId = function(projectId) {
+            return $http.get(pubUrlBase + '/' + projectId, {isPublic: true});
         };
 
         dataFactory.addProject = function(newProject) {
             return Upload.upload({
-                // headers: {
-                //     Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'
-                // },
                 url: urlBase,
-                data: {title: newProject.name, description: newProject.description, patient: 1}
+                data: {name: newProject.name, description: newProject.description, public: newProject.isPublic} // jshint ignore:line
             });
         };
 
+        dataFactory.editProject = function(projectId, data) {
+            return $http.put(urlBase + '/' + projectId, data);
+        };
+
         dataFactory.deleteScreen = function(id) {
-            return $http.delete(urlBase + '/' + id, { // jshint ignore:line
-                // headers: {Authorization: 'Token a9ab45f1306ad8a2e357040998a0cc5ea90e2ab4'}
-            });
+            return $http.delete(urlBase + '/' + id); // jshint ignore:line
         };
 
         return dataFactory;

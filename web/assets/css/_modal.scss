@@ -1,0 +1,943 @@
+.modal-overlay {
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(center);
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    left: 0;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: $z-epsilon + 10;
+}
+
+.modal {
+    background-color: $white;
+    max-width: 450px;
+    padding: 50px;
+    position: relative;
+    width: 100%;
+}
+
+.modal-background {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}
+
+.modal-header {
+    padding: 10px 0;
+    position: relative;
+
+    &::after {
+        border-bottom: 1px solid $grey-dark;
+        bottom: 0;
+        content: '';
+        left: -50px;
+        position: absolute;
+        width: 450px;
+    }
+}
+
+.modal-submenu {
+    margin-top: 20px;
+    position: relative;
+}
+
+.modal-message {
+    color: $red;
+}
+
+.modal-submenu__list li {
+    color: $grey-2;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9em;
+    margin-right: 25px;
+    position: relative;
+    text-transform: uppercase;
+
+    &.active {
+        color: $btn-blue;
+
+        &::after {
+            border-bottom: 2px solid $btn-blue;
+            bottom: -9px;
+            content: '';
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+    }
+}
+
+.modal-header-section {
+    display: inline-block;
+}
+
+.modal-body {
+    @include padding(20px 0);
+    color: #999;
+    max-height: 430px;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    @include display(flex);
+    @include justify-content(space-around);
+    @include align-items(center);
+    margin-top: 20px;
+}
+
+.modal-close {
+    @extend %icon-button;
+    max-width: 15px;
+    position: absolute;
+    right: -20px;
+    top: -20px;
+}
+
+.modal--share {
+    max-width: 450px;
+    padding: 50px;
+
+    .modal-header {
+        padding: 0 0 10px;
+
+        &::after {
+            left: -50px;
+            width: 450px;
+        }
+    }
+
+    .modal-body {
+        padding: 20px 0 0;
+    }
+
+    .modal-input {
+        margin: 20px 0 30px;
+    }
+
+    .modal-input--multiline {
+        @extend %small;
+        border: 1px solid #9797a1;
+        margin: 0;
+        padding: 10px;
+    }
+
+    #share-link {
+        color: $btn-blue;
+        cursor: text;
+        display: block;
+        font-style: italic;
+        margin-bottom: 40px;
+        position: relative;
+        text-decoration: none;
+        word-break: break-word;
+    }
+}
+
+.modal--link {
+    max-width: 645px;
+
+    .modal-header::after {
+        width: 645px;
+    }
+
+    .modal-body {
+        @include outer-container;
+        @include padding(50px 0);
+        position: relative;
+    }
+
+    .modal-body__items {
+        @include display(flex);
+        @include flex-direction(row);
+        @include flex-wrap(wrap);
+        @include justify-content(left);
+        counter-reset: sceneImage;
+        width: 100%;
+    }
+
+    .modal-body__item--wrapper {
+        @include size(125px 100px);
+        background-color: rgba(#edbbf4, 0.5);
+        margin: 0 13px 30px 0;
+        position: relative;
+
+        &:nth-child(4n) {
+            margin-right: 0;
+        }
+    }
+
+    .modal-body__image {
+        background-color: $navy;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border: 2px solid $white;
+        box-sizing: border-box;
+        cursor: pointer;
+        height: 100%;
+        padding-top: 14px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+
+        &.selected {
+            border: 2px solid $btn-blue;
+        }
+    }
+
+    .modal-body__item--label {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        margin-top: 80%;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        top: 3px;
+    }
+}
+
+.modal-billing {
+    background: radial-gradient(ellipse at center, rgba(54, 59, 111, 1) 0%, rgba(19, 21, 42, 1) 100%);
+    display: block;
+    font-family: "OpenS ans", sans-serif;
+
+    .modal--payment {
+        background-color: $grey;
+        margin: 0 auto;
+        max-width: 600px;
+
+        .modal-header::after {
+            width: 600px;
+        }
+
+        .account-info-section {
+            margin-bottom: 0;
+            padding: 10px 0;
+        }
+
+        .modal-button + .modal-button {
+            margin-left: 0;
+        }
+    }
+
+    .modal-overlay-header {
+        margin-top: 5%;
+        position: relative;
+    }
+
+    .modal-overlay-header__title {
+        color: $white;
+        font-size: 48px;
+        margin-bottom: 50px;
+        text-align: center;
+        text-transform: none;
+    }
+
+    .modal-overlay-header__desc {
+        color: $neon-blue;
+        font-size: 24px;
+        margin: 0;
+        text-align: center;
+    }
+
+    .modal--payment-options {
+        margin: 115px auto;
+        position: relative;
+        width: 450px;
+    }
+
+    .modal--payment-options-inner {
+        @include display(flex);
+        @include flex-wrap(row wrap);
+    }
+
+    .modal-overlay-options-billing {
+        @include padding(1em 0);
+        @include transition(background-color, $transition-speed);
+        border-bottom: 1px solid $neon-blue;
+        border-top: 1px solid $neon-blue;
+        color: $white;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        text-transform: uppercase;
+        width: 50%;
+
+        &.active {
+            background-color: $btn-blue;
+        }
+
+        &:nth-child(1) {
+            border-bottom-left-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-top-left-radius: 2em;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 2em;
+            border-left: 1px solid $neon-blue;
+            border-right: 1px solid $neon-blue;
+            border-top-right-radius: 2em;
+        }
+    }
+
+    .modal--payment-tooltip {
+        @include position(absolute);
+        color: $white;
+        right: -78px;
+        top: -65px;
+
+        &::after {
+            @include size(26px 44px);
+            @include position(absolute, 22px 20px);
+            background-image: url('/assets/img/icon-billing-arrow.svg');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            content: '';
+        }
+    }
+
+    .modal--payment-pricing {
+        @include display(flex);
+        @include align-items(stretch);
+        @include flex-flow(row wrap);
+        margin: 0 auto;
+        max-width: 600px;
+        position: relative;
+    }
+
+    .modal--payment-module {
+        @include padding(25px 0);
+        background-color: $white;
+        box-shadow: 0 2px 4px rgba($black, 0.5);
+        max-height: 475px;
+        position: relative;
+        width: 50%;
+
+        &.featured {
+            height: 520px;
+            margin-top: -23px;
+            max-height: 520px;
+
+            .modal--payment-module-header {
+                margin-bottom: 48px;
+
+                h1 {
+                    color: $white;
+                }
+
+                &::before {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .modal--payment-module-header {
+        color: $btn-blue;
+        margin-bottom: 25px;
+        text-align: center;
+
+        h1 {
+            position: relative;
+            text-transform: none;
+            z-index: 1;
+        }
+
+        &::before {
+            @include size(100% 100px);
+            @include position(absolute, 0 0);
+            background-color: $btn-blue;
+            content: '';
+            opacity: 0;
+            z-index: 0;
+        }
+    }
+
+    .modal--payment-module-price-wrap h1,
+    .modal--payment-module-price-wrap p {
+        text-align: center;
+    }
+
+    .modal--payment-module-price-wrap span {
+        font-size: 16px;
+    }
+
+    .modal--payment-module-price-wrap p {
+        color: $grey-2;
+        margin: 0;
+    }
+
+    .modal--payment-module-features {
+        margin-top: 25px;
+
+        li {
+            color: $grey-2;
+            padding: 10px 25px;
+            text-align: center;
+
+            &:nth-child(odd) {
+                background-color: $grey;
+                border-bottom: 1px solid $grey-2;
+                border-top: 1px solid $grey-2;
+            }
+        }
+    }
+
+    .modal--payment-module-button {
+        @include padding(0.5em 2em);
+        display: block;
+        margin: 55px auto 25px;
+        position: relative;
+        width: 180px;
+    }
+
+    .modal-body {
+        padding: 0;
+    }
+
+    .modal-header-plan {
+        @include margin(5px null 10px null);
+    }
+
+    .modal-close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        z-index: 9999;
+    }
+
+    .modal-header {
+        position: relative;
+    }
+
+    .modal-header-price {
+        @include position(absolute, 15px 0 null null);
+    }
+
+    .modal-billing-options {
+        @include clearfix;
+    }
+
+    .modal-billing-option {
+        @extend %h2;
+        display: block;
+        float: left;
+        text-align: center;
+        width: 50%;
+
+        &:first-of-type {
+            border-right: 1px solid $black;
+        }
+    }
+
+    .modal-message {
+        color: $green;
+        display: block;
+        position: relative;
+        text-align: center;
+
+        &.error {
+            color: $red;
+        }
+    }
+
+    .modal-link {
+        color: $btn-blue;
+        display: block;
+        margin-top: 15px;
+        position: relative;
+        text-align: center;
+    }
+
+    .modal-billing-options--hide {
+        display: none;
+    }
+
+    .modal-overlay-payment-plan-title {
+        text-align: center;
+    }
+
+    .modal-overlay-payment-plan-details {
+        background-color: rgba($white, 0.8);
+        border: 1px solid $grey-dark;
+        margin-top: 10px;
+    }
+
+    .modal-overlay-payment-plan {
+        @include clearfix;
+        @include padding(20px null);
+    }
+
+    .modal-overlay-payment-inner {
+        @include padding(10px);
+        display: block;
+        float: left;
+        text-align: center;
+        width: 50%;
+
+        &:first-of-type {
+            border-right: 1px solid $grey-dark;
+        }
+    }
+
+    .modal-overlay-payment-amount {
+        @extend %h2;
+        color: $black;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .account-info-section {
+        margin-top: 0;
+
+        // &:first-of-type {
+        //     display: none;
+        // }
+
+        .account-info-data {
+            border-bottom: 1px solid $grey-dark;
+
+            @include placeholder {
+                color: $grey-darkest;
+            }
+        }
+
+        .account-info-data--number,
+        .account-info-data--name {
+            margin-right: 5%;
+            width: 50%;
+        }
+
+        .account-info-data--month,
+        .account-info-data--year,
+        .account-info-data--cvc,
+        .account-info-data--zip {
+            margin-right: 5%;
+            width: 20%;
+        }
+
+        .account-info-data--year,
+        .account-info-data--zip {
+            margin-right: 0;
+        }
+    }
+
+    .account-info-section--submit {
+        margin-top: 20px;
+    }
+}
+
+.project__instruct--inner {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.75);
+    display: block;
+    max-width: 860px;
+    position: relative;
+    width: 100%;
+
+    @include media($phablet) {
+        margin-top: 130px;
+    }
+
+    .modal-close {
+        right: 10px;
+        top: 10px;
+    }
+
+    .modal-footer {
+        background-color: $white;
+        border-top: 1px solid $grey;
+        margin-top: 0;
+        padding: 15px 0;
+
+
+        @include media($phablet) {
+            width: 100%;
+        }
+
+        .modal-button {
+            width: 120px;
+        }
+    }
+}
+
+.project__instruct--top {
+    @include display(flex);
+    @include flex-flow(row wrap);
+    @include align-items(flex-start);
+    @include justify-content(space-between);
+    background-color: $navy;
+    padding: 60px 70px;
+    z-index: 100;
+
+    @include media($phablet) {
+        @include flex-flow(column);
+        float: left;
+        min-height: 570px;
+        padding: 60px 30px;
+        width: 50%;
+    }
+}
+
+.project__instruct--module {
+    display: block;
+    position: relative;
+    width: 120px;
+
+    @include media($phablet) {
+        width: 100%;
+    }
+}
+
+.project__instruct--number {
+    @include size(50px 50px);
+    @include position(relative);
+    border: 1px solid $neon-blue;
+    border-radius: 50px;
+    color: $neon-blue;
+    display: block;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 24px;
+    left: 50%;
+    line-height: 2;
+    margin-bottom: 25px;
+    margin-left: calc(50 / 2 * -1px);
+    text-align: center;
+
+    @include media($phablet) {
+        margin-bottom: 10px;
+    }
+}
+
+.project__instruct--title {
+    color: $pink;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.project__instruct--icons {
+    @include display(flex);
+    @include flex-flow(row wrap);
+    @include align-items(center);
+    @include justify-content(center);
+    margin-top: 25px;
+    position: relative;
+    width: 100%;
+
+    @include media($phablet) {
+        display: none;
+    }
+}
+
+.project__instruct--icon {
+    display: inline-block;
+    margin-left: 15px;
+    position: relative;
+    vertical-align: middle;
+    width: 35px;
+
+    @include media($phablet) {
+        width: 100%;
+    }
+
+    &:nth-child(1) {
+        margin-left: 0;
+    }
+}
+
+.project__instruct--bot {
+    @include display(flex);
+    @include flex-flow(row wrap);
+    @include align-items(flex-start);
+    @include justify-content(space-between);
+    background-color: $white;
+    box-shadow: inset -2px 6px 10px -4px rgba(0, 0, 0, 0.75);
+    padding: 15px 40px;
+
+    @include media($phablet) {
+        @include flex-flow(column);
+        box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
+        min-height: 570px;
+        padding: 85px 40px;
+        width: 50%;
+
+        .project__instruct--module {
+            font-size: 11px;
+            width: 100%;
+        }
+    }
+
+    .project__instruct--module {
+        color: $navy;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+        text-align: center;
+        width: 190px;
+    }
+}
+
+.scene__instruct--inner {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.75);
+    display: block;
+    height: 0;
+    max-width: 860px;
+    padding-bottom: 533px;
+    position: relative;
+    width: 100%;
+
+    .modal-close {
+        right: 10px;
+        top: 10px;
+        z-index: 100;
+    }
+
+    .panel-2 {
+        display: none;
+    }
+
+    .modal-footer {
+        background-color: $white;
+        border-top: 1px solid $grey;
+        margin-top: 0;
+        padding: 20px 0;
+
+        .modal-button {
+            width: 120px;
+        }
+    }
+}
+
+.scene__instruct--panel {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.panel-2 {
+    .scene__instruct--top {
+        @include align-items(center);
+        padding: 60px 240px;
+
+        @include media($phablet) {
+            padding: 60px;
+        }
+    }
+}
+
+.scene__instruct--top {
+    @include display(flex);
+    @include flex-flow(row wrap);
+    @include align-items(flex-start);
+    @include justify-content(space-between);
+    background: radial-gradient(ellipse at center, #363b6f 0%, #13152a 100%);
+    min-height: 300px;
+    padding: 60px 140px;
+    z-index: 100;
+
+    @include media($phablet) {
+        padding: 60px 70px;
+    }
+}
+
+.scene__instruct--title {
+    color: $white;
+    display: block;
+    font-size: 24px;
+    margin-bottom: 50px;
+    text-align: center;
+    text-transform: none;
+    width: 100%;
+}
+
+.scene__instruct--module {
+    text-align: center;
+    width: 85px;
+
+    @include media($phablet) {
+        width: 50px;
+
+        img {
+            max-height: 70px !important;
+        }
+    }
+
+    img {
+        max-height: 100px;
+        width: 100%;
+    }
+}
+
+.scene__instruct--icon-text {
+    color: $white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 20px;
+    text-transform: lowercase;
+}
+
+.scene__instruct--bot {
+    background-color: $white;
+    padding: 30px 240px;
+
+    @include media($phablet) {
+        padding: 30px 40px;
+    }
+
+    .scene__instruct--module {
+        width: auto;
+    }
+
+    .scene__instruct--text {
+        color: $navy;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
+}
+
+.scene__instruct--toggle {
+    @include size(25px 10px);
+    left: 50%;
+    margin-left: calc(25 / 2 * -1px);
+    margin-top: 15px;
+    position: relative;
+}
+
+.scene__instruct--toggle-icon {
+    @include size(10px 10px);
+    background-color: $grey-2;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+
+    &.active {
+        background-color: $pink;
+    }
+}
+
+@include media($tablet) {
+
+    .modal-launch--container {
+
+        padding-top: $header-height-tablet + 60px;
+    }
+}
+
+@include media($phablet) {
+    .modal,
+    .modal--share {
+        max-width: 340px;
+        padding: 50px;
+    }
+
+    .modal--share {
+        max-width: 340px;
+        padding: 50px;
+
+        .modal-header::after {
+            left: -50px;
+            width: 340px;
+        }
+    }
+
+    .modal-header::after {
+        left: -50px;
+        width: 340px;
+    }
+
+    .modal--link {
+        max-width: 376px;
+
+        .modal-header::after {
+            width: 376px;
+        }
+
+        .modal-body__item--wrapper {
+            @include size(120px);
+            margin: 0 20px 30px 0;
+
+            &:nth-child(2n) {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .modal-billing {
+
+        .modal--payment-pricing {
+            max-width: 100%;
+        }
+
+        .modal--payment-options {
+            margin: 70px auto 21px;
+            width: 100%;
+        }
+
+        .modal-overlay-options-billing {
+            &:nth-child(1) {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+            }
+
+            &:last-child {
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+
+        .modal--payment-module {
+            @include flex(1 100%);
+            order: 2;
+
+            &.featured {
+                order: 1;
+            }
+        }
+
+        .modal--payment-tooltip {
+            display: none;
+        }
+    }
+}
+
+@include media($mobile) {
+    .modal-body {
+        height: 100%;
+        max-width: 100%;
+    }
+
+    .modal-footer {
+        margin-top: 15px;
+    }
+
+    .modal--link {
+        .modal-body__item--wrapper {
+            height: 0;
+            margin: 0 0 30px;
+            padding-bottom: 50%;
+            width: 50%;
+
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
+
+            &:nth-child(4n) {
+                margin-right: 0;
+            }
+        }
+
+        .modal-body__item--label {
+            margin-top: 100%;
+            top: 0;
+        }
+    }
+}

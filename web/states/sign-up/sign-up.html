@@ -1,0 +1,103 @@
+<div class="sign-up">
+	<div class="sign-up-inner">
+        <div
+            class="sign-up-logo-link"
+            href="#">
+            <img
+                class="logo"
+                src="assets/img/vg-logo-new.svg">
+        </div>
+        <div class="sign-up-modal-overlay">
+            <div class="modal">
+                <form ng-submit="createUser(model)">
+                    <div class="modal-header">
+                        <h3 class="modal-header-title">Get started for free</h3>
+                        <h4 class="modal-header-tag">No credit card required</h4>
+                    </div>
+                    <div class="modal-body">
+                        <a class="social-login" ng-click="signUpFB()">
+                            <div
+                                class="social-login__icon"
+                                ng-include="'assets/img/fb-icon.svg'">
+                            </div>
+                            <span class="social-login__text">Sign up with Facebook</span>
+                        </a>
+                        <div class="modal-divider"><span>or</span></div>
+                        <div class="form-group">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-email.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Full Name"
+                                value=""
+                                type="name"
+                                ng-model="model.name"
+                                required />
+                        </div>
+                        <div class="form-group">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-email.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Email address"
+                                value=""
+                                type="email"
+                                ng-model="model.email"
+                                required />
+                                <span
+                                    class=""
+                                    ng-if="emailDuplicate">
+                                    This email address is already in use.
+                                </span>
+                        </div>
+                        <div class="form-group">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-password.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Create password"
+                                value=""
+                                type="password"
+                                ng-model="model.password"
+                                required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            class="modal-submit modal-button"
+                            type="submit"
+                            ng-class="{'button-disable': disableButton === true}"
+                            ng-disabled="model.$invalid">
+                            Create Account</button>
+                    </div>
+                    <div
+                        ng-if="loginError"
+                        class="sign-in-modal-error"
+                        login-error-message>
+                        {{errorMessage}}
+                    </div>
+                    <div class="sign-up-modal-terms">
+                        By creating an account you agree to very.gd
+                        <a
+                            class="sign-up-modal-terms-link"
+                            target="_blank"
+                            href="http://very.gd/terms.html">
+                            Terms of Service.
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <div class="sign-up-cta">
+                Already have an account?
+                <a
+                    class="sign-in-link"
+                    ui-sref="sign-in">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

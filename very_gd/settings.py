@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', None)
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -24,7 +22,29 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+SITE_ID = 1
+SITE_EMAIL_FROM_ADDRESS = 'noreply@very.gd'
+
+if os.getenv('DEV_ENV', None):
+    DEBUG = True
+
+REST_FRAMEWORK_DOCS = {
+    'HIDE_DOCS': not DEBUG
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+
 CORS_ORIGIN_ALLOW_ALL = True
+
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY', None)
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET', None)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', None)
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', None)
 
 MEDIA_PORTAL_SETTINGS = {
     'REQUEST_SETUP_VIEW': 'very_gd.views.RequestSetup',
@@ -34,9 +54,14 @@ MEDIA_PORTAL_SETTINGS = {
 
     'IMGIX_URL': 'https://verygd.imgix.net',
 
-    'ALBUM': 'project.models.Project',
+    'ALBUM': 'scene.models.Scene',
+
     'ALBUM_IMAGE': 'panel.models.PanelImage',
-    'ALBUM_VIDEO': 'panel.models.PanelVideo'
+    'ALBUM_VIDEO': 'panel.models.PanelVideo',
+
+    'MEDIA_MEMBER': 'users.models.Member',
+    'SITE_NAME': 'very.gd',
+    'TEST_STRATEGIES': 'very_gd.tests.strategies.TestStrategies'
 }
 
 AWS_ACCESS_KEY_ID = 'AKIAJWMHOK5Q43FJ6E4A'
@@ -50,21 +75,29 @@ AWS_VIDEO_PIPELINE_ID = '1473882498921-q1vh9h'
 ADMINS = [('Andrew', 'andrew@useallfive.com')]
 SERVER_EMAIL = 'andrew@useallfive.com'
 
-ALLOWED_HOSTS = ['216.70.115.196', 'very.gd.ua5.land']
+ALLOWED_HOSTS = ['52.53.186.20', 'ec2-52-53-186-20.us-west-1.compute.amazonaws.com', 'api.very.gd']
 
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
-EMAIL_PORT = 465
+if DEBUG:
+    ALLOWED_HOSTS += ['0.0.0.0']
 
-TAGGIT_CASE_INSENSITIVE = True
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
 
-EMAIL_HOST_USER = os.getenv('AWS_SES_USER', None)
-EMAIL_HOST_PASSWORD = os.getenv('AWS_SES_PASSWORD', None)
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', None)
+
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
+
+INTERCOM_SECURE_KEY = os.getenv('INTERCOM_SECURE_KEY', None)
+INTERCOM_APP_NAME = os.getenv('INTERCOM_APP_NAME', None)
+INTERCOM_APP_ID = os.getenv('INTERCOM_APP_ID', None)
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2'
 )
 
 # Application definition
@@ -83,9 +116,9 @@ INSTALLED_APPS = (
 # Third-party applications
 INSTALLED_APPS += (
     'actstream',
+    'social_django',
     'rest_framework',
     'rest_framework.authtoken',
-    'taggit',
     'guardian',
     'media_portal.policy',
     'media_portal.payment',
@@ -99,6 +132,11 @@ INSTALLED_APPS += (
 INSTALLED_APPS += (
     'project',
     'panel',
+    'scene',
+    'rest_framework_docs',
+    'storages',
+    'users',
+    'group',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -162,12 +200,12 @@ USE_TZ = True
 
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'very_gd/static'),
+    # os.path.join(BASE_DIR, 'very_gd/static'),
 )
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'very_gd/static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

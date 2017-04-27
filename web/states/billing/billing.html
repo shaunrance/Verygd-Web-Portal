@@ -1,0 +1,177 @@
+<div ui-view class="billing">
+    <div
+        account-nav
+        class="account-account-nav">
+    </div>
+    <div class="account-body">
+        <div class="account-billing">
+            <div class="account-billing-inner">
+                <p class="modal-message" ng-class="{'error': errorMessage}">{{message}}</p>
+
+
+                <div class="account-billing-title">
+                    Current Plan
+                </div>
+                <div class="account-billing-plan">
+                    <span
+                        ng-if="user.subscription_type === 'granted'"
+                        class="account-info-billing">
+                        Premium (Granted)
+                    </span>
+
+                    <span
+                        ng-if="user.subscription_type !== 'granted'"
+                        class="account-info-billing">
+                        {{type}}
+                    </span>
+                </div>
+                <div class="account-billing-button-container">
+                    <button
+                        class="account-billing-update-button"
+                        ng-click="showModal(billing)">
+                        Change Plan
+                    </button>
+                </div>
+            </div>
+            <div
+                class="account-billing-inner"
+                ng-class="{'account-billing-info--hide': !showAnnualToggle};">
+                <div class="account-billing-title">
+                        Annual Billing
+                </div>
+                <div class="account-billing-toggle">
+                    <toggle-switch
+                        disabled="true"
+                        color="true"
+                        ng-model="monthlyBilling"
+                        on-label="ON"
+                        off-label="OFF">
+                    </toggle-switch>
+                </div>
+                <div class="account-billing-statement">
+                    <span
+                        class="account-billing-statement-text">
+                        Next Payment of ${{user.payment.amount/100}} will be processed on {{user.payment.next_billing_date | date:'EEEE, MMMM d, y' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div
+            class="account-billing-info"
+            ng-class="{'account-billing-info--hide': !showCardInfo};">
+            <form ng-submit="updateUser(model)">
+                    <!-- <div class="account-info-section">
+                        <input
+                            class="account-info-data"
+                            type="checkbox"
+                            name="paymentType"
+                            id="paymentType"
+                            value="{{plan_name}}"
+                            ng-model="model.paymentType"
+                            ng-change="paymentType(model.paymentType)"
+                            ng-checked="annualBilling" />
+                        <label for="paymentType">Professional Package @ $25/mo</label>
+                    </div> -->
+                <div class="account-info-section">
+                     <div class="account-info-title">
+                        Name on Card
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="name"
+                        ng-model="name.name"
+                        placeholder="{{name.name}}"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Credit Card Number
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="text"
+                        ng-model="card.number"
+                        placeholder="{{card.placeHolder}}"
+                        required />
+                </div>
+                <div class="account-info-section account-info-section-exp-sec">
+                    <div class="account-info-title">
+                        Expiration Month
+                    </div>
+                    <select
+                        class="account-info-data"
+                        name="month"
+                        id="month"
+                        onchange=""
+                        size="1"
+                        ng-model="month.number"
+                        required >
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    <div class="account-info-title">
+                        Expiration Year
+                    </div>
+                    <select
+                        class="account-info-data"
+                        name="year"
+                        id="year"
+                        onchange=""
+                        size="1"
+                        ng-model="year.number"
+                        required >
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                    <div class="account-info-title ">
+                        Security Code
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="tel"
+                        ng-model="cvc.number"
+                        placeholder="CVC"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <div class="account-info-title">
+                        Zip Code
+                    </div>
+                    <input
+                        class="account-info-data"
+                        type="tel"
+                        ng-model="zip.number"
+                        placeholder="{{zip.number}}"
+                        ng-minlength="5"
+                        required />
+                </div>
+                <div class="account-info-section">
+                    <input
+                        class="billing-info-button modal-submit modal-update modal-button"
+                        type="submit"
+                        value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

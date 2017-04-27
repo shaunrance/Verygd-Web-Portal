@@ -1,17 +1,44 @@
-<div header></div>
-<div add-menu class="add-menu--controls"></div>
+<div
+    header
+    header-title-data="title"
+    header-link="link">
+</div>
 <div ui-view class="projects">
+    <div
+        upgrade>
+    </div>
+    <div class="projects__empty" ng-class="{'show': emptyProjects}">
+        <p>You don't have any projects yet.</p>
+        <button class="button" ng-click="createProject()">Create Project</button>
+        <a href="https://medium.com/verygd/authoring-for-vr-with-very-gd-f4360ba08577">Not sure how to get started? Read our tutorial here.</a>
+    </div>
     <div  class="vg__items">
-        <figure ng-repeat="project in projects" class="vg__item--wrapper project--wrapper">
-            <button class="project__item--delete" ng-click="deleteProject(project.id)">
-                <img class="project-delete_icon" src="assets/img/close.svg" />
+        <figure
+            ng-repeat="project in projects"
+            class="vg__item--wrapper project--wrapper">
+            <button
+                class="project__item--delete"
+                ng-click="deleteProject(project.id)">
+                <img
+                    class="project-delete_icon"
+                    src="assets/img/close.svg" />
             </button>
-            <a class="vg__item--link project--link" ui-sref="projects.details({ projectId: project.id })">
+            <a
+                class="vg__item--link project--link"
+                ui-sref="projects.details({ projectId: project.id })">
                 <div class="vg__image--wrapper">
-                    <div class="vg__image" ng-style="{'background-image':'url({{project.cover_image}})'}"></div>
+                    <div
+                        class="vg__image"
+                        ng-style="{'background-image':'url({{project.cover_image}})'}">
+                    </div>
                 </div>
-                <figcaption class="vg__image--caption">{{project.title}}</figcaption>
+                <figcaption class="vg__image--caption">
+                    {{project.name}}
+                </figcaption>
             </a>
+            <button class="project__item--delete" ng-click="deleteProject(project.id)">
+                <img class="project-delete_icon" src="assets/img/delete.svg" />
+            </button>
         </figure>
     </div>
 </div>

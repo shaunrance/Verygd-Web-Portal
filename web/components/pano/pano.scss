@@ -1,4 +1,14 @@
 .my-canvas {
     height: 100vh;
+    overflow: hidden;
     width: 100vw;
+}
+
+.body--page-publicViewer,
+.body--page-viewer {
+    overflow: hidden;
+}
+
+.body--hotspot-hovered {
+    cursor: pointer;
 }

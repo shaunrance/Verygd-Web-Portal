@@ -1,18 +1,22 @@
-/* global angular, THREE, $, TweenMax, Linear */
+/* global angular, THREE, $, TweenMax, _, Linear, Quint */
 angular.module('ua5App')
-    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', function($rootScope, BaseThreeScene, BrowserFactory) {
+    .directive('pano', ['$rootScope', 'BaseThreeScene', 'BrowserFactory', 'GeoFactory', 'Hotspot', function($rootScope, BaseThreeScene, BrowserFactory, GeoFactory, Hotspot) {
         return {
             restrict: 'A',
             templateUrl: 'components/pano/pano.html',
             scope: {
                 useVr: '=',
-                panoContent: '='
+                panoContent: '=',
+                background: '=',
+                isPanorama: '=',
+                sceneType: '=',
+                equirectangularBackgroundImage: '=',
+                hotspotType: '='
             },
             link: function($scope, element, attrs) {
                 var $$el = $('.my-canvas');
+                var $body = $('body');
                 var crosshair;
-                var gazeStarted = false;
-                var gazeTimeout;
                 var scene = new BaseThreeScene();
                 var useVr = $scope.useVr;
                 var panelCount = 0;
@@ -20,12 +24,32 @@ angular.module('ua5App')
                 var roomRadius;
                 var worldDirectionVector = new THREE.Vector3();
                 var cam;
+                //var panoLink;
+                var panoramaMesh;
+                var sphereMesh;
+                var background = $scope.background;
+                var backgroundHex;
+
+                if ($scope.sceneType === 'sphere') {
+                    backgroundHex = 0x000000;
+                    $scope.background = '#000000';
+                } else {
+                    backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                    if ($scope.equirectangularBackgroundImage) {
+                        makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                    }
+                }
+
+                if (typeof $scope.hotspotType === 'undefined') {
+                    $scope.hotspotType = 'Minimal';
+                }
 
                 $scope.$watch(function() {
                     return $scope.useVr;
                 }, function(newValue, oldValue) {
                     if (newValue !== oldValue) {
                         scene.destroy();
+                        $$el.off();
                         useVr = newValue;
                         scene = new BaseThreeScene();
                         init();
@@ -76,69 +100,122 @@ angular.module('ua5App')
                     return panels;
                 }
 
+                function componentToHex(c) {
+                    var hex = c.toString(16);
+                    return hex.length === 1 ? '0' + hex : hex;
+                }
+
                 function init() {
                     var i;
                     var panels;
+                    var trueCount;
                     var pos = {x: 0, y: 0};
-                    
                     $$el.mousedown(function() {
                         pos = {x: cam.rotation.x, y: cam.rotation.y};
                     });
+
                     $$el.mouseup(function() {
                         if (
                             Math.abs(pos.x - cam.rotation.x) === 0 &&
                             Math.abs(pos.y - cam.rotation.y) === 0
                         ) {
-                            clickHandler();
+                            setTimeout(function() {
+                                clickHandler(scene.activeObject());
+                            }, 100);
                         }
                     });
 
+                    if ($scope.sceneType === 'sphere') {
+                        backgroundHex = 0x000000;
+                        $scope.background = '#000000';
+                    } else {
+                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                        if ($scope.equirectangularBackgroundImage) {
+                            makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                        }
+                    }
                     scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
-                    $rootScope.renderer.setClearColor(0x000000);
-                    
-                    i = $scope.panoContent.length;
+
+                    $rootScope.renderer.setClearColor(componentToHex($scope.background));
+                    $rootScope.renderer.sortObjects = false;
+
+                    trueCount = i = $scope.panoContent.length;
+
+                    if (trueCount < 3) {
+                        i = 4;
+                    }
+                    if (trueCount === 2) {
+                        $scope.panoContent[2] = _.clone($scope.panoContent[1]);
+                        $scope.panoContent[1] = undefined;
+                    }
+
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    if (panelCount > 1) {
-                        while (i--) {
-                            makePanel($scope.panoContent[i], panels[i]);
+
+                    //legacy isPanorama support:
+                    if (!$scope.sceneType) {
+                        if ($scope.isPanorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
                         }
-                    } else {
-                        makePanorama($scope.panoContent[0]);
+                    }
+
+                    switch ($scope.sceneType) {
+                        case 'cylinder':
+                            makePanorama($scope.panoContent[0]);
+                            break;
+                        case 'sphere':
+                            makeSphere($scope.panoContent[0]); //jshint ignore:line
+                            break;
+                        default:
+                            while (i--) {
+                                if ($scope.panoContent[i]) {
+                                    makePanel($scope.panoContent[i], panels[i]);
+                                }
+                            }
+                            break;
                     }
 
                     if (useVr) {
-                        crosshair = makeCrosshair();    
+                        window.crosshair = crosshair = makeCrosshair();
                     }
+
                     cam = scene.camera();
                     scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
-                    createExitBtn();
                 }
 
                 function makePanel(data, panel) {
                     var geometry;
-                    var hitAreaGeo;
-                    var hitAreaMat;
-                    var hitAreaMesh;
                     var material;
                     var plane;
                     var textureLoader = new THREE.TextureLoader();
+                    var border;
+
+                    textureLoader.crossOrigin = '';
+
+                    if (!data) {
+                        return;
+                    }
+
+                    border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000',
+                        data.url,
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
-                            var linkMaterial;
 
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.MeshBasicMaterial,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
                             plane = new THREE.Mesh(geometry, material);
+                            plane.name = 'panel';
                             plane.rotation.x = panel.rotation.x;
                             plane.rotation.y = panel.rotation.y;
                             plane.rotation.z = panel.rotation.z;
@@ -147,162 +224,205 @@ angular.module('ua5App')
                             plane.position.y = panel.position.y;
                             plane.position.z = panel.position.z;
                             plane.index = panel.index;
-                            
-                            //TODO: validate that the linked scene exists
-                            if (useVr) {
-                                linkMaterial = new THREE.MeshBasicMaterial({
-                                    side: THREE.MeshBasicMaterial,
-                                    map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
-                                    transparent: true
-                                });
-                                if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
-                                    hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                                    hitAreaMat = linkMaterial;
-                                    hitAreaMat.depthWrite = false;
-                                    hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                                    hitAreaMesh.name = 'sceneLink';
-                                    hitAreaMesh.sceneLink = data.related_tag;
-                                    hitAreaMesh.position.y = -size.height / 2 - 4;
-                                    hitAreaMesh.position.z = 3;
-                                    plane.add(hitAreaMesh);
-                                    scene.pushItem(hitAreaMesh);
-                                }
-                                scene.scene().add(plane);
-                            } else {
-                                if (data.related_tag && parseInt(data.related_tag, 10) !== 0) {
-                                    plane.name = 'sceneLink';
-                                    plane.sceneLink = data.related_tag;
-                                }
-                                scene.addItem(plane);
-                            }
-                            
+
+                            scene.addItem(plane);
+                            makeHotspots(data.hotspots, plane, size.width, size.height);
                         }
                     );
                 }
 
+                function makeHotspots(data, container, width, height, radius) {
+                    container.hotspots = [];
+                    if ($scope.hotspotType === 'Disabled') {
+                        return;
+                    }
+                    _.each(data, function(item) {
+                        var hotspot = new Hotspot({
+                            data: item,
+                            scene: scene,
+                            hotspotType: $scope.hotspotType,
+                            stereoscopic: $scope.useVr,
+                            container: container,
+                            planeWidth: width,
+                            planeHeight: height,
+                            radius: radius || null,
+                            sceneType: $scope.sceneType
+                        });
+                        container.add(hotspot);
+                        container.hotspots.push(hotspot);
+                        scene.pushItem(hotspot);
+                    });
+                }
+
                 function makePanorama(data) {
-                    var cylinder;
                     var geometry;
-                    var hitAreaGeo;
-                    var hitAreaMat;
-                    var hitAreaMesh;
                     var material;
                     var textureLoader = new THREE.TextureLoader();
-                    var materialEmpty = new THREE.MeshBasicMaterial({side: THREE.BackSide});
-                    var materialsArray = [];
 
+                    textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        data.url + '?fm=jpg&h=2000&w=2000&fit=max&q=60',
+                        data.url,
                         function(texture) {
-                            var size = sizePlaneFromImage(texture.image);
-                            var linkMaterial;
                             var height;
-                            var materialGroup;
-                            var cylFaces;
 
                             material = new THREE.MeshBasicMaterial({
                                 side: THREE.FrontSide,
                                 transparent: true,
                                 map: texture,
-                                opacity: 1
+                                opacity: 1,
+                                alphaTest: 0.1
                             });
-
-                            materialsArray = [
-                                materialEmpty,
-                                material,
-                                materialEmpty
-                            ];
 
                             function map(value, start1, stop1, start2, stop2) {
                                 return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
                             }
 
-                            height = map(texture.image.width / texture.image.height, 7.5, 2.01, 100, 300);
-                            geometry = new THREE.CylinderGeometry(150, 150, height, 20);
+                            height = map(texture.image.width / texture.image.height, 7.5, 2.01, 40, 300);
 
-                            materialGroup = new THREE.MeshFaceMaterial(materialsArray);
-                            cylFaces = geometry.faces.length;
-                            for (var i = 0; i < cylFaces; i++) {
-                                if (i <= 39) {
-                                    //give the faces around the cyl the img texture
-                                    geometry.faces[i].materialIndex = 1;
-                                } else {
-                                    //give the top/bottom faces a black texture
-                                    geometry.faces[i].materialIndex = 0;
-                                }
-                            }
-                            
-                            cylinder = new THREE.Mesh(geometry, materialGroup);
-                            cylinder.index = 0;
+                            geometry = new THREE.CylinderGeometry(150, 150, height, 20, 1, true);
+
+                            geometry.elementsNeedUpdate = true; // update faces
+
+                            panoramaMesh = new THREE.Mesh(geometry, material);
+                            panoramaMesh.index = 0;
+                            panoramaMesh.name = 'panorama';
+
+                            panoramaMesh.rotation.y = 4.723;
+                            panoramaMesh.position.y = 8;
 
                             //invert the object, to fix the texture
-                            cylinder.scale.set(- 1, 1, 1);
-
-                            if (useVr) {
-                                linkMaterial = new THREE.MeshBasicMaterial({
-                                    side: THREE.MeshBasicMaterial,
-                                    map: THREE.ImageUtils.loadTexture('/assets/img/link.png'),
-                                    transparent: true
-                                });
-
-                                hitAreaGeo = new THREE.CircleGeometry(2, 32);
-                                hitAreaMat = linkMaterial;
-                                hitAreaMat.depthWrite = false;
-                                hitAreaMesh = new THREE.Mesh(hitAreaGeo, hitAreaMat);
-                                hitAreaMesh.name = 'sceneLink';
-                                hitAreaMesh.position.y = -size.height / 2 - 4;
-                                hitAreaMesh.position.z = 3;
-                                cylinder.add(hitAreaMesh);
-                                scene.pushItem(hitAreaMesh); 
-                                scene.scene().add(cylinder);
-                            } else {
-                                cylinder.name = 'sceneLink';
-                                scene.addItem(cylinder);
-                            }
-                            
+                            panoramaMesh.scale.set(- 1, 1, 1);
+                            scene.addItem(panoramaMesh, true);
+                            makeHotspots(data.hotspots, panoramaMesh, 0, height);
+                            //makePanoramaHotspots(data.hotspots, height, panoramaMesh);
                         }
                     );
                 }
 
-                function createExitBtn() {
-                    var geometry = new THREE.PlaneGeometry(40, 20, 1);
-                    var material;
+                function makeSphere(data) { //jshint ignore:line
+                    var url = (typeof data === 'string') ? data : data.url;
+                    var radius = 500;
                     var textureLoader = new THREE.TextureLoader();
+                    var geometry;
+                    var material;
+
+                    textureLoader.crossOrigin = '';
                     textureLoader.load(
-                        '/assets/img/exit.png',
+                        url,
                         function(texture) {
-                            var plane;
+                            var threeWidth;
+                            if (typeof data === 'object') {
+                                threeWidth = Math.pow(2, Math.round(Math.log(texture.image.width) / Math.log(2)));
+                                radius = threeWidth / 2 / Math.PI;
+                            }
+                            geometry = new THREE.SphereGeometry(radius, 32, 32);
                             material = new THREE.MeshBasicMaterial({
-                                side: THREE.MeshBasicMaterial,
                                 transparent: true,
                                 map: texture,
-                                opacity: 0.8
+                                opacity: 1,
+                                side: THREE.DoubleSide
                             });
-                            plane = new THREE.Mesh(geometry, material);
-                            plane.name = 'exit';
-                            if (useVr) {
-                                scene.addItem(plane);
+                            sphereMesh = new THREE.Mesh(geometry, material);
+                            sphereMesh.name = 'sphere';
+
+                            sphereMesh.scale.set(-1.1, 1.1, 1.1);
+                            if (!BrowserFactory.isMobile()) {
+                                sphereMesh.rotation.y = Math.PI;
+                            } else {
+                                sphereMesh.rotation.y = Math.PI / -2;
                             }
-                            exitBtn = plane;
+                            scene.addItem(sphereMesh, true);
+                            if (typeof data === 'object') {
+                                makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
+                            }
                         }
                     );
                 }
 
+                // function createExitBtn() {
+                //     var geometry = new THREE.PlaneGeometry(40, 20, 1);
+                //     var material;
+                //     var textureLoader = new THREE.TextureLoader();
+                //     textureLoader.load(
+                //         '/assets/img/exit.png',
+                //         function(texture) {
+                //             material = new THREE.MeshBasicMaterial({
+                //                 side: THREE.MeshBasicMaterial,
+                //                 transparent: true,
+                //                 map: texture,
+                //                 opacity: 0.8
+                //             });
+                //             exitBtn = new THREE.Mesh(geometry, material);
+                //             exitBtn.name = 'exit';
+                //             if (useVr) {
+                //                 scene.addItem(exitBtn);
+                //             }
+                //             if (typeof panoLink === 'object') {
+                //                 exitBtn.add(panoLink);
+                //             }
+                //         }
+                //     );
+                // }
+
                 function reload() {
-                    var i = $scope.panoContent.length;
+                    var i;
+                    var trueCount;
                     var panels;
                     // empty the scene, except for our camera:
                     scene.destroyAllSceneObjects(['PerspectiveCamera']);
                     // make new panels
                     panels = getPanels(i);
                     panelCount = panels.length;
-                    if (panelCount > 1) {
-                        while (i--) {
-                            makePanel($scope.panoContent[i], panels[i]);
-                        }
+                    background = $scope.background;
+                    if ($scope.sceneType === 'sphere') {
+                        backgroundHex = 0x000000;
+                        $scope.background = '#000000';
                     } else {
-                        makePanorama($scope.panoContent[0]);
+                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
+                        if ($scope.equirectangularBackgroundImage) {
+                            makeSphere($scope.equirectangularBackgroundImage);
+                        }
                     }
+                    $rootScope.renderer.setClearColor(componentToHex(background));
+                    $rootScope.renderer.autoClear = false;
+                    $rootScope.renderer.sortObjects = false;
+                    trueCount = i = $scope.panoContent.length;
+
+                    if (trueCount < 3) {
+                        i = 4;
+                    }
+                    if (trueCount === 2) {
+                        $scope.panoContent[2] = _.clone($scope.panoContent[1]);
+                        $scope.panoContent[1] = undefined;
+                    }
+
+                    panels = getPanels(i);
+                    panelCount = panels.length;
+
+                    if (!$scope.sceneType) {
+                        if ($scope.isPanorama) {
+                            $scope.sceneType = 'cylinder';
+                        } else {
+                            $scope.sceneType = 'panel';
+                        }
+                    }
+
+                    switch ($scope.sceneType) {
+                        case 'cylinder':
+                            makePanorama($scope.panoContent[0]);
+                            break;
+                        case 'sphere':
+                            makeSphere($scope.panoContent[0]);
+                            break;
+                        default:
+                            while (i--) {
+                                if ($scope.panoContent[i]) {
+                                    makePanel($scope.panoContent[i], panels[i]);
+                                }
+                            }
+                            break;
+                    }
+
                 }
 
                 function makeCrosshair() {
@@ -319,31 +439,31 @@ angular.module('ua5App')
                     var frontMesh;
                     var cam = scene.camera();
 
-                    backGeo = new THREE.SphereGeometry(0.2, 25, 25);
+                    backGeo = new THREE.SphereGeometry(0.1, 25, 25);
                     backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
                     backMesh = new THREE.Mesh(backGeo, backMat);
                     backMat.depthWrite = false;
                     backMesh.position.set(0, 0, -5);
 
-                    midGeo = new THREE.SphereGeometry(0.2, 25, 25);
-                    midMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
+                    midGeo = new THREE.SphereGeometry(0.06, 25, 25);
+                    midMat = new THREE.MeshBasicMaterial({color: 0xdddddd, opacity: 0.4, transparent: true});
                     midMesh = new THREE.Mesh(midGeo, midMat);
                     midMat.depthWrite = false;
-                    midMesh.position.set(0, 0, -5); 
+                    midMesh.position.set(0, 0, -5);
 
                     frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
                     frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.9, transparent: true});
                     frontMat.depthWrite = false;
                     frontMesh = new THREE.Mesh(frontGeo, frontMat);
                     frontMesh.position.set(0, 0, -5);
-                    
+
                     //add in in front of our camera:
                     cam.add(backMesh);
                     cam.add(midMesh);
                     cam.add(frontMesh);
 
                     // return the mid crosshair, so we can animate it
-                    return midMesh;
+                    return {mid: midMesh, front: frontMesh};
                 }
 
                 // returns a width & height object
@@ -364,60 +484,134 @@ angular.module('ua5App')
                     }
                     return dimensions;
                 }
-                
+
                 function onRender() {
                     if (typeof exitBtn === 'object' && useVr) {
                         cam.getWorldDirection(worldDirectionVector);
                         exitBtn.position.z = worldDirectionVector.z * 200;
                         exitBtn.position.x = worldDirectionVector.x * 200;
-                        exitBtn.position.y = -145;
+                        exitBtn.position.y = -200;
                         exitBtn.lookAt(cam.position);
+                    }
+
+                }
+
+                function toggleHotspots(activeObject) {
+
+                    //if we're on a cylinder or sphere scene
+                    if (
+                        $scope.sceneType === 'cylinder' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = panoramaMesh;
+                    }
+
+                    if (
+                        $scope.sceneType === 'sphere' &&
+                        // and we click nothing
+                        typeof activeObject !== 'object'
+                    ) {
+                        //set it to the panorama mesh, so we can flash the hotspots
+                        activeObject = sphereMesh;
+                    }
+
+                    if (typeof activeObject === 'object') {
+                        var clickedHotspot = false;
+
+                        if (activeObject.name === 'hotspot') {
+                            launchHotpsot(activeObject.hotspot);
+                            clickedHotspot = true;
+                        }
+
+                        //todo
+                        if (!clickedHotspot && $scope.hotspotType !== 'visible') {
+                            if (activeObject.name === 'panel' || activeObject.name === 'sphere' || activeObject.name === 'panorama') {
+                                _.each(activeObject.hotspots, function(child) {
+                                    if (child.name === 'hotspot') {
+                                        child.flash();
+                                    }
+                                });
+                            }
+                        }
                     }
                 }
 
                 function clickHandler(item) {
-                    var activeObject = scene.activeObject();
-                    if (typeof scene.activeObject() !== 'undefined') {
-                        if (scene.activeObject().name === 'sceneLink') {
-                            // TODO: hook this up with real data
-                            // currently hardcoded to fire a 'scene:change' event
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
-                                if (activeObject.hasOwnProperty('sceneLink')) {
-                                    $rootScope.$broadcast('scene:change', {link: activeObject.sceneLink});    
-                                }
-                            }});                            
-                        } else if (scene.activeObject().name === 'exit') {
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 0.2});
-                            TweenMax.to(scene.activeObject().material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
+                    toggleHotspots(item);
+
+                    if (typeof item !== 'undefined') {
+                        if (item.name === 'exit') {
+                            TweenMax.to(item.material, 0.2, {opacity: 0.2});
+                            TweenMax.to(item.material, 0.2, {opacity: 1, delay: 0.2, onComplete: function() {
                                 window.history.back();
-                            }});                            
+                            }});
+                        }
+                    }
+                }
+
+                function launchHotpsot(data) {
+                    $body.removeClass('body--hotspot-hovered');
+                    if (data.type === 'scene') {
+                        $rootScope.$broadcast('scene:change', {link: data.sceneId});
+                    } else if (data.type === 'url') {
+                        if (!data.newWindow) {
+                            window.location = data.url;
+                        } else {
+                            window.open(data.url, '_blank');
                         }
                     }
                 }
 
                 function mouseOverHandler(item) {
                     //console.log('Mouse Hovering: ', item);
-                    if (!gazeStarted && useVr) {
-                        // Animate crosshair for long gaze
-                        gazeStarted = true;
-                        TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
-                        TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
-                        clearTimeout(gazeTimeout);
-                        gazeTimeout = setTimeout(clickHandler, 1700);
+                    // if (!gazeStarted && useVr) {
+                    //     // Animate crosshair for long gaze
+                    //     gazeStarted = true;
+                    //     TweenMax.to(crosshair.scale, 2, {x: 0.1, y: 0.1, ease:Linear.easeNone});
+                    //     TweenMax.to(crosshair.material, 0.2, {opacity: 0.4, ease:Linear.easeNone});
+                    //     clearTimeout(gazeTimeout);
+                    //     gazeTimeout = setTimeout(clickHandler, 1700);
+                    // }
+                    if (item && item.name === 'hotspot') {
+                        $body.addClass('body--hotspot-hovered');
+                        if (useVr) {
+                            TweenMax.to(crosshair.mid.material, 0.7, {opacity: 0.3, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.mid.scale, 0.7, {x: 1.7, y: 1.7, ease: Quint.easeOut});
+                            TweenMax.to(crosshair.front.scale, 1.5, {x: 2, y: 2, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.5, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.6, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.7, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 1.8, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, delay: 1.9, ease: Linear.easeNone});
+                            TweenMax.to(crosshair.front.material, 0.1, {opacity: 0, delay: 2,
+                                ease: Linear.easeNone, onComplete: function() {
+                                    TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.mid.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
+                                    clickHandler(scene.activeObject());
+                                }});
+                        }
                     }
                 }
 
                 function mouseOutHandler(item) {
+                    // if (useVr) {
+                    //     // Reset crosshair for long gaze
+                    //     gazeStarted = false;
+                    //     clearTimeout(gazeTimeout);
+                    //     TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
+                    //     TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});
+                    // }
                     if (useVr) {
-                        // Reset crosshair for long gaze
-                        gazeStarted = false;
-                        clearTimeout(gazeTimeout);
-                        TweenMax.to(crosshair.scale, 0.3, {x: 1, y: 1});
-                        TweenMax.to(crosshair.material, 0.3, {opacity: 0, ease:Linear.easeNone});                        
+                        TweenMax.to(crosshair.front.material, 0.1, {opacity: 1, overwrite: 'all', ease: Linear.easeNone});
+                        TweenMax.to(crosshair.mid.scale, 0.2, {x: 0.1, y: 0.1, overwrite: 'all', ease:Linear.easeNone});
+                        TweenMax.to(crosshair.front.scale, 0.2, {x: 1, y: 1, overwrite: 'all', ease: Linear.easeNone});
                     }
+                    $body.removeClass('body--hotspot-hovered');
                 }
-                                
+
                 $rootScope.$on('app:resized', function() {
                     $$el.width($(window).width());
                     $$el.height($(window).height());
@@ -436,8 +630,9 @@ angular.module('ua5App')
                         );
                     }
                 });
-                
+
                 init();
+                scene.resize();
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {
@@ -445,7 +640,7 @@ angular.module('ua5App')
                 //     var mouseY = event.originalEvent.touches[0].pageY - $element.offset().top + $window.scrollTop();
                 //     map.setTouching(true);
                 //     map.setCursorPosition(mouseX, mouseY);
-                // });               
+                // });
             }
         };
     }])

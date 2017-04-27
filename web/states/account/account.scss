@@ -1,0 +1,155 @@
+.account {
+    @include clearfix;
+    @include outer-container;
+    @include padding(50px $site-gutter 50px);
+    position: relative;
+}
+
+.account-message {
+    background: $green-2;
+    border-radius: 10px;
+    color: $white;
+    display: none;
+    font-family: 'Open Sans', sans-serif;
+    left: 1%;
+    padding: 15px 35px;
+    position: absolute;
+    top: 5px;
+    width: 98%;
+
+    &.error {
+        background: $red;
+    }
+}
+
+.account-account-nav {
+    @extend %uppercase;
+    float: left;
+    width: 20%;
+}
+
+.account-body {
+    float: left;
+    height: 500px;
+    width: 80%;
+}
+
+.account-avatar-container {
+    margin-left: 5px;
+    position: relative;
+}
+
+.account-avatar-inner {
+    @include clearfix;
+    border-bottom: 1px solid $grey-dark;
+    padding-bottom: 30px;
+    position: relative;
+}
+
+.account-avatar-title,
+.account-avatar-image-container,
+.account-avatar-button-container,
+.account-billing-button-container {
+    display: block;
+    float: left;
+}
+
+.account-avatar-title {
+    @extend %uppercase;
+    @extend %h7;
+    color: $coal;
+    margin-top: 60px;
+    width: 20%;
+}
+
+.account-avatar-image {
+    @include size(120px);
+    border-radius: 50%;
+}
+
+.account-avatar-image-upload {
+    @extend %h7;
+    @include padding(12px 25px);
+    @include position(relative, 50px null null 50px);
+    border: 1px solid $btn-blue;
+    color: $btn-blue;
+    text-decoration: none;
+}
+
+.account-info-section {
+    @include clearfix;
+    @include padding(10px);
+    margin-bottom: 60px;
+    position: relative;
+
+    &.account-info-section-exp-sec {
+
+        .account-info-title {
+            width: 20%;
+        }
+
+        .account-info-data {
+            width: 40%;
+
+            &:first-of-type {
+                width: 20%;
+            }
+        }
+    }
+}
+
+#confirm-message {
+    color: $green;
+    font-family: 'Open Sans', sans-serif;
+    margin: 20px 0 0 20%;
+    position: relative;
+
+    &.error {
+        color: $red;
+    }
+}
+
+.account-info-title {
+    @extend %uppercase;
+    @extend %h7;
+    color: $coal;
+    display: block;
+    float: left;
+    margin-top: 0.7692307692em;
+    width: 20%;
+}
+
+.account-info-data {
+    @extend %h2;
+    background: none;
+    border: none;
+    color: $navy;
+    display: block;
+    float: left;
+    width: 80%;
+
+    @include placeholder {
+        color: $navy;
+    }
+}
+
+.account-info-billing-price {
+    color: $grey-darkest;
+    margin-left: 0.8em;
+}
+
+.account-info-button {
+    @include size(120px 40px);
+}
+
+@include media($tablet) {
+    .account {
+        padding: 130px 30px;
+    }
+}
+
+@include media($phablet) {
+    .account {
+        padding: 110px 0;
+    }
+}

@@ -10,6 +10,7 @@
         <meta charset="utf-8">
         <meta name="fragment" content="!">
         <base href="/">
+        <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet">
         <!-- @if PRODUCTION='false' -->
         <script src="bower_components/angular/angular.js"></script>
         <!-- @endif -->
@@ -28,58 +29,92 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title ng-bind="ngMeta.title">Very.gd</title>
+        <title ng-bind="ngMeta.title">very.gd</title>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
-        <meta content="Very.gd">
+        <meta content="very.gd">
         <meta
             name="description"
-            content=""
-            ng-content="{{ ngMeta.description }}">
+            content="{{ ngMeta.description }}">
         <meta
             property="og:description"
-            content=""
-            ng-content="{{ ngMeta.description }}">
+            content="{{ ngMeta.description }}">
         <meta
             property="og:image"
-            content=""
-            ng-content="{{ ngMeta.image }}">
+            content="{{ ngMeta.image }}">
         <meta
             property="og:site_name"
-            content=""
-            ng-content="Site Name">
+            content="very.gd">
         <meta
             property="og:url"
-            content=""
-            ng-content="{{ ngMeta.url }}">
+            content="{{ ngMeta.url }}">
         <meta
             property="og:type"
             content="website">
         <meta
             name="twitter:card"
-            content="summary_large_image">
+            content="player">
         <meta
             name="twitter:title"
             content="{{ ngMeta.title }}">
         <meta
             property="twitter:image:src"
             content="{{ ngMeta.image }}">
+
+        <meta
+            property="twitter:player"
+            content="{{ ngMeta.url }}">
+
+        <meta
+            property="twitter:player:width"
+            content="576">
+        <meta
+            property="twitter:player:height"
+            content="324">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
         <link
-            href="assets/img/favicon.png"
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/assets/img/icons/apple-touch-icon.png">
+        <link
             rel="icon"
-            type="image/png">
+            type="image/png"
+            href="/assets/img/icons/favicon-32x32.png"
+            sizes="32x32">
         <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans"
-            rel="stylesheet">
+            rel="icon"
+            type="image/png"
+            href="/assets/img/icons/favicon-16x16.png"
+            sizes="16x16">
+        <link
+            rel="manifest"
+            href="/assets/img/icons/manifest.json">
+        <link
+            rel="shortcut icon"
+            href="/assets/img/icons/favicon.ico">
+
+        <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/jdy4df93';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
     </head>
-    <body>
+    <body class="body--{{pageClass}}">
         <noscript>
             <div class="noscript">
                 Please enable JavaScript on your browser or upgrade to <a href="http://www.google.com/chrome/" target="_blank">Google Chrome</a> to use Base Angular.
             </div>
         </noscript>
         <div ui-view></div>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-82267205-3', 'auto');
+          ga('send', 'pageview');
+
+        </script>
         <!-- @if PRODUCTION='true' -->
             <!-- @if TESTING='true' -->
             <script src="_build/vendor.js?v=<!-- @echo VERSION -->"></script>
@@ -101,6 +136,9 @@
         <script src="bower_components/angular-touch/angular-touch.min.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+        <script src="bower_components/angular-facebook/lib/angular-facebook.js"></script>
+        <script src="bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
+        <link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
         <script src="bower_components/ng-sortable/dist/ng-sortable.js"></script>
         <script src="bower_components/gsap/src/minified/TweenMax.min.js"></script>
         <script src="bower_components/imagesloaded/imagesloaded.pkgd.min.js"></script>
@@ -117,40 +155,68 @@
         <script src="bower_components/three.js/examples/js/libs/stats.min.js"></script>
         <script src="bower_components/suite/suite.js"></script>
         <script src="bower_components/suite/factories/browser.js"></script>
+        <script src="bower_components/suite/factories/geo.js"></script>
         <script src="bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+        <script src="bower_components/tinycolor/dist/tinycolor-min.js"></script>
+        <script src="bower_components/angular-color-picker/dist/angularjs-color-picker.min.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+        <script src="bower_components/clipboard/dist/clipboard.min.js"></script>
+        <script src="bower_components/jquery-ui/jquery-ui.js"></script>
         <!-- end bower_components -->
         <script src="app.js"></script>
         <!-- state scripts -->
-        <script src="states/home/home.js"></script>
+        <script src="states/sign-in/sign-in.js"></script>
         <script src="states/projects/projects.js"></script>
         <script src="states/viewer/viewer.js"></script>
         <script src="states/details/details.js"></script>
         <script src="states/scene/scene.js"></script>
+        <script src="states/forgot-password/forgot-password.js"></script>
+        <script src="states/reset-password/reset-password.js"></script>
+        <script src="states/sign-up/sign-up.js"></script>
+        <script src="states/account/account.js"></script>
+        <script src="states/billing/billing.js"></script>
+        <script src="states/notifications/notifications.js"></script>
+        <script src="states/terms-of-service/terms-of-service.js"></script>
+        <script src="states/privacy-policy/privacy-policy.js"></script>
         <!-- end state scripts -->
         <!-- component scripts -->
         <script src="components/header/header.js"></script>
         <script src="components/unorphanize/unorphanize.js"></script>
         <script src="components/pano/base-three-scene.js"></script>
+        <script src="components/pano/hotspot.js"></script>
         <script src="components/pano/pano.js"></script>
+        <script src="components/toggle-switch/toggle-switch.js"></script>
         <script src="components/add-menu/add-menu.js"></script>
+        <script src="components/account-nav/account-nav.js"></script>
+        <script src="components/upgrade/upgrade.js"></script>
+        <script src="components/hotspot-editor/hotspot-editor.js"></script>
+        <script src="components/hotspot-settings/hotspot-settings.js"></script>
         <!-- end component scripts -->
         <!-- start factories scripts -->
         <script src="factories/authInterceptor.js"></script>
         <!-- end factories scripts-->
         <!-- start resources scripts -->
         <script src="resources/auth.js"></script>
+        <script src="resources/users.js"></script>
         <!-- end resources scripts-->
         <!-- start services scripts -->
-        <script src="services/screenFactory.js"></script>
+        <script src="services/sceneFactory.js"></script>
+        <script src="services/panelFactory.js"></script>
         <script src="services/projectFactory.js"></script>
+        <script src="services/intercomFactory.js"></script>
         <!-- end services scripts -->
         <!-- start modals scripts -->
         <script src="modals/addModal.js"></script>
+        <script src="modals/billingModal.js"></script>
+        <script src="modals/editModal.js"></script>
         <script src="modals/deleteModal.js"></script>
         <script src="modals/shareModal.js"></script>
         <script src="modals/linkModal.js"></script>
         <script src="modals/signInModal.js"></script>
+        <script src="modals/signUpModal.js"></script>
+        <script src="modals/projectInstructModal.js"></script>
+        <script src="modals/sceneInstructModal.js"></script>
+        <script src="modals/hotspotModal.js"></script>
         <!-- end modals scripts -->
         <!-- @endif -->
     </body>

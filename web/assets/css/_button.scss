@@ -1,0 +1,64 @@
+.button {
+    @include transition(background-color $transition-speed, border-color $transition-speed, color $transition-speed);
+    position: relative;
+}
+
+.nav-item {
+    @include margin(0 20px 0 0);
+    @include padding(10px 5px);
+    color: $black;
+    display: block;
+    text-decoration: none;
+
+    &:hover {
+        background-color: $grey-dark;
+        border-radius: 2px;
+    }
+
+    &.active {
+        background-color: $grey-dark;
+        border-radius: 2px;
+    }
+}
+
+.modal-button {
+    @extend %reset-button;
+    @extend %modal-button;
+
+    + .modal-button {
+        margin-left: 10px;
+    }
+}
+
+.modal-submit {
+    background-color: $btn-blue;
+}
+
+.modal-update {
+    background-color: $pink;
+}
+
+.modal-cancel {
+    background-color: $grey-dark;
+}
+
+.modal-delete {
+    background-color: $red;
+}
+
+.modal-accept {
+    background-color: $btn-blue;
+}
+
+.modal-label {
+    display: none;
+}
+
+.modal-input {
+    border: none;
+    border-bottom: 1px solid $input-grey;
+    margin-top: 20px;
+    outline: 0;
+    padding: 10px 0;
+    width: 100%;
+}

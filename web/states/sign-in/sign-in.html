@@ -1,0 +1,88 @@
+<div class="sign-in">
+    <div class="sign-in-inner">
+        <div
+            class="sign-in-logo-link"
+            href="#">
+            <img
+                class="logo"
+                src="assets/img/vg-logo-new.svg">
+        </div>
+        <div class="sign-in-modal-overlay">
+            <div class="modal">
+                <form ng-submit="login(model)">
+                    <div class="modal-header">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="modal-body">
+                        <a class="social-login" ng-click="loginFB()">
+                            <div
+                                class="social-login__icon"
+                                ng-include="'assets/img/fb-icon.svg'">
+                            </div>
+                            <span class="social-login__text">Log in with Facebook</span>
+                        </a>
+
+                        <div class="modal-divider"><span>or</span></div>
+
+                        <div class="form-group form-group-floated">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-email.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Email address"
+                                value=""
+                                type="email"
+                                ng-model="model.email"
+                                required />
+                            <label>Email address</label>
+                        </div>
+                        <div class="form-group form-group-floated">
+                            <img
+                                class="input-icon"
+                                src="assets/img/icon-password.png">
+                            <input
+                                class="modal-input"
+                                placeholder="Password"
+                                value=""
+                                type="password"
+                                ng-model="model.password"
+                                required />
+                            <label>Password</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            class="modal-submit modal-button"
+                            type="submit"
+                            ng-disabled="loginForm.$invalid">
+                            Submit
+                        </button>
+                    </div>
+                    <div
+                        ng-if="loginError"
+                        class="sign-in-modal-error"
+                        login-error-message>
+                        {{errorMessage}}
+                    </div>
+                </form>
+            </div>
+            <div class="sign-in-cta">
+                Don't have an account?
+                <a
+                    class="sign-up-link"
+                    ui-sref="sign-up">
+                    Sign Up
+                </a>
+            </div>
+
+            <div class="forgot-cta">
+                <a
+                    class="sign-up-link"
+                    ui-sref="forgot-password">
+                    Forgot Password?
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
