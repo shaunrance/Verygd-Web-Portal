@@ -16,6 +16,7 @@ angular.module('ua5App')
                 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
                 $scope.projectTitle = '';
+                $scope.projectId = '';
                 $scope.mobileUserMenuToggle = false;
                 $scope.userMenuToggle = false;
                 $scope.notificationToggle = false;
@@ -83,6 +84,7 @@ angular.module('ua5App')
 
                         .then(function(response) {
                             $scope.projectTitle = response.data.name;
+                            $scope.projectId = response.data.id;
 
                         }, function(error) {
 
@@ -169,6 +171,10 @@ angular.module('ua5App')
 
                 $scope.closeMenu = function() {
                     $scope.mobileUserMenuToggle = false;
+                };
+
+                $scope.updateProject = function(projectId, data) {
+                    projectFactory.editProject(projectId, {name:data});
                 };
 
                 // Body click event to close dekstop user menu

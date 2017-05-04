@@ -14,7 +14,8 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             var mouse = new THREE.Vector2();
             var onMouseOut = function(item) {};
             var onMouseOver = function(item) {};
-            var raycaster;
+            var mouseRaycaster;
+            var previousIntersectId = false;
             var renderHook = function() {};
             var renderer;
             var rendering = true;
@@ -23,59 +24,57 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             var useVR = false;
             var debug = false;
 
-            function getHoveredElements() {
-                var elToMouseOver = false;
-                var firstTouched = true;
-                var hits = [];
+            function getHoveredElement() {
                 var intersects;
-                var j;
+                var closestIntersect;
+                var currentIntersectId;
+                var prevObject;
 
-                raycaster.setFromCamera(mouse, camera);
-                intersects = raycaster.intersectObjects(itemsMouseCanHit);
+                mouseRaycaster.setFromCamera(mouse, camera);
+                intersects = mouseRaycaster.intersectObjects(itemsMouseCanHit);
+
+                // get the closest one
+                intersects = _.sortBy(intersects, 'distance');
+                intersects = _.reject(intersects, function(intersect) {
+                    return (
+                        intersect.hasOwnProperty('object') &&
+                        !intersect.object.isVisible
+                    );
+                });
+
                 if (intersects.length > 0) {
-                    j = intersects.length;
-                    while (j--) {
-                        if (
-                            intersects[j].hasOwnProperty('object') &&
-                            !intersects[j].object.isVisible
-                        ) {
-                            intersects.splice(j, 1);
-                        }
-                    }
-                }
+                    closestIntersect = intersects[0].object;
+                    currentIntersectId = closestIntersect.id;
 
-                if (intersects.length > 0) {
+                    if (previousIntersectId !== currentIntersectId) {
 
-                    for (var i = 0; i < intersects.length; i ++) {
-                        hits.push(intersects[i].object.id);
-                        //-- store the new elements:
-                        if (activeElement === intersects[i].object.id) {
-                            elToMouseOver = intersects[i].object.id;
-                            firstTouched = false;
+                        if (previousIntersectId) {
+                            prevObject = scene.getObjectById(previousIntersectId, true);
+                            if (typeof prevObject === 'object') {
+                                onMouseOut(prevObject);
+                                scene.getObjectById(previousIntersectId, true).hovered = false;
+                            }
                         }
                     }
 
-                    if (!elToMouseOver) {
-                        elToMouseOver = intersects[0].object.id;
-                        if (activeElement) {
-                            onMouseOut(scene.getObjectById(activeElement, true));
-                            activeElement = false;
-                        }
+                    if (currentIntersectId && !closestIntersect.hovered) {
+                        onMouseOver(scene.getObjectById(currentIntersectId, true));
+                        closestIntersect.hovered = true;
                     }
 
-                    if (activeElement && !firstTouched) {
-                        onMouseOver(scene.getObjectById(activeElement, true));
-                    }
-
-                    activeElement = elToMouseOver;
+                    previousIntersectId = currentIntersectId;
                 } else {
                     //-- get the items that have been removed
-                    if (activeElement) {
-                        onMouseOut(scene.getObjectById(activeElement, true));
-                        activeElement = false;
+                    if (previousIntersectId) {
+                        prevObject = scene.getObjectById(previousIntersectId, true);
+                        if (typeof prevObject === 'object') {
+                            onMouseOut(prevObject);
+                            prevObject.hovered = false;
+                        }
+                        previousIntersectId = false;
                     }
                 }
-                return hits;
+                return currentIntersectId;
             }
 
             function render() {
@@ -83,7 +82,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     stats.begin();
                 }
                 camera.updateMatrixWorld();
-                activeElements = getHoveredElements();
+                activeElement = getHoveredElement();
                 renderHook();
                 if (useVR) {
                     effect.render(scene, camera);
@@ -134,7 +133,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     }
                 }
                 itemsMouseCanHit = [];
-                camera.position.set(0, 10, 0);
+                //camera.position.set(0, 10, 0);
             }
 
             function stopRendering() {
@@ -212,9 +211,9 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
 
             function setupBaseScene() {
                 var ASPECT = $$el.width() / $$el.height();
-                var FAR = 700;
+                var FAR = 2000;
                 var FOV = 50;
-                var NEAR = 0.001;
+                var NEAR = 0.1;
 
                 if (debug) {
                     stats = new Stats();
@@ -235,7 +234,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 //camera.position.set(-90, 15, 0);
                 camera.position.set(0, 10, 0);
 
-                raycaster = new THREE.Raycaster();
+                mouseRaycaster = new THREE.Raycaster();
 
                 if (BrowserFactory.hasTouch()) {
                     controls = new THREE.DeviceOrientationControls(camera, true);
@@ -280,6 +279,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
             return {
                 activeObject: getActiveObject,
                 activeObjects: getActiveObjects,
+                getHoveredElement: getHoveredElement,
                 itemsMouseCanHit: getItemsMouseCanHit,
                 addItem: addItem,
                 camera: getCamera,
