@@ -63,7 +63,7 @@ angular.module('ua5App')
                     if ($scope.storagePercent > 75) {
                         $scope.storageBarFillColor = '#FF0000';
                     } else {
-                        $scope.storageBarFillColor = '#53a0fd;';
+                        $scope.storageBarFillColor = '#53a0fd';
                     }
                 });
 

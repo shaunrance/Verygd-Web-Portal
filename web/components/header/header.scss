@@ -205,7 +205,7 @@
 
 .header__storage-bar {
     @include size(120px 4px);
-    background-color: #95959f;
+    background-color: $coal;
 }
 
 .header__storage-bar-fill {
