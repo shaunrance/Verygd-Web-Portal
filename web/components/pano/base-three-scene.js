@@ -133,7 +133,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     }
                 }
                 itemsMouseCanHit = [];
-                camera.position.set(0, 10, 0);
+                //camera.position.set(0, 10, 0);
             }
 
             function stopRendering() {
