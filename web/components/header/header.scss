@@ -190,6 +190,29 @@
     }
 }
 
+.header__storage-container {
+    @include size(140px 20px);
+    display: inline-block;
+    margin-right: 44px;
+    vertical-align: bottom;
+}
+
+.header__storage-caption {
+    color: #dfdfe1;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.header__storage-bar {
+    @include size(140px 4px);
+    background-color: $coal;
+}
+
+.header__storage-bar-fill {
+    @include size(10% 4px);
+    background-color: #53a0fd;
+}
+
 .breadcrumb {
     @extend %h2;
     @extend %uppercase;
