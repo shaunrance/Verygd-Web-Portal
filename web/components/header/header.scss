@@ -191,7 +191,7 @@
 }
 
 .header__storage-container {
-    @include size(120px 20px);
+    @include size(140px 20px);
     display: inline-block;
     margin-right: 44px;
     vertical-align: bottom;
@@ -204,7 +204,7 @@
 }
 
 .header__storage-bar {
-    @include size(120px 4px);
+    @include size(140px 4px);
     background-color: $coal;
 }
 
