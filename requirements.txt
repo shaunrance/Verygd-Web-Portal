@@ -10,3 +10,4 @@ sendgrid-django
 social-auth-core
 social-auth-app-django
 requests
+mysqlclient
