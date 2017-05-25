@@ -29,6 +29,13 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return model_dict
 
+    def update(self, instance, validated_data):
+        if 'password' in validated_data and validated_data['password']:
+            # hash the new password
+            validated_data['password'] = instance.__class__.hash_password(validated_data['password'])
+
+        return super(ProjectSerializer, self).update(instance, validated_data)
+
     def create(self, validated_data):
         # the owner param is implicit
         validated_data['owner'] = self.context['request'].member

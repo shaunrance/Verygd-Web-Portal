@@ -80,6 +80,24 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 403)
 
+        # update password for existing private project
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'password': 'tests'
+        })
+
+        self.assertEquals(response.status_code, 200)
+
+        # old password no longer works
+        response, msg = self.get_as(self.member, ''.join([detail_url, '?password=test']))
+
+        self.assertEquals(response.status_code, 403)
+
+        # new password works
+        response, msg = self.get_as(self.member, ''.join([detail_url, '?password=tests']))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password' not in msg)
+
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
 
