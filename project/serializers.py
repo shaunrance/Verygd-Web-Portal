@@ -7,6 +7,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         exclude = ('owner', )
+        extra_kwargs = {'password': {'write_only': True}}
 
     public = serializers.NullBooleanField(required=False)
 

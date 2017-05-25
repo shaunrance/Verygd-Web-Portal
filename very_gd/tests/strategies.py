@@ -16,7 +16,7 @@ class TestStrategies(MediaPortalTestStrategies):
             'url': just('/users/signup'),
             'method': just('post'),
             'params': fixed_dictionaries({
-                'name': self.get_firstlast_name_strategy(),
+                'full_name': self.get_firstlast_name_strategy(),
                 'email': ff.fake_factory(u'email', locale='en'),
                 'password': text(alphabet=alphabet, min_size=7),
             })

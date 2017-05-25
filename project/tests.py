@@ -62,6 +62,20 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(msg['public'], False)
 
+    def test_password_protect_private_project(self):
+        project_id = self.add_new_project(self.member, public=False, password='test')
+
+        detail_url = '/{0}/{1}'.format(self.endpoint, project_id)
+
+        response, msg = self.get_as(self.member, detail_url)
+
+        self.assertEquals(response.status_code, 403)
+
+        response, msg = self.get_as(self.member, ''.join([detail_url, '?password=test']))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password' not in msg)
+
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
 
