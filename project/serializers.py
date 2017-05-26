@@ -7,6 +7,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         exclude = ('owner', )
+        extra_kwargs = {'password': {'write_only': True}}
 
     public = serializers.NullBooleanField(required=False)
 
@@ -27,6 +28,13 @@ class ProjectSerializer(serializers.ModelSerializer):
             model_dict['content'].append(content_metadatum)
 
         return model_dict
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data and validated_data['password']:
+            # hash the new password
+            validated_data['password'] = instance.__class__.hash_password(validated_data['password'])
+
+        return super(ProjectSerializer, self).update(instance, validated_data)
 
     def create(self, validated_data):
         # the owner param is implicit
