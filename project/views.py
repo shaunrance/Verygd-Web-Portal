@@ -3,9 +3,8 @@ from media_portal.album.views import AlbumViewSet as BaseViewSet
 from project.models import Project
 from project.serializers import ProjectSerializer
 from project.permissions import ProjectPermissions
+from project.auth import PrivateProjectAuthentication
 from very_gd.views import RequestSetup
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 
 class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
@@ -13,24 +12,9 @@ class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
 
     serializer_class = ProjectSerializer
 
-    authentication_classes = BaseViewSet.authentication_classes
-    permission_classes = (IsAuthenticated, ProjectPermissions, )
+    authentication_classes = (PrivateProjectAuthentication, ) + BaseViewSet.authentication_classes
+    permission_classes = (ProjectPermissions, )
     pagination_class = BaseViewSet.pagination_class
-
-    def retrieve(self, request, *args, **kwargs):
-        project = self.get_object()
-        serializer = self.get_serializer(project)
-
-        password = request.query_params.get('password', None)
-        valid_password = False
-
-        if password:
-            valid_password = project.check_password(password)
-
-        if project.password and (not password or not valid_password):
-            return Response('this project is password-protected.', status=403)
-        else:
-            return Response(serializer.data)
 
     def filter_queryset(self, queryset):
         params = {}
@@ -41,10 +25,15 @@ class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
         if id:
             params['pk'] = id
 
-        if not password:
-            params['owner'] = self.request.user.member.group_owner
+        queryset = self.model.objects.filter(**params)
 
-        return self.model.objects.filter(**params)
+        if password:
+            queryset = queryset.filter(password__isnull=False)
+
+        if hasattr(self.request.user, 'member'):
+            queryset = queryset.filter(owner=self.request.user.member.group_owner)
+
+        return queryset
 
     def get_queryset(self):
         return self.model.objects.prefetch_related('scenes')
