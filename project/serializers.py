@@ -30,6 +30,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         return model_dict
 
     def update(self, instance, validated_data):
+        # remove password if setting to public
+        if 'public' in validated_data and validated_data['public'] and instance.private:
+            validated_data['password'] = None
+
         if 'password' in validated_data and validated_data['password']:
             # hash the new password
             validated_data['password'] = instance.__class__.hash_password(validated_data['password'])

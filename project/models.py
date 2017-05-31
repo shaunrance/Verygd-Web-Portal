@@ -26,6 +26,10 @@ class Project(PasswordProtectable, models.Model):
     featured_order = models.IntegerField(blank=True, null=True)
 
     @property
+    def private(self):
+        return not self.public
+
+    @property
     def media_group(self):
         return self.owner.media_group
 

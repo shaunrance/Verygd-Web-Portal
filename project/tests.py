@@ -112,6 +112,24 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 404)
 
+        # re-add password
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'password': 'test'
+        })
+
+        self.assertEquals(response.status_code, 200)
+
+        # making it public should remove the password-protection
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'public': True
+        })
+
+        self.assertEquals(response.status_code, 200)
+
+        response, msg = self.get_as(self.anonymous_member, public_url)
+
+        self.assertEquals(response.status_code, 200)
+
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
 
