@@ -59,7 +59,7 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
             valid_password = instance.check_password(password)
 
         if instance.password and (not password or not valid_password):
-            return Response('this project is password-protected.', status=403)
+            return Response('password-protected', status=403)
         else:
             return Response(serializer.data)
 
