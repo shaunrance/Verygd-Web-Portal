@@ -20,6 +20,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'name': str(instance.owner)
         }
 
+        model_dict['password_protected'] = instance.password is not None
+
         for content in instance.content:
             content_serializer = content.serializer(content, context=self.context)
 

@@ -77,6 +77,7 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 200)
         self.assertTrue('password' not in msg)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
 
         response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=tests']))
 
@@ -88,6 +89,7 @@ class TestProject(TestAPIBase):
         })
 
         self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
 
         # old password no longer works
         response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=test']))
@@ -106,6 +108,7 @@ class TestProject(TestAPIBase):
         }, format='json')
 
         self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
 
         # project is now private again
         response, msg = self.get_as(self.anonymous_member, public_url)
@@ -118,6 +121,7 @@ class TestProject(TestAPIBase):
         })
 
         self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
 
         # making it public should remove the password-protection
         response, msg = self.patch_as(self.member, detail_url, data={
@@ -125,10 +129,12 @@ class TestProject(TestAPIBase):
         })
 
         self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
 
         response, msg = self.get_as(self.anonymous_member, public_url)
 
         self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
 
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
