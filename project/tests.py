@@ -71,6 +71,10 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 403)
 
+        # project owner can access without a password
+        response, msg = self.get_as(self.member, detail_url)
+        self.assertEquals(response.status_code, 200)
+
         response, msg = self.get_as(self.anonymous_member, ''.join([detail_url, '?password=test']))
 
         self.assertEquals(response.status_code, 200)
@@ -105,9 +109,10 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(response.status_code, 200)
 
+        # project is now private again
         response, msg = self.get_as(self.anonymous_member, detail_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 403)
 
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
