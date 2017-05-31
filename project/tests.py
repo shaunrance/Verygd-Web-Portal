@@ -75,6 +75,10 @@ class TestProject(TestAPIBase):
         response, msg = self.get_as(self.member, detail_url)
         self.assertEquals(response.status_code, 200)
 
+        # project owner can access with (an ignored) password
+        response, msg = self.get_as(self.member, ''.join([detail_url, '?password=test']))
+        self.assertEquals(response.status_code, 200)
+
         response, msg = self.get_as(self.anonymous_member, ''.join([detail_url, '?password=test']))
 
         self.assertEquals(response.status_code, 200)

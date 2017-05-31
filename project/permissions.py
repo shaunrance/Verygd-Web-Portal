@@ -24,5 +24,5 @@ def has_valid_password(request, obj):
 class ProjectPermissions(BasePermission):
     post = is_authenticated & is_a_group_owner
     put = patch = is_authenticated & is_the_group_owner
-    get = (has_password & has_valid_password) | (is_authenticated & is_in_group)
+    get = (is_authenticated & is_in_group) | (has_password & has_valid_password)
     delete = is_authenticated & is_the_group_owner

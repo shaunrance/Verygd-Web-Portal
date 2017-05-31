@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class PrivateProjectAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        if 'password' in request.query_params and request.method == 'GET':
+        if 'password' in request.query_params and request.method == 'GET' and 'Authorization' not in request.META:
             project = project_pk = None
             path_parts = request.path.split('/')[1:]
 
