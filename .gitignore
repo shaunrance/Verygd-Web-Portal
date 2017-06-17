@@ -28,3 +28,5 @@ secret.yml
 /db.sqlite3
 
 verygd.pem
+
+/.idea
