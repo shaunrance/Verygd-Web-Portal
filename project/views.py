@@ -3,8 +3,12 @@ from media_portal.album.views import AlbumViewSet as BaseViewSet
 from project.models import Project
 from project.serializers import ProjectSerializer
 from project.permissions import ProjectPermissions
-from very_gd.views import RequestSetup
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from django.db.models import Q
+
+from very_gd.views import RequestSetup
 
 
 class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
@@ -16,17 +20,23 @@ class ProjectViewSet(viewsets.ModelViewSet, RequestSetup):
     permission_classes = (IsAuthenticated, ProjectPermissions, )
     pagination_class = BaseViewSet.pagination_class
 
-    def get_queryset(self):
-        params = {
-            'owner': self.request.user.member.group_owner
-        }
+    def filter_queryset(self, queryset):
+        params = {}
 
         id = self.request.query_params.get('id', None)
 
         if id:
             params['pk'] = id
 
-        return self.model.objects.filter(**params).prefetch_related('scenes')
+        queryset = self.model.objects.filter(**params)
+
+        if hasattr(self.request.user, 'member'):
+            queryset = queryset.filter(owner=self.request.user.member.group_owner)
+
+        return queryset
+
+    def get_queryset(self):
+        return self.model.objects.prefetch_related('scenes')
 
 
 class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, RequestSetup):
@@ -38,6 +48,20 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
     permission_classes = []
 
     lookup_field = 'short_uuid'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        password = request.query_params.get('password', None)
+        valid_password = False
+
+        if password:
+            valid_password = instance.check_password(password)
+
+        if instance.password and (not password or not valid_password):
+            return Response('password-protected', status=403)
+        else:
+            return Response(serializer.data)
 
     def filter_queryset(self, queryset):
         params = {}
@@ -62,4 +86,4 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
         return queryset
 
     def get_queryset(self):
-        return self.model.objects.filter(public=True).prefetch_related('scenes')
+        return self.model.objects.filter(Q(public=True) | Q(password__isnull=False)).prefetch_related('scenes')

@@ -36,7 +36,7 @@ class UserResetPasswordSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
 @admin.register(Member, site=admin_site)
 class MemberAdmin(admin.ModelAdmin):
     actions = ('delete_members', 'upgrade_to_premium', )
-    list_display = ('name', 'signed_up_via_social_auth', 'premium_user', 'total_allowed_in_bytes',
+    list_display = ('full_name', 'signed_up_via_social_auth', 'premium_user', 'total_allowed_in_bytes',
                     'total_content_in_bytes', 'total_content_bytes_left')
     readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', 'signed_up_via_social_auth', 'premium_user', )
 

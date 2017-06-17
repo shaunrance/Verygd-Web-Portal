@@ -3,6 +3,7 @@ import shortuuid
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from users.models import Member
+from project.mixins import PasswordProtectable
 
 
 def get_default_shortuuid():
@@ -10,7 +11,7 @@ def get_default_shortuuid():
 
 
 @python_2_unicode_compatible
-class Project(models.Model):
+class Project(PasswordProtectable, models.Model):
     short_uuid = models.CharField(max_length=22, unique=True, default=get_default_shortuuid, editable=False, null=False)
 
     name = models.CharField(max_length=32, blank=False, null=False)
@@ -23,6 +24,10 @@ class Project(models.Model):
 
     featured = models.BooleanField(default=False, blank=True, null=False)
     featured_order = models.IntegerField(blank=True, null=True)
+
+    @property
+    def private(self):
+        return not self.public
 
     @property
     def media_group(self):
