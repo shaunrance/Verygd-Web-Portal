@@ -824,10 +824,61 @@
     }
 }
 
+.modal-password {
+    border-bottom: 1px solid #DFDFDF;
+    border-top: 1px solid #DFDFDF;
+    padding: 10px 0;
+
+    .switch-on .toggle-switch__bar {
+        background: $green;
+    }
+}
+
+.modal-password__switch-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-password__switch {
+    position: relative;
+    top: 18px;
+}
+
+.modal-password__form {
+    display: flex;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.modal-password__input {
+    flex-grow: 3;
+    padding: 0 15px;
+}
+
+.modal-button.modal-password__save {
+    flex-grow: 1.5;
+    line-height: 1em;
+    margin-left: 10px;
+    padding: 10px;
+    width: auto;
+}
+
+.modal-password__footer {
+    border-bottom: 1px solid #DFDFDF;
+    margin-top: 20px;
+
+    p {
+        font-style: italic;
+    }
+
+    #share-link {
+        margin-bottom: 0;
+    }
+}
+
 @include media($tablet) {
 
     .modal-launch--container {
-
         padding-top: $header-height-tablet + 60px;
     }
 }

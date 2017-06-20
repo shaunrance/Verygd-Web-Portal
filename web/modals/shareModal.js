@@ -1,4 +1,5 @@
 /* global angular, Clipboard, $ */
+/* global angular, Clipboard, $ */
 angular.module('ua5App')
     .controller('shareModalController', ['$scope', '$rootScope', '$element', 'fields', 'close', 'projectFactory', function($scope, $rootScope, $element, fields, close, projectFactory) {
         var clipboard = new Clipboard('.modal-submit'); //jshint ignore:line
@@ -16,6 +17,7 @@ angular.module('ua5App')
         $scope.urlShowing = true;
         $scope.projectId = fields.project;
         $scope.sceneId = fields.scene;
+        $scope.projectPassword = '';
 
         $scope.close = function() {
             close({
@@ -35,6 +37,34 @@ angular.module('ua5App')
             close({
                 input: $scope.input.fields
             });
+        };
+
+        $scope.$watch('passwordOn', function(value) {
+            if (value === false) {
+                $scope.projectPassword = null;
+                $scope.savePassword();
+                $scope.project.password_protected = false;
+            }
+        });
+
+        $scope.savePassword = function() {
+            $scope.passwordSaved = false;
+            if ($scope.projectPassword === '') {
+                $scope.projectPassword = null;
+                $scope.project.password_protected = false;
+                $scope.passwordOn = false;
+            }
+            projectFactory.editProject($scope.project.id, {name: $scope.project.name, password: $scope.projectPassword}).then(function() {
+                if ($scope.projectPassword) {
+                    $scope.passwordSaved = true;
+                }
+            });
+        };
+
+        $scope.passwordKeyHandler = function(keyEvent) {
+            if (keyEvent.which === 13) {
+                $scope.savePassword();
+            }
         };
 
         $scope.emailSubmit = function() {
@@ -73,6 +103,8 @@ angular.module('ua5App')
                 } else {
                     $scope.publicProject = false;
                 }
+
+                $scope.passwordOn = $scope.project.password_protected;
             });
         }
 
