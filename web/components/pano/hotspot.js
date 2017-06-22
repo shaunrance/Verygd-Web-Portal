@@ -71,7 +71,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 var pointMaterial;
 
                 var coords = getCentroid(mesh);
-                pointGeometry = new THREE.SphereGeometry(15, 32, 32);
+                pointGeometry = new THREE.SphereGeometry(10, 32, 32);
                 pointMaterial = new THREE.MeshBasicMaterial({
                     color: 0x81e4ee,
                     transparent: true,
