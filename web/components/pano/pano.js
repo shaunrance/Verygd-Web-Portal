@@ -48,11 +48,13 @@ angular.module('ua5App')
                     return $scope.useVr;
                 }, function(newValue, oldValue) {
                     if (newValue !== oldValue) {
-                        scene.destroy();
-                        $$el.off();
                         useVr = newValue;
-                        scene = new BaseThreeScene();
-                        init();
+                        scene.setUseVR(useVr);
+                        if (useVr) {
+                            showCrosshair();
+                        } else {
+                            hideCrosshair();
+                        }
                         scene.resize();
                     }
                 });
@@ -124,6 +126,7 @@ angular.module('ua5App')
                             }
                         });
                         scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                        scene.resize();
                     }
 
                     $rootScope.renderer.setClearColor(componentToHex($scope.background));
@@ -187,10 +190,8 @@ angular.module('ua5App')
                     }
 
                     if (!hasInit) {
-                        if (useVr) {
-                            window.crosshair = crosshair = makeCrosshair();
-                        }
-
+                        crosshair = makeCrosshair();
+                        hideCrosshair();
                         cam = scene.camera();
                         scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                         hasInit = true;
@@ -424,7 +425,19 @@ angular.module('ua5App')
                     cam.add(frontMesh);
 
                     // return the mid crosshair, so we can animate it
-                    return {mid: midMesh, front: frontMesh};
+                    return {mid: midMesh, front: frontMesh, back: backMesh};
+                }
+
+                function hideCrosshair() {
+                    crosshair.front.material.opacity = 0;
+                    crosshair.mid.material.opacity = 0;
+                    crosshair.back.material.opacity = 0;
+                }
+
+                function showCrosshair() {
+                    crosshair.front.material.opacity = 0.9;
+                    crosshair.mid.material.opacity = 0.4;
+                    crosshair.back.material.opacity = 0.3;
                 }
 
                 // returns a width & height object
@@ -593,7 +606,6 @@ angular.module('ua5App')
                 });
 
                 init();
-                scene.resize();
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {
