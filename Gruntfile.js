@@ -226,6 +226,17 @@ module.exports = function(grunt) {
                     after_deploy: 'cd ' + secret.prod.path + '/current/ && mv _htaccessProd .htaccess'
                 }
             }
+        },
+        protractor: {
+            options: {
+                configFile: 'test/protractor-conf.js', // Default config file
+                keepAlive: true, // If false, the grunt process stops when the test fails.
+                noColor: false, // If true, protractor will not use colors in its output.
+                args: {
+                    // Arguments passed to the command
+                }
+            },
+            all: {}
         }
     });
 
@@ -324,4 +335,5 @@ module.exports = function(grunt) {
         'ssh_deploy:prod'
     ];
     grunt.registerTask('deploy', prodTasks);
+    grunt.registerTask('test', 'protractor');
 };
