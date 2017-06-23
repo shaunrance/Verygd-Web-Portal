@@ -73,6 +73,20 @@ grunt
 
 ---
 
+## Frontend E2E Testing
+
+### Setup
+```
+brew install selenium-server-standalone
+npm install -g protractor
+webdriver-manager update
+```
+
+### 
+Run the Selenium server: `webdriver-manager start`
+Run the grunt test task: `grunt test`
+
+
 ## Deployments
 
 ### Make a Build & Test
