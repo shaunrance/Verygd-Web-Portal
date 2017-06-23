@@ -43,7 +43,7 @@ angular.module('ua5App.projects')
 
             });
         };
-        $scope.title = 'projects';
+        $scope.title = 'My Projects';
         $scope.link = 'projects';
         $scope.emptyProjects = false;
 
@@ -181,6 +181,7 @@ angular.module('ua5App.projects')
 
                         project.cover_image = sceneImage + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000';
                     });
+                    $scope.projects.reverse();
                 }, function(error) {
 
                 });
