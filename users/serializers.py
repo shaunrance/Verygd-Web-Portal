@@ -25,7 +25,7 @@ class MemberCreateSerializer(BaseMemberCreateSerializer):
 class MemberSocialCreateSerializer(BaseMemberCreateSerializer):
     class Meta(MemberSerializer.Meta):
         model = Member
-        exclude = MemberSerializer.Meta.exclude + ('invites', 'name', 'email', 'password', )
+        exclude = MemberSerializer.Meta.exclude + ('invites', 'full_name', 'email', 'password', )
 
     provider = serializers.ChoiceField(choices=('facebook', 'google',), write_only=True, required=True)
     access_token = serializers.CharField(required=True, write_only=True)
