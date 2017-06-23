@@ -100,11 +100,11 @@ angular.module('ua5App')
                 .on('enter', function() {
                     $rootScope.$apply();
                     createGamePads();
+                    $rootScope.inVR = true;
                     $('.webvr-ui-button').addClass('webvr-ui--exit');
                 })
                 .on('exit', function() {
                     camera.quaternion.set(0, 0, 0, 1);
-                    camera.position.set(0, controls.userHeight, 0);
                     $rootScope.inVR = false;
                     $rootScope.$apply();
                     $('.webvr-ui-button').removeClass('webvr-ui--exit');
@@ -122,6 +122,7 @@ angular.module('ua5App')
                 })
                 .on('hide', function() {
                     $buttonUI.hide();
+                    $rootScope.inVR = true;
                     // On iOS there is no button to close fullscreen mode, so we need to provide one
                     if (window.enterVR.state === webvrui.State.PRESENTING_FULLSCREEN) {
                         $exit.show();
@@ -131,6 +132,7 @@ angular.module('ua5App')
                     $buttonUI.show();
                     $('.webvr-ui-button').removeClass('webvr-ui--exit');
                     $exit.hide();
+                    $rootScope.inVR = false;
                 })
             ;
 
@@ -149,10 +151,15 @@ angular.module('ua5App')
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.target.set(
-              camera.position.x + 0.15,
-              camera.position.y,
-              camera.position.z
+                camera.position.x + 0.15,
+                camera.position.y,
+                camera.position.z
             );
+            
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.target = new THREE.Vector3(Math.PI, 0, -Math.PI * 4);
+
             // controls.minPolarAngle = Math.PI / 2 - 0.6;
             // controls.maxPolarAngle = Math.PI / 2 + 0.6;
             controls.noPan = true;
@@ -433,6 +440,7 @@ angular.module('ua5App')
                 renderer.render(scene, camera);
                 effect.render(scene, camera);
             } else {
+                controls.update();
                 renderer.render(scene, camera);
             }
 
