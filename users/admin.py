@@ -36,7 +36,8 @@ class UserResetPasswordSettingsAdmin(BaseUserAdmin, admin.ModelAdmin):
 @admin.register(Member, site=admin_site)
 class MemberAdmin(admin.ModelAdmin):
     actions = ('delete_members', 'upgrade_to_premium', )
-    list_display = ('name', 'signed_up_via_social_auth', 'premium_user', )
+    list_display = ('full_name', 'signed_up_via_social_auth', 'premium_user', 'total_allowed_in_bytes',
+                    'total_content_in_bytes', 'total_content_bytes_left')
     readonly_fields = ('payment', 'group', 'user', 'total_content_bytes', 'signed_up_via_social_auth', 'premium_user', )
 
     def premium_user(self, instance):
@@ -44,6 +45,19 @@ class MemberAdmin(admin.ModelAdmin):
 
     def signed_up_via_social_auth(self, instance):
         return 'Yes' if hasattr(instance.user, 'social_user') and instance.user.social_user else ''
+
+    def total_content_in_bytes(self, instance):
+        return instance.total_content_bytes
+
+    def total_allowed_in_bytes(self, instance):
+        return instance.file_size_quota_bytes
+
+    def total_content_bytes_left(self, instance):
+        return instance.content_bytes_left
+
+    total_content_in_bytes.short_description = 'Total Content (Bytes)'
+    total_allowed_in_bytes.short_description = 'Total Allowed (Bytes)'
+    total_content_bytes_left.short_description = 'Total Space Left (Bytes)'
 
     def upgrade_to_premium(self, request, queryset):
         for member in queryset.all():

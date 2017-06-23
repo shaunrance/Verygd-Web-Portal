@@ -80,7 +80,7 @@ angular.module('ua5App.sign-up')
             $scope.disableButton = true;
 
             user = {
-                name: data.name,
+                full_name: data.name,
                 email: data.email,
                 password: data.password
             };

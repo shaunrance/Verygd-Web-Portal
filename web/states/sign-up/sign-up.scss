@@ -1,5 +1,4 @@
 .sign-up {
-    @include linear-gradient(to right, #5de0e9 0%, #5b9df9 50%, #ec39e5 100%);
     min-height: 100vh;
 
     .form-group {
@@ -69,7 +68,8 @@
         display: block;
         font-family: 'Open Sans', sans-serif;
         font-size: 16px;
-        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-top: 20px;
         text-align: center;
         text-decoration: none;
     }
@@ -94,7 +94,7 @@
     text-align: center;
 
     .logo {
-        width: 250px;
+        width: 188px;
 
         .vg-logo {
             @include size(100%);
@@ -140,7 +140,6 @@
         }
 
         .modal-header {
-            padding: 0;
 
             &::after {
                 display: none;

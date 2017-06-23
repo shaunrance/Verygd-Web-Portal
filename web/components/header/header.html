@@ -50,8 +50,13 @@
             <a ng-if="public" class="logo-link" href="/" data-ui-sref-opts="{reload: true}">
                 <img class="logo" src="assets/img/vg-logo-new-header.svg">
             </a>
-
             <div class="header__user-container" ng-hide="public">
+                <div class="header__storage-container">
+                    <div class="header__storage-caption">{{storageCurrentMB}} MB of {{storageMaxMB}} MB used</div>
+                    <div class="header__storage-bar">
+                        <div class="header__storage-bar-fill" style="width: {{storagePercent}}%; background-color: {{storageBarFillColor}}"></div>
+                    </div>
+                </div>
 <!-- 
                <div class="header__notification-container" ng-click="toggleNotification()">
                     <div class="header__notification-icon" ng-class="{'pending': notifications.length > 0}"></div>
@@ -74,7 +79,6 @@
 <!--                     <div class="header__avatar"></div> -->
                     <span>{{user.name}}</span>
                 </div>
-
                 <div class="header__user-menu" ng-hide="public" ng-class="{'show': userMenuToggle}">
                     <ul class="menu-list">
                         <li class="menu-list--item">

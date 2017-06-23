@@ -62,6 +62,80 @@ class TestProject(TestAPIBase):
 
         self.assertEquals(msg['public'], False)
 
+    def test_password_protect_private_project(self):
+        project_id = self.add_new_project(self.member, public=False, password='test')
+        project = Project.objects.get(pk=project_id)
+
+        detail_url = '/{0}/{1}'.format(self.endpoint, project_id)
+        public_url = '/public/project/{0}'.format(project.short_uuid)
+
+        response, msg = self.get_as(self.anonymous_member, public_url)
+
+        self.assertEquals(response.status_code, 403)
+
+        response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=test']))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password' not in msg)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
+
+        response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=tests']))
+
+        self.assertEquals(response.status_code, 403)
+
+        # update password for existing private project
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'password': 'tests'
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
+
+        # old password no longer works
+        response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=test']))
+
+        self.assertEquals(response.status_code, 403)
+
+        # new password works
+        response, msg = self.get_as(self.anonymous_member, ''.join([public_url, '?password=tests']))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password' not in msg)
+
+        # clear password
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'password': None
+        }, format='json')
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
+
+        # project is now private again
+        response, msg = self.get_as(self.anonymous_member, public_url)
+
+        self.assertEquals(response.status_code, 404)
+
+        # re-add password
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'password': 'test'
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and msg['password_protected'])
+
+        # making it public should remove the password-protection
+        response, msg = self.patch_as(self.member, detail_url, data={
+            'public': True
+        })
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
+
+        response, msg = self.get_as(self.anonymous_member, public_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue('password_protected' in msg and not msg['password_protected'])
+
     def test_num_of_private_projects(self):
         self.project_id = self.add_new_project(self.member, public=False)
 

@@ -79,8 +79,9 @@ angular.module('ua5App')
                 if (typeof id === 'string') {
                     dataFactory.get(id).then(function(response) {
                         if (
-                            response[0].payment &&
-                            (response[0].payment.plan_name === 'beta_monthly' || response[0].payment.plan_name === 'beta_yearly'))
+                            (response[0].payment &&
+                            (response[0].payment.plan_name === 'beta_monthly' || response[0].payment.plan_name === 'beta_yearly')) ||
+                            response[0].member_type === 'premium')
                         {
                             p.resolve(10000000);
                         } else {

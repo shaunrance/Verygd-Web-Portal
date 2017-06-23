@@ -71,7 +71,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 var pointMaterial;
 
                 var coords = getCentroid(mesh);
-                pointGeometry = new THREE.SphereGeometry(15, 32, 32);
+                pointGeometry = new THREE.SphereGeometry(10, 32, 32);
                 pointMaterial = new THREE.MeshBasicMaterial({
                     color: 0x81e4ee,
                     transparent: true,
@@ -154,7 +154,8 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 geometry = new THREE.CylinderGeometry(150, 150, spotHeight, 20, 1, true, spotPos, spotWidth);
                 mesh = new THREE.Mesh(geometry, material);
                 mesh.scale.set(-0.9, 0.9, 0.9);
-                mesh.position.y = CYL_OFFSET_Y + spotY - (spotHeight / 2);
+                mesh.position.y = spotY - (spotHeight / 2) - CYL_OFFSET_Y;
+                mesh.position.y += 8;
                 //mesh.rotation.y = 4.723;
             }
 
@@ -177,9 +178,9 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 mesh = new THREE.Mesh(geometry, material);
 
                 //scale our hotspot sphere to prevent artifacts
-                mesh.scale.x = 0.5;
-                mesh.scale.y = 0.5;
-                mesh.scale.z = 0.5;
+                mesh.scale.x = 0.9;
+                mesh.scale.y = 0.9;
+                mesh.scale.z = 0.9;
             }
 
             (function init() {

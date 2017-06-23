@@ -24,27 +24,76 @@ angular.module('ua5App.viewer')
                     project: ['projectFactory', '$stateParams', '$q', function(projectFactory, $stateParams, $q) {
                         return projectFactory.getProjectByPubId($stateParams.projectId).then(function(response) {
                             return response.data;
+                        }, function(error) {
+                            return error.data;
                         });
                     }]
                 }
             });
     }])
-    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', '$timeout', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state, $timeout) {
+    .controller('viewerCtrl', ['$scope', '$stateParams', 'project', 'sceneFactory', 'BrowserFactory', 'ngMeta', '$state', '$timeout', 'projectFactory', function($scope, $stateParams, project, sceneFactory, BrowserFactory, ngMeta, $state, $timeout, projectFactory) {
         var lastScene = 1;
-        $scope.scenes = project.content;
-        $scope.touch = BrowserFactory.hasTouch();
-        $scope.iFrame = BrowserFactory.isIframe();
-        $scope.mobile = BrowserFactory.isMobile();
-        $scope.firstImage = $scope.scenes[0].content !== 'undefined' ? $scope.scenes[0].content[0].url : 'assets/img/black-background.png';
-        $scope.useVr = false;
+        $scope.enabled = false;
 
-        $timeout(function() {
-            $scope.url = 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id;
-        }, 10);
+        $scope.getProject = function(password) {
+            projectFactory.getProjectByPubId($stateParams.projectId, password).then(function(response) {
+                project = response.data;
+                $scope.enabled = true;
+                init();
+            }, function() {
+                checkIfEnabled();
+            });
+        };
 
-        ngMeta.setTitle('Viewer');
+        function checkIfEnabled() {
+            if (typeof project === 'object') {
+                $scope.enabled = true;
+                init();
+            } else if (project === 'password-protected') {
+                var password = prompt('Password Required:', '');
+                if (password) {
+                    $scope.getProject(password);
+                }
+            }
+        }
 
-        $scope.isPublicViewer = ($state.current.name === 'publicViewer');
+        checkIfEnabled();
+
+        function init() {
+            console.log('project.content', project.content);
+            $scope.scenes = project.content;
+            $scope.touch = BrowserFactory.hasTouch();
+            $scope.iFrame = BrowserFactory.isIframe();
+            $scope.mobile = BrowserFactory.isMobile();
+            $scope.firstImage = $scope.scenes[0].content !== 'undefined' ? $scope.scenes[0].content[0].url : 'assets/img/black-background.png';
+            $scope.useVr = false;
+
+            $timeout(function() {
+                $scope.url = 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id;
+            }, 10);
+
+            ngMeta.setTitle('Viewer');
+
+            $scope.isPublicViewer = ($state.current.name === 'publicViewer');
+            filterScenes();
+            ngMeta.setTitle(project.name);
+            ngMeta.setTag('url', 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id);
+            ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark=https://app.very.gd/assets/img/logo-very_gd.png&markscale=5&markpad=20');
+            // right now we're going to simulate a scene change between two projects
+            $scope.$on('scene:change', function(event, data) {
+                var targetScene = parseInt(data.link, 10);
+
+                if (targetScene !== '') {
+                    _.each($scope.scenes, function(scene) {
+                        if (scene.id === targetScene) {
+                            $scope.currentScene = scene;
+                            applyContent();
+                            $scope.$apply();
+                        }
+                    });
+                }
+            });
+        }
 
         function applyContent() {
             $scope.background = $scope.currentScene.background;
@@ -93,27 +142,8 @@ angular.module('ua5App.viewer')
         $scope.exit = function() {
             window.history.back();
         };
-
-        // right now we're going to simulate a scene change between two projects
-        $scope.$on('scene:change', function(event, data) {
-            var targetScene = parseInt(data.link, 10);
-
-            if (targetScene !== '') {
-                _.each($scope.scenes, function(scene) {
-                    if (scene.id === targetScene) {
-                        $scope.currentScene = scene;
-                        applyContent();
-                        $scope.$apply();
-                    }
-                });
-            }
-        });
-
+        
         $('body').off('click');
 
-        filterScenes();
-        ngMeta.setTitle(project.name);
-        ngMeta.setTag('url', 'https://app.very.gd/p/' + project.short_uuid + '/' + $scope.currentScene.id);
-        ngMeta.setTag('image', $scope.currentScene.content[0].url + '?w=1200&h=628&fit=crop&crop=entropy&mark=https://app.very.gd/assets/img/logo-very_gd.png&markscale=5&markpad=20');
     }])
 ;

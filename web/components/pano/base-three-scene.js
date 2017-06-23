@@ -133,7 +133,7 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                     }
                 }
                 itemsMouseCanHit = [];
-                camera.position.set(0, 10, 0);
+                //camera.position.set(0, 10, 0);
             }
 
             function stopRendering() {
@@ -293,6 +293,9 @@ angular.module('suite').factory('BaseThreeScene', ['$rootScope', 'BrowserFactory
                 getCursorPosition: getCursorPosition,
                 startRendering: startRendering,
                 stopRendering: stopRendering,
+                setUseVR: function(_useVR) {
+                    useVR = _useVR;
+                },
                 resize: updateDimensions
             };
         };

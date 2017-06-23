@@ -1,5 +1,10 @@
-.sign-in {
+body.body--page-sign-in,
+body.body--page-sign-up,
+body.body--page-forgot-password {
     @include linear-gradient(to right, #5de0e9 0%, #5b9df9 50%, #ec39e5 100%);
+}
+
+.sign-in {
     min-height: 100vh;
 
     .form-group {
@@ -101,7 +106,7 @@
     text-align: center;
 
     .logo {
-        width: 250px;
+        width: 188px;
 
         .vg-logo {
             @include size(100%);
@@ -145,7 +150,6 @@
         }
 
         .modal-header {
-            padding: 0;
 
             &::after {
                 display: none;

@@ -15,20 +15,56 @@
         </div>
         <div class="modal-body">
             <div class="modal-panel" ng-hide="!urlShowing">
-                <div class="form-group" ng-hide="!publicProject">
-                    <p>Use the link below to share your project</p>
-                    <a id="share-link" target="_blank">{{url}}</a>
-                    <div class="modal-footer">
-                        <button class="modal-submit modal-button" type="button" data-clipboard-target="#share-link" ng-click="copyLink()">Copy Link</button>
+
+                <!-- Private Projects: Password Protect -->
+                <div ng-show="!publicProject">
+                    <p>A project must be made public or have a password in order to share.</p>
+
+                    <div class="modal-password">
+
+                        <div class="modal-password__switch-group">
+                            <p class="modal-password__label">Password Protect</p>
+
+                            <toggle-switch
+                                class="modal-password__switch"
+                                ng-model="passwordOn">
+                            </toggle-switch>
+                        </div>
+
+                        <div class="modal-password__form" ng-hide="!passwordOn">
+                            <input
+                                type="password"
+                                class="modal-password__input"
+                                ng-keypress="passwordKeyHandler($event)"
+                                placeholder="{{project.password_protected ? '************' : ''}}"
+                                ng-model="projectPassword">
+                            <button
+                                class="modal-submit modal-button modal-password__save"
+                                ng-click="savePassword()">Save</button>
+                        </div>
+                    </div>
+
+                    <div ng-hide="passwordOn" class="modal-footer">
+                        <button class="modal-submit modal-button" type="button" ng-click="makePublic()">Make Public</button>
+                    </div>
+                    <div class="modal-password__footer" ng-show="passwordSaved || project.password_protected">
+                        <button class="modal-submit modal-button" type="button" data-clipboard-target="#share-link">Copy Link</button>
+                        <p>Password protected URL: <a id="share-link" target="_blank">{{url}}</a></p>
                     </div>
                 </div>
-                <div class="form-group" ng-hide="publicProject">
-                    <p>Currently, a project must be made public in order to share</p>
-                    <div class="modal-footer">
-                        <button class="modal-submit modal-button" type="button" ng-click="makePublic()">Make Public</button>
+
+                <!-- Public Projects -->
+                <div ng-show="publicProject">
+                    <div class="form-group">
+                        <p>Use the link below to share your project</p>
+                        <a id="share-link-public" target="_blank">{{url}}</a>
+                        <div class="modal-footer">
+                            <button class="modal-submit modal-button" type="button" data-clipboard-target="#share-link-public" ng-click="copyLink()">Copy Link</button>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="modal-panel" ng-hide="urlShowing">
                 <div class="form-group" ng-hide="!publicProject">
                     <p>Use the HTML code below to embed on the web:</p>
@@ -38,7 +74,7 @@
                     </div>
                 </div>
                 <div class="form-group" ng-hide="publicProject">
-                    <p>Currently, a project must be made public in order to share</p>
+                    <p>A project must be made public in order to embed.</p>
                     <div class="modal-footer">
                         <button class="modal-submit modal-button" type="button" ng-click="makePublic()">Make Public</button>
                     </div>

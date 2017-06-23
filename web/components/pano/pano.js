@@ -27,9 +27,9 @@ angular.module('ua5App')
                 //var panoLink;
                 var panoramaMesh;
                 var sphereMesh;
-                var background = $scope.background;
                 var backgroundHex;
                 var planes;
+                var hasInit = false;
 
                 if ($scope.sceneType === 'sphere') {
                     backgroundHex = 0x000000;
@@ -49,11 +49,15 @@ angular.module('ua5App')
                     return $scope.useVr;
                 }, function(newValue, oldValue) {
                     if (newValue !== oldValue) {
-                        scene.destroy();
-                        $$el.off();
                         useVr = newValue;
                         scene = SpaceFactory;
                         init();
+                        scene.setUseVR(useVr);
+                        if (useVr) {
+                            showCrosshair();
+                        } else {
+                            hideCrosshair();
+                        }
                         scene.resize();
                     }
                 });
@@ -64,7 +68,7 @@ angular.module('ua5App')
                 }, function(newValue, oldValue) {
                     if (newValue !== oldValue) {
                         $scope.panoContent = newValue;
-                        reload();
+                        setTimeout(reload, 100);
                     }
                 });
 
@@ -107,38 +111,48 @@ angular.module('ua5App')
                 }
 
                 function init() {
-                    var i;
-                    var panels;
-                    var trueCount;
                     var pos = {x: 0, y: 0};
-                    $$el.mousedown(function() {
-                        pos = {x: cam.rotation.x, y: cam.rotation.y};
-                    });
 
-                    $$el.mouseup(function() {
-                        if (
-                            Math.abs(pos.x - cam.rotation.x) === 0 &&
-                            Math.abs(pos.y - cam.rotation.y) === 0
-                        ) {
-                            setTimeout(function() {
-                                clickHandler(scene.activeObject());
-                            }, 100);
-                        }
-                    });
+                    if (!hasInit) {
+                        $$el.mousedown(function() {
+                            pos = {x: cam.rotation.x, y: cam.rotation.y};
+                        });
+
+                        $$el.mouseup(function() {
+                            if (
+                                Math.abs(pos.x - cam.rotation.x) === 0 &&
+                                Math.abs(pos.y - cam.rotation.y) === 0
+                            ) {
+                                setTimeout(function() {
+                                    clickHandler(scene.activeObject());
+                                }, 100);
+                            }
+                        });
+                        scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                        scene.resize();
+                    }
+
+                    $rootScope.renderer.setClearColor(componentToHex($scope.background));
+                    $rootScope.renderer.sortObjects = false;
 
                     if ($scope.sceneType === 'sphere') {
                         backgroundHex = 0x000000;
                         $scope.background = '#000000';
+                        onBackgroundLoadComplete();
                     } else {
                         backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
                         if ($scope.equirectangularBackgroundImage) {
-                            makeSphere($scope.equirectangularBackgroundImage); //jshint ignore:line
+                            makeSphere($scope.equirectangularBackgroundImage, onBackgroundLoadComplete); //jshint ignore:line
+                        } else {
+                            onBackgroundLoadComplete();
                         }
                     }
-                    scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                }
 
-                    $rootScope.renderer.setClearColor(componentToHex($scope.background));
-                    $rootScope.renderer.sortObjects = false;
+                function onBackgroundLoadComplete() {
+                    var i;
+                    var panels;
+                    var trueCount;
 
                     trueCount = i = $scope.panoContent.length;
 
@@ -181,13 +195,13 @@ angular.module('ua5App')
                             break;
                     }
 
-                    if (useVr) {
-                        window.crosshair = crosshair = makeCrosshair();
+                    if (!hasInit) {
+                        crosshair = makeCrosshair();
+                        hideCrosshair();
+                        cam = scene.getCamera();
+                        scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                        hasInit = true;
                     }
-
-                    cam = scene.getCamera();
-                    scene.setOnClick(clickHandler);
-                    scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                 }
 
                 function makePanel(data, panel) {
@@ -215,7 +229,7 @@ angular.module('ua5App')
                                 transparent: true,
                                 map: texture,
                                 opacity: 1,
-                                alphaTest: 0.1
+                                alphaTest: 0.05
                             });
 
                             geometry = new THREE.PlaneBufferGeometry(size.width, size.height);
@@ -276,7 +290,7 @@ angular.module('ua5App')
                                 transparent: true,
                                 map: texture,
                                 opacity: 1,
-                                alphaTest: 0.1
+                                alphaTest: 0.05
                             });
 
                             function map(value, start1, stop1, start2, stop2) {
@@ -303,7 +317,7 @@ angular.module('ua5App')
                     );
                 }
 
-                function makeSphere(data) { //jshint ignore:line
+                function makeSphere(data, onLoadCallback) { //jshint ignore:line
                     var url = (typeof data === 'string') ? data : data.url;
                     var radius = 500;
                     var textureLoader = new THREE.TextureLoader();
@@ -336,6 +350,9 @@ angular.module('ua5App')
                             if (typeof data === 'object') {
                                 makeHotspots(data.hotspots, sphereMesh, texture.image.width, texture.image.height, radius);
                             }
+                            if (typeof onLoadCallback === 'function') {
+                                onLoadCallback();
+                            }
                         }
                     );
                 }
@@ -366,67 +383,10 @@ angular.module('ua5App')
                 // }
 
                 function reload() {
-                    var i;
-                    var trueCount;
-                    var panels;
                     // empty the scene, except for our camera:
                     scene.destroyAllSceneObjects(['PerspectiveCamera']);
-                    // make new panels
-                    panels = getPanels(i);
-                    panelCount = panels.length;
-                    background = $scope.background;
-                    if ($scope.sceneType === 'sphere') {
-                        backgroundHex = 0x000000;
-                        $scope.background = '#000000';
-                    } else {
-                        backgroundHex = $scope.background !== '' ? $scope.background.split('#').join('') : 0x000000;
-                        if ($scope.equirectangularBackgroundImage) {
-                            makeSphere($scope.equirectangularBackgroundImage);
-                        }
-                    }
-                    $rootScope.renderer.setClearColor(componentToHex(background));
-                    $rootScope.renderer.autoClear = false;
-                    $rootScope.renderer.sortObjects = false;
-                    trueCount = i = $scope.panoContent.length;
-
-                    if (trueCount < 3) {
-                        i = 4;
-                    }
-                    if (trueCount === 2) {
-                        $scope.panoContent[2] = _.clone($scope.panoContent[1]);
-                        $scope.panoContent[1] = undefined;
-                    }
-
-                    panels = getPanels(i);
-                    panelCount = panels.length;
-
-                    if (!$scope.sceneType) {
-                        if ($scope.isPanorama) {
-                            $scope.sceneType = 'cylinder';
-                        } else {
-                            $scope.sceneType = 'panel';
-                        }
-                    }
-
-                    switch ($scope.sceneType) {
-                        case 'cylinder':
-                            makePanorama($scope.panoContent[0]);
-                            break;
-                        case 'sphere':
-                            makeSphere($scope.panoContent[0]);
-                            break;
-                        default:
-                            while (i--) {
-                                planes = new THREE.Object3D();
-                                if ($scope.panoContent[i]) {
-                                    scene.addItem(planes, false);
-                                    makePanel($scope.panoContent[i], panels[i]);
-                                }
-                                planes.rotation.y = Math.PI / 2;
-                            }
-                            break;
-                    }
-
+                    // set it up again
+                    init();
                 }
 
                 function makeCrosshair() {
@@ -441,7 +401,7 @@ angular.module('ua5App')
                     var frontGeo;
                     var frontMat;
                     var frontMesh;
-                    var cam = scene.camera();
+                    var cam = scene.getCamera();
 
                     backGeo = new THREE.SphereGeometry(0.1, 25, 25);
                     backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
@@ -467,7 +427,19 @@ angular.module('ua5App')
                     cam.add(frontMesh);
 
                     // return the mid crosshair, so we can animate it
-                    return {mid: midMesh, front: frontMesh};
+                    return {mid: midMesh, front: frontMesh, back: backMesh};
+                }
+
+                function hideCrosshair() {
+                    crosshair.front.material.opacity = 0;
+                    crosshair.mid.material.opacity = 0;
+                    crosshair.back.material.opacity = 0;
+                }
+
+                function showCrosshair() {
+                    crosshair.front.material.opacity = 0.9;
+                    crosshair.mid.material.opacity = 0.4;
+                    crosshair.back.material.opacity = 0.3;
                 }
 
                 // returns a width & height object
@@ -623,7 +595,7 @@ angular.module('ua5App')
                 });
 
                 $scope.$on('$destroy', function() {
-                    scene.destroy();
+                    scene.destroyAllSceneObjects();
                 });
 
                 $$el.mousemove(function(event) {
@@ -636,7 +608,8 @@ angular.module('ua5App')
                 });
 
                 init();
-                scene.resize();
+                scene.setOnMouseOver(mouseOverHandler);
+                scene.setOnMouseOut(mouseOutHandler);
 
                 // TODO: Add touch
                 // $element.on('touchmove touchstart', function(event) {

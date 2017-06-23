@@ -27,6 +27,9 @@ class VeryGDMember(BaseMember, SocialPhotoMixin):
         return self.file_size_quota_bytes - self.total_content_bytes
 
     def create_project(self, project_cls, *args, **kwargs):
+        if kwargs['public'] is False and kwargs.get('password', None):
+            kwargs['password'] = project_cls.hash_password(kwargs['password'])
+
         project = project_cls.objects.create(**kwargs)
         project.save()
 
@@ -40,7 +43,10 @@ class VeryGDMember(BaseMember, SocialPhotoMixin):
 class Member(VeryGDMember):
     @property
     def file_size_quota_bytes(self):
-        return self.quota_settings.basic_quota_bytes
+        if self.has_premium_account:
+            return self.premiummember.file_size_quota_bytes
+        else:
+            return self.quota_settings.basic_quota_bytes
 
     def create_project(self, *args, **kwargs):
         if 'public' not in kwargs:

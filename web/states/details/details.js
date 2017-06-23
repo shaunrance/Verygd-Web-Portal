@@ -66,7 +66,7 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
         ];
 
         $scope.hotspotType = {};
-        $scope.hotspotType.type = 'Minimal'
+        $scope.hotspotType.type = 'Minimal';
 
         //Determine which background type is active (color, gradient, or image
         //when we grab the scene from the api
@@ -128,7 +128,12 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
                     getSceneInfo($scope.currentScene);
                 });
             } else if (args === 'projectPrivacy.active') {
-                projectFactory.editProject($scope.project.id, {name: $scope.project.name, public: !$scope.projectPrivacy.active}); //jshint ignore:line
+                var isPublic = !$scope.projectPrivacy.active;
+                var projectSettings = {name: $scope.project.name, public: isPublic}; //jshint ignore:line
+                if (isPublic) {
+                    projectSettings.password = null;
+                }
+                projectFactory.editProject($scope.project.id, projectSettings); //jshint ignore:line
 
                 if ($scope.projectPrivacy.active === true) {
                     $scope.privateProjectsRemaining.number--;
@@ -298,7 +303,6 @@ angular.module('ua5App.details', ['ngFileUpload', 'color.picker', 'xeditable'])
 
                 $scope.sceneColor = $scope.sceneColorActive === 'color' ? color : null;
                 $scope.sceneImage = $scope.sceneColorActive === 'image' ? $scope.sceneImage : null;
-                console.log($scope.hotspotType.type)
                 data = {
                     background: color,
                     equirectangular_background_image: $scope.sceneImage,

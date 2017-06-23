@@ -73,6 +73,20 @@ grunt
 
 ---
 
+## Frontend E2E Testing
+
+### Setup
+```
+brew install selenium-server-standalone
+npm install -g protractor
+webdriver-manager update
+```
+
+### 
+Run the Selenium server: `webdriver-manager start`
+Run the grunt test task: `grunt test`
+
+
 ## Deployments
 
 ### Make a Build & Test
@@ -90,17 +104,19 @@ To push to staging, run:
 grunt stage
 ```
 
-##Backend Setup
+# Backend
+
+## Setup
 
 This assumes you have python installed already.
 
-###Install virtualenv
+### Install virtualenv
 
 ```
 [sudo] pip install virtualenv
 ```
 
-###Create a virtualenv
+### Create a virtualenv
 
 Name a new virtualenv directory ('verygd' in this example).
 ```
@@ -112,8 +128,18 @@ source ~/verygd/bin/activate
 ```
 Keep this virtualenv active for subsequent steps, and in general before running any project-related commands.
 
-###Install Project Dependencies 
+### Install Project Dependencies 
 
 Change to the project directory and run
 
 ```pip install -r requirements.txt```
+
+## Deployment
+
+Obtain the very.gd pem file and securely copy the file to your `~/.ssh` directory.
+
+Assuming your `ssh-agent` is active, `ssh-add` the very.gd pem file to your `ssh-agent`.
+
+To deploy the latest from the `deployment` branch, you'll need to run the deployment fabric command.
+
+`fab -R staging deploy -u ubuntu`
