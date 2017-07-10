@@ -50,9 +50,9 @@ angular.module('ua5App.account', ['ngFileUpload'])
                     $state.go('sign-in');
                 } else {
                     $scope.user = user[0];
-                    $scope.name.name = $scope.user.name;
+                    $scope.name.name = $scope.user.full_name;
                     $scope.email.email = $scope.user.email;
-                    $scope.title = $scope.user.name;
+                    $scope.title = $scope.user.full_name;
                     $scope.link = 'account';
                 }
             }
