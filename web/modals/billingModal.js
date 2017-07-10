@@ -113,15 +113,19 @@ angular.module('ua5App')
                         }, 1500);
                     },
                     function(error) {
+                        var errors = [];
+                        $scope.errorMessage = true;
                         $scope.message = '<strong>There was an issue with your payment details</strong>';
-                        console.log(error);
-                        if (error.data && error.data.payment && error.data.payment.non_field_errors.length > 0) {
-                            _.each(error.data.payment.non_field_errors, function(message) {
-                                $scope.message += '<br>' + message;
-                            });
+
+                        if (error.data && error.data.payment && error.data.payment.non_field_errors) {
+                            errors = error.data.payment.non_field_errors;
+                        } else if (error.data.payment.error) {
+                            errors = [error.data.payment.error];
                         }
 
-                        $scope.errorMessage = true;
+                        _.each(errors, function(error) {
+                            $scope.message += '<br>' + error.message;
+                        });
                     }
                 );
             } else {
