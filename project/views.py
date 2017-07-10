@@ -86,4 +86,4 @@ class PublicProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
         return queryset
 
     def get_queryset(self):
-        return self.model.objects.filter(Q(public=True) | Q(password__isnull=False)).prefetch_related('scenes')
+        return self.model.objects.filter(Q(public=True)).prefetch_related('scenes')
