@@ -161,6 +161,7 @@ socket = /Applications/MAMP/tmp/mysql/mysql.sock
 ```
 
 - Run the server
+`source ~/verygd/bin/activate`
 `python manage.py runserver`
 
 ## Deployment
