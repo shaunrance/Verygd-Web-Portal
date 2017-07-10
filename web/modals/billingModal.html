@@ -92,6 +92,7 @@
                             ng-checked="annualChecked" />
                     </div> -->
                     <div class="account-info-section">
+                        <p class="modal-message" ng-class="{'error': errorMessage}" ng-bind-html="message"></p>
                         <span class="account-info-title account-info-data--number">
                             Credit Card Number
                         </span>
@@ -138,7 +139,6 @@
                             size="1"
                             ng-model="year.number"
                             required >
-                            <option value="2016">2016</option>
                             <option value="2017">2017</option>
                             <option value="2018">2018</option>
                             <option value="2019">2019</option>
@@ -181,6 +181,17 @@
                             ng-model="zip.number"
                             required />
                     </div>
+                    <div class="account-info-section">
+                        <span class="account-info-title account-info-data--name">
+                            Coupon Code
+                        </span>
+                    </div>
+                    <div class="account-info-section">
+                        <input
+                            class="account-info-data account-info-data--name"
+                            type="text"
+                            ng-model="coupon.name" />
+                    </div>
                     <div class="account-info-section account-info-section--submit">
                         <input
                             class="modal-submit modal-button"
@@ -199,8 +210,6 @@
                             value="Update Card">
 
                         <a class="modal-link" ng-click="showPayment()">Back</a>
-
-                        <p class="modal-message" ng-class="{'error': errorMessage}">{{message}}</p>
                     </div>
                 </form>
             </div>
