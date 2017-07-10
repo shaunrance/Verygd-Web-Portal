@@ -62,6 +62,7 @@ angular.module('ua5App', [
     .constant('APICONSTANTS', {
         //TODO add option for production server
         apiHost: 'https://api.very.gd',
+        //apiHost: 'http://0.0.0.0:8000',
         authCookie: {
             token: 'vg-user',
             user_id: 'vg-member',
