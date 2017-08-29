@@ -39,8 +39,8 @@
         &.dropped {
             background: rgba(86, 224, 234, 0.50);
             border: 2px solid #56E0EA;
-            min-height: 50px;
-            min-width: 50px;
+            min-height: 10px;
+            min-width: 10px;
         }
     }
 
@@ -61,4 +61,8 @@
         max-width: none;
         width: 100%;
     }
+}
+
+.ui-icon-gripsmall-diagonal-se {
+    background: none;
 }

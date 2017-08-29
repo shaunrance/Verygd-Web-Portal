@@ -33,12 +33,12 @@ class Panel(models.Model):
              update_fields=None):
         created = not self.pk
 
-        if created and not self.owner.has_premium_account:
+        if created:
             self.reached_scene_size_limit()
 
         super(Panel, self).save(force_insert, force_update, using, update_fields)
 
-        if created and not self.owner.has_premium_account:
+        if created:
             self.increment_scene_size()
 
     def delete(self, using=None, keep_parents=False):

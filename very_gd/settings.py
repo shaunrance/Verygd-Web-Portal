@@ -85,6 +85,7 @@ EMAIL_BACKEND = 'sgbackend.SendGridBackend'
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', None)
 
 STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', None)
+#STRIPE_API_KEY = os.getenv('STRIPE_API_KEY', 'sk_test_azjtonclpzeFWmxqiKgLjgAc')
 
 INTERCOM_SECURE_KEY = os.getenv('INTERCOM_SECURE_KEY', None)
 INTERCOM_APP_NAME = os.getenv('INTERCOM_APP_NAME', None)

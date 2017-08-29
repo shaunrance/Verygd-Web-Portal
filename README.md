@@ -134,6 +134,36 @@ Change to the project directory and run
 
 ```pip install -r requirements.txt```
 
+May need to install django
+`sudo pip install django --upgrade `
+
+### Local Setup
+- Get a django key at http://www.miniwebtool.com/django-secret-key-generator/
+- Edit your ~/.bash_profile:
+
+```
+export DEV_ENV=True
+export DJANGO_SECRET_KEY='YOUR KEY'
+
+```
+Run `source ~/.bash_profile`
+
+- Create a database, perhaps use MAMP
+- Edit `/etc/mysql.cnf` with your verygd db info:
+```
+[client]
+database = verygd
+host = localhost
+user = root
+password = root
+default-character-set = utf8
+socket = /Applications/MAMP/tmp/mysql/mysql.sock
+```
+
+- Run the server
+`source ~/verygd/bin/activate`
+`python manage.py runserver`
+
 ## Deployment
 
 Obtain the very.gd pem file and securely copy the file to your `~/.ssh` directory.

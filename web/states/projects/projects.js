@@ -50,7 +50,7 @@ angular.module('ua5App.projects')
         $scope.newProject = {};
 
         $scope.$on('addProject', function(event, args) {
-            args.isPublic = ($scope.limit < 1);
+            args.isPublic = true;
             addProject(args);
         });
 

@@ -81,7 +81,7 @@
 .modal-body {
     @include padding(20px 0);
     color: #999;
-    max-height: 430px;
+    max-height: 460px;
     overflow-y: auto;
 }
 
@@ -210,7 +210,7 @@
 
     .modal--payment {
         background-color: $grey;
-        margin: 0 auto;
+        margin: 0 auto 40px;
         max-width: 600px;
 
         .modal-header::after {
@@ -248,7 +248,7 @@
     }
 
     .modal--payment-options {
-        margin: 115px auto;
+        margin: 40px auto;
         position: relative;
         width: 450px;
     }
@@ -400,6 +400,7 @@
     }
 
     .modal-body {
+        max-height: none;
         padding: 0;
     }
 

@@ -96,7 +96,9 @@ angular.module('ua5App.billing')
                     exp_year: $scope.year.number,
                     cvc: $scope.cvc.number,
                     address_zip: $scope.zip.number
-                }
+                    //,coupon_code: 'VR_ENTHUSIAST'
+                },
+                coupon: ''
             };
 
             UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
