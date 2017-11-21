@@ -155,12 +155,16 @@ angular.module('ua5App')
             // Create a three.js scene.
             scene = new THREE.Scene();
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.target.set(
-                camera.position.x + 0.15,
-                camera.position.y,
-                camera.position.z
-            );
+            if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) { // jshint ignore:line
+                controls = new THREE.DeviceOrientationControls(camera, renderer.domElement);
+            } else {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.target.set(
+                    camera.position.x + 0.15,
+                    camera.position.y,
+                    camera.position.z
+                );
+            }
 
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
