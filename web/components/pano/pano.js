@@ -53,11 +53,11 @@ angular.module('ua5App')
                         scene = SpaceFactory;
                         init();
                         scene.setUseVR(useVr);
-                        if (useVr) {
-                            showCrosshair();
-                        } else {
-                            hideCrosshair();
-                        }
+                        // if (useVr) {
+                        //     showCrosshair();
+                        // } else {
+                        //     hideCrosshair();
+                        // }
                         scene.resize();
                     }
                 });
@@ -111,24 +111,23 @@ angular.module('ua5App')
                 }
 
                 function init() {
-                    var pos = {x: 0, y: 0};
-
                     if (!hasInit) {
-                        $$el.mousedown(function() {
-                            pos = {x: cam.rotation.x, y: cam.rotation.y};
-                        });
-
-                        $$el.mouseup(function() {
-                            if (
-                                Math.abs(pos.x - cam.rotation.x) === 0 &&
-                                Math.abs(pos.y - cam.rotation.y) === 0
-                            ) {
-                                setTimeout(function() {
-                                    clickHandler(scene.activeObject());
-                                }, 100);
-                            }
-                        });
+                        // $$el.mousedown(function() {
+                        //     pos = {x: cam.rotation.x, y: cam.rotation.y};
+                        // });
+                        //
+                        // $$el.mouseup(function() {
+                        //     if (
+                        //         Math.abs(pos.x - cam.rotation.x) === 0 &&
+                        //         Math.abs(pos.y - cam.rotation.y) === 0
+                        //     ) {
+                        //         setTimeout(function() {
+                        //             clickHandler(scene.activeObject());
+                        //         }, 100);
+                        //     }
+                        // });
                         scene.init($$el, $rootScope.renderer, onRender, mouseOverHandler, mouseOutHandler, useVr);
+                        scene.setOnClick(clickHandler);
                         scene.resize();
                     }
 
@@ -196,10 +195,10 @@ angular.module('ua5App')
                     }
 
                     if (!hasInit) {
-                        crosshair = makeCrosshair();
-                        hideCrosshair();
+                        //crosshair = makeCrosshair();
+                        // hideCrosshair();
                         cam = scene.getCamera();
-                        scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
+                        //scene.setCursorPosition($(element).width() / 2, $(element).height() / 2);
                         hasInit = true;
                     }
                 }
@@ -389,58 +388,17 @@ angular.module('ua5App')
                     init();
                 }
 
-                function makeCrosshair() {
-                    var backGeo;
-                    var backMat;
-                    var backMesh;
-
-                    var midGeo;
-                    var midMat;
-                    var midMesh;
-
-                    var frontGeo;
-                    var frontMat;
-                    var frontMesh;
-                    var cam = scene.getCamera();
-
-                    backGeo = new THREE.SphereGeometry(0.1, 25, 25);
-                    backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
-                    backMesh = new THREE.Mesh(backGeo, backMat);
-                    backMat.depthWrite = false;
-                    backMesh.position.set(0, 0, -5);
-
-                    midGeo = new THREE.SphereGeometry(0.06, 25, 25);
-                    midMat = new THREE.MeshBasicMaterial({color: 0xdddddd, opacity: 0.4, transparent: true});
-                    midMesh = new THREE.Mesh(midGeo, midMat);
-                    midMat.depthWrite = false;
-                    midMesh.position.set(0, 0, -5);
-
-                    frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
-                    frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.9, transparent: true});
-                    frontMat.depthWrite = false;
-                    frontMesh = new THREE.Mesh(frontGeo, frontMat);
-                    frontMesh.position.set(0, 0, -5);
-
-                    //add in in front of our camera:
-                    cam.add(backMesh);
-                    cam.add(midMesh);
-                    cam.add(frontMesh);
-
-                    // return the mid crosshair, so we can animate it
-                    return {mid: midMesh, front: frontMesh, back: backMesh};
-                }
-
-                function hideCrosshair() {
-                    crosshair.front.material.opacity = 0;
-                    crosshair.mid.material.opacity = 0;
-                    crosshair.back.material.opacity = 0;
-                }
-
-                function showCrosshair() {
-                    crosshair.front.material.opacity = 0.9;
-                    crosshair.mid.material.opacity = 0.4;
-                    crosshair.back.material.opacity = 0.3;
-                }
+                // function hideCrosshair() {
+                //     crosshair.front.material.opacity = 0;
+                //     crosshair.mid.material.opacity = 0;
+                //     crosshair.back.material.opacity = 0;
+                // }
+                //
+                // function showCrosshair() {
+                //     crosshair.front.material.opacity = 0.9;
+                //     crosshair.mid.material.opacity = 0.4;
+                //     crosshair.back.material.opacity = 0.3;
+                // }
 
                 // returns a width & height object
                 // it keeps the aspect of the uploaded image
@@ -598,14 +556,14 @@ angular.module('ua5App')
                     scene.destroyAllSceneObjects();
                 });
 
-                $$el.mousemove(function(event) {
-                    if (!useVr) {
-                        scene.setCursorPosition(
-                            event.clientX - $$el.offset().left + $(window).scrollLeft(),
-                            event.clientY - $$el.offset().top + $(window).scrollTop()
-                        );
-                    }
-                });
+                // $$el.mousemove(function(event) {
+                //     if (!useVr) {
+                //         scene.setCursorPosition(
+                //             event.clientX - $$el.offset().left + $(window).scrollLeft(),
+                //             event.clientY - $$el.offset().top + $(window).scrollTop()
+                //         );
+                //     }
+                // });
 
                 init();
                 scene.setOnMouseOver(mouseOverHandler);

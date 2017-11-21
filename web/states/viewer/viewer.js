@@ -1,4 +1,4 @@
-/* global angular, $, _ */
+/* global angular, _ */
 angular.module('ua5App.viewer')
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -142,8 +142,8 @@ angular.module('ua5App.viewer')
         $scope.exit = function() {
             window.history.back();
         };
-        
-        $('body').off('click');
+
+        //$('body').off('click');
 
     }])
 ;

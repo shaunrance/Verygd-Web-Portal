@@ -36,8 +36,9 @@
     "three.js": "threejs#dev",
     "webvr-boilerplate": "^0.4.8",
     "webvr-polyfill": "^1.0.0",
-    "webvr-ui": "googlevr/webvr-ui#^0.9.4",
-    "angular-xeditable": "0.7.0"
+    "webvr-ui": "googlevr/webvr-ui#bf85b5f5a8e8641e155612d0e20fff8d6c65b293",
+    "angular-xeditable": "0.7.0",
+    "ray-input": "borismus/ray-input#^0.1.3"
   },
   "resolutions": {
     "angular": "1.6.2",
