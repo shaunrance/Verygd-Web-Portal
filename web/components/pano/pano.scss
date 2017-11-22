@@ -14,9 +14,9 @@
 }
 
 .button-ui {
-    bottom: 20px;
-    left: 35px;
+    bottom: 13px;
     position: absolute;
+    right: 8px;
     z-index: 2;
 }
 
@@ -24,10 +24,16 @@
     z-index: 3;
 }
 
+.webvr-ui-logo {
+    height: 15px;
+    position: relative;
+    top: -1px;
+}
+
 .webvr-ui-svg-error,
 .webvr-ui-svg {
     fill: #fff;
-    transform: scale(1.8, 1.8);
+    transform: scale(0.8, 0.8);
 }
 
 .webvr-ui-button {
@@ -57,4 +63,27 @@
 
 .body--hotspot-hovered {
     cursor: pointer;
+}
+
+.webvr-button {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #fff;
+    display: inline-block;
+    height: 25px;
+}
+
+@media screen and (max-width: 767px) {
+
+    .webvr-button {
+        height: 21px;
+    }
+
+    .webvr-ui-logo {
+        top: -3px;
+    }
+
+    .webvr-ui-svg-error,
+    .webvr-ui-svg {
+        transform: scale(0.6, 0.6);
+    }
 }

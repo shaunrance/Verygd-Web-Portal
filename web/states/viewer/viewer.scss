@@ -1,5 +1,5 @@
 .viewer__nav {
-    @include position(fixed, null 15px 15px null);
+    @include position(fixed, null 50px 13px null);
     z-index: 10;
 
     > * {
@@ -12,9 +12,9 @@
 }
 
 .viewer__exit {
+    background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid $white;
     color: #fff;
-    margin-right: 20px;
     margin-top: 16px;
     padding: 2px 12px;
 }
