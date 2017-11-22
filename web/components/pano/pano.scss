@@ -36,7 +36,7 @@
 
     .webvr-ui-svg,
     .webvr-ui-svg-error {
-        display: initial;
+        display: block;
         margin-left: 0;
         margin-top: 0;
         position: absolute;
@@ -48,7 +48,7 @@
 
     .webvr-ui-svg-error,
     .webvr-ui-svg-exit {
-        margin-top: -4px;
+        margin-top: -5px;
     }
 }
 
@@ -58,7 +58,6 @@
 
 .webvr-ui-logo {
     height: 15px;
-    left: -11px;
     position: relative;
     top: 2px;
     width: 23px;
@@ -130,7 +129,7 @@
         }
 
         .webvr-ui-svg {
-            margin-top: 3px;
+            margin-top: 4px;
         }
     }
 
