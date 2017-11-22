@@ -13,6 +13,11 @@
     z-index: 1;
 }
 
+.viewer__cta {
+    position: relative;
+    top: 5px;
+}
+
 .button-ui {
     bottom: 13px;
     position: absolute;
@@ -41,7 +46,8 @@
         margin-top: -1px;
     }
 
-    .webvr-ui-svg-error {
+    .webvr-ui-svg-error,
+    .webvr-ui-svg-exit {
         margin-top: -4px;
     }
 }
@@ -101,6 +107,12 @@
 }
 
 @media screen and (max-width: 767px) {
+
+    .viewer__cta {
+        margin-top: 10px;
+        padding: 0 4px;
+        transform: scale(0.8);
+    }
 
     .button-ui {
         bottom: 10px;
