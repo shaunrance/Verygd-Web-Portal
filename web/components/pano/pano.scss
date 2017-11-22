@@ -108,8 +108,10 @@
 @media screen and (max-width: 767px) {
 
     .viewer__cta {
+        left: -10px;
         margin-top: 10px;
         padding: 0 4px;
+        position: relative;
         transform: scale(0.8);
     }
 
