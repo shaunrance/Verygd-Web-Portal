@@ -18,6 +18,32 @@
     position: absolute;
     right: 8px;
     z-index: 2;
+
+    .webvr-ui-button {
+        border: none;
+        height: 21px;
+        min-width: 0;
+    }
+
+    .webvr-ui-title {
+        display: none !Important;
+    }
+
+    .webvr-ui-svg,
+    .webvr-ui-svg-error {
+        display: initial;
+        margin-left: 0;
+        margin-top: 0;
+        position: absolute;
+    }
+
+    .webvr-ui-svg {
+        margin-top: -1px;
+    }
+
+    .webvr-ui-svg-error {
+        margin-top: -4px;
+    }
 }
 
 .exit-btn {
@@ -26,8 +52,10 @@
 
 .webvr-ui-logo {
     height: 15px;
+    left: -11px;
     position: relative;
-    top: -1px;
+    top: 2px;
+    width: 23px;
 }
 
 .webvr-ui-svg-error,
@@ -74,12 +102,24 @@
 
 @media screen and (max-width: 767px) {
 
+    .button-ui {
+        bottom: 10px;
+    }
+
     .webvr-button {
         height: 21px;
     }
 
     .webvr-ui-logo {
-        top: -3px;
+        top: -4px;
+
+        .webvr-ui-svg-error {
+            margin-top: 0;
+        }
+
+        .webvr-ui-svg {
+            margin-top: 3px;
+        }
     }
 
     .webvr-ui-svg-error,
