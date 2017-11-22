@@ -21,13 +21,14 @@
 .button-ui {
     bottom: 13px;
     position: absolute;
-    right: 8px;
+    right: 15px;
     z-index: 2;
 
     .webvr-ui-button {
         border: none;
-        height: 21px;
+        height: 14px;
         min-width: 0;
+        padding: 0;
     }
 
     .webvr-ui-title {
@@ -36,19 +37,27 @@
 
     .webvr-ui-svg,
     .webvr-ui-svg-error {
+        bottom: 0 !important;
         display: block;
+        left: 0 !important;
         margin-left: 0;
         margin-top: 0;
+        padding: 0;
         position: absolute;
+        right: 0 !important;
+        top: -2px;
+    }
+
+    .webvr-ui-svg-error {
+        left: 0px !important;
+        top: -2px;
     }
 
     .webvr-ui-svg {
-        margin-top: -1px;
-    }
-
-    .webvr-ui-svg-error,
-    .webvr-ui-svg-exit {
-        margin-top: -5px;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: 1px;
     }
 }
 
@@ -57,11 +66,14 @@
 }
 
 .webvr-ui-logo {
-    height: 15px;
+    height: 18px;
+    left: 1px;
     position: relative;
-    top: 2px;
-    width: 23px;
+    top: 3px;
+    width: 24px;
 }
+
+
 
 .webvr-ui-svg-error,
 .webvr-ui-svg {
@@ -72,6 +84,7 @@
 .webvr-ui-button {
     background: transparent;
     border: none;
+    display: block !important;
 
     .webvr-ui-svg-error {
         display: none;
@@ -101,38 +114,40 @@
 .webvr-button {
     background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid #fff;
-    display: inline-block;
     height: 25px;
+    width: 28px;
 }
 
 @media screen and (max-width: 767px) {
 
     .viewer__cta {
-        left: -10px;
+        left: 0;
         margin-top: 10px;
         padding: 0 4px;
         position: relative;
         transform: scale(0.8);
     }
 
-    .button-ui {
-        bottom: 10px;
+    .webvr-ui-logo {
+        left: 0;
+        top: 1px;
     }
 
     .webvr-button {
         height: 21px;
+        width: 25px;
     }
 
-    .webvr-ui-logo {
-        top: -4px;
+    .webvr-ui-svg-error {
+        bottom: 0 !important;
+        left: -1px !important;
+        right: 0 !important;
+        top: -5px;
+    }
 
-        .webvr-ui-svg-error {
-            margin-top: 0;
-        }
-
-        .webvr-ui-svg {
-            margin-top: 4px;
-        }
+    .webvr-ui-svg {
+        left: 1px;
+        top: 1px;
     }
 
     .webvr-ui-svg-error,
