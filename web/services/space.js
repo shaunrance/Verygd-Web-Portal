@@ -1,4 +1,4 @@
-/* global angular, THREE, $, webvrui, _ */
+/* global angular, THREE, $, webvrui, _, TweenMax */
 angular.module('ua5App')
     .factory('SpaceFactory', ['$rootScope', '$q', function($rootScope, $q) {
         var scene;
@@ -8,6 +8,7 @@ angular.module('ua5App')
         var lastRender = 0;
         var daydreamPad;
         var vivePad;
+        var gearPad;
         var mouse = new THREE.Vector2();
         var itemsMouseCanHit = [];
         var previousIntersectId = false;
@@ -17,6 +18,8 @@ angular.module('ua5App')
         var renderItems = [];
         var activeElement;
         var vrControls;
+        var usingCrosshair = false;
+        var crossHair;
 
         var onClick = function() {};
 
@@ -32,11 +35,12 @@ angular.module('ua5App')
         var renderer = new THREE.WebGLRenderer();
 
         // Create perspective camera used in VR
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 20000);
 
         // Create WebVR UI Enter VR Button
         var options = {
-            injectCSS: false,
+            injectCSS: true,
+            color: 'black',
             textEnterVRTitle: ' ',
             textExitVRTitle: ' ',
             textVRNotFoundTitle: ' '
@@ -46,12 +50,12 @@ angular.module('ua5App')
         var CONTROLLER = {
             MOUSE: 'controllerMouse',
             VIVE: 'controllerVive',
-            DAYDREAM: 'controllerDaydream'
+            DAYDREAM: 'controllerDaydream',
+            GEAR: 'controllerGear'
         };
 
         // We'll use this to save the last position, to detect movement
         var savedVive = -1;
-        var savedDaydream = -1;
 
         var activeController;
         var $space;
@@ -70,14 +74,17 @@ angular.module('ua5App')
         function isCardboard() {
             var _isCardboard = false;
             navigator.getVRDisplays()
-            .then(function(displays) {
-                for (var i = 0; i < displays.length; i++) {
-                    if (displays[i].displayName.indexOf('Cardboard') > -1) {
-                        _isCardboard = true;
+                .then(function(displays) {
+                    for (var i = 0; i < displays.length; i++) {
+                        if (
+                            displays[i].displayName.indexOf('Cardboard') > -1 ||
+                            displays[i].displayName.indexOf('Gear') > -1
+                        ) {
+                            _isCardboard = true;
+                        }
                     }
-                }
-                defer.resolve(_isCardboard);
-            });
+                    defer.resolve(_isCardboard);
+                });
             return defer.promise;
         }
 
@@ -116,7 +123,6 @@ angular.module('ua5App')
                 })
                 .on('error', function(error) {
                     //document.getElementById('learn-more').style.display = 'inline';
-                    console.error(error);
                     $rootScope.inVR = false;
                     $('.webvr-ui-button').addClass('webvr-ui--exit');
                 })
@@ -149,13 +155,17 @@ angular.module('ua5App')
             // Create a three.js scene.
             scene = new THREE.Scene();
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.target.set(
-                camera.position.x + 0.15,
-                camera.position.y,
-                camera.position.z
-            );
-            
+            if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) { // jshint ignore:line
+                controls = new THREE.DeviceOrientationControls(camera, renderer.domElement);
+            } else {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.target.set(
+                    camera.position.x + 0.15,
+                    camera.position.y,
+                    camera.position.z
+                );
+            }
+
             controls.enableDamping = true;
             controls.dampingFactor = 0.25;
             controls.target = new THREE.Vector3(Math.PI, 0, -Math.PI * 4);
@@ -193,6 +203,52 @@ angular.module('ua5App')
             ;
 
             $(renderer.domElement).on('click', clickhandler);
+
+            function addVRClickListener(clickCallback) {
+                var lastButtonState = [];
+                var presentingDisplay = null;
+
+                // Set up a loop to check gamepad state while any VRDisplay is presenting.
+                function onClickListenerFrame() {
+                    var gamepads;
+                    // Only reschedule the loop if a display is still presenting.
+                    if (presentingDisplay && presentingDisplay.isPresenting) {
+                        presentingDisplay.requestAnimationFrame(onClickListenerFrame);
+                    }
+
+                    gamepads = navigator.getGamepads();
+                    for (var i = 0; i < gamepads.length; i++) {
+                        var gamepad = gamepads[i];
+                        // Ensure the gamepad is valid and has buttons.
+                        if (gamepad &&
+                            gamepad.buttons.length) {
+                            var lastState = lastButtonState[i] || false;
+                            var newState = gamepad.buttons[0].pressed;
+                            // If the primary button state has changed from not pressed to pressed
+                            // over the last frame then fire the callback.
+
+                            if (newState && !lastState) {
+                                clickCallback(gamepad);
+                            }
+                            lastButtonState[i] = newState;
+                        }
+                    }
+                }
+
+                window.addEventListener('vrdisplaypresentchange', function(event) {
+                    if (event.display.isPresenting) {
+                        var scheduleFrame = !presentingDisplay;
+                        presentingDisplay = event.display;
+                        if (scheduleFrame) {
+                            onClickListenerFrame();
+                        }
+                    } else if (presentingDisplay === event.display) {
+                        presentingDisplay = null;
+                    }
+                });
+            }
+            addVRClickListener(clickhandler);
+
             $(renderer.domElement).on('mousemove', function(event) {
                 if (!$rootScope.inVR) {
                     activeController = CONTROLLER.MOUSE;
@@ -220,18 +276,22 @@ angular.module('ua5App')
         }
 
         function clickhandler() {
+            if (crossHair) {
+                TweenMax.to(crossHair.scale, 0.5, {x: 2, y: 2});
+                TweenMax.to(crossHair.scale, 0.5, {x: 1, y: 1, delay: 0.5});
+            }
             setTimeout(function() {
                 var el = getHoveredElements();
                 if (el) {
                     el = scene.getObjectById(el, true);
                     onClick(el);
                 }
-
             }, 100);
         }
 
         function createGamePads() {
             var lineGeometry;
+
             if (gamePadsCreated) {
                 return;
             }
@@ -239,12 +299,12 @@ angular.module('ua5App')
 
             isCardboard().then(function(value) {
                 if (value) {
+                    activeController = CONTROLLER.MOUSE;
                     $rootScope.inVR = true;
-                    makeCrosshair();
+                    crossHair = makeCrosshair();
                     setCursorPosition($(renderer.domElement).width() / 2, $(renderer.domElement).height() / 2);
                 }
             });
-
             if (typeof navigator.getGamepads === 'undefined') {
                 return;
             }
@@ -260,8 +320,17 @@ angular.module('ua5App')
             vivePad.addEventListener('triggerup', clickhandler);
             vivePad.name = 'controller';
 
-            scene.add(daydreamPad);
+            gearPad = new THREE.GearVRController(0);
+            gearPad.standingMatrix = vrControls.getStandingMatrix();
+            gearPad.addEventListener('touchpadup', clickhandler);
+            gearPad.addEventListener('triggerup', clickhandler);
+            gearPad.addEventListener('axischanged', clickhandler);
+
+            gearPad.name = 'controller';
+
+            // scene.add(daydreamPad);
             scene.add(vivePad);
+            scene.add(gearPad);
 
             daydreamPointer = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({linewidth: 3, color: 0x000000}));
             daydreamPointer.geometry.addAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 30], 3));
@@ -288,6 +357,8 @@ angular.module('ua5App')
             var frontGeo;
             var frontMat;
             var frontMesh;
+
+            usingCrosshair = true;
 
             backGeo = new THREE.SphereGeometry(0.1, 25, 25);
             backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
@@ -324,20 +395,19 @@ angular.module('ua5App')
             var matrix;
             var direction;
             var globalControllerPos;
-            var prevObject;
 
-            if (daydreamPad) {
-                daydreamPad.update();
-
-                // Check to see if Daydream controller is moving
-                if (daydreamPad.position && daydreamPad.position.x) {
-                    xPos = Math.round(daydreamPad.position.x * 10) / 10;
-                    if (savedDaydream !== xPos) {
-                        activeController = CONTROLLER.DAYDREAM;
-                    }
-                    savedDaydream = xPos;
-                }
-            }
+            // if (daydreamPad) {
+            //     daydreamPad.update();
+            //
+            //     // Check to see if Daydream controller is moving
+            //     if (daydreamPad.position && daydreamPad.position.x) {
+            //         xPos = Math.round(daydreamPad.position.x * 10) / 10;
+            //         if (savedDaydream !== xPos) {
+            //             activeController = CONTROLLER.DAYDREAM;
+            //         }
+            //         savedDaydream = xPos;
+            //     }
+            // }
 
             if (vivePad) {
                 vivePad.update();
@@ -396,9 +466,8 @@ angular.module('ua5App')
                 if (previousIntersectId !== currentIntersectId) {
 
                     if (previousIntersectId) {
-                        prevObject = scene.getObjectById(previousIntersectId, true);
-                        if (typeof prevObject === 'object') {
-                            onMouseOut(prevObject);
+                        onMouseOut(scene.getObjectById(previousIntersectId, true));
+                        if (scene.getObjectById(previousIntersectId, true)) {
                             scene.getObjectById(previousIntersectId, true).hovered = false;
                         }
                     }
@@ -413,10 +482,9 @@ angular.module('ua5App')
             } else {
                 //-- get the items that have been removed
                 if (previousIntersectId) {
-                    prevObject = scene.getObjectById(previousIntersectId, true);
-                    if (typeof prevObject === 'object') {
-                        onMouseOut(prevObject);
-                        prevObject.hovered = false;
+                    onMouseOut(scene.getObjectById(previousIntersectId, true));
+                    if (scene.getObjectById(previousIntersectId, true)) {
+                        scene.getObjectById(previousIntersectId, true).hovered = false;
                     }
                     previousIntersectId = false;
                 }

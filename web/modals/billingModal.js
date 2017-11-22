@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, _ */
 angular.module('ua5App')
     .controller('billingModalController', ['$timeout', '$scope', '$rootScope', '$state', '$element', 'fields', 'close', 'UsersResource', 'AuthResource', '$cookies', 'APICONSTANTS', function($timeout, $scope, $rootScope, $state, $element, fields, close, UsersResource, AuthResource, $cookies, APICONSTANTS) {
         var userId = $cookies.get(APICONSTANTS.authCookie.user_id);
@@ -12,6 +12,7 @@ angular.module('ua5App')
         $scope.year = {};
         $scope.cvc = {};
         $scope.zip = {};
+        $scope.coupon = {};
 
         $scope.title = 'Pricing';
         $scope.price = 19;
@@ -84,7 +85,8 @@ angular.module('ua5App')
                         exp_year: $scope.year.number,
                         cvc: $scope.cvc.number,
                         address_zip: $scope.zip.number
-                    }
+                    },
+                    coupon: $scope.coupon.name
                 };
 
                 UsersResource.user().update({id: userId, payment: paymentData}).$promise.then(
@@ -111,8 +113,19 @@ angular.module('ua5App')
                         }, 1500);
                     },
                     function(error) {
-                        $scope.message = 'There was an issue with your payment details. Please try again.';
+                        var errors = [];
                         $scope.errorMessage = true;
+                        $scope.message = '<strong>There was an issue with your payment details</strong>';
+
+                        if (error.data && error.data.payment && error.data.payment.non_field_errors) {
+                            errors = error.data.payment.non_field_errors;
+                        } else if (error.data.payment.error) {
+                            errors = [error.data.payment.error];
+                        }
+
+                        _.each(errors, function(error) {
+                            $scope.message += '<br>' + error.message;
+                        });
                     }
                 );
             } else {

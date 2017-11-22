@@ -11,7 +11,7 @@ from media_portal.payment.views import available_stripe_plans
 from media_portal.policy.urls import urlpatterns as policy_urls
 from media_portal.admin import admin_site
 
-from project.views import ProjectViewSet, PublicProjectViewSet
+from project.views import ProjectViewSet, PublicProjectViewSet, PublicProjectsViewSet
 from scene.views import SceneViewSet
 from panel.views import PanelImageViewSet
 
@@ -23,6 +23,7 @@ router.register(r'users', MembersViewSet, base_name='users')
 
 router.register(r'project', ProjectViewSet, base_name='project')
 
+router.register(r'public/project$', PublicProjectsViewSet, base_name='public_projects')
 router.register(r'public/project', PublicProjectViewSet, base_name='public_project')
 
 router.register(r'panel', PanelImageViewSet, base_name='panel')

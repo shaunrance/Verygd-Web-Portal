@@ -5,6 +5,7 @@ config:
             vendor:
                 src:
                     - web/bower_components/angular/angular.js
+                    - web/bower_components/webvr-polyfill/build/webvr-polyfill.js
                     - web/bower_components/angulartics/dist/angulartics.min.js
                     - web/bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js
                     - web/bower_components/jquery/dist/jquery.min.js
@@ -29,9 +30,9 @@ config:
                     - web/bower_components/three.js/examples/js/controls/VRControls.js
                     - web/bower_components/three.js/examples/js/effects/VREffect.js
                     - web/bower_components/three.js/examples/js/vr/ViveController.js
-                    - web/bower_components/three.js/examples/js/vr/DaydreamController.js
+                    - web/bower_components/three.js/examples/js/vr/ViveController.js
+                    - web/bower_components/three.js/examples/js/vr/GearVRController.js
                     - web/bower_components/webvr-ui/build/webvr-ui.js
-                    - web/bower_components/webvr-polyfill/build/webvr-polyfill.js
                     - web/bower_components/three.js/examples/js/effects/StereoEffect.js
                     - web/bower_components/three.js/examples/js/controls/DeviceOrientationControls.js
                     - web/bower_components/three.js/examples/js/controls/OrbitControls.js
@@ -45,6 +46,7 @@ config:
                     - web/bower_components/angular-cookies/angular-cookies.min.js
                     - web/bower_components/clipboard/dist/clipboard.min.js
                     - web/bower_components/jquery-ui/jquery-ui.js
+                    - web/bower_components/THREE.VRController/VRController.js
                 dest: web/_build/vendor.js
             app:
                 src:

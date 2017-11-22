@@ -116,8 +116,9 @@
           ga('create', 'UA-82267205-3', 'auto');
           ga('send', 'pageview');
 
-          var WebVRConfig = {
-              BUFFER_SCALE: 1
+          window.WebVRConfig = {
+              BUFFER_SCALE: 1,
+              ENABLE_DEPRECATED_API: true
           };
         </script>
         <!-- @if PRODUCTION='true' -->
@@ -132,6 +133,7 @@
         <!-- @endif -->
         <!-- @if PRODUCTION='false' -->
         <!-- start bower_components -->
+        <script src="bower_components/webvr-polyfill/build/webvr-polyfill.js"></script>
         <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
         <script src="bower_components/angulartics-google-analytics/dist/angulartics-google-analytics.min.js"></script>
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -154,6 +156,7 @@
         <script src="bower_components/angular-modal-service/dst/angular-modal-service.min.js"></script>
         <script src="bower_components/modernizr/modernizr.js"></script>
         <script src="bower_components/three.js/build/three.js"></script>
+        <script src="bower_components/ray-input/build/ray.js"></script>
 
         <!-- <script src="bower_components/three.js/build/three.min.js"></script> -->
         <script src="bower_components/three.js/examples/js/effects/StereoEffect.js"></script>
@@ -174,8 +177,9 @@
         <script src="bower_components/three.js/examples/js/effects/VREffect.js"></script>
         <script src="bower_components/three.js/examples/js/vr/ViveController.js"></script>
         <script src="bower_components/three.js/examples/js/vr/DaydreamController.js"></script>
+        <script src="bower_components/three.js/examples/js/vr/GearVRController.js"></script>
         <script src="bower_components/webvr-ui/build/webvr-ui.js"></script>
-        <script src="bower_components/webvr-polyfill/build/webvr-polyfill.js"></script>
+        <script src="bower_components/THREE.VRController/VRController.js"></script>
 
         <!-- end bower_components -->
         <script src="app.js"></script>

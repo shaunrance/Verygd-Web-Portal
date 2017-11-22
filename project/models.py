@@ -15,12 +15,13 @@ class Project(PasswordProtectable, models.Model):
     short_uuid = models.CharField(max_length=22, unique=True, default=get_default_shortuuid, editable=False, null=False)
 
     name = models.CharField(max_length=32, blank=False, null=False)
+    description = models.CharField(max_length=240, null=True)
     owner = models.ForeignKey(Member, null=False, related_name='projects')
 
     created_dt = models.DateTimeField(auto_now_add=True, null=False)
     updated_dt = models.DateTimeField(auto_now=True, null=False)
 
-    public = models.BooleanField(default=False, blank=True, null=False)
+    public = models.BooleanField(default=True, blank=True, null=False)
 
     featured = models.BooleanField(default=False, blank=True, null=False)
     featured_order = models.IntegerField(blank=True, null=True)

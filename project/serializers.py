@@ -29,6 +29,14 @@ class ProjectSerializer(serializers.ModelSerializer):
 
             model_dict['content'].append(content_metadatum)
 
+        try:
+            if model_dict['content'][0]['equirectangular_background_image']:
+                model_dict['hero_image'] = model_dict['content'][0]['equirectangular_background_image'] + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000'
+            elif model_dict['content'][0]['content'][0]['url']:
+                model_dict['hero_image'] = model_dict['content'][0]['content'][0]['url'] + '?fm=jpg&q=60&h=800&w=800&fit=max&bg=000000'
+        except IndexError:
+            model_dict['hero_image'] = 'https://app.very.gd/assets/img/image-placeholder.jpg'
+
         return model_dict
 
     def update(self, instance, validated_data):
