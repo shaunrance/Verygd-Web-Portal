@@ -1,209 +1,270 @@
-/* global angular, THREE, $, webvrui, _, TweenMax */
+/* global angular, THREE, $, webvrui, _, TweenMax, WEBVR */
 angular.module('ua5App')
-    .factory('SpaceFactory', ['$rootScope', '$q', function($rootScope, $q) {
+    .factory('SpaceFactory', ['$rootScope', '$q', 'BrowserFactory', function($rootScope, $q, BrowserFactory) {
         var scene;
-        var controls;
-        var effect;
-        var animationDisplay;
-        var lastRender = 0;
-        var daydreamPad;
-        var vivePad;
-        var gearPad;
+        var camera;
+        var renderer;
+        var activeElement;
+        var activeController;
+        var mouseRaycaster;
+        var renderItems = [];
+        var previousIntersectId = false;
         var mouse = new THREE.Vector2();
         var itemsMouseCanHit = [];
-        var previousIntersectId = false;
-        var daydreamPointer;
-        var vivePointer;
-        var gamePadsCreated = false;
-        var renderItems = [];
-        var activeElement;
-        var vrControls;
-        var usingCrosshair = false;
-        var crossHair;
-
-        var onClick = function() {};
-
-        var onMouseOut = function(item) {
-            //item.material.opacity = 0.6;
-        };
-
-        var onMouseOver = function(item) {
-            //item.material.opacity = 1;
-        };
-
-        // Setup three.js WebGL renderer.
-        var renderer = new THREE.WebGLRenderer();
-
-        // Create perspective camera used in VR
-        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 20000);
-
-        // Create WebVR UI Enter VR Button
-        var options = {
-            injectCSS: true,
-            color: 'black',
-            textEnterVRTitle: ' ',
-            textExitVRTitle: ' ',
-            textVRNotFoundTitle: ' '
-        };
-        // Different states the vive controller/mouse could be in
-        // vive controller should be the same as oculus
+        var controllers = [];
         var CONTROLLER = {
             MOUSE: 'controllerMouse',
             VIVE: 'controllerVive',
             DAYDREAM: 'controllerDaydream',
-            GEAR: 'controllerGear'
+            GEAR: 'controllerGear',
+            UNIVERSAL: 'controllerUniversal',
+            GAZE: 'controllerCardboard',
         };
+        var crosshair;
+        var Crosshair = function() {
 
-        // We'll use this to save the last position, to detect movement
-        var savedVive = -1;
+            var backGeo;
+            var backMat;
+            var backMesh;
 
-        var activeController;
-        var $space;
-        var $button;
-        var $buttonUI;
-        var $exit;
-        var $spaceContainer;
+            var midGeo;
+            var midMat;
+            var midMesh;
 
-        var mouseRaycaster;
-        var viveRaycaster;
-        var daydreamRaycaster;
-        var defer = $q.defer();
+            var frontGeo;
+            var frontMat;
+            var frontMesh;
 
-        renderer.sortObjects = false;
+            var isEnabled = true;
+            var isVisible = false;
 
-        function isCardboard() {
-            var _isCardboard = false;
-            navigator.getVRDisplays()
-                .then(function(displays) {
-                    for (var i = 0; i < displays.length; i++) {
-                        if (
-                            displays[i].displayName.indexOf('Cardboard') > -1 ||
-                            displays[i].displayName.indexOf('Gear') > -1
-                        ) {
-                            _isCardboard = true;
-                        }
+            backGeo = new THREE.SphereGeometry(0.1, 25, 25);
+            backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
+            backMesh = new THREE.Mesh(backGeo, backMat);
+            backMat.depthWrite = false;
+            backMesh.position.set(0, 0, -5);
+
+            midGeo = new THREE.SphereGeometry(0.06, 25, 25);
+            midMat = new THREE.MeshBasicMaterial({color: 0x333333, opacity: 0.0, transparent: true});
+            midMesh = new THREE.Mesh(midGeo, midMat);
+            midMat.depthWrite = false;
+            midMesh.position.set(0, 0, -5);
+
+            frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
+            frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.0, transparent: true});
+            frontMat.depthWrite = false;
+            frontMesh = new THREE.Mesh(frontGeo, frontMat);
+            frontMesh.position.set(0, 0, -5);
+
+            //add in in front of our camera:
+            camera.add(backMesh);
+            camera.add(midMesh);
+            camera.add(frontMesh);
+
+            return {
+                // enable: function (){
+                //     isEnabled = true;
+                // },
+                // disable: function (){
+                //     isEnabled = false;
+                // },
+                start: function(onComplete) {
+                    if (isEnabled) {
+                        TweenMax.to(midMesh.scale, 0.5, {x: 2, y: 2});
+                        TweenMax.to(midMesh.scale, 0.5, {x: 1, y: 1, delay: 0.5});
                     }
-                    defer.resolve(_isCardboard);
-                });
-            return defer.promise;
-        }
+                },
+                show: function() {
+                    if (isEnabled && !isVisible) {
+                        TweenMax.to(backMat, 0.2, {opacity: 0.3});
+                        TweenMax.to(midMat, 0.2, {opacity: 0.4});
+                        TweenMax.to(frontMat, 0.2, {opacity: 0.9});
+                        isVisible = true;
+                    }
+                },
+                hide: function() {
+                    if (isVisible) {
+                        TweenMax.to(backMat, 0.2, {opacity: 0.0});
+                        TweenMax.to(midMat, 0.2, {opacity: 0.0});
+                        TweenMax.to(frontMat, 0.2, {opacity: 0.0});
+                        isVisible = false;
+                    }
+                }
+            }
+        };
+        var $$el;
+        var elWidth;
+        var elHeight;
 
-        function init(element, _vrOnly) {
+        function init(_$$el, _renderer) {
+            var FAR = 2000;
+            var FOV = 50;
+            var NEAR = 0.1;
+            var controls;
+
+            //  Does this browser support the WebVR API?
+            //  Here’s how to download and configure one that does:
+            //  https://webvr.rocks
+            WEBVR.checkAvailability().catch(function(message){
+                document.body.appendChild( WEBVR.getMessageContainer( message ))
+            });
+
             // Default controller is mouse
             activeController = CONTROLLER.MOUSE;
-            $space = $(element).find('.space');
-            $button = $('.webvr-button');
 
-            $buttonUI = $(element).find('.button-ui');
-            $exit = $(element).find('.exit-btn');
-            $spaceContainer = $('.space-container');
-
-            // Need these for our various controllers, to detect rollovers
+            renderer = _renderer;
             mouseRaycaster = new THREE.Raycaster();
-            viveRaycaster = new THREE.Raycaster();
-            daydreamRaycaster = new THREE.Raycaster();
 
-            window.enterVR = new webvrui.EnterVRButton(renderer.domElement, options)
-                .on('enter', function() {
-                    $rootScope.$apply();
-                    createGamePads();
-                    $rootScope.inVR = true;
-                    $('.webvr-ui-button').addClass('webvr-ui--exit');
-                })
-                .on('exit', function() {
-                    camera.quaternion.set(0, 0, 0, 1);
-                    $rootScope.inVR = false;
-                    $rootScope.$apply();
-                    $('.webvr-ui-button').removeClass('webvr-ui--exit');
-                    // controls.minPolarAngle = Math.PI / 2 - 0.6;
-                    // controls.maxPolarAngle = Math.PI / 2 + 0.6;
-                    //controls.noPan = true;
-                    //controls.noZoom = true;
+            //  We need a renderer.
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.vr.enabled = false;
+            renderer.vr.standing = true;
+            _$$el.append(renderer.domElement);
+            $$el = _$$el;
 
-                })
-                .on('error', function(error) {
-                    //document.getElementById('learn-more').style.display = 'inline';
-                    $rootScope.inVR = false;
-                    $('.webvr-ui-button').addClass('webvr-ui--exit');
-                })
-                .on('hide', function() {
-                    $buttonUI.hide();
-                    $rootScope.inVR = true;
-                    // On iOS there is no button to close fullscreen mode, so we need to provide one
-                    if (window.enterVR.state === webvrui.State.PRESENTING_FULLSCREEN) {
-                        $exit.show();
-                    }
-                })
-                .on('show', function() {
-                    $buttonUI.show();
-                    $('.webvr-ui-button').removeClass('webvr-ui--exit');
-                    $exit.hide();
-                    $rootScope.inVR = false;
-                })
-            ;
-
-            // Add button to the #button element
-            $button[0].appendChild(window.enterVR.domElement);
-
-            //
-            // WEBGL SCENE SETUP
-            //
-
-            // Append the canvas element created by the renderer to document body element.
-            $spaceContainer.append(renderer.domElement);
-
-            // Create a three.js scene.
+            //  Once we create the camera we’ll attach it to the scene. This is usually
+            //  not necessary, but we’re going to attach a crosshair to it
+            camera = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, NEAR, FAR);
             scene = new THREE.Scene();
-
-            if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) { // jshint ignore:line
-                controls = new THREE.DeviceOrientationControls(camera, renderer.domElement);
-            } else {
-                controls = new THREE.OrbitControls(camera, renderer.domElement);
-                controls.target.set(
-                    camera.position.x + 0.15,
-                    camera.position.y,
-                    camera.position.z
-                );
-            }
-
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
-            controls.target = new THREE.Vector3(Math.PI, 0, -Math.PI * 4);
-
-            // controls.minPolarAngle = Math.PI / 2 - 0.6;
-            // controls.maxPolarAngle = Math.PI / 2 + 0.6;
-            controls.noPan = true;
-            controls.noZoom = true;
-
-            // Create VR Effect rendering in stereoscopic mode
-            effect = new THREE.VREffect(renderer);
-            effect.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.floor(window.devicePixelRatio));
             scene.add(camera);
 
-            // Hande canvas resizing
-            window.addEventListener('resize', onResize, true);
-            window.addEventListener('vrdisplaypresentchange', onResize, true);
+            //  Create our crosshair and show it
+            crosshair = new Crosshair();
+            crosshair.show();
 
-            // Get the HMD
-            window.enterVR.getVRDisplay()
-                .then(function(display) {
-                    animationDisplay = display;
-                    vrControls = new THREE.VRControls(camera);
-                    vrControls.standing = true;
-                    camera.position.y = vrControls.userHeight;
 
-                    display.requestAnimationFrame(animate);
-                })
-                .catch(function() { // jshint ignore:line
-                    // If there is no display available, fallback to window
-                    animationDisplay = window;
-                    window.requestAnimationFrame(animate);
-                })
-            ;
+            //  This button is important. It toggles between normal in-browser view
+            //  and the brand new WebVR in-your-goggles view!
+            WEBVR.getVRDisplay(function(display) {
+                renderer.vr.setDevice(display);
+                document.body.appendChild(WEBVR.getButton( display, renderer.domElement));
+            });
 
-            $(renderer.domElement).on('click', clickhandler);
 
+            //  If we're on a touch device, use Accelerometer to navigate the space
+            if (BrowserFactory.hasTouch()) {
+                controls = new THREE.DeviceOrientationControls(camera, true);
+                controls.connect();
+            } else {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.25;
+                controls.target = new THREE.Vector3(Math.PI, 0, -Math.PI * 4);
+                controls.noPan = true;
+                controls.noZoom = true;
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                elWidth = $$el.width();
+                elHeight = $$el.height();
+            }
+            window.addEventListener('resize', onWindowResize, false);
+            onWindowResize();
+
+            $$el.on('mousedown', function () {
+                startDragX = camera.position.x.toPrecision(3);
+            });
+
+            $$el.on('mouseup', function () {
+                if (startDragX === camera.position.x.toPrecision(3)) {
+                    clickhandler();
+                }
+            });
+
+            $$el.on('mousemove', function(event) {
+                activeController = CONTROLLER.MOUSE;
+                setCursorPosition(
+                    event.clientX -  $$el.offset().left + $(window).scrollLeft(),
+                    event.clientY -  $$el.offset().top + $(window).scrollTop()
+                );
+            });
+
+            //  Check this out: When THREE.VRController finds a new controller
+            //  it will emit a custom “vr controller connected” event on the
+            //  global window object. It uses this to pass you the controller
+            //  instance and from there you do what you want with it.
+            window.addEventListener('vr controller connected', function(event) {
+                var controllerMaterial;
+                var controllerMesh;
+                var handleMesh;
+                var controller;
+                //  Here it is, your VR controller instance.
+                //  It’s really a THREE.Object3D so you can just add it to your scene:
+
+                controller = event.detail;
+                controller.name = 'controller';
+                scene.add(controller);
+
+
+                //  HEY HEY HEY! This is important. You need to make sure you do this.
+                //  For standing experiences (not seated) we need to set the standingMatrix
+                //  otherwise you’ll wonder why your controller appears on the floor
+                //  instead of in your hands! And for seated experiences this will have no
+                //  effect, so safe to do either way:
+                controller.standingMatrix = renderer.vr.getStandingMatrix();
+
+
+                //  And for 3DOF (seated) controllers you need to set the controller.head
+                //  to reference your camera. That way we can make an educated guess where
+                //  your hand ought to appear based on the camera’s rotation.
+                controller.head = camera;
+
+
+                //  Right now your controller has no visual.
+                //  It’s just an empty THREE.Object3D.
+                //  Let’s fix that!
+                controllerMaterial = new THREE.MeshNormalMaterial({
+                    transparent: true,
+                    opacity: 0.5
+                });
+                controllerMesh = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03, 0.03, 0.2, 30 ),
+                    controllerMaterial
+                );
+                handleMesh = new THREE.Mesh(
+                    new THREE.CylinderGeometry( 0.004, 0.02, 10000, 10 ),
+                    controllerMaterial
+                );
+
+                controllerMaterial.flatShading = true;
+                controllerMesh.rotation.x = - Math.PI / 2;
+                handleMesh.position.y = 5000;
+                controllerMesh.add(handleMesh);
+                controller.userData.mesh = controllerMesh;
+                controller.add(controllerMesh);
+                controllerMesh.rotation.x = -Math.PI / 2;
+                controllerMesh.position.z = 0.1;
+
+                controllers.push({
+                    controller: controller,
+                    mesh: controllerMesh,
+                    raycaster: new THREE.Raycaster()
+                });
+
+                //  Button events. How easy is this?!
+                //  We’ll just use the “primary” button -- whatever that might be ;)
+                //  Check out the THREE.VRController.supported{} object to see
+                //  all the named buttons we’ve already mapped for you!
+                controller.addEventListener( 'primary press began', function( event ){
+                    //guiInputHelper.pressed( true )
+                });
+
+                controller.addEventListener( 'primary press ended', function( event ){
+                    //guiInputHelper.pressed( false )
+                    activeController = CONTROLLER.UNIVERSAL;
+                    clickhandler();
+                });
+
+                controller.addEventListener( 'disconnected', function( event ){
+                    controller.parent.remove(controller)
+                });
+            });
+
+            // Support for GearVR headset button click
             function addVRClickListener(clickCallback) {
                 var lastButtonState = [];
                 var presentingDisplay = null;
@@ -249,37 +310,72 @@ angular.module('ua5App')
             }
             addVRClickListener(clickhandler);
 
-            $(renderer.domElement).on('mousemove', function(event) {
-                if (!$rootScope.inVR) {
-                    activeController = CONTROLLER.MOUSE;
-                    setCursorPosition(
-                        event.clientX - $(renderer.domElement).offset().left + $(window).scrollLeft(),
-                        event.clientY - $(renderer.domElement).offset().top + $(window).scrollTop()
-                    );
+            function update(){
+                //  Here’s VRController’s UPDATE goods right here:
+                //  This one command in your animation loop is going to handle
+                //  all the VR controller business you need to get done!
+                THREE.VRController.update();
+
+                _.each(renderItems, function(item) {
+                    if (item && item.tick) {
+                        item.tick();
+                    }
+                });
+
+                if (renderer.vr && renderer.vr.getDevice() && renderer.vr.getDevice().isPresenting) {
+                    if (!renderer.vr.enabled) {
+                        renderer.vr.enabled  = true;
+                    }
+                    if (controllers && controllers.length > 0) {
+                        _.each(controllers, function (controller) {
+                            if (controller.lastX !== controller.controller.rotation.x.toPrecision(2)) {
+                                activeController = CONTROLLER.UNIVERSAL;
+                                controller.lastX = controller.controller.rotation.x.toPrecision(2);
+                                controllerIdleCheck = Date.now();
+                                crosshair.hide();
+                            } else {
+                                if (Date.now() - controllerIdleCheck > 1000) {
+                                    activeController = CONTROLLER.GAZE;
+                                    crosshair.show();
+                                }
+                            }
+                        });
+                    } else {
+                        setCursorPosition(elWidth / 2, elHeight / 2);
+                        crosshair.show();
+                    }
+                } else {
+                    if (renderer.vr.enabled) {
+                        renderer.vr.enabled = false;
+                    }
+                    if (BrowserFactory.hasTouch()) {
+                        controls.update();
+                    }
+                    crosshair.hide();
                 }
-            });
-        }
-
-        function onResize(e) {
-            effect.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            $spaceContainer.css({
-                width: window.innerWidth + 'px',
-                height: window.innerHeight + 'px'
-            });
-            $space.css({
-                width: window.innerWidth + 'px',
-                height: window.innerHeight + 'px'
-            });
-        }
-
-        function clickhandler() {
-            if (crossHair) {
-                TweenMax.to(crossHair.scale, 0.5, {x: 2, y: 2});
-                TweenMax.to(crossHair.scale, 0.5, {x: 1, y: 1, delay: 0.5});
+                activeElement = getHoveredElements();
+                renderer.render(scene, camera);
             }
+            renderer.animate(update);
+        }
+
+        function addItem(item, isInteractive, parent, gazable) {
+            parent = (typeof parent === 'undefined') ? scene : parent;
+            isInteractive = (typeof isInteractive === 'undefined') ? true : isInteractive;
+            gazable = (typeof gazable === 'undefined') ? false : gazable;
+            if (isInteractive) {
+                registerItem(item);
+            }
+            item.gazable = gazable;
+            parent.add(item);
+
+            //refresh camera for pointer:
+            scene.remove(camera);
+            scene.add(camera);
+        }
+
+        // Fires the passed in onClick method, along with the element under it
+        function clickhandler() {
             setTimeout(function() {
                 var el = getHoveredElements();
                 if (el) {
@@ -289,162 +385,40 @@ angular.module('ua5App')
             }, 100);
         }
 
-        function createGamePads() {
-            var lineGeometry;
-
-            if (gamePadsCreated) {
-                return;
-            }
-            gamePadsCreated = true;
-
-            isCardboard().then(function(value) {
-                if (value) {
-                    activeController = CONTROLLER.MOUSE;
-                    $rootScope.inVR = true;
-                    crossHair = makeCrosshair();
-                    setCursorPosition($(renderer.domElement).width() / 2, $(renderer.domElement).height() / 2);
-                }
-            });
-            if (typeof navigator.getGamepads === 'undefined') {
-                return;
-            }
-
-            daydreamPad = new THREE.DaydreamController();
-            daydreamPad.addEventListener('touchpadup', clickhandler);
-            daydreamPad.position.set(0.25, 1, 0);
-            daydreamPad.name = 'controller';
-
-            vivePad = new THREE.ViveController(0);
-            vivePad.standingMatrix = vrControls.getStandingMatrix();
-            vivePad.addEventListener('thumbpadup', clickhandler);
-            vivePad.addEventListener('triggerup', clickhandler);
-            vivePad.name = 'controller';
-
-            gearPad = new THREE.GearVRController(0);
-            gearPad.standingMatrix = vrControls.getStandingMatrix();
-            gearPad.addEventListener('touchpadup', clickhandler);
-            gearPad.addEventListener('triggerup', clickhandler);
-            gearPad.addEventListener('axischanged', clickhandler);
-
-            gearPad.name = 'controller';
-
-            // scene.add(daydreamPad);
-            scene.add(vivePad);
-            scene.add(gearPad);
-
-            daydreamPointer = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({linewidth: 3, color: 0x000000}));
-            daydreamPointer.geometry.addAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 30], 3));
-
-            lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-            lineGeometry.vertices.push(new THREE.Vector3(0, 0, -1000));
-            vivePointer = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({linewidth: 3}));
-            //vivePointer.geometry.addAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 30], 3));
-
-            daydreamPad.add(daydreamPointer);
-            vivePad.add(vivePointer);
-        }
-
-        function makeCrosshair() {
-            var backGeo;
-            var backMat;
-            var backMesh;
-
-            var midGeo;
-            var midMat;
-            var midMesh;
-
-            var frontGeo;
-            var frontMat;
-            var frontMesh;
-
-            usingCrosshair = true;
-
-            backGeo = new THREE.SphereGeometry(0.1, 25, 25);
-            backMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.3, transparent: true});
-            backMesh = new THREE.Mesh(backGeo, backMat);
-            backMat.depthWrite = false;
-            backMesh.position.set(0, 0, -5);
-
-            midGeo = new THREE.SphereGeometry(0.06, 25, 25);
-            midMat = new THREE.MeshBasicMaterial({color: 0x333333, opacity: 0.4, transparent: true});
-            midMesh = new THREE.Mesh(midGeo, midMat);
-            midMat.depthWrite = false;
-            midMesh.position.set(0, 0, -5);
-
-            frontGeo = new THREE.SphereGeometry(0.04, 25, 25);
-            frontMat = new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.9, transparent: true});
-            frontMat.depthWrite = false;
-            frontMesh = new THREE.Mesh(frontGeo, frontMat);
-            frontMesh.position.set(0, 0, -5);
-
-            //add in in front of our camera:
-            camera.add(backMesh);
-            camera.add(midMesh);
-            camera.add(frontMesh);
-
-            // return the mid crosshair, so we can animate it
-            return midMesh;
+        function registerItem(item) {
+            item.isVisible = true;
+            itemsMouseCanHit.push(item);
         }
 
         function getHoveredElements() {
-            var intersects;
             var closestIntersect;
             var currentIntersectId;
-            var xPos;
-            var matrix;
-            var direction;
-            var globalControllerPos;
-
-            // if (daydreamPad) {
-            //     daydreamPad.update();
-            //
-            //     // Check to see if Daydream controller is moving
-            //     if (daydreamPad.position && daydreamPad.position.x) {
-            //         xPos = Math.round(daydreamPad.position.x * 10) / 10;
-            //         if (savedDaydream !== xPos) {
-            //             activeController = CONTROLLER.DAYDREAM;
-            //         }
-            //         savedDaydream = xPos;
-            //     }
-            // }
-
-            if (vivePad) {
-                vivePad.update();
-
-                matrix = new THREE.Matrix4();
-                matrix.extractRotation(vivePad.matrix);
-
-                direction = new THREE.Vector3(0, 0, 1);
-                direction.applyMatrix4(matrix);
-                direction.multiplyScalar(-1);
-
-                globalControllerPos = new THREE.Vector3();
-                globalControllerPos.setFromMatrixPosition(vivePad.matrixWorld);
-
-                // Check to see if Vive controller is moving
-                if (vivePad.position && vivePad.position.x) {
-                    xPos = Math.round(vivePad.position.x * 10) / 10;
-
-                    if (savedVive !== xPos) {
-                        activeController = CONTROLLER.VIVE;
-                    }
-                    savedVive = xPos;
-                }
-            }
+            var intersects = [];
 
             switch (activeController) {
-                case CONTROLLER.DAYDREAM:
-                    daydreamRaycaster.ray.origin.copy(daydreamPad.position);
-                    daydreamRaycaster.ray.direction.set(0, 0, - 1).applyQuaternion(daydreamPad.quaternion);
-                    intersects = daydreamRaycaster.intersectObjects(itemsMouseCanHit, true);
+                case CONTROLLER.UNIVERSAL:
+                    _.each(controllers, function(controller) {
+                        var matrix = new THREE.Matrix4();
+                        matrix.extractRotation(controller.controller.matrix);
+
+                        var direction = new THREE.Vector3(0, 0, 1);
+                        direction.applyMatrix4(matrix);
+                        direction.normalize();
+                        direction.multiplyScalar(-1);
+
+                        var globalControllerPos = new THREE.Vector3();
+                        globalControllerPos.setFromMatrixPosition(controller.mesh.matrixWorld);
+
+                        controller.raycaster.set(globalControllerPos, direction);
+                        intersects = intersects.concat(controller.raycaster.intersectObjects(itemsMouseCanHit, true));
+                    });
                     break;
-                case CONTROLLER.VIVE:
-                    viveRaycaster.set(globalControllerPos, direction);
-                    intersects = viveRaycaster.intersectObjects(itemsMouseCanHit, true);
+                case CONTROLLER.GAZE:
+                    mouseRaycaster.setFromCamera(mouse, camera);
+                    intersects = mouseRaycaster.intersectObjects(itemsMouseCanHit);
                     break;
-                default:
                 case CONTROLLER.MOUSE:
+                default:
                     mouseRaycaster.setFromCamera(mouse, camera);
                     intersects = mouseRaycaster.intersectObjects(itemsMouseCanHit);
                     break;
@@ -492,74 +466,22 @@ angular.module('ua5App')
             return currentIntersectId;
         }
 
-        function setCursorPosition(x, y) {
-            mouse.x = (x / $(renderer.domElement).width()) * 2 - 1;
-            mouse.y = - (y / $(renderer.domElement).height()) * 2 + 1;
-        }
-
-        // Request animation frame loop function
-        function animate(timestamp) {
-            lastRender = timestamp;
-
-            if (window.enterVR.isPresenting()) {
-                if (vrControls) {
-                    vrControls.update();
-                }
-                renderer.render(scene, camera);
-                effect.render(scene, camera);
-            } else {
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            _.each(renderItems, function(item) {
-                if (item && item.tick) {
-                    item.tick();
-                }
-            });
-
-            activeElement = getHoveredElements();
-            animationDisplay.requestAnimationFrame(animate);
-        }
-
-        // function startRendering() {
-
-        // }
-
-        // function stopRendering() {
-
-        // }
-
-        function addItem(item, isInteractive, parent) {
-            parent = (typeof parent === 'undefined') ? scene : parent;
-            isInteractive = (typeof isInteractive === 'undefined') ? true : isInteractive;
-            if (isInteractive) {
-                registerItem(item);
-            }
-            parent.add(item);
-
-            //refresh camera for pointer:
-            scene.remove(camera);
-            scene.add(camera);
-        }
-
-        function registerItem(item) {
-            item.isVisible = true;
-            itemsMouseCanHit.push(item);
-        }
-
         function getActiveObject() {
             return scene.getObjectById(activeElement, true);
         }
 
-        function updateDimensions() {
-            // var width = $$el.width();
-            // var height = $$el.height();
-
-            // camera.aspect = width / height;
-            // camera.updateProjectionMatrix();
-            // renderer.setSize(width, height);
+        function setCursorPosition(x, y) {
+            mouse.x = (x / elWidth) * 2 - 1;
+            mouse.y = - (y / elHeight) * 2 + 1;
         }
+
+        var onMouseOut = function(item) {
+            //item.material.opacity = 0.6;
+        };
+
+        var onMouseOver = function(item) {
+            //item.material.opacity = 1;
+        };
 
         function destroyAllSceneObjects(skipTypes) {
             var i;
@@ -569,6 +491,7 @@ angular.module('ua5App')
                 var obj = scene.children[i];
                 // if our object is in the group of skip types, dont remove it
                 if (_.indexOf(skipTypes, obj.type) === -1 && obj.name !== 'controller') {
+                    console.log('delete', obj.type)
                     scene.remove(obj);
                     if (obj.geometry) {
                         obj.geometry.dispose();
@@ -611,20 +534,13 @@ angular.module('ua5App')
             setOnClick: function(clickEventHandler) {
                 onClick = clickEventHandler;
             },
-            setOnMouseOver: function(mouseOverEventHandler) {
-                onMouseOver = mouseOverEventHandler;
-            },
-            setOnMouseOut: function(mouseOutEventHandler) {
-                onMouseOut = mouseOutEventHandler;
-            },
-            pushItem: function(item) {
-                itemsMouseCanHit.push(item);
-                item.isVisible = true;
-            },
+            setOnMouseOver: function() {},
+            setOnMouseOut: function() {},
+            pushItem: registerItem,
             addRenderItem: function(items) {
                 renderItems.push(items);
             },
-            resize: updateDimensions
+            resize: function() {}
         };
     }])
 ;

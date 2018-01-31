@@ -27,6 +27,8 @@ secret.yml
 
 /db.sqlite3
 
-verygd.pem
+*.pem
 
 /.idea
+
+*.pyc

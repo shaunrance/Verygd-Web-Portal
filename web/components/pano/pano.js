@@ -219,7 +219,7 @@ angular.module('ua5App')
                     border = (!data.related_tag) ? '' : '&border=2,81e4ee';
 
                     textureLoader.load(
-                        data.url,
+                        data.url + '?w=400',
                         function(texture) {
                             var size = sizePlaneFromImage(texture.image);
 
@@ -421,7 +421,6 @@ angular.module('ua5App')
 
                 function onRender() {
                     if (typeof exitBtn === 'object' && useVr) {
-                        cam.getWorldDirection(worldDirectionVector);
                         exitBtn.position.z = worldDirectionVector.z * 200;
                         exitBtn.position.x = worldDirectionVector.x * 200;
                         exitBtn.position.y = -200;

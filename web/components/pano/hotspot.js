@@ -211,6 +211,7 @@ angular.module('suite').factory('Hotspot', ['$rootScope', 'BrowserFactory', 'Geo
                 mesh.hotspot = config.data;
                 mesh.showing = false;
                 mesh.isVisible = true;
+                mesh.gazable = true;
 
                 // add our public methods to this object:
                 mesh.show = show;
