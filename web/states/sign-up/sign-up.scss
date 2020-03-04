@@ -5,6 +5,25 @@
         border-bottom: 1px solid $grey-dark;
     }
 
+    .form-group-floated {
+        position: relative;
+
+        label,
+        input.ng-empty ~ label {
+            @include position(absolute, 29px 0 0 25px);
+            @include transition(all 0.3s ease-in-out);
+            @include user-select(none);
+            pointer-events: none;
+        }
+
+        input:focus ~ label,
+        input:valid ~ label,
+        input.ng-not-empty ~ label {
+            @include transform(translateY(-22px));
+            font-size: 11px;
+        }
+    }
+
     .modal {
         box-shadow: 2px 1px 10px rgba($black, 0.3);
     }
@@ -22,7 +41,7 @@
         font-family: 'Open Sans', sans-serif;
 
         @include placeholder {
-            color: #a3a3ac;
+            color: transparent;
         }
     }
 
